@@ -1,0 +1,37 @@
+# May, 2017
+# Laura Jim?nez
+
+# Function that determines which points from a given matrix are inside
+# an ellipse -------
+
+## Parameters ----------
+## cloud == matrix that contains the coordinates of the points to evaluate
+## centroid == vector with the coordinates of the centroid of the ellipse
+## sigma == covariance matrix that defines de ellipse
+## alpha == confidence level
+
+el.in <- function(cloud,centroid,sigma,alpha){
+  # step 1: calculate de Mahalanobis distance
+  maha <- mahalanobis(x=cloud,center=centroid,cov=sigma)
+  # step 2: a point is inside the confidence region (1-alpha=confidence%) if
+  # the distance divided by the quantile of a Chi-square variable with k d.f. is less than 1
+  chi.q <- qchisq(alpha,ncol(cloud))
+  check <- (maha/chi.q) <= 1
+  cloud <- cbind(rep(1,nrow(cloud))*check,cloud)
+    return(as.matrix(cloud))
+}
+
+# Example ------------------
+
+mu <- c(0.86,1)
+sigma <- matrix(c(0.021,-0.008,-0.008,0.061),ncol=2,byrow=T)
+# Define the matrix of points
+cloud <- cbind(runif(5000,0,2),runif(5000,0,2))
+# Use the function to determine which points from the matrix are inside the ellipse
+check <- el.in(cloud,mu,sigma,0.95)
+# Plot the points, ellipse and use different colors for the points inside/outside the ellipse
+x11()
+plot(check[,2],check[,3],pch=".",xlab="",ylab="",main="Points inside an ellipse")     
+el <- ellipse::ellipse(x=sigma,centre = mu,level=0.95)
+lines(el,col=2,lwd=2)
+points(subset(check,check[,1]==1)[,2:3],pch=19,col=2)
