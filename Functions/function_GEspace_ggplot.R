@@ -152,7 +152,7 @@ library(ggpubr)
 
 ranpoints <- read.csv("./Catasticta_nimbice_M_bios.csv",header=T)
 species <- read.csv("./Catasticta_nimbice_bios.csv",header=T)
-shp <- readOGR("./nimbice_shp","nimbice3")
+shp <- readOGR("./Shapefiles","nimbice3")
 
 GEspace(bckgrnd=ranpoints, occ=species, add.poly=shp, save.p = "map1.png")
 GEspace(bckgrnd=ranpoints, occ=species, add.poly=shp)
