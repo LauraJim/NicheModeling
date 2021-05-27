@@ -1,5 +1,5 @@
 # May, 2017
-# Laura Jim?nez
+# Laura Jimenez
 
 # Function that determines which points from a given matrix are inside
 # an ellipse -------
@@ -40,7 +40,7 @@ points(subset(check,check[,1]==1)[,2:3],pch=19,col=2)
 # Example 2 ----------------
 occ <- read.csv ("./Threnetes_ruckeri_occ_bios.csv",header=T)[,-(1:2)]
 
-# mu calculates the means of the columns that contain the occurrneces
+# mu calculates the means of the columns that contain the occurrences
 mu <- colMeans(occ)
 # Sigma calculates the covariance of the occurrences
 Sigma <- cov(occ)
