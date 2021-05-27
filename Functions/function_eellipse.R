@@ -61,7 +61,7 @@ occ <- read.csv ("./Threnetes_ruckeri_occ_bios.csv",header=T)[,-(1:2)]
 alpha <- c(0.75, 0.9, 0.95)
 
 # calculate the parameters
-# mu calculates the means of the columns that contain the occurrneces
+# mu calculates the means of the columns that contain the occurrences
 mu <- colMeans(occ)
 # Sigma calculates the covariance of the occurrences
 Sigma <- cov(occ)
