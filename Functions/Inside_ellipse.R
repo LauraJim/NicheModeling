@@ -35,3 +35,43 @@ plot(check[,2],check[,3],pch=".",xlab="",ylab="",main="Points inside an ellipse"
 el <- ellipse::ellipse(x=sigma,centre = mu,level=0.95)
 lines(el,col=2,lwd=2)
 points(subset(check,check[,1]==1)[,2:3],pch=19,col=2)
+
+
+# Example 2 ----------------
+occ <- read.csv ("./Threnetes_ruckeri_occ_bios.csv",header=T)[,-(1:2)]
+
+# mu calculates the means of the columns that contain the occurrneces
+mu <- colMeans(occ)
+# Sigma calculates the covariance of the occurrences
+Sigma <- cov(occ)
+# Define the matrix of points
+cloud <- read.csv("./Threnetes_ruckeri_M_bios.csv",header=T)[,-(1:2)]
+
+check <- el.in(cloud,mu,Sigma,0.95)
+
+x11()
+plot(check[,2],check[,3],pch=20,xlab="",ylab="",main="Points inside an ellipse")     
+el <- ellipse::ellipse(x=Sigma,centre = mu,level=0.95)
+lines(el,col=2,lwd=2)
+points(subset(check,check[,1]==1)[,2:3],pch=19,col=2)
+
+
+# example 3 ----------------
+
+occ <- read.csv ("./Catasticta_nimbice_bios.csv",header=T)[,-(1:2)]
+
+# mu calculates the means of the columns that contain the occurrneces
+mu <- colMeans(occ)
+# Sigma calculates the covariance of the occurrences
+Sigma <- cov(occ)
+# Define the matrix of points
+cloud <- read.csv("./Catasticta_nimbice_M_bios.csv",header=T)[,-(1:2)]
+
+check <- el.in(cloud,mu,Sigma,0.95)
+
+x11()
+plot(check[,2],check[,3],pch=".",xlab="",ylab="",main="Points inside an ellipse")     
+el <- ellipse::ellipse(x=Sigma,centre = mu,level=0.95)
+lines(el,col=2,lwd=2)
+points(subset(check,check[,1]==1)[,2:3],pch=19,col=2)
+
