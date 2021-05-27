@@ -162,7 +162,7 @@ GEspace(bckgrnd=ranpoints, occ=species)
 ## Example 2:
 ranpoints2 <- read.csv("./Threnetes_ruckeri_M_bios.csv",header=T) # use random points as background
 species2 <- read.csv("./Threnetes_ruckeri_occ_bios.csv",header=T) # occurence of species with environmental data (previously created file)
-shp2 <- readOGR("./threnetes_shp","Threnetes_ruckeri")
+shp2 <- readOGR("./Shapefiles","Threnetes_ruckeri")
 
 GEspace(bckgrnd = ranpoints2, occ = species2, add.poly = shp2, save.p = "map3.png")
 GEspace(bckgrnd = ranpoints2, occ = species2, add.poly = shp2)
