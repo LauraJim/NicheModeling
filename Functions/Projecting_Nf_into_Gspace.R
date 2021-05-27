@@ -3,25 +3,27 @@
 # Last version: December 2020
 # Project resulting ellipses back into G-space
 
-setwd("C:\\Users\\l215j162\\Documents\\KU\\Doc-project\\NicheEstimation")
+
 library(raster)
 
+
 # Read environmental layers cropped to the area of interest
-bio1.proj <- raster(".\\ClimateData10min\\bio1WH.asc")
-bio2.proj <- raster(".\\ClimateData10min\\bio12WH.asc")
-stck_1_2.proj <- stack(bio1.proj,bio2.proj)
+bio1 <- raster(".\\ClimateData10min\\bio1WH.asc")
+bio2 <- raster(".\\ClimateData10min\\bio12WH.asc")
+bios <- stack(bio1,bio2)
 
 # Set the values of the MLEs (Maximum Likelihood Estimate)
-mle.mu <- c(177.4347015,1640.714552)
-mle.A <- matrix(c(0.000650966,-1.37E-05,-1.37E-05,1.83E-06), nrow = 2, byrow = T)
-mle.Sig <- chol2inv(chol(mle.A))
+mu <- colMeans(occ)
+# Sigma calculates the covariance of the occurrences
+Sigma <- cov(occ)
+
 
 # Calculate suitabilities in each cell
-max.val <- mvtnorm::dmvnorm(x=mle.mu,mean = mle.mu, sigma = mle.Sig)
+max.val <- mvtnorm::dmvnorm(x=mu,mean = mu, sigma = Sigma)
 # function that calculates the log(suitability)
-sui.fun <- function(cell){log(mvtnorm::dmvnorm(x=c(cell[1],cell[2]),mean = mle.mu, sigma = mle.Sig))-log(max.val)}
+sui.fun <- function(cell){log(mvtnorm::dmvnorm(x=c(cell[1],cell[2]),mean = mu, sigma = Sigma))-log(max.val)}
 # apply this function to the whole raster layer
-suit.rast <- calc(stck_1_2.proj,fun=sui.fun)
+suit.rast <- calc(bios,fun=sui.fun)
 # take exponential to go back to the original scale
 suit.rast1 <- calc(suit.rast,fun = exp,
                    filename="C:\\Users\\l215j162\\Dropbox\\Nf-second model\\Hummers-Cooper\\Analysis3\\thalassinus_suit_map_maha.asc",
@@ -35,3 +37,77 @@ plot(suit.rast1)
 #points(occ.geo,pch=15,col="red",cex=0.5)
 
 # END
+
+
+# make function: --------------------------------------
+
+niche.G <- function(mu, Sigma, save.map) {
+  
+  # Calculate suitabilities in each cell
+  max.val <- mvtnorm::dmvnorm(x=mu,mean = mu, sigma = Sigma)
+  # function that calculates the log(suitability)
+  sui.fun <- function(cell){log(mvtnorm::dmvnorm(x=c(cell[1],cell[2]),mean = mu, sigma = Sigma))-log(max.val)}
+  # apply this function to the whole raster layer
+  suit.rast <- calc(bios,fun=sui.fun)
+  # take exponential to go back to the original scale
+  
+  suit.rast1 <- calc(suit.rast,fun = exp,
+                     filename= paste0(save.map, ".asc"), # paste puts strings together
+                     overwrite=T)
+  # save a TIFF, does not work
+#  writeRaster(suit.rast1,"./Catasticta_nimbice_map.tif", overwrite = T)
+  
+}
+  
+# Main: How to use "niche.G" --------------- 
+
+## libraries:
+
+library(raster)
+# needs package mvtnorm to be installed
+
+## Read environmental layers cropped to the area of interest
+bio1 <- raster(".\\ClimateData10min\\bio1WH.asc")
+bio2 <- raster(".\\ClimateData10min\\bio12WH.asc")
+bios <- stack(bio1,bio2)
+
+## Example 1
+
+occ <- read.csv("./Catasticta_nimbice_bios.csv",header=T)[,-(1:2)]
+
+# calculate parameters
+
+# Set the values of the MLEs (Maximum Likelihood Estimate)
+center <- colMeans(occ)
+# Sigma calculates the covariance of the occurrences
+boundary <- cov(occ)
+# define name for the maps
+  # save.asc <- "./Catasticta_nimbice_map.asc"
+  # save.tiff <- "./Catasticta_nimbice_map.tiff"
+saveM <- "./Catasticta_nimbice_map"
+
+niche.G(mu = center, Sigma = boundary, save.map = saveM)
+
+x11()
+plot(suit.rast1)
+
+
+## Example 2
+
+occ2 <- read.csv("./Threnetes_ruckeri_occ_bios.csv",header=T)[,-(1:2)]
+
+# calculate parameters
+
+# Set the values of the MLEs (Maximum Likelihood Estimate)
+center2 <- colMeans(occ2)
+# Sigma calculates the covariance of the occurrences
+boundary2 <- cov(occ2)
+# define name for the maps
+# save.asc <- "./Catasticta_nimbice_map.asc"
+# save.tiff <- "./Catasticta_nimbice_map.tiff"
+saveM2 <- "./Threnetes_ruckeri_map"
+
+niche.G(mu = center2, Sigma = boundary2, save.map = saveM2)
+
+x11()
+plot(suit.rast1)
