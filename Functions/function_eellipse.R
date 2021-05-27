@@ -37,8 +37,8 @@ e.ellipse <- function(mu, Sigma, alpha = 0.95, enames) {
   ys <- c(min(occ[,2]) -200, max(occ[,2]) +200)
   
   # create a plot that shows the occurences in the environmental space 
-  plot(occ[,1], occ[,2], pch=20, col= "turquoise", xlab="Environment 1",
-       ylab="Environment 2", main="Environmental Space", xlim = xs, ylim = ys)
+  plot(occ[,1], occ[,2], pch=20, col= "turquoise", xlab=enames[1],
+       ylab=enames[2], main="Environmental Space", xlim = xs, ylim = ys)
   
   # create a loop to write ellipse-lines with different gray colors
   for(i in 1:la){
@@ -66,7 +66,7 @@ mu <- colMeans(occ)
 # Sigma calculates the covariance of the occurrences
 Sigma <- cov(occ)
 # Define names for the environmental type
-names1 <- c("bio1", "bio12")
+names1 <- c("Annual mean temperature (°C x 10)","Annual Precipitation (mm)") 
 
 # apply function  
 f <- e.ellipse(mu, Sigma, alpha, enames = names1)
@@ -81,6 +81,6 @@ alpha2 <- seq(0,1,by = 0.1)
 
 mu2 <- colMeans(occ)
 Sigma2 <- cov(occ)
-names2 <- c("bio1", "bio12")
+names2 <- c("Annual mean temperature (°C x 10)","Annual Precipitation (mm)") 
 
 f <- e.ellipse(mu = mu2, Sigma = Sigma2, alpha = alpha2, enames = names2)
