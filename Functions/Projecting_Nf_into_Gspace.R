@@ -3,42 +3,6 @@
 # Last version: December 2020
 # Project resulting ellipses back into G-space
 
-
-library(raster)
-
-
-# Read environmental layers cropped to the area of interest
-bio1 <- raster(".\\ClimateData10min\\bio1WH.asc")
-bio2 <- raster(".\\ClimateData10min\\bio12WH.asc")
-bios <- stack(bio1,bio2)
-
-# Set the values of the MLEs (Maximum Likelihood Estimate)
-mu <- colMeans(occ)
-# Sigma calculates the covariance of the occurrences
-Sigma <- cov(occ)
-
-
-# Calculate suitabilities in each cell
-max.val <- mvtnorm::dmvnorm(x=mu,mean = mu, sigma = Sigma)
-# function that calculates the log(suitability)
-sui.fun <- function(cell){log(mvtnorm::dmvnorm(x=c(cell[1],cell[2]),mean = mu, sigma = Sigma))-log(max.val)}
-# apply this function to the whole raster layer
-suit.rast <- calc(bios,fun=sui.fun)
-# take exponential to go back to the original scale
-suit.rast1 <- calc(suit.rast,fun = exp,
-                   filename="C:\\Users\\l215j162\\Dropbox\\Nf-second model\\Hummers-Cooper\\Analysis3\\thalassinus_suit_map_maha.asc",
-                   overwrite=T)
-
-# save a TIFF
-writeRaster(suit.rast1,"C:\\Users\\l215j162\\Dropbox\\Nf-second model\\Hummers-Cooper\\Analysis3\\thalassinus_suit_map_maha.tiff", overwrite = T)
-
-x11()
-plot(suit.rast1)
-#points(occ.geo,pch=15,col="red",cex=0.5)
-
-# END
-
-
 # make function: --------------------------------------
 
 niche.G <- function(mu, Sigma, save.map) {
@@ -58,6 +22,7 @@ niche.G <- function(mu, Sigma, save.map) {
   # save a TIFF
   writeRaster(suit.rast1, paste0(save.map, ".tif"), overwrite = T)
   
+  return(suit.rast1)
 }
   
 # Main: How to use "niche.G" --------------- 
@@ -85,11 +50,10 @@ boundary <- cov(occ)
 # define name for the maps
 saveM <- "./Catasticta_nimbice_map"
 
-niche.G(mu = center, Sigma = boundary, save.map = saveM)
+result1 <- niche.G(mu = center, Sigma = boundary, save.map = saveM)
 
 x11()
-plot(suit.rast1)
-
+plot(result1)
 
 ## Example 2
 
