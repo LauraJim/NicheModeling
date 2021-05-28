@@ -73,21 +73,22 @@ result2 <- niche.G(mu = center2, Sigma = boundary2, save.map = saveM2)
 x11()
 plot(result2)
 
+
 #### Now make plot with ggplot ------------------------------------
 # Read raster with output from weighted model
-outp <- raster("./Wasps/Models-set3/Suitability_bios_1_12_M4000.tif")
+outp <- raster("./Results/Threnetes_ruckeri_map.tif")
 # emap <- extent(-170, 179, -60, 80) # whole world
 # emap <- extent(-140, -110, 30, 65) # USA-CAN
-emap <- extent(70, 150, 10, 55) # Asia
+# emap <- extent(70, 150, 10, 55) # Asia
 # emap <- extent(-15, 30, 35, 60) # Europe
 
-outp1 <- crop(outp, emap)
-outpp <- rasterToPoints(outp1)
+# outp1 <- crop(outp, emap)
+outpp <- rasterToPoints(outp)
 outppd <- data.frame(outpp)
 colnames(outppd) <- c("Longitude","Latitude","Suitability")
 
 # Read presence points 
-occ1 <- read.csv("./Wasps/Models-set3/occs_noEurope_50kmthin_Bio1_Bio12.csv",header=T)
+occ3 <- read.csv("./Threnetes_ruckeri_occ_bios.csv",header=T)
 
 x11()
 ggplot() +
@@ -96,10 +97,21 @@ ggplot() +
   #borders("world", xlim = c(-179, 179), ylim = c(-60, 80)) +
   scale_fill_gradient2("Suitability",limits=c(0,1), low = 'grey80',
                        mid='slateblue1', high = 'slateblue4',na.value = NA,
-                       midpoint = 0.5, n.breaks=3) +
-  coord_sf(xlim = emap[1:2], ylim = emap[3:4], expand = FALSE) +
-  geom_point(data = occ1,aes(x=long, y=lat), shape = 23, fill = "yellowgreen")
+                       midpoint = 0.5, n.breaks=4) +
+  # coord_sf(xlim = emap[1:2], ylim = emap[3:4], expand = FALSE) +
+  geom_point(data = occ3,aes(x=long, y=lat), shape = 23, fill = "yellowgreen")
 
-ggsave('./Wasps/Models-set3/Suitmap_vespa_Asia.png',  width = 24, height = 12, units = "cm",
+ggsave('./Results/Threnetes_ruckeri_ggplot.png',  width = 24, height = 12, units = "cm",
        dpi = 600, pointsize = 6)
 
+# Test gradient color -------------------
+
+x11()
+ggplot() +
+  geom_tile(data = outppd,aes(x=Longitude, y=Latitude, fill=Suitability)) +
+  theme_bw() +
+  #borders("world", xlim = c(-179, 179), ylim = c(-60, 80)) +
+  scale_fill_gradientn("Suitability",limits=c(0,1), na.value = NA, +
+                       guide = "colourbar", aesthetics = "fill", colors) +
+  # coord_sf(xlim = emap[1:2], ylim = emap[3:4], expand = FALSE) +
+  geom_point(data = occ3,aes(x=long, y=lat), shape = 23, fill = "yellowgreen")
