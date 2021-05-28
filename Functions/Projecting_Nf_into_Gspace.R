@@ -75,6 +75,9 @@ plot(result2)
 
 
 #### Now make plot with ggplot ------------------------------------
+
+## Example 1: Threnetes ruckeri
+
 # Read raster with output from weighted model
 outp <- raster("./Results/Threnetes_ruckeri_map.tif")
 # emap <- extent(-170, 179, -60, 80) # whole world
@@ -99,19 +102,39 @@ ggplot() +
                        mid='slateblue1', high = 'slateblue4',na.value = NA,
                        midpoint = 0.5, n.breaks=4) +
   # coord_sf(xlim = emap[1:2], ylim = emap[3:4], expand = FALSE) +
-  geom_point(data = occ3,aes(x=long, y=lat), shape = 23, fill = "yellowgreen")
+  geom_point(data = occ3,aes(x=occ3[,1], y=occ3[,2]), shape = 23, fill = "yellowgreen")
 
-ggsave('./Results/Threnetes_ruckeri_ggplot.png',  width = 24, height = 12, units = "cm",
+ggsave('./Results/Threnetes_ruckeri_ggplot.png',  width = 24, height = 24, units = "cm",
        dpi = 600, pointsize = 6)
+
+
+## Example 2: Catasticta nimbice
+
+# Read raster with output from weighted model
+outp2 <- raster("./Results/Catasticta_nimbice_map.tif")
+outpp2 <- rasterToPoints(outp2)
+outppd2 <- data.frame(outpp2)
+colnames(outppd2) <- c("Longitude","Latitude","Suitability")
+
+# Read presence points 
+occ4 <- read.csv("./Catasticta_nimbice_bios.csv",header=T)
+
+# plot
+x11()
+ggplot() +
+  geom_tile(data = outppd2,aes(x=Longitude, y=Latitude, fill=Suitability)) +
+  theme_bw() +
+  #borders("world", xlim = c(-179, 179), ylim = c(-60, 80)) +
+  scale_fill_gradient2("Suitability",limits=c(0,1), low = 'grey80',
+                       mid='slateblue1', high = 'slateblue4',na.value = NA,
+                       midpoint = 0.5, n.breaks=4) +
+  # coord_sf(xlim = emap[1:2], ylim = emap[3:4], expand = FALSE) +
+  geom_point(data = occ4,aes(x=occ4[,1], y=occ4[,2]), shape = 23, fill = "yellowgreen")
+
+ggsave('./Results/Catasticta_nimbice_ggplot.png',  width = 24, height = 24, units = "cm",
+       dpi = 600, pointsize = 6)
+
+
 
 # Test gradient color -------------------
 
-x11()
-ggplot() +
-  geom_tile(data = outppd,aes(x=Longitude, y=Latitude, fill=Suitability)) +
-  theme_bw() +
-  #borders("world", xlim = c(-179, 179), ylim = c(-60, 80)) +
-  scale_fill_gradientn("Suitability",limits=c(0,1), na.value = NA, +
-                       guide = "colourbar", aesthetics = "fill", colors) +
-  # coord_sf(xlim = emap[1:2], ylim = emap[3:4], expand = FALSE) +
-  geom_point(data = occ3,aes(x=long, y=lat), shape = 23, fill = "yellowgreen")
