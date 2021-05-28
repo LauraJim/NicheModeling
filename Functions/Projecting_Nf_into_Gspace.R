@@ -3,42 +3,6 @@
 # Last version: December 2020
 # Project resulting ellipses back into G-space
 
-
-library(raster)
-
-
-# Read environmental layers cropped to the area of interest
-bio1 <- raster(".\\ClimateData10min\\bio1WH.asc")
-bio2 <- raster(".\\ClimateData10min\\bio12WH.asc")
-bios <- stack(bio1,bio2)
-
-# Set the values of the MLEs (Maximum Likelihood Estimate)
-mu <- colMeans(occ)
-# Sigma calculates the covariance of the occurrences
-Sigma <- cov(occ)
-
-
-# Calculate suitabilities in each cell
-max.val <- mvtnorm::dmvnorm(x=mu,mean = mu, sigma = Sigma)
-# function that calculates the log(suitability)
-sui.fun <- function(cell){log(mvtnorm::dmvnorm(x=c(cell[1],cell[2]),mean = mu, sigma = Sigma))-log(max.val)}
-# apply this function to the whole raster layer
-suit.rast <- calc(bios,fun=sui.fun)
-# take exponential to go back to the original scale
-suit.rast1 <- calc(suit.rast,fun = exp,
-                   filename="C:\\Users\\l215j162\\Dropbox\\Nf-second model\\Hummers-Cooper\\Analysis3\\thalassinus_suit_map_maha.asc",
-                   overwrite=T)
-
-# save a TIFF
-writeRaster(suit.rast1,"C:\\Users\\l215j162\\Dropbox\\Nf-second model\\Hummers-Cooper\\Analysis3\\thalassinus_suit_map_maha.tiff", overwrite = T)
-
-x11()
-plot(suit.rast1)
-#points(occ.geo,pch=15,col="red",cex=0.5)
-
-# END
-
-
 # make function: --------------------------------------
 
 niche.G <- function(mu, Sigma, save.map) {
@@ -58,6 +22,7 @@ niche.G <- function(mu, Sigma, save.map) {
   # save a TIFF
   writeRaster(suit.rast1, paste0(save.map, ".tif"), overwrite = T)
   
+  return(suit.rast1)
 }
   
 # Main: How to use "niche.G" --------------- 
@@ -83,13 +48,12 @@ center <- colMeans(occ)
 # Sigma calculates the covariance of the occurrences
 boundary <- cov(occ)
 # define name for the maps
-saveM <- "./Catasticta_nimbice_map"
+saveM <- "./Results/Catasticta_nimbice_map"
 
-niche.G(mu = center, Sigma = boundary, save.map = saveM)
+result1 <- niche.G(mu = center, Sigma = boundary, save.map = saveM)
 
 x11()
-plot(suit.rast1)
-
+plot(result1)
 
 ## Example 2
 
@@ -102,9 +66,40 @@ center2 <- colMeans(occ2)
 # Sigma calculates the covariance of the occurrences
 boundary2 <- cov(occ2)
 # define name for the maps
-saveM2 <- "./Threnetes_ruckeri_map"
+saveM2 <- "./Results/Threnetes_ruckeri_map"
 
-niche.G(mu = center2, Sigma = boundary2, save.map = saveM2)
+result2 <- niche.G(mu = center2, Sigma = boundary2, save.map = saveM2)
 
 x11()
-plot(suit.rast1)
+plot(result2)
+
+#### Now make plot with ggplot ------------------------------------
+# Read raster with output from weighted model
+outp <- raster("./Wasps/Models-set3/Suitability_bios_1_12_M4000.tif")
+# emap <- extent(-170, 179, -60, 80) # whole world
+# emap <- extent(-140, -110, 30, 65) # USA-CAN
+emap <- extent(70, 150, 10, 55) # Asia
+# emap <- extent(-15, 30, 35, 60) # Europe
+
+outp1 <- crop(outp, emap)
+outpp <- rasterToPoints(outp1)
+outppd <- data.frame(outpp)
+colnames(outppd) <- c("Longitude","Latitude","Suitability")
+
+# Read presence points 
+occ1 <- read.csv("./Wasps/Models-set3/occs_noEurope_50kmthin_Bio1_Bio12.csv",header=T)
+
+x11()
+ggplot() +
+  geom_tile(data = outppd,aes(x=Longitude, y=Latitude, fill=Suitability)) +
+  theme_bw() +
+  #borders("world", xlim = c(-179, 179), ylim = c(-60, 80)) +
+  scale_fill_gradient2("Suitability",limits=c(0,1), low = 'grey80',
+                       mid='slateblue1', high = 'slateblue4',na.value = NA,
+                       midpoint = 0.5, n.breaks=3) +
+  coord_sf(xlim = emap[1:2], ylim = emap[3:4], expand = FALSE) +
+  geom_point(data = occ1,aes(x=long, y=lat), shape = 23, fill = "yellowgreen")
+
+ggsave('./Wasps/Models-set3/Suitmap_vespa_Asia.png',  width = 24, height = 12, units = "cm",
+       dpi = 600, pointsize = 6)
+
