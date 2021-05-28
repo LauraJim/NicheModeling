@@ -52,10 +52,11 @@ niche.G <- function(mu, Sigma, save.map) {
   # take exponential to go back to the original scale
   
   suit.rast1 <- calc(suit.rast,fun = exp,
-                     filename= paste0(save.map, ".asc"), # paste puts strings together
+                     filename= paste0(save.map, ".asc"), # paste puts strings 
+                     # together, paste0 has no space inbetween
                      overwrite=T)
-  # save a TIFF, does not work
-#  writeRaster(suit.rast1,"./Catasticta_nimbice_map.tif", overwrite = T)
+  # save a TIFF
+  writeRaster(suit.rast1, paste0(save.map, ".tif"), overwrite = T)
   
 }
   
@@ -82,8 +83,6 @@ center <- colMeans(occ)
 # Sigma calculates the covariance of the occurrences
 boundary <- cov(occ)
 # define name for the maps
-  # save.asc <- "./Catasticta_nimbice_map.asc"
-  # save.tiff <- "./Catasticta_nimbice_map.tiff"
 saveM <- "./Catasticta_nimbice_map"
 
 niche.G(mu = center, Sigma = boundary, save.map = saveM)
@@ -103,8 +102,6 @@ center2 <- colMeans(occ2)
 # Sigma calculates the covariance of the occurrences
 boundary2 <- cov(occ2)
 # define name for the maps
-# save.asc <- "./Catasticta_nimbice_map.asc"
-# save.tiff <- "./Catasticta_nimbice_map.tiff"
 saveM2 <- "./Threnetes_ruckeri_map"
 
 niche.G(mu = center2, Sigma = boundary2, save.map = saveM2)
