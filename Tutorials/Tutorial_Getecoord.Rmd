@@ -2,7 +2,7 @@
 title: "How to export environmental data from raster files (with *get.ecoord*)"
 author: "Laura Jiménez and Carola Franzen"
 date: "June 2021"
-output: html_document
+output: pdf_document
 fontsize: 12pt
 linkcolor: dodgerblue4
 ---
@@ -116,7 +116,7 @@ head(f, n=3)
 
 Save the output as a csv-file:
 ```{r}
-write.csv(f,file=paste0("./Input_Data/Catasticta_nimbice","_bios.csv"),
+write.csv(f,file=paste0("./Output_Data/Catasticta_nimbice","_bios.csv"),
           row.names = F)
 ```
 
@@ -142,7 +142,7 @@ occ <- read.csv("./Input_Data/Catasticta_nimbice.csv",header=T)[,-1]
 
 f <- get.ecoord(estck=bios, gcoord=occ, enames=names1)
 
-write.csv(f,file=paste0("./Input_Data/Catasticta_nimbice","_bios.csv"),
+write.csv(f,file=paste0("./Output_Data/Catasticta_nimbice","_bios.csv"),
           row.names = F)
 ```
 &nbsp;
@@ -160,7 +160,7 @@ occ2 <- read.csv("./Input_Data/Threnetes_ruckeri_occ.csv",header=T)[,-1]
 
 f2 <- get.ecoord(estck=bios, gcoord=occ2, names1) 
 
-write.csv(f2,file=paste0("./Input_Data/Threnetes_ruckeri_occ","_bios.csv"),
+write.csv(f2,file=paste0("./Output_Data/Threnetes_ruckeri_occ","_bios.csv"),
           row.names = F)
 ```
 
