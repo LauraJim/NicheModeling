@@ -1,0 +1,149 @@
+---
+title: "How to determine which datapoints are within an ellipse (with *el.in*)"
+author: "Laura Jiménez (and Carola Franzen)"
+date: "June 2021"
+output: html_document
+fontsize: 12pt
+linkcolor: dodgerblue4
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+\
+  
+## Introduction
+
+The function `el.in` creates a matrix that determines how many points of a species occurrence are within a confidence region bordered by an ellipse. A graph can then be used to display the occurrences within an ellipse.
+\
+\
+
+#### Input data
+
+For this function two matrices are necessary: one that uses random background points to create a cloud of background points and another one that contains the environmental data, which corresponds to the occurrence points of a species. The former can be created by using the function `sam.poly` (see ###). The latter can be created by using the `get.ecoord` function (see tutorial "How to export environmental data from raster files (with *get.ecoord*)").
+\
+\
+
+## Parameters
+
+Four parameters need to be defined for this function (two of these parameters are derived from the occurrence table with environmental data):
+\
+```{r}
+# read table, omit coordinates
+occ <- read.csv("./Input_Data/Threnetes_ruckeri_occ_bios.csv",header=T)[,-(1:2)]
+
+```
+\
+
+**1) The random background points that contain environmental data, called `cloud`**
+
+```{r}
+cloud <- read.csv("./Input_Data/Threnetes_ruckeri_M_bios.csv",header=T)[,-(1:2)]
+```
+\
+
+**2) The mean of the columns that contain environmental data, called `centroid`**
+
+```{r}
+mu <- colMeans(occ)
+```
+\
+  
+**3) The covariance of the environmental data, called `sigma`**
+```{r}
+Sigma <- cov(occ)
+```
+\
+
+**4) The confidence level, called `alpha`**
+
+This parameter can be set directly in the function.
+\
+\
+
+## How *el.in* works
+
+The function calculates an ellipse with the mahalanobis distance and determines which points of a species occurrence that corresponds to environmental data places is within an ellipse. 
+
+![Graph of Threnetes' environmental space within an ellipse](Images/ThR_ESpace_inellipse.png)
+\
+
+Function:
+```{r}
+el.in <- function(cloud,centroid,sigma,alpha){
+  # step 1: calculate de Mahalanobis distance
+  maha <- mahalanobis(x=cloud,center=centroid,cov=sigma)
+  # step 2: a point is inside the confidence region (1-alpha=confidence%) if
+  # the distance divided by the quantile of a Chi-square variable with k d.f. is less than 1
+  chi.q <- qchisq(alpha,ncol(cloud))
+  check <- (maha/chi.q) <= 1
+  cloud <- cbind(rep(1,nrow(cloud))*check,cloud)
+    return(as.matrix(cloud))
+}
+```
+\
+\
+
+## Output
+
+The output is a matrix that contains data on which points lie within an ellipse. This matrix can be visualized with a plot.
+
+Apply `el.in` with the parameters `cloud`, `centroid`, `sigma`, and `alpha` and plot:
+```{r}
+# Use the function to determine which points from the matrix are inside the ellipse
+check <- el.in(cloud,mu,Sigma,0.95)
+
+x11()
+plot(check[,2],check[,3],pch=20,xlab="",ylab="",main="Points inside an ellipse")     
+el <- ellipse::ellipse(x=Sigma,centre = mu,level=0.95)
+lines(el,col=2,lwd=2)
+points(subset(check,check[,1]==1)[,2:3],pch=19,col=2)
+```
+\
+\
+
+## Examples
+\
+
+#### Threnetes ruckeri
+
+```{r, fig.show='hide'}
+# read table with occurrence data, omit coordinates
+occ <- read.csv ("./Input_Data/Threnetes_ruckeri_occ_bios.csv",header=T)[,-(1:2)]
+# mu calculates the means of the columns that contain the occurrences
+mu <- colMeans(occ)
+# Sigma calculates the covariance of the occurrences
+Sigma <- cov(occ)
+# Define the matrix of points
+cloud <- read.csv("./Input_Data/Threnetes_ruckeri_M_bios.csv",header=T)[,-(1:2)]
+# Use the function to determine which points from the matrix are inside the ellipse
+check <- el.in(cloud,mu,Sigma,0.95)
+
+# plot
+x11()
+plot(check[,2],check[,3],pch=20,xlab="",ylab="",main="Points inside an ellipse")     
+el <- ellipse::ellipse(x=Sigma,centre = mu,level=0.95)
+lines(el,col=2,lwd=2)
+points(subset(check,check[,1]==1)[,2:3],pch=19,col=2)
+
+```
+\
+
+#### Catasticta nimbice
+
+```{r, fig.show='hide'}
+occ2 <- read.csv ("./Input_Data/Catasticta_nimbice_bios.csv",header=T)[,-(1:2)]
+mu2 <- colMeans(occ2)
+Sigma2 <- cov(occ2)
+cloud2 <- read.csv("./Input_Data/Catasticta_nimbice_M_bios.csv",header=T)[,-(1:2)]
+
+check2 <- el.in(cloud2,mu2,Sigma2,0.95)
+
+x11()
+plot(check2[,2], check2[,3], pch=".", xlab="", ylab="", 
+     main="Points inside an ellipse")     
+el <- ellipse::ellipse(x=Sigma,centre = mu,level=0.95)
+lines(el,col=2,lwd=2)
+points(subset(check,check[,1]==1)[,2:3],pch=19,col=2)
+```
+

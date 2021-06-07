@@ -1,4 +1,5 @@
 # Function "get.ecoord"
+# Authors: Laura Jiménez and Carola Franzen
 # 2021-05-18
 
 # Description:"get.ecoord" --------------
@@ -15,12 +16,14 @@
 
 ## Output
 # A matrix with four or more columns (depending on the number of layers in estck)
-# and column nmaes: long, lat, enames
+# and column names: long, lat, enames
+
 
 # Function's code: get.ecoord ----------------
 
 get.ecoord <- function(estck,gcoord, enames) {
-  # check the amount of layers in a raster and make sure they are the same as the names that are used
+  # check the amount of layers in a raster and make sure they are the same as 
+  # the names that are used
   if (length(estck@layers)==length(enames)) {  
     # extract climatic data from a raster
     a <- extract(estck,gcoord)  
@@ -48,7 +51,7 @@ library(dismo)
 bio1 <- raster("./ClimateData10min/bio1WH.asc") 
 # total annual precipitation data
 bio12 <- raster("./ClimateData10min/bio12WH.asc") 
-## combine rasters with environmental data into a single RasterStack (with two layers)
+## combine rasters with environmental data into a single RasterStack (w/ two layers)
 bios <- stack(bio1, bio12)
 # add names for new columns that contain environmental data
 names1 <- c("bio1", "bio12") 

@@ -4,14 +4,15 @@
 # Description: "e.ellipse" ---------------
 # The function e.ellipse creates confidence regions, ellipses based on the 
 # Mahalanobis distance that can be used as borders for suitable environments of 
-# a species
-# Currently it only works with three alpha levels
+# a species.
+# Various alpha levels can be chosen.
 
 ## Parameters: 
 # mu = the mean of the columns that contain environmental data, such as 
 # temperature and precipitation 
-# Sigma = the covariance of the occurence
+# Sigma = the covariance of the occurrence
 # enames = character vector with the names of the environmental variables
+# alpha = confidence level
 
 ## Output
 # A plot with the environmental space of a species and three ellipses
@@ -58,19 +59,18 @@ e.ellipse <- function(mu, Sigma, alpha = 0.95, enames) {
 occ <- read.csv ("./Threnetes_ruckeri_occ_bios.csv",header=T)[,-(1:2)]
 
 # choose alpha level
-alpha <- c(0.75, 0.9, 0.95)
+alpha1 <- c(0.75, 0.9, 0.95)
 
 # calculate the parameters
 # mu calculates the means of the columns that contain the occurrences
-mu <- colMeans(occ)
+mu1 <- colMeans(occ)
 # Sigma calculates the covariance of the occurrences
-Sigma <- cov(occ)
+Sigma1 <- cov(occ)
 # Define names for the environmental type
 names1 <- c("Annual mean temperature (°C x 10)","Annual Precipitation (mm)") 
 
 # apply function  
-f <- e.ellipse(mu, Sigma, alpha, enames = names1)
-
+f <- e.ellipse(mu= mu1, Sigma= Sigma1, alpha= alpha1, enames = names1)
 
 ## Example 2:
 

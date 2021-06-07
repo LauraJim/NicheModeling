@@ -30,12 +30,15 @@ niche.G <- function(mu, Sigma, save.map) {
 ## libraries:
 
 library(raster)
+library(sp)
+library(ggplot2)
 # needs package mvtnorm to be installed
 
 ## Read environmental layers cropped to the area of interest
 bio1 <- raster(".\\ClimateData10min\\bio1WH.asc")
 bio2 <- raster(".\\ClimateData10min\\bio12WH.asc")
 bios <- stack(bio1,bio2)
+
 
 ## Example 1
 
@@ -54,6 +57,7 @@ result1 <- niche.G(mu = center, Sigma = boundary, save.map = saveM)
 
 x11()
 plot(result1)
+
 
 ## Example 2
 
@@ -136,5 +140,20 @@ ggsave('./Results/Catasticta_nimbice_ggplot.png',  width = 24, height = 24, unit
 
 
 
-# Test gradient color -------------------
+# Test gradient color - still work in progress -------------------
+library(colorspace)
+
+# issue with the discrete color filling, data needs to be converted via factor 
+# but this does not work out (does not finish processing plot)
+
+x11()
+ggplot() +
+  geom_tile(data = outppd2,aes(x=Longitude, y=Latitude, color= Suitability)) +
+#  theme_bw() +
+#  geom_density(alpha = 0.6) +
+  scale_color_discrete_sequential(palette = "BluYl") + 
+  # scale_fill_gradient2("Suitability",limits=c(0,1), low = 'grey80',
+  #                     mid='slateblue1', high = 'slateblue4',na.value = NA,
+  #                     midpoint = 0.5, n.breaks=4) +
+  geom_point(data = occ4,aes(x=occ4[,1], y=occ4[,2]), shape = 23, fill = "yellowgreen")
 
