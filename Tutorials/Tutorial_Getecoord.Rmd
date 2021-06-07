@@ -21,7 +21,8 @@ library(dismo)
 
 The function `get.ecoord` is a simple tool to extract environmental data, such as annual mean temperature or total annual precipitation, from raster-files that contain this type of information. The extracted data is then combined with the occurrence coordinates of a species. The output is a matrix that contains four or more columns: the coordinates of the species' occurrence (latitude and longitude) and the environmental variables for those coordinates.
 \
-
+  
+\
   
 ## Parameters
 
@@ -35,16 +36,6 @@ For this function, three parameters are necessary:
 \
 
 * `enames` = names for the extracted environmental variables in form of a character vector for the output table
-\
-\
-  
-### Input data
-
-The raster files need to contain information on climatic values that are of interest for the user. The rasters used in the examples below are from [WorldClim](https://worldclim.org/data/index.html) and have a resolution of "10 minutes". The files usually do not need further editing.
-
-The presence data of the species of interest needs to contain the coordinates of occurrence (longitude and latitude) in form of a table. 
-Occurrence data is available on various open databases. For the examples below, data from [GBIF](https://www.gbif.org/) was used. However, the tables from GBIF need to be cleaned up before they can be used as the database is aggregated from various sources with different formats and can contain various errors. There are packages available that aid in the cleaning of the data (e.g. see [CoordinateCleaner]( https://ropensci.github.io/CoordinateCleaner/articles/Cleaning_GBIF_data_with_CoordinateCleaner.html)).
-\
 \
   
 ## Function's code
@@ -88,12 +79,20 @@ The output of the function is a matrix with at least four variables. The first t
   
 ## Worked Examples
 
+### Input data
+
+The raster files need to contain information on climatic values that are of interest for the user. The rasters used in the examples below are from [WorldClim](https://worldclim.org/data/index.html) and have a resolution of "10 minutes". The files usually do not need further editing.
+
+The presence data of the species of interest needs to contain the coordinates of occurrence (longitude and latitude) in form of a table. 
+Occurrence data is available on various open databases. For the examples below, data from [GBIF](https://www.gbif.org/) was used. However, the tables from GBIF need to be cleaned up before they can be used as the database is aggregated from various sources with different formats and can contain various errors. There are packages available that aid in the cleaning of the data (e.g. see [CoordinateCleaner]( https://ropensci.github.io/CoordinateCleaner/articles/Cleaning_GBIF_data_with_CoordinateCleaner.html)).
+
+The same function can also be used to extract environmental data and combine it with random points of a study area if a matrix with random points is available.
+\
+  
 ### *Catasticta nimbice*
 
-For this species we use presence data from the GBIF datasets and the environmental conditions "mean annual temperature" (= bio1) and "total annual precipitation" (= bio12) from the WorldClim datasets.  
-\
-
-To create the parameter `estck`, two or more rasters are combined into one rasterstack. This rasterstack will have as many layers as rasters are combined together. In this example, there are only two layers (bio1 and bio12).  
+To create the parameter `estck`, two or more rasters are combined into one rasterstack. For this species we used rasters with the environmental conditions "mean annual temperature" (= bio1) and "total annual precipitation" (= bio12).  
+The created rasterstack will have as many layers as rasters are combined together. In this example, there are only two layers: bio1 and bio12.
 ```{r}
 
 # read raster files
@@ -133,8 +132,8 @@ head(f, n=3)
 ```
 \
 
-Save the output as a csv-file:
-```{r}
+Save the output as a csv-file (but do not run every time):
+```{r, eval=FALSE}
 write.csv(f,file=paste0("./Output_Data/Catasticta_nimbice","_bios.csv"),
           row.names = F)
 ```
@@ -144,22 +143,34 @@ This csv-file can now be used as data input for various graphs that highlight th
 
 ### *Threnetes ruckeri*
 
-The datasets for the species *Threnetes ruckeri* was gathered from GBIF and WorldClim (same dataset as previous example).
+The raster datasets for the species *Threnetes ruckeri* and names ("bio1" and "bio12") are the same as the above example.
 
-```{r}
+```{r, eval=FALSE}
 bio1 <- raster("./Input_Data/bio1WH.asc") 
 bio12 <- raster("./Input_Data/bio12WH.asc") 
 bios <- stack(bio1, bio12)
 
 names1 <- c("bio1", "bio12") 
 
-occ2 <- read.csv("./Input_Data/Threnetes_ruckeri_occ.csv",header=T)[,-1]
+```
+  
+Unlike the previous example, random points of a study area instead of the occurrence points are combined with extracted environmental data that can be used as a background for maps (e.g. in the tutorials "Function *GEspace*" and "Function *el.in*").
 
-f2 <- get.ecoord(estck=bios, gcoord=occ2, names1) 
+```{r}
+# read table with random points
+bckgrnd <- read.csv("./Input_Data/Threnetes_ruckeri_M.csv",header=T)
+head(bckgrnd, n=3)
+
+f2 <- get.ecoord(estck=bios, gcoord=bckgrnd, names1) 
 head(f2, n=3)
-
-write.csv(f2,file=paste0("./Output_Data/Threnetes_ruckeri_occ","_bios.csv"),
-          row.names = F)
 ```
 
+
+Save the output as a csv-file (but do not run it every time):
+```{r, eval=FALSE}
+
+write.csv(f2,file=paste0("./Output_Data/Threnetes_ruckeri_M","_bios.csv"),
+          row.names = F)
+```
+  
   
