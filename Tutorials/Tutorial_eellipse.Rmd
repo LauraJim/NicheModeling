@@ -66,6 +66,9 @@ alpha1 <- c(0.75, 0.9, 0.95)
 The function creates ellipses with a loop that loops as many alpha levels as are entered into the function (up to three). If no alpha levels are entered into the function, the default is 0.95. The ellipses are displayed in a plot that also shows the environmental datapoints of a species. In this example, the environmental data are mean annual temperature and total annual precipitation.
 
 ![Graph of Threnetes' environmental space with three ellipses](Images/ESpace_ellipses.png)
+```{r pressure, echo=FALSE, fig.cap="A Statistical Methods for Evaluating Relationships. University of Kansas Science Bulletin, 38, 1409-1448.", out.width = '50%',fig.align="center"}
+knitr::include_graphics("CitationSokalMichener.png")
+```
 \
 \
 
