@@ -27,7 +27,7 @@ library(ggpubr)
 The function `GEspace` is a tool that can plot the geographical and environmental space of a species' presence in `ggplot2`. The output is a plot with a geographical map with occurrence points and a graph of the occurrence in relation to the environmental data, such as annual mean temperature or total annual precipitation, next to it.
 \
 
-## Parameters
+### Parameters
 
 For this function, two parameters are necessary and a two more can be added:
 
@@ -44,6 +44,33 @@ For this function, two parameters are necessary and a two more can be added:
 \
 \
 
+### Dependencies
+
+* `rgdal`
+\
+
+* `raster`
+\
+
+* `ggplot2`
+\
+
+* `rnaturalearth`
+\
+
+* `rnaturalearthdata`
+\
+
+* `ggpubr`
+\
+
+* `sf`
+\
+
+* `rgeos`
+\
+
+\
 
 ## Function's code
 
@@ -234,7 +261,7 @@ The output varies depending on how the function is applied. If a polygon is adde
 ## Worked Examples
 
 <!-- Where should the library notice go? Is here okay? -->
-### Necessary libraries
+### Open libraries
 
 ```{r, eval=FALSE}
 library(rgdal)
