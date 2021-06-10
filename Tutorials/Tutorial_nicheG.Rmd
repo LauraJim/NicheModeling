@@ -25,7 +25,7 @@ The function niche.G projects ellipses that define suitable environments for a s
 \
 \
 
-## Parameters
+### Parameters
 
 * `mu` = the mean of the columns that contain environmental data, such as temperature and precipitation 
 \
@@ -37,6 +37,23 @@ The function niche.G projects ellipses that define suitable environments for a s
 \
 
 \
+
+### Dependencies
+
+* `raster`
+\
+
+* `sp`
+\
+
+* `ggplot2`
+\
+
+* `mvtnorm`
+\
+
+\
+
 
 ## Function's code
 
@@ -76,7 +93,7 @@ The function will produce a geographical map that represents areas that have sui
 ## Worked Examples
 
 <!-- Where should the library notice go? Is here okay? -->
-### Necessary libraries
+### Upload libraries
 
 ```{r, eval=FALSE}
 library(raster)
