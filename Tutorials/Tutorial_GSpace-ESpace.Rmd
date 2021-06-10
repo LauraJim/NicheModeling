@@ -24,46 +24,41 @@ library(ggpubr)
   
 # Creating plots with the geographical and environmental space of a species in ggplot2
 
-The function `GEspace` is a tool that can plot the geographical and environmental space of a species' presence in ggplot. The output is a plot with a geographical map with occurrence points and a graph of the occurrence in relation to the environmental data, such as annual mean temperature or total annual precipitation, next to it.
+The function `GEspace` is a tool that can plot the geographical and environmental space of a species' presence in `ggplot2`. The output is a plot with a geographical map with occurrence points and a graph of the occurrence in relation to the environmental data, such as annual mean temperature or total annual precipitation, next to it.
 \
 
 ## Parameters
 
 For this function, two parameters are necessary and a two more can be added:
 
-* `occ` = a table with occurrence and corresponding environmental data of a species
+* `occ` = a matrix with occurrence and corresponding environmental data of a species
 \
 
-* `bckgrnd` = a table with random points from a specific geographic region that will be used as a background for the geographical space
-
-It is important to note that both parameters, the matrices for `occ` and `bckgrnd`, need to have the same structure: the first two columns contain the coordinates, with longitute in the first column and latitude in the second. The following columns need to contain the environmental data of interest.
+* `bckgrnd` = a matrix with random points from a specific geographic region and corresponding environmental data
 \
   
-* `add.poly` = a polygon of the study area
-
-This parameter is not necessary and can be added if a polygon is available.
+* `add.poly` = a polygon of the study area (optional)
 \
   
-* `save.p` = saves the file to your set output folder
+* `save.p` = saves the file to your set output folder (optional)
+\
+\
 
-This parameter is not necessary and can be added if the graph should be saved as a file.
-\
-\
-  
-### Input data
-Two files are necessary to plot the graphs: a file with geographical data and a matrix that contains the coordinates of a species' occurrence and various environmental variables. The latter can be created by using the `get.ecoord` function (see tutorial "Function *get.ecoord*"). The former can either be a polygon or a matrix with random points of the study area. Random points of the study area can be created by using the function `sam.poly` (see ###).
-\
-\
 
 ## Function's code
 
 ### How *GEspace* works
   
 Depending on the data input, the function `GEspace` will create a plot with a polygon or random background points as a geographical space.  
-The default option (no polygon added) will create a map of the study area based on the coordinates of random background points and the occurrence points of a species. As a first step, the function will create a new matrix that combines the coordinates of the random background points and the occurrence points into two columns and adds a third column with a type (1 for background points and 2 for occurrence points). This map is plotted on the left side. To the right side, the environmental space will be plotted. For this plot a data-frame is created (in the same manner as the previous data-frame) for the environmental data of the background and occurrence points. Those points are plotted in a Cartesian coordinate system.   
-If the user adds a polygon, it will be used alongside a part of the worldmap from the `rnaturalearth` packages for the greographical space. The polygon is first transformed to the WGS 84 coordinate system. It serves as a boundary on which the worldmap is cut. Both, the polygon and clipped worldmap are used as a background map onto which the occurrence points of the species is plotted. The environmental space is plotted as above. If save.p is added to the function, then the graph will be saved, if not, a window with the graph will pop up.
+The default option (no polygon added, no graph saved) will create a map of the study area based on the coordinates of random background points and the occurrence points of a species. As a first step, the function will create a new matrix that combines the coordinates of the random background points and the occurrence points into two columns and adds a third column with a type (1 for background points and 2 for occurrence points). The background points and occurrence points are plotted as a geographical map to the left side. To the right side, the environmental space will be plotted. For this plot a data-frame is created (in the same manner as the previous data-frame) for the environmental data of the background and occurrence points. Those points are plotted in a Cartesian coordinate system. 
+If the background points exceed 1000 objects, the point size in the graphs is reduced.  
+  
+If the user adds a polygon with `add.poly`, it will be used alongside a worldmap from the `rnaturalearth` packages for the mapping of the geographical space. The polygon is first transformed to the WGS 84 coordinate system. It serves as a mask on which the worldmap is clipped. Both, the polygon and clipped worldmap are used as a background map onto which the occurrence points of the species are plotted. The environmental space is plotted as above. 
+  
+If `save.p` is added to the function, then the graph will be saved, if not, a window with the graph will pop up.
 \
   
+
 ```{r}
 GEspace <- function(bckgrnd, occ, add.poly = NULL, save.p = NULL) {
   
@@ -230,114 +225,149 @@ GEspace <- function(bckgrnd, occ, add.poly = NULL, save.p = NULL) {
   
 ### Output
 
-The output is a plot with two graphs. On the left side is the geographical space of a species and on the right side is the environmental space of a species with two environmental data points.
+The output is a plot with two graphs. On the left side is the geographical space and on the right side is the environmental space (with two environmental conditions) of a species' occurrence.
 The output varies depending on how the function is applied. If a polygon is added, the background for the geographical space will be a clipped worldmap from the `rnaturalearth` packages overlayed with the polygon of the study area. If no polygon is added, the background will consist of random points of the study areay
 \
-
+  
+\
+  
 ## Worked Examples
 
-###  Catasticta nimbice
+<!-- Where should the library notice go? Is here okay? -->
+### Necessary libraries
 
-Distribution of the species Catasticta nimbice and its environmental space:
-
-```{r, message= FALSE, results=FALSE, fig.show='hide'}
-# read matrix with random background points
-ranpoints <- read.csv("./Input_Data/Catasticta_nimbice_M_bios.csv",header=T) 
-# read matrix with occurrence of species that contains environmental data
-species <- read.csv("./Input_Data/Catasticta_nimbice_bios.csv",header=T)
-# read polygon
-shp <- readOGR("./Input_Data/shapefiles","nimbice3")
-# save file to
-saveM <- "./Output_Data/Catasticta_nimbice"
-
-# apply function GEspace
-# with polygon, save as png
-GEspace(bckgrnd=ranpoints, occ=species, add.poly=shp, save.p = paste0(saveM, "_bckgrndmap.png"))
-# with polygon
-GEspace(bckgrnd=ranpoints, occ=species, add.poly=shp)
-# with background points, save as png
-GEspace(bckgrnd=ranpoints, occ=species, save.p = paste0(saveM, "_polymap.png"))
-# with background points
-GEspace(bckgrnd=ranpoints, occ=species)
-
+```{r, eval=FALSE}
+library(rgdal)
+library(raster)
+library(ggplot2)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(ggpubr)
+# package "sf" needs to be installed, but not loaded
+# package "rgeos" needs to be installed, but not loaded
 ```
 \
 
-We use the "bios.csv"-file that was created in a previous tutorial (Function *get.ecoord*):
+### Input data
+Two files are necessary to plot the graphs: a matrix with random geographical and environmental data of the study area that provides background points and a matrix that contains the coordinates of a species' occurrence and various environmental variables. Both can be created by using the `get.ecoord` function (see tutorial "Function *get.ecoord*").
+
+It is important to note that both parameters, the matrices for `occ` and `bckgrnd`, need to have the same structure: the first two columns contain the coordinates, with longitude in the first column and latitude in the second. The following columns need to contain the environmental data of interest.
+\
+\
+
+###  *Catasticta nimbice*
+\
+
+Distribution of the species *Catasticta nimbice* and its environmental space. In this example the number of background points is above 1000 and the point size is reduced in order to keep a clear display of points.
+
+For the species' occurrence points in correspondence with environmental data the "bios.csv"-file that was created with `get.ecoord` is used.
 ```{r}
 # read table of a species occurrence with environmental data points
 species <- read.csv("./Input_Data/Catasticta_nimbice_bios.csv",header=T)
-head(species, n=3)
+
 
 ```
+```{r, echo=FALSE}
+head(species, n=5)
+```
+
 \
-  
+
+For the random background points in correspondence with environmental data the "M_bios.csv"-file that was created with `get.ecoord` is used.  
 ```{r}
 # read table with random background points
 ranpoints <- read.csv("./Input_Data/Catasticta_nimbice_M_bios.csv",header=T)
-head(ranpoints, n=3)
 
 ```
+```{r, echo=FALSE}
+head(ranpoints, n=5)
+```
+
 \
+
+If a polygon of the distribution area is available, it can be added as a parameter.
 ```{r, results='hide', message=FALSE}
 # read polygon
 shp <- readOGR("./Input_Data/shapefiles","nimbice3")
 
 ```
 \
+
+If the graph is to be saved, the location and name can be set.
 ```{r}
 saveM <- "./Output_Data/Catasticta_nimbice"
 
 ```
 \
 
-  
-No polygon (default), not saving the graph (default), graph will pop up:
+**Apply `GEspace`** (but do not run every time):  
+
+No polygon added (default), no save.p added (default): A graph will pop up & the geographical background will be made of random points.
 ```{r, eval=FALSE}
 GEspace(bckgrnd=ranpoints, occ=species)
 ```
+\
+
+```{r, echo=FALSE, fig.cap=" Figure of the geographical space with random points as a background (left) and the environmental space (right) of *Catasticta nimbice* .", out.width = '70%',fig.align="center"}
+options(knitr.duplicate.label = "allow")
+knitr::include_graphics("Images/Catasticta_nimbice_points.png")
+```
+\
 
 
-No polygon (default), but saving:
+No polygon added (default), save.p added: The graph will be saved & the geographical background will be made of random points.
 ```{r, eval=FALSE}
 GEspace(bckgrnd=ranpoints, occ=species, save.p =  paste0(saveM, "_bckgrndmap.png"))
 ```
 
 
-With polygon, not saving (default), graph will pop up:
+With polygon, no save.p added (default): A graph will pop up & the geographical background will be made of a polygon.
 ```{r, eval=FALSE, message= FALSE}
 GEspace(bckgrnd=ranpoints, occ=species, add.poly=shp)
 ```
 
-With polygon, but saving:
+With polygon, save.p added: A graph will pop up & the geographical background will be made of a polygon.
 ```{r, eval=FALSE, message= FALSE}
 GEspace(bckgrnd=ranpoints, occ=species, add.poly=shp, save.p =  paste0(saveM, "_polymap.png"))
 ```
 \
 
-```{r pressure, echo=FALSE, fig.cap=" Figure of the geographical space with random points as a background (left) and the environmental space (right) of *Catasticta nimbice* .", out.width = '70%',fig.align="center"}
-knitr::include_graphics("Images/map2.png")
-```
-\
-
-```{r pressure, echo=FALSE, fig.cap=" Figure of the geographical space with a polygon and clipped worldmap as a background (left) and the environmental space (right) of *Catasticta nimbice* .", out.width = '70%',fig.align="center"}
-knitr::include_graphics("Images/map1.png")
+```{r, echo=FALSE, fig.cap=" Figure of the geographical space with a polygon and clipped worldmap as a background (left) and the environmental space (right) of *Catasticta nimbice* .", out.width = '70%',fig.align="center"}
+options(knitr.duplicate.label = "allow")
+knitr::include_graphics("Images/Catasticta_nimbice_poly.png")
 ```
 \
 
 
-#### Threnetes ruckeri
+### *Threnetes ruckeri*
+\
 
-Distribution of the species Threnetes ruckeri and its environmental space:
+Distribution of the species *Threnetes ruckeri* and its environmental space. In this example the number of background points is below 1000 and the point size is not reduced.
 
 ```{r, message=FALSE, results=FALSE, fig.show='hide'}
 ranpoints2 <- read.csv("./Input_Data/Threnetes_ruckeri_M_bios.csv",header=T)
 species2 <- read.csv("./Input_Data/Threnetes_ruckeri_occ_bios.csv",header=T)
 shp2 <- readOGR("./Input_Data/shapefiles","Threnetes_ruckeri")
 
+```
+
+```{r, eval=FALSE}
 GEspace(bckgrnd = ranpoints2, occ = species2, add.poly = shp2, save.p = "Threnetes_bckgrndmap.png")
 GEspace(bckgrnd = ranpoints2, occ = species2, add.poly = shp2)
+```
+
+
+```{r, echo=FALSE, fig.cap=" Figure of the geographical space with random points as a background (left) and the environmental space (right) of *Threnetes ruckeri* .", out.width = '70%',fig.align="center"}
+options(knitr.duplicate.label = "allow")
+knitr::include_graphics("Images/Threnetes_ruckeri_points.png")
+```
+\
+
+```{r, eval=FALSE}
 GEspace(bckgrnd = ranpoints2, occ = species2, save.p = "Threnetes_polymap.png")
 GEspace(bckgrnd = ranpoints2, occ = species2)
 ```
 
+```{r, echo=FALSE, fig.cap=" Figure of the geographical space with a polygon and clipped worldmap as a background (left) and the environmental space (right) of *Threnetes ruckeri* .", out.width = '70%',fig.align="center"}
+knitr::include_graphics("Images/Threnetes_ruckeri_poly.png")
+```

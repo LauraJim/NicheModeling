@@ -9,8 +9,9 @@
 
 ## Parameters: 
 # mu = the mean of the columns that contain environmental data, such as 
-# temperature and precipitation 
-# Sigma = the covariance of the occurrence
+#       temperature and precipitation 
+# Sigma = the covariance of the environmental data linked with a species' 
+#         occurrence
 # enames = character vector with the names of the environmental variables
 # alpha = confidence level
 

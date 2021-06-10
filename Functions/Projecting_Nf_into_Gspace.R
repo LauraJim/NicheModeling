@@ -3,14 +3,33 @@
 # Last version: December 2020
 # Project resulting ellipses back into G-space
 
-# make function: --------------------------------------
+# Description: -----------------------------------
+# The function niche.G projects ellipses that define suitable environments for a 
+# species on a map as potential niches. The regions in the geographical space
+# are colored by different degrees of suitability.
+
+## Parameters:
+# mu = the mean of the columns that contain environmental data, such as 
+#       temperature and precipitation 
+# Sigma = the covariance of the environmental data linked with a species' 
+#         occurrence
+# save.map = set the location and name for saving the map
+
+## Output:
+# The function will produce a geographical map that represents areas that have 
+# suitable environmental conditions for a species. Those potential ecological 
+# niche regions are colored by different degrees of suitability. The map will
+# automatically be saved as a tiff and a asci file.
+
+# the function's code: niche.G --------------------------------------
 
 niche.G <- function(mu, Sigma, save.map) {
   
   # Calculate suitabilities in each cell
   max.val <- mvtnorm::dmvnorm(x=mu,mean = mu, sigma = Sigma)
   # function that calculates the log(suitability)
-  sui.fun <- function(cell){log(mvtnorm::dmvnorm(x=c(cell[1],cell[2]),mean = mu, sigma = Sigma))-log(max.val)}
+  sui.fun <- function(cell){log(mvtnorm::dmvnorm(x=c(cell[1],cell[2]),mean = mu, 
+                                                 sigma = Sigma))-log(max.val)}
   # apply this function to the whole raster layer
   suit.rast <- calc(bios,fun=sui.fun)
   # take exponential to go back to the original scale
