@@ -122,6 +122,8 @@ like.fn <- function(theta){ negloglike(theta,sam1=sp.occpnts,sam2=sam.Mpnts) }
 # apply optimization function to minimize the negative log-likelihood
 #find.mle <- optim(par=vals.ini, fn=like.fn, method="L-BFGS-B", lower=c(-50,0.001,0.001,-999999,0.001),
 #                  upper=c(50,10000,rep(-999999,3)))
+# ini = initial value that is set to help algorithm find value faster (if we already
+#       know that it will be around that value)
 find.mle <- optim(par=vals.ini, fn=like.fn, method="Nelder-Mead")
 mle <- find.mle$par
 mle.mu <- mle[1:2]
