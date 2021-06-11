@@ -4,11 +4,19 @@
 # Function that determines which points from a given matrix are inside
 # an ellipse -------
 
+## Description: --------------
+# The function `el.in` creates a matrix that determines how many points are 
+# within a confidence region bordered by an ellipse. The ellipse is calculated 
+# based on a species' environmental data and a confidence level. The points 
+# inside the ellipse are potential data points of the niche in which a species 
+# may thrive.
+
 ## Parameters ----------
 ## cloud == matrix that contains the coordinates of the points to evaluate
 ## centroid == vector with the coordinates of the centroid of the ellipse
 ## sigma == covariance matrix that defines de ellipse
 ## alpha == confidence level
+
 
 el.in <- function(cloud,centroid,sigma,alpha){
   # step 1: calculate de Mahalanobis distance
