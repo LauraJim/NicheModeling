@@ -1,0 +1,131 @@
+---
+title: "Function *sam.polyM*"
+author: "Laura Jimenéz and Carola Franzen"
+date: "June 2021"
+output: html_document
+fontsize: 12pt
+linkcolor: dodgerblue4
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(raster)
+library(rgdal)
+library(rgeos)
+library(tools)
+```
+\
+
+## Sampling random points from an area of interest
+
+The function `sam.polyM` takes a random sample of environmental combinations inside the study area. For this, the environmental data from a rasterstack is clipped by a shapefile that delimits the area before the sample is taken.
+\
+
+\
+
+### Parameters
+
+* `M.shp` = a shapefile of the study area (polygon)
+\
+
+* `N` = the sample size
+\
+
+* `bios` = a rasterstack that contains at least two layers with environmental data
+\
+
+\
+
+### Dependencies
+
+* `raster`
+\
+
+* `rgdal`
+\
+
+* `rgeos`
+\
+
+* `tools`
+\
+
+\
+
+## Function's code
+
+
+### How *sam.polyM* works
+
+The function `sam.polyM`uses a shapefile of the area of interest as a mask to clip the rasterstack in order to reduce the information of the rasterstack to the same geographical area. As a next step, cells with an NA value will be deleted from the clipped rasterstack. As a next step, a random sample of indices is generated. With these indices a sample of the clipped rasterstack is taken. The sample size is dictated by N.
+
+```{r}
+# Get a random sample of points inside the polygon that delimits M (= )
+# and extract their environmental values
+sam.polyM <- function(M.shp,N,bios){
+  # crop and mask the environmental layers with the M polygon
+  clip.M <- mask(crop(bios,M.shp),M.shp)
+  # get rid of cells with NA values = indices
+  ind <- which(!is.na(clip.M[[1]][]))
+  # get a random sample of indices
+  sam <- sample(ind,N,replace = T)
+  # choose the points corresponding to the selected indices
+  Mpnts <- clip.M[][sam,]
+  return(Mpnts)
+}
+```
+\
+
+### Output
+
+The output of the function is a matrix of random points with as many columns as layers the rasterstack has.
+\
+
+\
+
+## Worked Examples
+
+### Input Data
+
+The raster files need to contain information on climatic values that are of interest for the user. The rasters used in the examples below are from [WorldClim](https://worldclim.org/data/index.html) and have a resolution of "10 minutes". The files usually do not need further editing.
+
+A polygon that marks the borders of a species' occurrence or the study area is necessary. This polygon should be a shapefile.
+\
+
+### *Catasticta nimbice*
+
+First, the rasterstack for the parameter `bios` is prepared. For this example two rasters with the environmental data "annual mean temperature" and "total annual precipitation" are used. The rasterstack will therefore have two layers.
+
+```{r}
+# Read environmental layers
+bio1 <- raster("./Input_Data/bio1WH.asc")
+bio12 <- raster("./Input_Data/bio12WH.asc")
+
+# Create a single raster with as many layers as environmental variables
+stck_bios <- stack(bio1, bio12)
+```
+\
+
+Read the parameter for `M.shp`.
+
+```{r, results='hide', message=FALSE}
+M.shp <- readOGR("./Input_Data/shapefiles","nimbice3")
+```
+\
+
+Apply the function with `bios`, `M.shp`, and `N`. Here, `N` will be 10,000. The generated matrix will therefore have two columns with environmental data from the study area and 10,000 rows.
+
+```{r}
+sam.Mpnts <- sam.polyM(M.shp = M.shp,N = 10000,bios = stck_bios)
+```
+\
+
+Save the output as a csv-file (do not run everytime)
+
+```{r, eval=FALSE}
+write.csv(sam.Mpnts,file=paste0("./Output_Data/Catasticta_nimbice","_M_bios.csv"),
+          row.names = F)
+```
+
+
