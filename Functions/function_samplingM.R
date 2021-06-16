@@ -57,20 +57,22 @@ M.shp <- readOGR("./Shapefiles","C_nimbice")
 # sam.Mpnts <- sam.polyM(M.shp = M.shp,N = N,bios = stck_bios)
 sam.Mpnts <- sam.polyM(M.shp = M.shp,N = 10000,bios = stck_bios)
 
-# Plot sampled points with occurrence points on top
-# plot
-occ <- read.csv("./Catasticta_nimbice_bios.csv",header=T) 
 
+## Use sampled points for a plot
+occ <- read.csv("./Catasticta_nimbice_bios.csv",header=T) 
 pal <- c("grey50", "turquoise") # defining two colors that can be called upon
 
-
-## plot
+# plot
 x11()
-par(mfrow=c(1,2)) # display two different graphs next to each other
+# display two different graphs next to each other
+par(mfrow=c(1,2)) 
 
 # geographic part of plot -- G-Space
-plot(M.shp, col=pal[1], xlab="longitude", ylab="latitude", main="Geographic Space") # use long and lat of random background points; pch= display as point; col=pal calls the second color previously defined
-points(occ[,1], occ[,2], pch=19, col=pal[2]) # add points with species location; pch=19 is form of point (full circle)
+#   use long and lat of random background points; pch= display as point; 
+#   col=pal calls the second color previously defined
+plot(M.shp, col=pal[1], xlab="longitude", ylab="latitude", main="Geographic Space") 
+# add points with species location; pch=19 is form of point (full circle)
+points(occ[,1], occ[,2], pch=19, col=pal[2]) 
 
 # add legend
 legend(x= "bottomleft",
@@ -82,8 +84,12 @@ legend(x= "bottomleft",
 
 
 # environmental part of the plot -- E-Space
-plot(sam.Mpnts[,1], sam.Mpnts[,2], pch=".", col=pal[1], xlab="Mean Annual Temperature", ylab="Accumulated Precipitation", main="Environmental Space") # use random points with environmental data
-points(occ$bio1, occ$bio12, pch=19, col=pal[2]) # add points of species environmental data    
+#   use random points with environmental data for the plot
+plot(sam.Mpnts[,1], sam.Mpnts[,2], pch=".", col=pal[1], 
+     xlab="Mean Annual Temperature", ylab="Accumulated Precipitation", 
+     main="Environmental Space") 
+# add points of species environmental data
+points(occ$bio1, occ$bio12, pch=19, col=pal[2])     
 
 # add legend
 legend(x= "topleft",
@@ -93,27 +99,31 @@ legend(x= "topleft",
        bty = "n")
 
 
+
 # Example 2:
 
 # Read M polygon
 M.shp <- readOGR("./threnetes_shp","Threnetes_ruckeri") ###
-# Get a random sample of points in M and extract its corresponding environmental values
+
+## Get a random sample of points in M and extract its corresponding environmental values
 sam.Mpnts <- sam.polyM(M.shp = M.shp,N = 10000,bios = stck_bios)
 
 
-# plot
+## Use sampled points for a plot
 occ <- read.csv("./Threnetes_ruckeri_occ_bios.csv",header=T) 
-
 pal <- c("grey50", "turquoise") # defining two colors that can be called upon
 
 
-## plot
+# plot
 x11()
-par(mfrow=c(1,2)) # display two different graphs next to each other
+par(mfrow=c(1,2))
 
 # geographic part of plot -- G-Space
-plot(M.shp, col=pal[1], xlab="longitude", ylab="latitude", main="Geographic Space") # use long and lat of random background points; pch= display as point; col=pal calls the second color previously defined
-points(occ[,1], occ[,2], pch=19, col=pal[2]) # add points with species location; pch=19 is form of point (full circle)
+#   use long and lat of random background points; pch= display as point; 
+#   col=pal calls the second color previously defined
+plot(M.shp, col=pal[1], xlab="longitude", ylab="latitude", main="Geographic Space") 
+# add points with species location; pch=19 is form of point (full circle)
+points(occ[,1], occ[,2], pch=19, col=pal[2]) 
 
 # add legend
 legend(x= "bottomleft",
@@ -125,8 +135,10 @@ legend(x= "bottomleft",
 
 
 # environmental part of the plot -- E-Space
-plot(sam.Mpnts[,1], sam.Mpnts[,2], pch=".", col=pal[1], xlab="Mean Annual Temperature", ylab="Accumulated Precipitation", main="Environmental Space") # use random points with environmental data
-points(occ$bio1, occ$bio12, pch=19, col=pal[2]) # add points of species environmental data    
+plot(sam.Mpnts[,1], sam.Mpnts[,2], pch=".", col=pal[1], 
+     xlab="Mean Annual Temperature", ylab="Accumulated Precipitation", 
+     main="Environmental Space") 
+points(occ$bio1, occ$bio12, pch=19, col=pal[2])  
 
 # add legend
 legend(x= "topleft",
