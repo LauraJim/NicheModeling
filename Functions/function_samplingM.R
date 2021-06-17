@@ -57,33 +57,50 @@ M.shp <- readOGR("./Shapefiles","C_nimbice")
 # sam.Mpnts <- sam.polyM(M.shp = M.shp,N = N,bios = stck_bios)
 sam.Mpnts <- sam.polyM(M.shp = M.shp,N = 10000,bios = stck_bios)
 
+# Example 1
 
 ## Use sampled points for a plot
 occ <- read.csv("./Catasticta_nimbice_bios.csv",header=T) 
 pal <- c("grey50", "turquoise") # defining two colors that can be called upon
 
-# plot
-x11()
-# display two different graphs next to each other
-par(mfrow=c(1,2)) 
-
-# geographic part of plot -- G-Space
-#   use long and lat of random background points; pch= display as point; 
-#   col=pal calls the second color previously defined
-plot(M.shp, col=pal[1], xlab="longitude", ylab="latitude", main="Geographic Space") 
-# add points with species location; pch=19 is form of point (full circle)
-points(occ[,1], occ[,2], pch=19, col=pal[2]) 
-
-# add legend
-legend(x= "bottomleft",
-       legend = c("Study Area", "Occurences"),
-       lty = c(1, 0),
-       pch = c(NA, 19),
-       col = c(pal[1], pal[2]),
-       bty = "n")
+# # plot
+# x11()
+# # display two different graphs next to each other
+# par(mfrow=c(1,2)) 
+# 
+# # geographic part of plot -- G-Space
+# #   use long and lat of random background points; pch= display as point; 
+# #   col=pal calls the second color previously defined
+# plot(M.shp, col=pal[1], xlab="longitude", ylab="latitude", main="Geographic Space") 
+# # add points with species location; pch=19 is form of point (full circle)
+# points(occ[,1], occ[,2], pch=19, col=pal[2]) 
+# 
+# # add legend
+# legend(x= "bottomleft",
+#        legend = c("Study Area", "Occurences"),
+#        lty = c(1, 0),
+#        pch = c(NA, 19),
+#        col = c(pal[1], pal[2]),
+#        bty = "n")
 
 
 # environmental part of the plot -- E-Space
+
+# Calculate and draw the kernel using the points inside M (define M carefully)
+# kernel for contour plot
+fhat.M <- ks::kde(x=cbind(sam.Mpnts[,1], sam.Mpnts[,2]))
+### PLOT 2: Probability of selecting a point, given the fundamental niche
+# plot estimated kernel of M with points inside M
+lvls1 <- c(5,25,50,75,95)
+library(scales)
+col.M2 <- alpha("orangered2",0.1)
+M.cols <- colorRampPalette(c(alpha("white",0.1),alpha("cadetblue4",0.9)))
+x11()
+plot(fhat.M,display="filled.contour",cont=lvls1,main="",xlab="Mean annual temperature (°C*10)",
+     ylab="Annual precipitation (mm)",col=M.cols(length(lvls1)+1))
+# add points used for kernel estimation
+points(sam.Mpnts[,1], sam.Mpnts[,2],col=col.M2,pch=19,cex=0.6)
+
 #   use random points with environmental data for the plot
 plot(sam.Mpnts[,1], sam.Mpnts[,2], pch=".", col=pal[1], 
      xlab="Mean Annual Temperature", ylab="Accumulated Precipitation", 
