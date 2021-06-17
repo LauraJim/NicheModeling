@@ -267,6 +267,34 @@ stck_bios &lt;- stack(bio1, bio12)</code></pre>
 <p>Save the output as a csv-file (do not run everytime)</p>
 <pre class="r"><code>write.csv(sam.Mpnts,file=paste0(&quot;./Output_Data/Catasticta_nimbice&quot;,&quot;_M_bios.csv&quot;),
           row.names = F)</code></pre>
+<p><br />
+</p>
+<p>Create a simple plot of the environmental space (E-Space) with a species’ occurrence.</p>
+<pre class="r"><code># read occurrence data
+occ &lt;- read.csv(&quot;./Input_Data/Catasticta_nimbice_bios.csv&quot;,header=T) 
+# set colors
+pal &lt;- c(&quot;grey50&quot;, &quot;turquoise&quot;)
+
+# plot
+x11()
+#   use random points with environmental data for the plot
+plot(sam.Mpnts[,1], sam.Mpnts[,2], pch=&quot;.&quot;, col=pal[1], 
+     xlab=&quot;Mean Annual Temperature&quot;, ylab=&quot;Accumulated Precipitation&quot;, 
+     main=&quot;Environmental Space&quot;) 
+# add points of species environmental data
+points(occ$bio1, occ$bio12, pch=19, col=pal[2])
+# add legend
+legend(x= &quot;topleft&quot;,
+       legend = c(&quot;Study Area&quot;, &quot;Occurences&quot;),
+       pch = c(20, 19),
+       col = c(pal[1], pal[2]),
+       bty = &quot;n&quot;)</code></pre>
+<p><br />
+</p>
+</div>
+<div id="threnetes-ruckeri" class="section level3">
+<h3><em>Threnetes ruckeri</em></h3>
+<p>The rasterstack is the same as the previous example</p>
 </div>
 </div>
 
