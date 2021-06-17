@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Tutorial_InEllipse.html
 Tutorial_eellipse.html
 Tutorial_Getecoord.html
@@ -5,3 +6,11 @@ Tutorial_GSpace-ESpace.html
 Tutorial_nicheG.html
 Tutorial_sampolyM.html
 Output_Data
+=======
+Tutorial_nicheG.html
+Tutorial_eellipse.html
+Tutorial_Getecoord.html
+Tutorial_InEllipse.html
+Tutorial_sampolyM.html
+Output_Data
+>>>>>>> 9e2b0db2d345bb919744ceb1555603e732fcb47d
