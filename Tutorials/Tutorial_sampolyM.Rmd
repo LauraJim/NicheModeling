@@ -127,5 +127,46 @@ Save the output as a csv-file (do not run everytime)
 write.csv(sam.Mpnts,file=paste0("./Output_Data/Catasticta_nimbice","_M_bios.csv"),
           row.names = F)
 ```
+\
+
+Create a simple plot of the environmental space (E-Space) with a species' occurrence.
+```{r, fig.show='hide'}
+# read occurrence data
+occ <- read.csv("./Input_Data/Catasticta_nimbice_bios.csv",header=T) 
+# set colors
+pal <- c("grey50", "turquoise")
+
+# plot
+x11()
+#   use random points with environmental data for the plot
+plot(sam.Mpnts[,1], sam.Mpnts[,2], pch=".", col=pal[1], 
+     xlab="Mean Annual Temperature", ylab="Accumulated Precipitation", 
+     main="Environmental Space") 
+# add points of species environmental data
+points(occ$bio1, occ$bio12, pch=19, col=pal[2])
+# add legend
+legend(x= "topleft",
+       legend = c("Study Area", "Occurences"),
+       pch = c(20, 19),
+       col = c(pal[1], pal[2]),
+       bty = "n")
+```
+\
+
+
+
+### *Threnetes ruckeri*
+
+The rasterstack is the same as the previous example. In this example, a different graph will be plotted using the sampled points.
+
+```{r}
+# Read M polygon
+M.shp <- readOGR("./threnetes_shp","Threnetes_ruckeri") ###
+
+## Get a random sample of points in M and extract its corresponding environmental values
+sam.Mpnts <- sam.polyM(M.shp = M.shp,N = 10000,bios = stck_bios)
+
+
+```
 
 
