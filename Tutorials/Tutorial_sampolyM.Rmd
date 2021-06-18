@@ -14,6 +14,7 @@ library(raster)
 library(rgdal)
 library(rgeos)
 library(tools)
+library(scales)
 ```
 \
 
@@ -49,6 +50,9 @@ The function `sam.polyM` takes a random sample of environmental combinations ins
 \
 
 * `tools`
+\
+
+* `scales`
 \
 
 \
@@ -121,7 +125,7 @@ sam.Mpnts <- sam.polyM(M.shp = M.shp,N = 10000,bios = stck_bios)
 ```
 \
 
-Save the output as a csv-file (do not run everytime)
+If needed, save the output as a csv-file (do not run every time)
 
 ```{r, eval=FALSE}
 write.csv(sam.Mpnts,file=paste0("./Output_Data/Catasticta_nimbice","_M_bios.csv"),
@@ -130,6 +134,7 @@ write.csv(sam.Mpnts,file=paste0("./Output_Data/Catasticta_nimbice","_M_bios.csv"
 \
 
 Create a simple plot of the environmental space (E-Space) with a species' occurrence.
+
 ```{r, fig.show='hide'}
 # read occurrence data
 occ <- read.csv("./Input_Data/Catasticta_nimbice_bios.csv",header=T) 
@@ -152,21 +157,61 @@ legend(x= "topleft",
        bty = "n")
 ```
 \
-
+```{r, echo=FALSE, fig.cap=" Figure of the environmental space, where the occurrence points of *Catasticta nimbice* are plotted over a bunch of background points that were sampled from the rasterstack and polygon.", out.width = '70%',fig.align="center"}
+options(knitr.duplicate.label = "allow")
+knitr::include_graphics("Images/SampleM_Espace.png")
+```
+\
 
 
 ### *Threnetes ruckeri*
 
 The rasterstack is the same as the previous example. In this example, a different graph will be plotted using the sampled points.
 
-```{r}
+```{r, results='hide', message=FALSE}
 # Read M polygon
-M.shp <- readOGR("./threnetes_shp","Threnetes_ruckeri") ###
+M.shp <- readOGR("./Input_Data/shapefiles","Threnetes_ruckeri")
 
+```
+\
+
+Apply the function with `M.shp`, `bios`, and a sample size with `N`.
+```{r}
 ## Get a random sample of points in M and extract its corresponding environmental values
 sam.Mpnts <- sam.polyM(M.shp = M.shp,N = 10000,bios = stck_bios)
 
+```
+\
+
+The output is used to plot a graph showing concentrations of sample points marked by a shade. The layers of shades are created by kernel smoothing. The kernel is drawn using the points inside M. There are currently five levels of shades selected (5, 25, 50, 75, and 95). 
+<!-- what does "probability of selecting a point" here mean? --> 
+
+```{r, fig.show='hide'}
+# Calculate and draw the kernel using the points inside M (define M carefully)
+# kernel for contour plot
+fhat.M <- ks::kde(x=cbind(sam.Mpnts[,1], sam.Mpnts[,2]))
+
+## Probability of selecting a point, given the fundamental niche
+# plot estimated kernel of M with points inside M
+lvls1 <- c(5,25,50,75,95)
+# library(scales)
+col.M2 <- alpha("orangered2",0.1)
+M.cols <- colorRampPalette(c(alpha("white",0.1),alpha("cadetblue4",0.9)))
+
+# plot
+x11()
+plot(fhat.M,display="filled.contour",cont=lvls1,main="",xlab="Mean annual temperature (°C*10)",
+     ylab="Annual precipitation (mm)",col=M.cols(length(lvls1)+1))
+# add points used for kernel estimation
+points(sam.Mpnts[,1], sam.Mpnts[,2],col=col.M2,pch=20,cex=0.6)
 
 ```
 
+
+```{r, echo=FALSE, fig.cap=" Figure of the environmental space showing layers with various density of the sampled points from the rasterstack and polygon.", out.width = '70%',fig.align="center"}
+options(knitr.duplicate.label = "allow")
+knitr::include_graphics("Images/ThR_Kernel_shade.png")
+```
+
+<!-- end of function samplingM --> 
 

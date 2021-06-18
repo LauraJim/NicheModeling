@@ -83,8 +83,21 @@ pal <- c("grey50", "turquoise") # defining two colors that can be called upon
 #        col = c(pal[1], pal[2]),
 #        bty = "n")
 
+# # environmental part of the plot -- E-Space
+# # use random points with environmental data for the plot
+# plot(sam.Mpnts[,1], sam.Mpnts[,2], pch=".", col=pal[1], 
+#     xlab="Mean Annual Temperature", ylab="Accumulated Precipitation", 
+#     main="Environmental Space") 
+# # add points of species environmental data
+# points(occ$bio1, occ$bio12, pch=19, col=pal[2])     
 
-# environmental part of the plot -- E-Space
+# # add legend
+# legend(x= "topleft",
+#       legend = c("Study Area", "Occurences"),
+#       pch = c(20, 19),
+#       col = c(pal[1], pal[2]),
+#       bty = "n")
+
 
 # Calculate and draw the kernel using the points inside M (define M carefully)
 # kernel for contour plot
@@ -99,28 +112,13 @@ x11()
 plot(fhat.M,display="filled.contour",cont=lvls1,main="",xlab="Mean annual temperature (°C*10)",
      ylab="Annual precipitation (mm)",col=M.cols(length(lvls1)+1))
 # add points used for kernel estimation
-points(sam.Mpnts[,1], sam.Mpnts[,2],col=col.M2,pch=19,cex=0.6)
-
-#   use random points with environmental data for the plot
-plot(sam.Mpnts[,1], sam.Mpnts[,2], pch=".", col=pal[1], 
-     xlab="Mean Annual Temperature", ylab="Accumulated Precipitation", 
-     main="Environmental Space") 
-# add points of species environmental data
-points(occ$bio1, occ$bio12, pch=19, col=pal[2])     
-
-# add legend
-legend(x= "topleft",
-       legend = c("Study Area", "Occurences"),
-       pch = c(20, 19),
-       col = c(pal[1], pal[2]),
-       bty = "n")
-
+points(sam.Mpnts[,1], sam.Mpnts[,2],col=col.M2,pch=20,cex=0.6)
 
 
 # Example 2:
 
 # Read M polygon
-M.shp <- readOGR("./threnetes_shp","Threnetes_ruckeri") ###
+M.shp <- readOGR("./Shapefiles","Threnetes_ruckeri") ###
 
 ## Get a random sample of points in M and extract its corresponding environmental values
 sam.Mpnts <- sam.polyM(M.shp = M.shp,N = 10000,bios = stck_bios)
@@ -163,3 +161,4 @@ legend(x= "topleft",
        pch = c(20, 19),
        col = c(pal[1], pal[2]),
        bty = "n")
+
