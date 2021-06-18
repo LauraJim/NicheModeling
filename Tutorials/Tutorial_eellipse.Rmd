@@ -48,7 +48,13 @@ The function creates ellipses with a loop that loops as many alpha levels as are
 \
 
 ```{r}
-e.ellipse <- function(mu, Sigma, alpha = 0.95, enames) {
+e.ellipse <- function(occ, alpha = 0.95, enames) {
+  # calculate mu
+  mu1 <- colMeans(occ)
+  
+  # calculate Sigma
+  Sigma1 <- cov(occ)
+  
   # create a list
   els <- list()
   
@@ -57,7 +63,7 @@ e.ellipse <- function(mu, Sigma, alpha = 0.95, enames) {
   for(i in 1:la){
     # create a loop that inputs the ellipses into the empty list based on the 
     # chosen alpha levels (loop repeats for as many alpha levels are put in)
-    els[[i]] <- ellipse::ellipse(centre = mu, x= Sigma, level = alpha[i])
+    els[[i]] <- ellipse::ellipse(centre = mu1, x= Sigma1, level = alpha[i])
   }
   # create a scale of grays for the ellipses
   pal <- gray(0:(la - 1)/la)
@@ -103,19 +109,19 @@ In this example, the alpha level has three set values. This will create three el
 Load a matrix with environmental data that is linked to the occurrence of a species.
 ```{r}
 # read table of occurrences, omit coordinates
-occ <- read.csv ("./Input_Data/Threnetes_ruckeri_occ_bios.csv",header=T)[,-(1:2)]
+species <- read.csv ("./Input_Data/Threnetes_ruckeri_occ_bios.csv",header=T)[,-(1:2)]
 ```
 \
 
 Calculate the means of the columns with environmental data.
 ```{r}
-mu1 <- colMeans(occ)
+# mu1 <- colMeans(occ)
 ```
 \
 
 Calculate the covariance of the environmental data.
 ```{r}
-Sigma1 <- cov(occ)
+# Sigma1 <- cov(occ)
 ```
 \
 
@@ -133,7 +139,7 @@ alpha1 <- c(0.75, 0.9, 0.95)
 
 Apply `e.ellipse` with `mu`, `Sigma`, `enames`, and `alpha`:
 ```{r, fig.show='hide'}
-f <- e.ellipse(mu = mu1, Sigma = Sigma1, alpha = alpha1, enames = names1)
+f <- e.ellipse(occ = species, alpha = alpha1, enames = names1)
 
 ```
 \
@@ -150,9 +156,7 @@ knitr::include_graphics("Images/Threnetes_ESpace_ellipses.png")
 In this example, more than three ellipses are created. The confidence levels are defined by a sequence instead of distinct numbers.
 
 ```{r, fig.show='hide'}
-occ <- read.csv("./Input_Data/Catasticta_nimbice_bios.csv",header=T)[,-(1:2)]
-mu2 <- colMeans(occ)
-Sigma2 <- cov(occ)
+species2 <- read.csv("./Input_Data/Catasticta_nimbice_bios.csv",header=T)[,-(1:2)]
 names2 <- c("Annual mean temperature (°C x 10)","Annual Precipitation (mm)") 
 
 ```
@@ -164,7 +168,7 @@ alpha2 <- seq(0,1,by = 0.1)
 ```
 
 ```{r, fig.show='hide'}
-f2 <- e.ellipse(mu = mu2, Sigma = Sigma2, alpha = alpha2, enames = names2)
+f2 <- e.ellipse(occ = species2 , alpha = alpha2, enames = names2)
 ```
 
 
