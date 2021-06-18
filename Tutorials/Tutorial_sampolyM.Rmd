@@ -145,7 +145,7 @@ pal <- c("grey50", "turquoise")
 x11()
 #   use random points with environmental data for the plot
 plot(sam.Mpnts[,1], sam.Mpnts[,2], pch=".", col=pal[1], 
-     xlab="Mean Annual Temperature", ylab="Accumulated Precipitation", 
+     xlab="Mean Annual Temperature (°C*10)", ylab="Annual precipitation (mm)", 
      main="Environmental Space") 
 # add points of species environmental data
 points(occ$bio1, occ$bio12, pch=19, col=pal[2])
