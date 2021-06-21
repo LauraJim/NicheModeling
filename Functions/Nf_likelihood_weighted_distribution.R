@@ -86,7 +86,6 @@ maxi.like <- function(occ, sam2) {
   mle.mu <- mle[1:2]
   mle.A <- matrix(c(mle[3:4],mle[4:5]),nrow=2,ncol=2)
   mle.Sig <- tryCatch(expr={chol2inv(chol(mle.A))}, error= function(e){NULL})
-  
   return(list(mle.Sig, mle.mu, Sig.ini, mu.ini))
 }
 
