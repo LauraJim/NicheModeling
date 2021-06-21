@@ -205,7 +205,6 @@ col.M2 <- alpha("orangered2",0.1)
 M.cols <- colorRampPalette(c(alpha("white",0.1),alpha("cadetblue4",0.9)))
 
 # plot
-x11()
 plot(fhat.M,display="filled.contour",cont=lvls1,main="",xlab="Mean annual temperature (°C*10)",
      ylab="Annual precipitation (mm)",col=M.cols(length(lvls1)+1))
 # add points used for kernel estimation
@@ -222,7 +221,7 @@ knitr::include_graphics("Images/ThR_Kernel_shade.png")
 <!-- end of function samplingM --> 
 \
 
-~ End of function `sam.polyM` ~ 
+ ~ End of function `sam.polyM` ~ 
 \
 
 \
@@ -321,6 +320,7 @@ negloglike <- function(guess, sam1, sam2){
 \
 
 \
+
 ## Functions Code
 
 ### How *maxi.like* works
@@ -328,7 +328,7 @@ negloglike <- function(guess, sam1, sam2){
 The function `maxi.like` calculates the maximum likelihood estimation with a matrix of randomly sampled points within the study area (= result from the function `sam.polyM`) and the occurrence data of a species that contains environmental data. At first, the mu and sigma of the occurrence data is calculated. Then, the sigma values are inverted. ###  <!-- description-->
 
 ```{r}
-maxi.like <- function(occ, sam2) {
+maxi.like <- function(occ, randpntsM) {
   # calculate mu
   mu.ini <- colMeans(occ)
   # calculate A (covariance)
@@ -338,7 +338,7 @@ maxi.like <- function(occ, sam2) {
   # whole vector of inicial values
   vals.ini <- c(mu.ini, A.ini[1,1], A.ini[1,2], A.ini[2,2])#c(mu.ini,A.ini[1,1],A.ini[1,2],A.ini[2,2])
   # fix the values of the samples used to evaluate the neg-log-likelihood
-  like.fn <- function(theta){ negloglike(theta, sam1=occ, sam2) } 
+  like.fn <- function(theta){ negloglike(theta, sam1=occ, sam2=randpntsM) } 
   find.mle <- optim(par=vals.ini, fn=like.fn, method="Nelder-Mead")
   mle <- find.mle$par
   mle.mu <- mle[1:2]
@@ -380,9 +380,9 @@ sp.occ <- read.csv("./Input_Data/Catasticta_nimbice_bios.csv",header=T)[,-(1:2)]
 ```
 \
 
-Apply the function with the parameters `occ` and `sam2` (the sample `sam2` was calculated above and is named *sam.Mpnts*).
+Apply the function with the parameters `occ` and `randpntsM` (the sample `randpntsM`` was calculated above and is named *sam.Mpnts*).
 ```{r, cache=TRUE}
-ml <- maxi.like(occ = sp.occ, sam2 = sam.Mpnts)
+ml <- maxi.like(occ = sp.occ, randpntsM = sam.Mpnts)
 ```
 \
 
@@ -394,7 +394,7 @@ colnames(ml.table) <- c("wn.mu", "wn.sigma1", "wn.sigma2", "maha.mu", "maha.sigm
 \
 
 Save the table as a csv-file.
-```{r}
+```{r, eval=FALSE}
 write.csv(ml.table,"./Output_Data/Catasticta_nimbice_Estimated_parameters.csv",row.names = F)
 ```
 \
@@ -446,6 +446,22 @@ knitr::include_graphics("Images/Catasticta_nimbice_mle.png")
 ### *Threnetes ruckeri*
 
 For this species the same steps are followed as above until the plot. Here, it will be plotted using `ggplot2`.
+\
+
+Read the matrix with occurrences combined with environmental data and the shape-file of the study area (the necessary rasterstack was already created in the example above).
+```{r}
+sp.occ2 <- read.csv("./Input_Data/Threnetes_ruckeri_occ_bios.csv",header=T)[,-(1:2)]
+
+M.shp2 <- readOGR("./Input_Data/shapefiles","Threnetes_ruckeri")
+```
+\
+
+Sample random points from the area of interest using the `sam.polyM` function with the parameters `M.shp`, `N`, and `bios`.
+```{r}
+sam.Mpnts2 <- sam.polyM(M.shp = M.shp2, N = 5000, bios = stck_bios)
+```
+\
+
 
 
 

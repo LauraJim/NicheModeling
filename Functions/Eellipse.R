@@ -1,8 +1,8 @@
-# function e.ellipse
+# function E.ellipse
 # 2021-05-20
 
-# Description: "e.ellipse" ---------------
-# The function e.ellipse creates confidence regions, ellipses based on the 
+# Description: "E.ellipse" ---------------
+# The function E.ellipse creates confidence regions, ellipses based on the 
 # Mahalanobis distance that can be used as borders for suitable environments of 
 # a species.
 # Various alpha levels can be chosen.
@@ -18,9 +18,9 @@
 ## Output
 # A plot with the environmental space of a species and three ellipses
 
-# The functions code: e.ellipse --------------
+# The functions code: E.ellipse --------------
 
-e.ellipse <- function(mu, Sigma, alpha = 0.95, enames) {
+E.ellipse <- function(mu, Sigma, alpha = 0.95, enames) {
   # create a list
   els <- list()
   
@@ -49,7 +49,7 @@ e.ellipse <- function(mu, Sigma, alpha = 0.95, enames) {
   
 }
 
-# Main: How to use "e.ellipse" --------------
+# Main: How to use "E.ellipse" --------------
 
 ## packages needed: ellipse
 
@@ -71,7 +71,7 @@ Sigma1 <- cov(occ)
 names1 <- c("Annual mean temperature (°C x 10)","Annual Precipitation (mm)") 
 
 # apply function  
-f <- e.ellipse(mu= mu1, Sigma= Sigma1, alpha= alpha1, enames = names1)
+f <- E.ellipse(mu= mu1, Sigma= Sigma1, alpha= alpha1, enames = names1)
 
 ## Example 2:
 
@@ -84,4 +84,4 @@ mu2 <- colMeans(occ)
 Sigma2 <- cov(occ)
 names2 <- c("Annual mean temperature (°C x 10)","Annual Precipitation (mm)") 
 
-f <- e.ellipse(mu = mu2, Sigma = Sigma2, alpha = alpha2, enames = names2)
+f <- E.ellipse(mu = mu2, Sigma = Sigma2, alpha = alpha2, enames = names2)

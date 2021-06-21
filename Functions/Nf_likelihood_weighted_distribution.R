@@ -70,8 +70,7 @@ negloglike <- function(guess,sam1,sam2){
 }
 
 # maximum likelihood
-
-maxi.like <- function(occ, sam2) {
+fitNiche <- function(occ, sam2) {
   # calculate mu
   mu.ini <- colMeans(occ)
   # calculate A (covariance)
@@ -137,7 +136,7 @@ sam.Mpnts <- sam.polyM(M.shp = M.shp,N = N,bios = stck_1_12)
 
 # Lookig for the MLE of mu and A --------------------------
 # in tutorial add cache=TRUE to avoid running the function every time it knits
-ml <- maxi.like(occ = sp.occ, sam2 = sam.Mpnts)
+ml <- fitNiche(occ = sp.occ, sam2 = sam.Mpnts)
 
 ml.table <- cbind(ml$wn.mu, ml$wn.sigma, ml$maha.mu, ml$maha.sigma)
 colnames(ml.table) <- c("wn.mu", "wn.sigma1", "wn.sigma2", "maha.mu", "maha.sigma1", "maha.sigma2")
@@ -183,16 +182,16 @@ sp.occ2 <- read.csv("./Threnetes_ruckeri_occ_bios.csv",header=T)[,-(1:2)]
 M.shp2 <- readOGR("./Shapefiles","Threnetes_ruckeri")
 
 # get a random sample of points in M and extract its corresponding environmental values
-sam.Mpnts2 <- sam.polyM(M.shp = M.shp2, N = N, bios = stck_1_12)
+sam.Mpnts2 <- sam.polyM(M.shp = M.shp2, N = 5000, bios = stck_bios)
 
 # use function
-ml2 <- maxi.like(occ = sp.occ2, sam2 = sam.Mpnts2)
+ml2 <- fitNiche(occ = sp.occ2, sam2 = sam.Mpnts2)
 
 # change function into proper table and rename column names
 ml.table2 <- cbind(ml$wn.mu, ml$wn.sigma, ml$maha.mu, ml$maha.sigma)
 colnames(ml.table2) <- c("wn.mu", "wn.sigma1", "wn.sigma2", "maha.mu", "maha.sigma1", "maha.sigma2")
 
-df.ml2 <- as.data.frame(ml.table2)
+# df.ml2 <- as.data.frame(ml.table2)
 
 # write table as a csv
 write.csv(ml.table2,"./Results/Threnetes_ruckeri_Estimated_parameters.csv",row.names = F)
