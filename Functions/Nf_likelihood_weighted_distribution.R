@@ -20,6 +20,7 @@
 # sam2 = matrix containing a second random sample of environmental combinations 
 #       which come from the area of study (M)
 
+# rasterstack, shapefile and occurrence points
 
 # Calling packages
 
@@ -69,8 +70,7 @@ negloglike <- function(guess,sam1,sam2){
 }
 
 # maximum likelihood
-
-maxi.like <- function(occ, sam2) {
+fitNiche <- function(occ, sam2) {
   # calculate mu
   mu.ini <- colMeans(occ)
   # calculate A (covariance)
@@ -86,7 +86,18 @@ maxi.like <- function(occ, sam2) {
   mle.mu <- mle[1:2]
   mle.A <- matrix(c(mle[3:4],mle[4:5]),nrow=2,ncol=2)
   mle.Sig <- tryCatch(expr={chol2inv(chol(mle.A))}, error= function(e){NULL})
+<<<<<<< HEAD
   return(list(mle.Sig, mle.mu, Sig.ini, mu.ini))
+=======
+  # change column names for mle.Sig
+  if(!is.null(mle.Sig)){
+  colnames(mle.Sig) <- colnames(Sig.ini)
+  rownames(mle.Sig) <- rownames(Sig.ini)
+  }
+    
+  # wn = weighted normal distribution
+  return(list(wn.mu = mle.mu, wn.sigma = mle.Sig, maha.mu = mu.ini, maha.sigma = Sig.ini))
+>>>>>>> 86f4e27ebe3f5f57d52060aee9a631ef65e94374
 }
 
 # MAIN ------------------------------------------------------------------------
@@ -96,6 +107,7 @@ maxi.like <- function(occ, sam2) {
 library(raster)
 library(rgdal)
 library(rgeos)
+library(ggplot2)
 # library(maptools)
 # data("wrld_simpl")
 
@@ -108,101 +120,130 @@ bio12 <- raster("./ClimateData10min/bio12WH.asc")
 stck_1_12 <- raster::stack(bio1,bio12)
 
 
-# Colors for different species
-Mcol <- c("chocolate4","firebrick","hotpink","chartreuse4","cadetblue","goldenrod")
-# colors for test occs, Mahalanobis model, weighted model
-colpal <- c("darkorchid2","darkolivegreen3","darkorchid4")
+
 
 ## Set parameters -------
 
 # Set the sample size (>= 10,000) that will be used to approximate expected value
 N <- 10000
 
-# # Choose the species to work with
-# i <- 1
+
 
 # Read presence points and M polygon
 sp.occ <- read.csv("./Catasticta_nimbice_bios.csv",header=T)[,-(1:2)]
-# sp.occpnts1 <- na.omit(sp.occpnts0[,3:4])
-# check dimensions of occ
-dim(sp.occ)
-# count number of rows
-n <- nrow(sp.occ)
 
 M.shp <- readOGR("./Shapefiles","C_nimbice")
-
-# Get a subsample of presence points to evaluate model robustness
-# # 1) set the proportion of occurrence points that will be used for model estimation
-# per <- 0.80 # change name of file 
-# # 2) calculate the amount of points to be included in the sample
-# nsub <- floor(n*per)
-# # 3) get a subsample of occurrence points
-# ind.sub <- sort(sample(x=1:n,size=nsub,replace=F))
-# # 4) proceed with the estimation using the new subsample
-# sp.occpnts <- sp.occpnts1[ind.sub,]
-# dim(sp.occpnts)
-# write.csv(sp.occpnts0[-ind.sub,],
-#           paste0(ext1,"test-occ/",spnames[i],"_test.csv"),row.names = F)
-
-# sp.occpnts <- sp.occpnts1
 
 # get a random sample of points in M and extract its corresponding environmental values
 sam.Mpnts <- sam.polyM(M.shp = M.shp,N = N,bios = stck_1_12)
 
 
-
 # Lookig for the MLE of mu and A --------------------------
+# in tutorial add cache=TRUE to avoid running the function every time it knits
+ml <- fitNiche(occ = sp.occ, sam2 = sam.Mpnts)
 
-ml <- maxi.like(occ = sp.occ, sam2 = sam.Mpnts)
+ml.table <- cbind(ml$wn.mu, ml$wn.sigma, ml$maha.mu, ml$maha.sigma)
+colnames(ml.table) <- c("wn.mu", "wn.sigma1", "wn.sigma2", "maha.mu", "maha.sigma1", "maha.sigma2")
+
+write.csv(ml.table,"./Results/Catasticta_nimbice_Estimated_parameters.csv",row.names = F)
 
 # get the ellipse defined by the ml estimators
-el <- ellipse::ellipse(x=ml[[1]], centre=ml[[2]], level=0.99)
+el <- ellipse::ellipse(x=ml[[2]], centre=ml[[1]], level=0.99)
 # get the ellipse from a multivarite normal model / mahalanobis distance method
-el.ml <- ellipse::ellipse(x=ml[[3]], centre=ml[[4]], level=0.99)
+el.ml <- ellipse::ellipse(x=ml[[4]], centre=ml[[3]], level=0.99)
 
 
-plot(sam.Mpnts,col="grey70",pch=1,xlim=c(0,350),ylim=c(0,8200),
-     xlab="Annual mean temperature (°C*10)", ylab="Annual precipitation (mm)")
+# colorpalette
+colpal <- c("grey70", "chartreuse4", "coral2", "cadetblue3")
+
+# plot will be saved as .png
+png(paste0("./Results/Catasticta_nimbice","_mle.png"),width = 2300, height = 2300, 
+    res = 600, pointsize = 6)
+x11()
+plot(sam.Mpnts,col=colpal[1],pch=1, xlab="Annual mean temperature (°C*10)", 
+     ylab="Annual precipitation (mm)")
 # add presence points to the plot
-points(sp.occ,col=Mcol[2],pch=20,cex=1.5) # presences used in model
+points(sp.occ,col=colpal[3],pch=20,cex=1.5) # presences used in model
 # ellipse maha
 lines(el,col=colpal[2],lwd=2)
 # ellipse mle
-lines(el.ml,col=colpal[3],lwd=2)
-
-
-
-# plot will be saved as .png
-png(paste0(ext1,spnames[i],"_mle.png"),width = 800, height = 800)
-# plot points inside M
-plot(sam.Mpnts,col="grey70",pch=1,xlim=c(0,350),ylim=c(0,8200),
-     xlab="Annual mean temperature (°C*10)", ylab="Annual precipitation (mm)")
-# add presence points to the plot
-points(sp.occ,col=colpal[1],pch=19,cex=1.5) # test presences
-points(sp.occ,col=Mcol[1],pch=19,cex=1.5) # presences used in model
-# ellipse maha
-lines(el.ml,col=colpal[2],lwd=2)
-# ellipse mle
-lines(el,col=colpal[3],lwd=2)
-sp.leg <- paste(spnames[i],"(",nrow(sp.occpnts),")")
+lines(el.ml,col=colpal[4],lwd=2)
+sp.leg <- paste("Catasticta nimbice","(",nrow(sp.occ),")")
 legend("topleft",legend = c(sp.leg,"Points inside M","Presences",
-                            "Testing presences",
                             "Ellipse from Mahalanobis method",
                             "Ellipse from weighted-normal model"),
-       pch=c(NA,1,19,19,NA,NA),col = c("white","black",Mcol[i],colpal),
-       lwd=c(NA,NA,NA,NA,2,2),bty = "n")
-# close plot-window
+       pch=c(NA,1,19,NA,NA),col = c("white", colpal[1], colpal[3], colpal[2], colpal[4]),
+       lwd=c(NA,NA,NA,2,2),bty = "n")
+# finish saving png
 dev.off()
 
-# save MLE values for both models, Weighted-Normal and Mahalanobis
-(MLE.vec <- c(spnames[i],mle,vals.ini))
 
-# Save MLE matrix --------------------------------------------
-#MLE.summary <- MLE.vec
-(MLE.summary <- rbind(MLE.summary,MLE.vec))
-colnames(MLE.summary) <- c("SpName","mle.mu1","mle.mu2","mle.A11","mle.A12","mle.A22",
-                           "maha.mu1","maha.mu2","maha.A11","maha.A12","maha.A22")
-head(MLE.summary)
-write.csv(MLE.summary,paste0(ext1,"Estimated_parameters_Hummers.csv"),row.names = F)
+## Example 2: Threnetes ruckeri in ggplot
+
+# read input data
+sp.occ2 <- read.csv("./Threnetes_ruckeri_occ_bios.csv",header=T)[,-(1:2)]
+
+M.shp2 <- readOGR("./Shapefiles","Threnetes_ruckeri")
+
+# get a random sample of points in M and extract its corresponding environmental values
+sam.Mpnts2 <- sam.polyM(M.shp = M.shp2, N = 5000, bios = stck_bios)
+
+# use function
+ml2 <- fitNiche(occ = sp.occ2, sam2 = sam.Mpnts2)
+
+# change function into proper table and rename column names
+ml.table2 <- cbind(ml$wn.mu, ml$wn.sigma, ml$maha.mu, ml$maha.sigma)
+colnames(ml.table2) <- c("wn.mu", "wn.sigma1", "wn.sigma2", "maha.mu", "maha.sigma1", "maha.sigma2")
+
+# df.ml2 <- as.data.frame(ml.table2)
+
+# write table as a csv
+write.csv(ml.table2,"./Results/Threnetes_ruckeri_Estimated_parameters.csv",row.names = F)
+
+# get the ellipse defined by the ml estimators
+el2 <- ellipse::ellipse(x=ml2[[2]], centre=ml2[[1]], level=0.99)
+vec <- c(1:100)
+el3 <- (cbind(el2, vec))
+
+df.el3 <- as.data.frame(el3)
+colnames(df.el3) <- c("Temperature", "Precipitation", "Type")
+
+
+
+# get the ellipse from a multivarite normal model / mahalanobis distance method
+el.ml2 <- ellipse::ellipse(x=ml2[[4]], centre=ml2[[3]], level=0.99)
+
+## plot in ggplot
+# prepare data as a dataframe for ggplot
+bckgrnd <- data.frame(Temperature = sam.Mpnts2[,1], Precipitation = sam.Mpnts2[,2])
+species <- data.frame(Temperature = sp.occ2[,1], Precipitation = sp.occ2[,2])
+data <- cbind(rbind(bckgrnd[,1:2], species[,1:2]), c(rep(1,nrow(bckgrnd)),rep(2,nrow(species))))
+data2 <- data.frame(Temperature = data[, 1], Precipitation = data[, 2], 
+                    Type = data[,3]) 
+
+# plot
+x11()
+##### doesn't work :(
+ggplot(data2, aes(x = Temperature, y = Precipitation, 
+                  color = factor(Type), shape = factor(Type))) +
+  geom_point() +
+  scale_shape_manual(values=c(1, 19), guide = FALSE) +
+  scale_color_manual(name= "Data",
+                     labels= c("Background", "Presence"),
+                     values= c("1"=colpal[1], "2"= colpal[3])) +
+  theme(legend.position = c(.05, .95), # for x, value of 0 puts it  to the 
+        # left side, value of 1 to the right, for y, value of 0 puts it to 
+        # the bottom, # value of 1 puts it to the top
+        legend.justification = c("left", "top")) +
+  scale_x_continuous("Annual mean temperature (°C*10)") +
+  scale_y_continuous("Annual precipitation (mm)") +
+  # geom_path(data = df_el2, lineend="butt", linejoin="round", linemitre=1, show.legend = "Ellipse from weighted-normal model")
+  geom_path(df.el3, mapping = aes(x = Temperature, y = Precipitation))
+
+
+x11()
+ggplot(df.el3, aes(Temperature, Precipitation)) +
+  geom_path()
+ 
 
 # END
