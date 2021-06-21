@@ -197,17 +197,20 @@ colnames(ml.table2) <- c("wn.mu", "wn.sigma1", "wn.sigma2", "maha.mu", "maha.sig
 write.csv(ml.table2,"./Results/Threnetes_ruckeri_Estimated_parameters.csv",row.names = F)
 
 # get the ellipse defined by the ml estimators
-el2 <- ellipse::ellipse(x=ml2[[2]], centre=ml2[[1]], level=0.99)
-vec <- c(1:100)
-el3 <- (cbind(el2, vec))
+el2 <- ellipse::ellipse(x=ml2[[2]], centre=ml2[[1]], level=0.99, npoints = 500)
 
-df.el3 <- as.data.frame(el3)
-colnames(df.el3) <- c("Temperature", "Precipitation", "Type")
+df.el2 <- as.data.frame(el2)
+colnames(df.el2) <- c("Temperature", "Precipitation")
 
 
 
 # get the ellipse from a multivarite normal model / mahalanobis distance method
 el.ml2 <- ellipse::ellipse(x=ml2[[4]], centre=ml2[[3]], level=0.99)
+
+df.elml <- as.data.frame(el.ml2)
+colnames(df.elml) <- c("Temperature", "Precipitation")
+
+
 
 ## plot in ggplot
 # prepare data as a dataframe for ggplot
@@ -220,9 +223,8 @@ data2 <- data.frame(Temperature = data[, 1], Precipitation = data[, 2],
 # plot
 x11()
 ##### doesn't work :(
-ggplot(data2, aes(x = Temperature, y = Precipitation, 
-                  color = factor(Type), shape = factor(Type))) +
-  geom_point() +
+ggplot(data2, aes(x = Temperature, y = Precipitation)) +
+  geom_point(aes(color = factor(Type), shape = factor(Type))) +
   scale_shape_manual(values=c(1, 19), guide = FALSE) +
   scale_color_manual(name= "Data",
                      labels= c("Background", "Presence"),
@@ -234,12 +236,9 @@ ggplot(data2, aes(x = Temperature, y = Precipitation,
   scale_x_continuous("Annual mean temperature (°C*10)") +
   scale_y_continuous("Annual precipitation (mm)") +
   # geom_path(data = df_el2, lineend="butt", linejoin="round", linemitre=1, show.legend = "Ellipse from weighted-normal model")
-  geom_path(df.el3, mapping = aes(x = Temperature, y = Precipitation))
+  geom_path(data = df.el2, color = colpal[2], size = 1.2) +
+  geom_path(data = df.elml, color = colpal[4], size = 1.2)
 
 
-x11()
-ggplot(df.el3, aes(Temperature, Precipitation)) +
-  geom_path()
- 
 
 # END
