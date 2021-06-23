@@ -27,6 +27,9 @@ The function niche.G projects ellipses that define suitable environments for a s
 
 ### Parameters
 
+* `Estck` = a raster stack with more than two climatic layers
+\
+
 * `mu` = the mean of the columns that contain environmental data, such as temperature and precipitation 
 \
 
@@ -62,7 +65,7 @@ The function niche.G projects ellipses that define suitable environments for a s
 The function `niche.G` calculates suitability regions for a species based on environmental data and projects them onto a raster with geographical information. Each cell of the raster is weighed by an index of suitability.
 
 ```{r}
-niche.G <- function(mu, Sigma, save.map) {
+niche.G <- function(Estck, mu, Sigma, save.map) {
   
   # Calculate suitabilities in each cell
   max.val <- mvtnorm::dmvnorm(x=mu,mean = mu, sigma = Sigma)
@@ -70,7 +73,7 @@ niche.G <- function(mu, Sigma, save.map) {
   sui.fun <- function(cell){log(mvtnorm::dmvnorm(x=c(cell[1],cell[2]),mean = mu, 
                                                  sigma = Sigma))-log(max.val)}
   # apply this function to the whole raster layer
-  suit.rast <- calc(bios,fun=sui.fun)
+  suit.rast <- calc(Estck,fun=sui.fun)
   # take exponential to go back to the original scale
   # save as ASCII
   suit.rast1 <- calc(suit.rast,fun = exp,
@@ -125,10 +128,10 @@ bios <- stack(bio1,bio2)
 ```
 \
 
-For the species' occurrence points in correspondence with environmental data the "bios.csv"-file that was created with `get.ecoord` is used.
+For the species' occurrence points in correspondence with environmental data the "occ_GE.csv"-file that was created with `get.Ecoord` is used.
 ```{r}
 # read table and omit columns with coordinates
-occ <- read.csv("./Input_Data/Catasticta_nimbice_bios.csv",header=T)[,-(1:2)]
+occ <- read.csv("./Input_Data/Catasticta_nimbice_occ_GE.csv",header=T)[,-(1:2)]
 ```
 \
 
@@ -150,12 +153,12 @@ saveM <- "./Output_Data/Catasticta_nimbice_map"
 ```
 \
 
-Apply the function `niche.G` with the parameters `mu`, `Sigma`, and `save.map` and plot it.
+Apply the function `niche.G` with the parameters `Estck`, `mu`, `Sigma`, and `save.map` and plot it.
 
 ```{r, eval=FALSE}
-result1 <- niche.G(mu = center, Sigma = boundary, save.map = saveM)
+result1 <- niche.G(Estck = bios, mu = center, Sigma = boundary, save.map = saveM)
 
-x11()
+# x11()
 plot(result1)
 ```
 
@@ -183,7 +186,7 @@ bios <- stack(bio1,bio2)
 Load the species' occurrence data that is linked with the environmental data and calculate the parameters.
 ```{r}
 
-occ2 <- read.csv("./Input_Data/Threnetes_ruckeri_occ_bios.csv",header=T)[,-(1:2)]
+occ2 <- read.csv("./Input_Data/Threnetes_ruckeri_occ_GE.csv",header=T)[,-(1:2)]
 
 center2 <- colMeans(occ2)
 boundary2 <- cov(occ2)
@@ -194,7 +197,7 @@ saveM2 <- "./Output_Data/Threnetes_ruckeri_map"
 
 Apply the function with `mu`, `Sigma`, and `save.map`.
 ```{r, eval=FALSE}
-result2 <- niche.G(mu = center2, Sigma = boundary2, save.map = saveM2)
+result2 <- niche.G(Estck = bios, mu = center2, Sigma = boundary2, save.map = saveM2)
 ```
 \
 
@@ -222,13 +225,13 @@ colnames(outppd) <- c("Longitude","Latitude","Suitability")
 
 Read the species' occurrence data points that are linked with the environmental data (without omitting the coordinates)
 ```{r}
-occ3 <- read.csv("./Input_Data/Threnetes_ruckeri_occ_bios.csv",header=T)
+occ3 <- read.csv("./Input_Data/Threnetes_ruckeri_occ_GE.csv",header=T)
 ```
 \
 
 Plot in ggplot.
 ```{r, fig.show='hide'}
-x11()
+# x11()
 ggplot() +
   geom_tile(data = outppd,aes(x=Longitude, y=Latitude, fill=Suitability)) +
   theme_bw() +

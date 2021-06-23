@@ -31,7 +31,7 @@ The function `GEspace` is a tool that can plot the geographical and environmenta
 
 For this function, two parameters are necessary and a two more can be added:
 
-* `occ` = a matrix with occurrence and corresponding environmental data of a species
+* `E.occ` = a matrix with occurrence and corresponding environmental data of a species
 \
 
 * `bckgrnd` = a matrix with random points from a specific geographic region and corresponding environmental data
@@ -87,7 +87,7 @@ If `save.p` is added to the function, then the graph will be saved, if not, a wi
   
 
 ```{r}
-GEspace <- function(bckgrnd, occ, add.poly = NULL, save.p = NULL) {
+GEspace <- function(bckgrnd, E.occ, add.poly = NULL, save.p = NULL) {
   
   # rgb is color; alpha is a factor of transparency
   # Mcol <- rgb(0.35,0,0.2,alpha = 0.6)
@@ -109,8 +109,8 @@ GEspace <- function(bckgrnd, occ, add.poly = NULL, save.p = NULL) {
     bckgrnd1 <- data.frame(longitude = bckgrnd[, 1], latitude = bckgrnd[, 2])
     occ1 <- data.frame(longitude = occ[, 1], latitude = occ[, 2])
     data <- cbind(rbind(bckgrnd1[,1:2],occ1[,1:2]),
-                  # an extra column is added to differentiate bckgrnd and occ 
-                  # (1 for bckgrnd, 2 for occ)
+                  # an extra column is added to differentiate bckgrnd and E.occ 
+                  # (1 for bckgrnd, 2 for E.occ)
                   c(rep(1,nrow(bckgrnd1)),rep(2,nrow(occ1))))
     # rename columns
     data2 <- data.frame(Longitude = data[, 1], Latitude = data[, 2], 
@@ -131,8 +131,8 @@ GEspace <- function(bckgrnd, occ, add.poly = NULL, save.p = NULL) {
     bckgrnd3 <- data.frame(Temperature = bckgrnd[, 3], Precipitation = bckgrnd[, 4])
     occ3 <- data.frame(Temperature = occ[, 3], Precipitation = occ [, 4])
     data3 <- cbind(rbind(bckgrnd3[,1:2],occ3[,1:2]),
-                   # an extra column is added to differentiate bckgrnd and occ 
-                   # (1 for bckgrnd, 2 for occ)
+                   # an extra column is added to differentiate bckgrnd and E.occ 
+                   # (1 for bckgrnd, 2 for E.occ)
                    c(rep(1,nrow(bckgrnd3)),rep(2,nrow(occ3))))
     # rename columns
     data4 <- data.frame(Temperature = data3[, 1], Precipitation = data3[, 2], 
@@ -276,9 +276,9 @@ library(ggpubr)
 \
 
 ### Input data
-Two files are necessary to plot the graphs: a matrix with random geographical and environmental data of the study area that provides background points and a matrix that contains the coordinates of a species' occurrence and various environmental variables. Both can be created by using the `get.ecoord` function (see tutorial "Function *get.ecoord*").
+Two files are necessary to plot the graphs: a matrix with random geographical and environmental data of the study area that provides background points and a matrix that contains the coordinates of a species' occurrence and various environmental variables. Both can be created by using the `get.Ecoord` function (see tutorial "Function *get.Ecoord*").
 
-It is important to note that both parameters, the matrices for `occ` and `bckgrnd`, need to have the same structure: the first two columns contain the coordinates, with longitude in the first column and latitude in the second. The following columns need to contain the environmental data of interest.
+It is important to note that both parameters, the matrices for `E.occ` and `bckgrnd`, need to have the same structure: the first two columns contain the coordinates, with longitude in the first column and latitude in the second. The following columns need to contain the environmental data of interest.
 \
 \
 
@@ -287,10 +287,10 @@ It is important to note that both parameters, the matrices for `occ` and `bckgrn
 
 Distribution of the species *Catasticta nimbice* and its environmental space. In this example the number of background points is above 1000 and the point size is reduced in order to keep a clear display of points.
 
-For the species' occurrence points in correspondence with environmental data the "bios.csv"-file that was created with `get.ecoord` is used.
+For the species' occurrence points in correspondence with environmental data the "occ_GE.csv"-file that was created with `get.Ecoord` is used.
 ```{r}
 # read table of a species occurrence with environmental data points
-species <- read.csv("./Input_Data/Catasticta_nimbice_bios.csv",header=T)
+species <- read.csv("./Input_Data/Catasticta_nimbice_occ_GE.csv",header=T)
 
 
 ```
@@ -300,10 +300,10 @@ head(species, n=5)
 
 \
 
-For the random background points in correspondence with environmental data the "M_bios.csv"-file that was created with `get.ecoord` is used.  
+For the random background points in correspondence with environmental data the "M_GE.csv"-file that was created with `get.Ecoord` is used.  
 ```{r}
 # read table with random background points
-ranpoints <- read.csv("./Input_Data/Catasticta_nimbice_M_bios.csv",header=T)
+ranpoints <- read.csv("./Input_Data/Catasticta_nimbice_M_GE.csv",header=T)
 
 ```
 ```{r, echo=FALSE}
@@ -331,7 +331,7 @@ saveM <- "./Output_Data/Catasticta_nimbice"
 
 No polygon added (default), no save.p added (default): A graph will pop up & the geographical background will be made of random points.
 ```{r, eval=FALSE}
-GEspace(bckgrnd=ranpoints, occ=species)
+GEspace(bckgrnd=ranpoints, E.occ=species)
 ```
 \
 
@@ -344,18 +344,18 @@ knitr::include_graphics("Images/Catasticta_nimbice_points.png")
 
 No polygon added (default), save.p added: The graph will be saved & the geographical background will be made of random points.
 ```{r, eval=FALSE}
-GEspace(bckgrnd=ranpoints, occ=species, save.p =  paste0(saveM, "_bckgrndmap.png"))
+GEspace(bckgrnd=ranpoints, E.occ=species, save.p =  paste0(saveM, "_bckgrndmap.png"))
 ```
 
 
 With polygon, no save.p added (default): A graph will pop up & the geographical background will be made of a polygon.
 ```{r, eval=FALSE, message= FALSE}
-GEspace(bckgrnd=ranpoints, occ=species, add.poly=shp)
+GEspace(bckgrnd=ranpoints, E.occ=species, add.poly=shp)
 ```
 
 With polygon, save.p added: A graph will pop up & the geographical background will be made of a polygon.
 ```{r, eval=FALSE, message= FALSE}
-GEspace(bckgrnd=ranpoints, occ=species, add.poly=shp, save.p =  paste0(saveM, "_polymap.png"))
+GEspace(bckgrnd=ranpoints, E.occ=species, add.poly=shp, save.p =  paste0(saveM, "_polymap.png"))
 ```
 \
 
@@ -372,15 +372,15 @@ knitr::include_graphics("Images/Catasticta_nimbice_poly.png")
 Distribution of the species *Threnetes ruckeri* and its environmental space. In this example the number of background points is below 1000 and the point size is not reduced.
 
 ```{r, message=FALSE, results=FALSE, fig.show='hide'}
-ranpoints2 <- read.csv("./Input_Data/Threnetes_ruckeri_M_bios.csv",header=T)
-species2 <- read.csv("./Input_Data/Threnetes_ruckeri_occ_bios.csv",header=T)
+ranpoints2 <- read.csv("./Input_Data/Threnetes_ruckeri_M_GE.csv",header=T)
+species2 <- read.csv("./Input_Data/Threnetes_ruckeri_occ_GE.csv",header=T)
 shp2 <- readOGR("./Input_Data/shapefiles","Threnetes_ruckeri")
 
 ```
 
 ```{r, eval=FALSE}
-GEspace(bckgrnd = ranpoints2, occ = species2, add.poly = shp2, save.p = "Threnetes_bckgrndmap.png")
-GEspace(bckgrnd = ranpoints2, occ = species2, add.poly = shp2)
+GEspace(bckgrnd = ranpoints2, E.occ = species2, add.poly = shp2, save.p = "Threnetes_bckgrndmap.png")
+GEspace(bckgrnd = ranpoints2, E.occ = species2, add.poly = shp2)
 ```
 
 
@@ -391,8 +391,8 @@ knitr::include_graphics("Images/Threnetes_ruckeri_points.png")
 \
 
 ```{r, eval=FALSE}
-GEspace(bckgrnd = ranpoints2, occ = species2, save.p = "Threnetes_polymap.png")
-GEspace(bckgrnd = ranpoints2, occ = species2)
+GEspace(bckgrnd = ranpoints2, E.occ = species2, save.p = "Threnetes_polymap.png")
+GEspace(bckgrnd = ranpoints2, E.occ = species2)
 ```
 
 ```{r, echo=FALSE, fig.cap=" Figure of the geographical space with a polygon and clipped worldmap as a background (left) and the environmental space (right) of *Threnetes ruckeri* .", out.width = '70%',fig.align="center"}

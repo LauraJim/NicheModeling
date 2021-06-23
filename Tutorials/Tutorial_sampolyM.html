@@ -186,7 +186,7 @@ pre code {
 </p></li>
 <li><p><code>N</code> = the sample size<br />
 </p></li>
-<li><p><code>bios</code> = a rasterstack that contains at least two layers with environmental data<br />
+<li><p><code>Estck</code> = a rasterstack that contains at least two layers with environmental data<br />
 </p></li>
 </ul>
 <p><br />
@@ -217,9 +217,9 @@ pre code {
 <p>The function <code>sam.polyM</code>uses a shapefile of the area of interest as a mask to clip the rasterstack in order to reduce the information of the rasterstack to the same geographical area. As a next step, cells with an NA value will be deleted from the clipped rasterstack. As a next step, a random sample of indices is generated. With these indices a sample of the clipped rasterstack is taken. The sample size is dictated by N.</p>
 <pre class="r"><code># Get a random sample of points inside the polygon that delimits M (= )
 # and extract their environmental values
-sam.polyM &lt;- function(M.shp,N,bios){
+sam.polyM &lt;- function(M.shp,N,Estck){
   # crop and mask the environmental layers with the M polygon
-  clip.M &lt;- mask(crop(bios,M.shp),M.shp)
+  clip.M &lt;- mask(crop(Estck,M.shp),M.shp)
   # get rid of cells with NA values = indices
   ind &lt;- which(!is.na(clip.M[[1]][]))
   # get a random sample of indices
@@ -249,7 +249,7 @@ sam.polyM &lt;- function(M.shp,N,bios){
 </div>
 <div id="catasticta-nimbice" class="section level3">
 <h3><em>Catasticta nimbice</em></h3>
-<p>First, the rasterstack for the parameter <code>bios</code> is prepared. For this example two rasters with the environmental data “annual mean temperature” and “total annual precipitation” are used. The rasterstack will therefore have two layers.</p>
+<p>First, the rasterstack for the parameter <code>Estck</code> is prepared. For this example two rasters with the environmental data “annual mean temperature” and “total annual precipitation” are used. The rasterstack will therefore have two layers.</p>
 <pre class="r"><code># Read environmental layers
 bio1 &lt;- raster(&quot;./Input_Data/bio1WH.asc&quot;)
 bio12 &lt;- raster(&quot;./Input_Data/bio12WH.asc&quot;)
@@ -262,18 +262,18 @@ stck_bios &lt;- stack(bio1, bio12)</code></pre>
 <pre class="r"><code>M.shp &lt;- readOGR(&quot;./Input_Data/shapefiles&quot;,&quot;nimbice3&quot;)</code></pre>
 <p><br />
 </p>
-<p>Apply the function with <code>bios</code>, <code>M.shp</code>, and <code>N</code>. Here, <code>N</code> will be 10,000. The generated matrix will therefore have two columns with environmental data from the study area and 10,000 rows.</p>
-<pre class="r"><code>sam.Mpnts &lt;- sam.polyM(M.shp = M.shp,N = 10000,bios = stck_bios)</code></pre>
+<p>Apply the function with <code>Estck</code>, <code>M.shp</code>, and <code>N</code>. Here, <code>N</code> will be 10,000. The generated matrix will therefore have two columns with environmental data from the study area and 10,000 rows.</p>
+<pre class="r"><code>sam.Mpnts &lt;- sam.polyM(M.shp = M.shp,N = 10000,Estck = stck_bios)</code></pre>
 <p><br />
 </p>
-<p>If needed, save the output as a csv-file (do not run every time)</p>
-<pre class="r"><code>write.csv(sam.Mpnts,file=paste0(&quot;./Output_Data/Catasticta_nimbice&quot;,&quot;_M_bios.csv&quot;),
+<p>If needed, save the output as a csv-file.</p>
+<pre class="r"><code>write.csv(sam.Mpnts,file=paste0(&quot;./Output_Data/Catasticta_nimbice&quot;,&quot;_M_E.csv&quot;),
           row.names = F)</code></pre>
 <p><br />
 </p>
 <p>Create a simple plot of the environmental space (E-Space) with a species’ occurrence.</p>
 <pre class="r"><code># read occurrence data
-occ &lt;- read.csv(&quot;./Input_Data/Catasticta_nimbice_bios.csv&quot;,header=T) 
+occ &lt;- read.csv(&quot;./Input_Data/Catasticta_nimbice_occ_GE.csv&quot;,header=T) 
 # set colors
 pal &lt;- c(&quot;grey50&quot;, &quot;turquoise&quot;)
 
@@ -309,9 +309,9 @@ Figure of the environmental space, where the occurrence points of <em>Catasticta
 M.shp &lt;- readOGR(&quot;./Input_Data/shapefiles&quot;,&quot;Threnetes_ruckeri&quot;)</code></pre>
 <p><br />
 </p>
-<p>Apply the function with <code>M.shp</code>, <code>bios</code>, and a sample size with <code>N</code>.</p>
+<p>Apply the function with <code>M.shp</code>, <code>Estck</code>, and a sample size with <code>N</code>.</p>
 <pre class="r"><code>## Get a random sample of points in M and extract its corresponding environmental values
-sam.Mpnts &lt;- sam.polyM(M.shp = M.shp,N = 10000,bios = stck_bios)</code></pre>
+sam.Mpnts &lt;- sam.polyM(M.shp = M.shp,N = 10000,Estck = stck_bios)</code></pre>
 <p><br />
 </p>
 <p>The output is used to plot a graph showing concentrations of sample points marked by a shade. The layers of shades are created by kernel smoothing. The kernel is drawn using the points inside M. There are currently five levels of shades selected (5, 25, 50, 75, and 95). <!-- what does "probability of selecting a point" here mean? --></p>

@@ -11,7 +11,7 @@
 ## Parameters:
 # M.shp = a shapefile of the study area (polygon)
 # N = the sample size
-# bios = a rasterstack that contains at least two layers with environmental data
+# Estck = a rasterstack that contains at least two layers with environmental data
 
 ## Output:
 # A matrix with two or more columns of samples that contain environmental data
@@ -20,9 +20,9 @@
 
 # Get a random sample of points inside the polygon that delimits M (= )
 # and extract their environmental values
-sam.polyM <- function(M.shp,N,bios){
+sam.polyM <- function(M.shp,N,Estck){
   # crop and mask the environmental layers with the M polygon
-  clip.M <- mask(crop(bios,M.shp),M.shp)
+  clip.M <- mask(crop(Estck,M.shp),M.shp)
   # get rid of cells with NA values = indices
   ind <- which(!is.na(clip.M[[1]][]))
   # get a random sample of indices
@@ -54,13 +54,13 @@ stck_bios <- stack(bio1, bio12)
 M.shp <- readOGR("./Shapefiles","C_nimbice")
 
 # Get a random sample of points in M and extract its corresponding environmental values
-# sam.Mpnts <- sam.polyM(M.shp = M.shp,N = N,bios = stck_bios)
-sam.Mpnts <- sam.polyM(M.shp = M.shp,N = 10000,bios = stck_bios)
+# sam.Mpnts <- sam.polyM(M.shp = M.shp,N = N,Estck = stck_bios)
+sam.Mpnts <- sam.polyM(M.shp = M.shp, N = 10000, Estck = stck_bios)
 
 # Example 1
 
 ## Use sampled points for a plot
-occ <- read.csv("./Catasticta_nimbice_bios.csv",header=T) 
+occ <- read.csv("./Catasticta_nimbice_occ_GE.csv",header=T) 
 pal <- c("grey50", "turquoise") # defining two colors that can be called upon
 
 # # plot
@@ -121,11 +121,11 @@ points(sam.Mpnts[,1], sam.Mpnts[,2],col=col.M2,pch=20,cex=0.6)
 M.shp <- readOGR("./Shapefiles","Threnetes_ruckeri") ###
 
 ## Get a random sample of points in M and extract its corresponding environmental values
-sam.Mpnts <- sam.polyM(M.shp = M.shp,N = 10000,bios = stck_bios)
+sam.Mpnts <- sam.polyM(M.shp = M.shp, N = 10000, Estck = stck_bios)
 
 
 ## Use sampled points for a plot
-occ <- read.csv("./Threnetes_ruckeri_occ_bios.csv",header=T) 
+occ <- read.csv("./Threnetes_ruckeri_occ_GE.csv",header=T) 
 pal <- c("grey50", "turquoise") # defining two colors that can be called upon
 
 
