@@ -1,8 +1,8 @@
-# Function "GEspace"
+# Function "GE.space"
 # Authors: Laura Jiménez and Carola Franzen
 # 2021-05-25
 
-# Description:"GEspace" ------------------
+# Description:"GE.space" ------------------
 # This function creates a plot with two two graphs in ggplot. One is the 
 # geographical space, the other is the environmental space of a species' 
 # occurrence. 
@@ -11,7 +11,7 @@
 # bckgrnd = contains random points within a limited geographical space that 
 #           serve as a background for a map
 # add.poly = a polygon of a geographical area in which a species occurs
-# E.occ = a matrix that contains the occurrence points of a species and the 
+# GE.occ = a matrix that contains the occurrence points of a species and the 
 #       environmental data of the find location
 # save.p = if set, the graph will be saved, if not, it will not be saved
 
@@ -21,9 +21,9 @@
 # different geographical outputs: 1) with background points, 2) with a polygon.
 
 
-# Function's code: GEspace -------------------
+# Function's code: GE.space -------------------
 
-GEspace <- function(bckgrnd, E.occ, add.poly = NULL, save.p = NULL) {
+GE.space <- function(bckgrnd, GE.occ, add.poly = NULL, save.p = NULL) {
   
   # rgb is color; alpha is a factor of transparency
   # Mcol <- rgb(0.35,0,0.2,alpha = 0.6)
@@ -182,7 +182,7 @@ GEspace <- function(bckgrnd, E.occ, add.poly = NULL, save.p = NULL) {
   
 }
 
-# Main: How to use "GEspace" ------------------------
+# Main: How to use "GE.space" ------------------------
 
 library(rgdal)
 library(raster)
@@ -205,15 +205,15 @@ shp <- readOGR("./Shapefiles","nimbice3")
 # save file to
 saveM <- "./Results/Catasticta_nimbice"
 
-# apply function GEspace
+# apply function GE.space
 # with polygon, save as png
-GEspace(bckgrnd=ranpoints, E.occ=species, add.poly=shp, save.p = paste0(saveM, "_bckgrndmap.png"))
+GE.space(bckgrnd=ranpoints, GE.occ=species, add.poly=shp, save.p = paste0(saveM, "_bckgrndmap.png"))
 # with polygon
-GEspace(bckgrnd=ranpoints, E.occ=species, add.poly=shp)
+GE.space(bckgrnd=ranpoints, GE.occ=species, add.poly=shp)
 # with background points, save as png
-GEspace(bckgrnd=ranpoints, E.occ=species, save.p = paste0(saveM, "_polymap.png"))
+GE.space(bckgrnd=ranpoints, GE.occ=species, save.p = paste0(saveM, "_polymap.png"))
 # with background points
-GEspace(bckgrnd=ranpoints, E.occ=species)
+GE.space(bckgrnd=ranpoints, GE.occ=species)
 
 
 ## Example 2:
@@ -221,7 +221,7 @@ ranpoints2 <- read.csv("./Threnetes_ruckeri_M_GE.csv",header=T)
 species2 <- read.csv("./Threnetes_ruckeri_occ_GE.csv",header=T)
 shp2 <- readOGR("./Shapefiles","Threnetes_ruckeri")
 
-GEspace(bckgrnd = ranpoints2, E.occ = species2, add.poly = shp2, save.p = "map3.png")
-GEspace(bckgrnd = ranpoints2, E.occ = species2, add.poly = shp2)
-GEspace(bckgrnd = ranpoints2, E.occ = species2, save.p = "map4.png")
-GEspace(bckgrnd = ranpoints2, E.occ = species2)
+GE.space(bckgrnd = ranpoints2, GE.occ = species2, add.poly = shp2, save.p = "map3.png")
+GE.space(bckgrnd = ranpoints2, GE.occ = species2, add.poly = shp2)
+GE.space(bckgrnd = ranpoints2, GE.occ = species2, save.p = "map4.png")
+GE.space(bckgrnd = ranpoints2, GE.occ = species2)
