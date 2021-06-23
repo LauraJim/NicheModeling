@@ -11,7 +11,7 @@
 # bckgrnd = contains random points within a limited geographical space that 
 #           serve as a background for a map
 # add.poly = a polygon of a geographical area in which a species occurs
-# occ = a matrix that contains the occurrence points of a species and the 
+# E.occ = a matrix that contains the occurrence points of a species and the 
 #       environmental data of the find location
 # save.p = if set, the graph will be saved, if not, it will not be saved
 
@@ -23,7 +23,7 @@
 
 # Function's code: GEspace -------------------
 
-GEspace <- function(bckgrnd, occ, add.poly = NULL, save.p = NULL) {
+GEspace <- function(bckgrnd, E.occ, add.poly = NULL, save.p = NULL) {
   
   # rgb is color; alpha is a factor of transparency
   # Mcol <- rgb(0.35,0,0.2,alpha = 0.6)
@@ -45,8 +45,8 @@ GEspace <- function(bckgrnd, occ, add.poly = NULL, save.p = NULL) {
     bckgrnd1 <- data.frame(longitude = bckgrnd[, 1], latitude = bckgrnd[, 2])
     occ1 <- data.frame(longitude = occ[, 1], latitude = occ[, 2])
     data <- cbind(rbind(bckgrnd1[,1:2],occ1[,1:2]),
-                  # an extra column is added to differentiate bckgrnd and occ 
-                  # (1 for bckgrnd, 2 for occ)
+                  # an extra column is added to differentiate bckgrnd and E.occ 
+                  # (1 for bckgrnd, 2 for E.occ)
                   c(rep(1,nrow(bckgrnd1)),rep(2,nrow(occ1))))
     # rename columns
     data2 <- data.frame(Longitude = data[, 1], Latitude = data[, 2], 
@@ -67,8 +67,8 @@ GEspace <- function(bckgrnd, occ, add.poly = NULL, save.p = NULL) {
     bckgrnd3 <- data.frame(Temperature = bckgrnd[, 3], Precipitation = bckgrnd[, 4])
     occ3 <- data.frame(Temperature = occ[, 3], Precipitation = occ [, 4])
     data3 <- cbind(rbind(bckgrnd3[,1:2],occ3[,1:2]),
-                   # an extra column is added to differentiate bckgrnd and occ 
-                   # (1 for bckgrnd, 2 for occ)
+                   # an extra column is added to differentiate bckgrnd and E.occ 
+                   # (1 for bckgrnd, 2 for E.occ)
                    c(rep(1,nrow(bckgrnd3)),rep(2,nrow(occ3))))
     # rename columns
     data4 <- data.frame(Temperature = data3[, 1], Precipitation = data3[, 2], 
@@ -197,9 +197,9 @@ library(ggpubr)
 ## Example 1:
 
 # read matrix with random background points
-ranpoints <- read.csv("./Catasticta_nimbice_M_bios.csv",header=T) 
+ranpoints <- read.csv("./Catasticta_nimbice_M_GE.csv",header=T) 
 # read matrix with occurrence of species that contains environmental data
-species <- read.csv("./Catasticta_nimbice_bios.csv",header=T)
+species <- read.csv("./Catasticta_nimbice_occ_GE.csv",header=T)
 # read polygon
 shp <- readOGR("./Shapefiles","nimbice3")
 # save file to
@@ -207,21 +207,21 @@ saveM <- "./Results/Catasticta_nimbice"
 
 # apply function GEspace
 # with polygon, save as png
-GEspace(bckgrnd=ranpoints, occ=species, add.poly=shp, save.p = paste0(saveM, "_bckgrndmap.png"))
+GEspace(bckgrnd=ranpoints, E.occ=species, add.poly=shp, save.p = paste0(saveM, "_bckgrndmap.png"))
 # with polygon
-GEspace(bckgrnd=ranpoints, occ=species, add.poly=shp)
+GEspace(bckgrnd=ranpoints, E.occ=species, add.poly=shp)
 # with background points, save as png
-GEspace(bckgrnd=ranpoints, occ=species, save.p = paste0(saveM, "_polymap.png"))
+GEspace(bckgrnd=ranpoints, E.occ=species, save.p = paste0(saveM, "_polymap.png"))
 # with background points
-GEspace(bckgrnd=ranpoints, occ=species)
+GEspace(bckgrnd=ranpoints, E.occ=species)
 
 
 ## Example 2:
-ranpoints2 <- read.csv("./Threnetes_ruckeri_M_bios.csv",header=T)
-species2 <- read.csv("./Threnetes_ruckeri_occ_bios.csv",header=T)
+ranpoints2 <- read.csv("./Threnetes_ruckeri_M_GE.csv",header=T)
+species2 <- read.csv("./Threnetes_ruckeri_occ_GE.csv",header=T)
 shp2 <- readOGR("./Shapefiles","Threnetes_ruckeri")
 
-GEspace(bckgrnd = ranpoints2, occ = species2, add.poly = shp2, save.p = "map3.png")
-GEspace(bckgrnd = ranpoints2, occ = species2, add.poly = shp2)
-GEspace(bckgrnd = ranpoints2, occ = species2, save.p = "map4.png")
-GEspace(bckgrnd = ranpoints2, occ = species2)
+GEspace(bckgrnd = ranpoints2, E.occ = species2, add.poly = shp2, save.p = "map3.png")
+GEspace(bckgrnd = ranpoints2, E.occ = species2, add.poly = shp2)
+GEspace(bckgrnd = ranpoints2, E.occ = species2, save.p = "map4.png")
+GEspace(bckgrnd = ranpoints2, E.occ = species2)

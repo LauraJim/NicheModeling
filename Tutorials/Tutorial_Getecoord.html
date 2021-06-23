@@ -185,11 +185,11 @@ pre code {
 <p>For this function, three parameters are necessary:<br />
 </p>
 <ul>
-<li><p><code>estck</code> = a raster stack that has two or more climatic layers<br />
+<li><p><code>Estck</code> = a raster stack that has two or more climatic layers<br />
 </p></li>
-<li><p><code>gcoord</code> = a matrix with two columns whose rows are geographic coordinates of species’ occurrence in the study area<br />
+<li><p><code>Gcoord</code> = a matrix with two columns whose rows are geographic coordinates of species’ occurrence in the study area<br />
 </p></li>
-<li><p><code>enames</code> = names for the extracted environmental variables in form of a character vector for the output table<br />
+<li><p><code>Enames</code> = names for the extracted environmental variables in form of a character vector for the output table<br />
 </p></li>
 </ul>
 </div>
@@ -197,25 +197,25 @@ pre code {
 <h2>Function’s code</h2>
 <div id="how-get.ecoord-works" class="section level3">
 <h3>How <em>get.ecoord</em> works</h3>
-<p>The function <code>get.ecoord</code> will first check the amount of layers that a rasterstack has and makes sure that the numbers of entered names are the same. If the number of names and raster layers are the same amount, the climatic data for the species occurrence points are extracted from the rasters and combined into a matrix. Rows with no occurrence points are deleted. Finally, the columns are renamed by the coordinates and names that were entered into the function. If less or more names are entered the message “Raster stack and enames does not have the same length” will be printed.</p>
-<pre class="r"><code>get.ecoord &lt;- function(estck, gcoord, enames) {
+<p>The function <code>get.ecoord</code> will first check the amount of layers that a rasterstack has and makes sure that the numbers of entered names are the same. If the number of names and raster layers are the same amount, the climatic data for the species occurrence points are extracted from the rasters and combined into a matrix. Rows with no occurrence points are deleted. Finally, the columns are renamed by the coordinates and names that were entered into the function. If less or more names are entered the message “Raster stack and Enames does not have the same length” will be printed.</p>
+<pre class="r"><code>get.ecoord &lt;- function(Estck, Gcoord, Enames) {
 
   # check the amount of layers in a raster and make sure they are the same as the
   # names that are used
-  if (length(estck@layers)==length(enames)) {  
+  if (length(Estck@layers)==length(Enames)) {  
     # extract climatic data from a raster
-    a &lt;- extract(estck,gcoord)  
+    a &lt;- extract(Estck,Gcoord)  
     # combine columns of extracted coordinates with column of environmental data
     # and deletes rows with data points that are marked as NA
-    b &lt;- na.omit(cbind(gcoord,a)) 
+    b &lt;- na.omit(cbind(Gcoord,a)) 
     # rename the columns 
-    colnames(b) &lt;- c(colnames(gcoord),enames) 
+    colnames(b) &lt;- c(colnames(Gcoord),Enames) 
     return(b)
   }
   else { 
     # if the amount of layers is not the same as the amount of added column names,
     # this message is printed instead
-    print(&quot;Raster stack and enames does not have the same length.&quot;) 
+    print(&quot;Raster stack and Enames does not have the same length.&quot;) 
   }
 }</code></pre>
 <p><br />
@@ -240,18 +240,18 @@ pre code {
 </div>
 <div id="catasticta-nimbice" class="section level3">
 <h3><em>Catasticta nimbice</em></h3>
-<p>To create the parameter <code>estck</code>, two or more rasters are combined into one rasterstack. For this species we used rasters with the environmental conditions “mean annual temperature” (= bio1) and “total annual precipitation” (= bio12).<br />
+<p>To create the parameter <code>Estck</code>, two or more rasters are combined into one rasterstack. For this species we used rasters with the environmental conditions “mean annual temperature” (= bio1) and “total annual precipitation” (= bio12).<br />
 The created rasterstack will have as many layers as rasters are combined together. In this example, there are only two layers: bio1 and bio12.</p>
 <pre class="r"><code># read raster files
 bio1 &lt;- raster(&quot;./Input_Data/bio1WH.asc&quot;)
 bio12 &lt;- raster(&quot;./Input_Data/bio12WH.asc&quot;)
 # combine the rasters into a RasterStack
-bios &lt;- stack(bio1, bio12) #  = estck</code></pre>
+bios &lt;- stack(bio1, bio12) #  = Estck</code></pre>
 <p><br />
 </p>
-<p>The parameter <code>gcoord</code> is a matrix with coordinates of the tracked occurrence of <em>Catasticta nimbice</em>. The cleaned table can be directly read without much modification.</p>
+<p>The parameter <code>Gcoord</code> is a matrix with coordinates of the tracked occurrence of <em>Catasticta nimbice</em>. The cleaned table can be directly read without much modification.</p>
 <pre class="r"><code># read table, set header and omit first column of the table
-occ &lt;- read.csv(&quot;./Input_Data/Catasticta_nimbice.csv&quot;,header=T)[,-1] #  = gcoord
+occ &lt;- read.csv(&quot;./Input_Data/Catasticta_nimbice_occ_G.csv&quot;,header=T)[,-1] #  = Gcoord
 
 head(occ, n=3)</code></pre>
 <pre><code>##   Longitude Latitude
@@ -260,13 +260,13 @@ head(occ, n=3)</code></pre>
 ## 3 -96.57000 16.31722</code></pre>
 <p><br />
 </p>
-<p>In order to set names for the new columns that will be created by the function, the parameter <code>enames</code> will be set with as many names as rasters have been stacked. In this example, the first column name is bio1 and the second is bio12.</p>
+<p>In order to set names for the new columns that will be created by the function, the parameter <code>Enames</code> will be set with as many names as rasters have been stacked. In this example, the first column name is bio1 and the second is bio12.</p>
 <pre class="r"><code># write names for the column heads of the environmental data
-names1 &lt;- c(&quot;bio1&quot;, &quot;bio12&quot;) #  = enames</code></pre>
+names1 &lt;- c(&quot;bio1&quot;, &quot;bio12&quot;) #  = Enames</code></pre>
 <p><br />
 </p>
-<p>Apply <code>get.ecoord</code> with the parameters <code>estck</code>, <code>gcoord</code>, and <code>enames</code>:</p>
-<pre class="r"><code>f &lt;- get.ecoord(estck=bios, gcoord=occ, enames=names1)
+<p>Apply <code>get.ecoord</code> with the parameters <code>Estck</code>, <code>Gcoord</code>, and <code>Enames</code>:</p>
+<pre class="r"><code>f &lt;- get.ecoord(Estck=bios, Gcoord=occ, Enames=names1)
 
 head(f, n=3)</code></pre>
 <pre><code>##   Longitude Latitude bio1 bio12
@@ -276,7 +276,7 @@ head(f, n=3)</code></pre>
 <p><br />
 </p>
 <p>Save the output as a csv-file (but do not run every time):</p>
-<pre class="r"><code>write.csv(f,file=paste0(&quot;./Output_Data/Catasticta_nimbice&quot;,&quot;_bios.csv&quot;),
+<pre class="r"><code>write.csv(f,file=paste0(&quot;./Output_Data/Catasticta_nimbice&quot;,&quot;_occ_GE.csv&quot;),
           row.names = F)</code></pre>
 <p>This csv-file can now be used as data input for various graphs that highlight the geographical presence of the species and the surrounding environment.<br />
 <br />
@@ -298,14 +298,14 @@ head(bckgrnd, n=3)</code></pre>
 ## 1 -71.58333  6.250003
 ## 2 -83.91666 11.916670
 ## 3 -69.74999  9.916670</code></pre>
-<pre class="r"><code>f2 &lt;- get.ecoord(estck=bios, gcoord=bckgrnd, names1) 
+<pre class="r"><code>f2 &lt;- get.ecoord(Estck=bios, Gcoord=bckgrnd, names1) 
 head(f2, n=3)</code></pre>
 <pre><code>##        long       lat bio1 bio12
 ## 1 -71.58333  6.250003  263  2588
 ## 2 -83.91666 11.916670  256  4614
 ## 3 -69.74999  9.916670  239   586</code></pre>
 <p>Save the output as a csv-file (but do not run it every time):</p>
-<pre class="r"><code>write.csv(f2,file=paste0(&quot;./Output_Data/Threnetes_ruckeri_M&quot;,&quot;_bios.csv&quot;),
+<pre class="r"><code>write.csv(f2,file=paste0(&quot;./Output_Data/Threnetes_ruckeri_M&quot;,&quot;_GE.csv&quot;),
           row.names = F)</code></pre>
 </div>
 </div>

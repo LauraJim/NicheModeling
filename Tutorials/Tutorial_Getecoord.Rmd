@@ -29,13 +29,13 @@ The function `get.ecoord` is a simple tool to extract environmental data, such a
 For this function, three parameters are necessary:
 \
 
-* `estck` = a raster stack that has two or more climatic layers
+* `Estck` = a raster stack that has two or more climatic layers
 \
 
-* `gcoord` = a matrix with two columns whose rows are geographic coordinates of species' occurrence in the study area
+* `Gcoord` = a matrix with two columns whose rows are geographic coordinates of species' occurrence in the study area
 \
 
-* `enames` = names for the extracted environmental variables in form of a character vector for the output table
+* `Enames` = names for the extracted environmental variables in form of a character vector for the output table
 \
   
 ## Function's code
@@ -44,27 +44,27 @@ For this function, three parameters are necessary:
 ### How *get.ecoord* works
   
 The function `get.ecoord` will first check the amount of layers that a rasterstack has and makes sure that the numbers of entered names are the same. If the number of names and raster layers are the same amount, the climatic data for the species occurrence points are extracted from the rasters and combined into a matrix. Rows with no occurrence points are deleted. Finally, the columns are renamed by the coordinates and names that were entered into the function.
-If less or more names are entered the message "Raster stack and enames does not have the same length" will be printed.  
+If less or more names are entered the message "Raster stack and Enames does not have the same length" will be printed.  
 
 ```{r}
-get.ecoord <- function(estck, gcoord, enames) {
+get.ecoord <- function(Estck, Gcoord, Enames) {
 
   # check the amount of layers in a raster and make sure they are the same as the
   # names that are used
-  if (length(estck@layers)==length(enames)) {  
+  if (length(Estck@layers)==length(Enames)) {  
     # extract climatic data from a raster
-    a <- extract(estck,gcoord)  
+    a <- extract(Estck,Gcoord)  
     # combine columns of extracted coordinates with column of environmental data
     # and deletes rows with data points that are marked as NA
-    b <- na.omit(cbind(gcoord,a)) 
+    b <- na.omit(cbind(Gcoord,a)) 
     # rename the columns 
-    colnames(b) <- c(colnames(gcoord),enames) 
+    colnames(b) <- c(colnames(Gcoord),Enames) 
     return(b)
   }
   else { 
     # if the amount of layers is not the same as the amount of added column names,
     # this message is printed instead
-    print("Raster stack and enames does not have the same length.") 
+    print("Raster stack and Enames does not have the same length.") 
   }
 }
 ```
@@ -91,7 +91,7 @@ The same function can also be used to extract environmental data and combine it 
   
 ### *Catasticta nimbice*
 
-To create the parameter `estck`, two or more rasters are combined into one rasterstack. For this species we used rasters with the environmental conditions "mean annual temperature" (= bio1) and "total annual precipitation" (= bio12).  
+To create the parameter `Estck`, two or more rasters are combined into one rasterstack. For this species we used rasters with the environmental conditions "mean annual temperature" (= bio1) and "total annual precipitation" (= bio12).  
 The created rasterstack will have as many layers as rasters are combined together. In this example, there are only two layers: bio1 and bio12.
 ```{r}
 
@@ -99,33 +99,33 @@ The created rasterstack will have as many layers as rasters are combined togethe
 bio1 <- raster("./Input_Data/bio1WH.asc")
 bio12 <- raster("./Input_Data/bio12WH.asc")
 # combine the rasters into a RasterStack
-bios <- stack(bio1, bio12) #  = estck
+bios <- stack(bio1, bio12) #  = Estck
 
 ```
 \
   
-The parameter `gcoord` is a matrix with coordinates of the tracked occurrence of *Catasticta nimbice*. The cleaned table can be directly read without much modification.
+The parameter `Gcoord` is a matrix with coordinates of the tracked occurrence of *Catasticta nimbice*. The cleaned table can be directly read without much modification.
 ```{r}
 # read table, set header and omit first column of the table
-occ <- read.csv("./Input_Data/Catasticta_nimbice.csv",header=T)[,-1] #  = gcoord
+occ <- read.csv("./Input_Data/Catasticta_nimbice_occ_G.csv",header=T)[,-1] #  = Gcoord
 
 head(occ, n=3)
 
 ```
 \
 
-In order to set names for the new columns that will be created by the function, the parameter `enames` will be set with as many names as rasters have been stacked. In this example, the first column name is bio1 and the second is bio12. 
+In order to set names for the new columns that will be created by the function, the parameter `Enames` will be set with as many names as rasters have been stacked. In this example, the first column name is bio1 and the second is bio12. 
 ```{r}
 # write names for the column heads of the environmental data
-names1 <- c("bio1", "bio12") #  = enames
+names1 <- c("bio1", "bio12") #  = Enames
 
 
 ```
 \
 
-Apply `get.ecoord` with the parameters `estck`, `gcoord`, and `enames`:
+Apply `get.ecoord` with the parameters `Estck`, `Gcoord`, and `Enames`:
 ```{r}
-f <- get.ecoord(estck=bios, gcoord=occ, enames=names1)
+f <- get.ecoord(Estck=bios, Gcoord=occ, Enames=names1)
 
 head(f, n=3)
 
@@ -134,7 +134,7 @@ head(f, n=3)
 
 Save the output as a csv-file (but do not run every time):
 ```{r, eval=FALSE}
-write.csv(f,file=paste0("./Output_Data/Catasticta_nimbice","_bios.csv"),
+write.csv(f,file=paste0("./Output_Data/Catasticta_nimbice","_occ_GE.csv"),
           row.names = F)
 ```
 This csv-file can now be used as data input for various graphs that highlight the geographical presence of the species and the surrounding environment.
@@ -161,7 +161,7 @@ Unlike the previous example, random points of a study area instead of the occurr
 bckgrnd <- read.csv("./Input_Data/Threnetes_ruckeri_M.csv",header=T)
 head(bckgrnd, n=3)
 
-f2 <- get.ecoord(estck=bios, gcoord=bckgrnd, names1) 
+f2 <- get.ecoord(Estck=bios, Gcoord=bckgrnd, names1) 
 head(f2, n=3)
 ```
 
@@ -169,8 +169,7 @@ head(f2, n=3)
 Save the output as a csv-file (but do not run it every time):
 ```{r, eval=FALSE}
 
-write.csv(f2,file=paste0("./Output_Data/Threnetes_ruckeri_M","_bios.csv"),
+write.csv(f2,file=paste0("./Output_Data/Threnetes_ruckeri_M","_GE.csv"),
           row.names = F)
 ```
-  
   

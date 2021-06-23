@@ -9,6 +9,7 @@
 # are colored by different degrees of suitability.
 
 ## Parameters:
+# Estck = a raster stack with more than two climatic layers
 # mu = the mean of the columns that contain environmental data, such as 
 #       temperature and precipitation 
 # Sigma = the covariance of the environmental data linked with a species' 
@@ -23,7 +24,7 @@
 
 # the function's code: niche.G --------------------------------------
 
-niche.G <- function(mu, Sigma, save.map) {
+niche.G <- function(Estck, mu, Sigma, save.map) {
   
   # Calculate suitabilities in each cell
   max.val <- mvtnorm::dmvnorm(x=mu,mean = mu, sigma = Sigma)
@@ -31,7 +32,7 @@ niche.G <- function(mu, Sigma, save.map) {
   sui.fun <- function(cell){log(mvtnorm::dmvnorm(x=c(cell[1],cell[2]),mean = mu, 
                                                  sigma = Sigma))-log(max.val)}
   # apply this function to the whole raster layer
-  suit.rast <- calc(bios,fun=sui.fun)
+  suit.rast <- calc(Estck,fun=sui.fun)
   # take exponential to go back to the original scale
   
   suit.rast1 <- calc(suit.rast,fun = exp,
@@ -61,7 +62,7 @@ bios <- stack(bio1,bio2)
 
 ## Example 1
 
-occ <- read.csv("./Catasticta_nimbice_bios.csv",header=T)[,-(1:2)]
+occ <- read.csv("./Catasticta_nimbice_occ_GE.csv",header=T)[,-(1:2)]
 
 # calculate parameters
 
@@ -72,7 +73,7 @@ boundary <- cov(occ)
 # define name for the maps
 saveM <- "./Results/Catasticta_nimbice_map"
 
-result1 <- niche.G(mu = center, Sigma = boundary, save.map = saveM)
+result1 <- niche.G(Estck = bios, mu = center, Sigma = boundary, save.map = saveM)
 
 x11()
 plot(result1)
@@ -80,7 +81,7 @@ plot(result1)
 
 ## Example 2
 
-occ2 <- read.csv("./Threnetes_ruckeri_occ_bios.csv",header=T)[,-(1:2)]
+occ2 <- read.csv("./Threnetes_ruckeri_occ_GE.csv",header=T)[,-(1:2)]
 
 # calculate parameters
 
@@ -91,7 +92,7 @@ boundary2 <- cov(occ2)
 # define name for the maps
 saveM2 <- "./Results/Threnetes_ruckeri_map"
 
-result2 <- niche.G(mu = center2, Sigma = boundary2, save.map = saveM2)
+result2 <- niche.G(Estck, mu = center2, Sigma = boundary2, save.map = saveM2)
 
 x11()
 plot(result2)
@@ -114,7 +115,7 @@ outppd <- data.frame(outpp)
 colnames(outppd) <- c("Longitude","Latitude","Suitability")
 
 # Read presence points 
-occ3 <- read.csv("./Threnetes_ruckeri_occ_bios.csv",header=T)
+occ3 <- read.csv("./Threnetes_ruckeri_occ_GE.csv",header=T)
 
 x11()
 ggplot() +
@@ -140,7 +141,7 @@ outppd2 <- data.frame(outpp2)
 colnames(outppd2) <- c("Longitude","Latitude","Suitability")
 
 # Read presence points 
-occ4 <- read.csv("./Catasticta_nimbice_bios.csv",header=T)
+occ4 <- read.csv("./Catasticta_nimbice_occ_GE.csv",header=T)
 
 # plot
 x11()

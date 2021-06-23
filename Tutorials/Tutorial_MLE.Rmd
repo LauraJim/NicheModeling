@@ -39,7 +39,7 @@ The function `sam.polyM` takes a random sample of environmental combinations ins
 * `N` = the sample size
 \
 
-* `bios` = a rasterstack that contains at least two layers with environmental data
+* `Estck` = a rasterstack that contains at least two layers with environmental data
 \
 
 \
@@ -73,9 +73,9 @@ The function `sam.polyM`uses a shapefile of the area of interest as a mask to cl
 ```{r}
 # Get a random sample of points inside the polygon that delimits M (= )
 # and extract their environmental values
-sam.polyM <- function(M.shp,N,bios){
+sam.polyM <- function(M.shp,N,Estck){
   # crop and mask the environmental layers with the M polygon
-  clip.M <- mask(crop(bios,M.shp),M.shp)
+  clip.M <- mask(crop(Estck,M.shp),M.shp)
   # get rid of cells with NA values = indices
   ind <- which(!is.na(clip.M[[1]][]))
   # get a random sample of indices
@@ -105,7 +105,7 @@ A polygon that marks the borders of a species' occurrence or the study area is n
 
 ### *Catasticta nimbice*
 
-First, the rasterstack for the parameter `bios` is prepared. For this example two rasters with the environmental data "annual mean temperature" and "total annual precipitation" are used. The rasterstack will therefore have two layers.
+First, the rasterstack for the parameter `Estck` is prepared. For this example two rasters with the environmental data "annual mean temperature" and "total annual precipitation" are used. The rasterstack will therefore have two layers.
 
 ```{r}
 # Read environmental layers
@@ -124,17 +124,17 @@ M.shp <- readOGR("./Input_Data/shapefiles","nimbice3")
 ```
 \
 
-Apply the function with `bios`, `M.shp`, and `N`. Here, `N` will be 10,000. The generated matrix will therefore have two columns with environmental data from the study area and 10,000 rows.
+Apply the function with `Estck`, `M.shp`, and `N`. Here, `N` will be 10,000. The generated matrix will therefore have two columns with environmental data from the study area and 10,000 rows.
 
 ```{r}
-sam.Mpnts <- sam.polyM(M.shp = M.shp,N = 10000,bios = stck_bios)
+sam.Mpnts <- sam.polyM(M.shp = M.shp,N = 10000,Estck = stck_bios)
 ```
 \
 
 If needed, save the output as a csv-file (do not run every time)
 
 ```{r, eval=FALSE}
-write.csv(sam.Mpnts,file=paste0("./Output_Data/Catasticta_nimbice","_M_bios.csv"),
+write.csv(sam.Mpnts,file=paste0("./Output_Data/Catasticta_nimbice","_M_E.csv"),
           row.names = F)
 ```
 \
@@ -143,7 +143,7 @@ Create a simple plot of the environmental space (E-Space) with a species' occurr
 
 ```{r, fig.show='hide'}
 # read occurrence data
-occ <- read.csv("./Input_Data/Catasticta_nimbice_bios.csv",header=T) 
+occ <- read.csv("./Input_Data/Catasticta_nimbice_occ_GE.csv",header=T) 
 # set colors
 pal <- c("grey50", "turquoise")
 
@@ -181,10 +181,10 @@ M.shp <- readOGR("./Input_Data/shapefiles","Threnetes_ruckeri")
 ```
 \
 
-Apply the function with `M.shp`, `bios`, and a sample size with `N`.
+Apply the function with `M.shp`, `Estck`, and a sample size with `N`.
 ```{r}
 ## Get a random sample of points in M and extract its corresponding environmental values
-sam.Mpnts <- sam.polyM(M.shp = M.shp,N = 10000,bios = stck_bios)
+sam.Mpnts <- sam.polyM(M.shp = M.shp,N = 10000,Estck = stck_bios)
 
 ```
 \
@@ -328,17 +328,17 @@ negloglike <- function(guess, sam1, sam2){
 The function `maxi.like` calculates the maximum likelihood estimation with a matrix of randomly sampled points within the study area (= result from the function `sam.polyM`) and the occurrence data of a species that contains environmental data. At first, the mu and sigma of the occurrence data is calculated. Then, the sigma values are inverted. ###  <!-- description-->
 
 ```{r}
-maxi.like <- function(occ, randpntsM) {
+fitNiche <- function(E.occ, E.samM) {
   # calculate mu
-  mu.ini <- colMeans(occ)
+  mu.ini <- colMeans(E.occ)
   # calculate A (covariance)
-  Sig.ini <- cov(occ)
+  Sig.ini <- cov(E.occ)
   # invert matrix sig.ini
   A.ini <- chol2inv(chol(Sig.ini))
   # whole vector of inicial values
   vals.ini <- c(mu.ini, A.ini[1,1], A.ini[1,2], A.ini[2,2])#c(mu.ini,A.ini[1,1],A.ini[1,2],A.ini[2,2])
   # fix the values of the samples used to evaluate the neg-log-likelihood
-  like.fn <- function(theta){ negloglike(theta, sam1=occ, sam2=randpntsM) } 
+  like.fn <- function(theta){ negloglike(theta, sam1=E.occ, sam2=E.samM) } 
   find.mle <- optim(par=vals.ini, fn=like.fn, method="Nelder-Mead")
   mle <- find.mle$par
   mle.mu <- mle[1:2]
@@ -376,13 +376,13 @@ If the random sample has already been calculated (see above, function `sam.polyM
 
 Read the matrix with environmental data of a species' occurrence.
 ```{r}
-sp.occ <- read.csv("./Input_Data/Catasticta_nimbice_bios.csv",header=T)[,-(1:2)]
+sp.occ <- read.csv("./Input_Data/Catasticta_nimbice_occ_GE.csv",header=T)[,-(1:2)]
 ```
 \
 
-Apply the function with the parameters `occ` and `randpntsM` (the sample `randpntsM`` was calculated above and is named *sam.Mpnts*).
+Apply the function with the parameters `E.occ` and `E.samM` (the sample `E.samM`` was calculated above and is named *sam.Mpnts*).
 ```{r, cache=TRUE}
-ml <- maxi.like(occ = sp.occ, randpntsM = sam.Mpnts)
+ml <- fitNiche(E.occ = sp.occ, E.samM = sam.Mpnts)
 ```
 \
 
@@ -450,18 +450,74 @@ For this species the same steps are followed as above until the plot. Here, it w
 
 Read the matrix with occurrences combined with environmental data and the shape-file of the study area (the necessary rasterstack was already created in the example above).
 ```{r}
-sp.occ2 <- read.csv("./Input_Data/Threnetes_ruckeri_occ_bios.csv",header=T)[,-(1:2)]
+sp.occ2 <- read.csv("./Input_Data/Threnetes_ruckeri_occ_GE.csv",header=T)[,-(1:2)]
 
-M.shp2 <- readOGR("./Input_Data/shapefiles","Threnetes_ruckeri")
+shapefile <- readOGR("./Input_Data/shapefiles","Threnetes_ruckeri")
 ```
 \
 
-Sample random points from the area of interest using the `sam.polyM` function with the parameters `M.shp`, `N`, and `bios`.
+Sample random points from the area of interest using the `sam.polyM` function with the parameters `M.shp`, `N`, and `Estck`.
 ```{r}
-sam.Mpnts2 <- sam.polyM(M.shp = M.shp2, N = 5000, bios = stck_bios)
+sam.Mpnts2 <- sam.polyM(M.shp = shapefile, N = 5000, Estck = stck_bios)
 ```
 \
 
+Apply function fit.Niche and change table.
+```{r, cache=TRUE}
+ml2 <- fitNiche(E.occ = sp.occ2, E.samM = sam.Mpnts2)
+# change function into proper table and rename column names
+ml.table2 <- cbind(ml$wn.mu, ml$wn.sigma, ml$maha.mu, ml$maha.sigma)
+colnames(ml.table2) <- c("wn.mu", "wn.sigma1", "wn.sigma2", "maha.mu", "maha.sigma1", "maha.sigma2")
+```
+\
+
+Write results as a table.
+```{r, eval=FALSE}
+write.csv(ml.table2,"./Results/Threnetes_ruckeri_Estimated_parameters.csv",row.names = F)
+```
+\
+
+Calculate ellipses and change them into a dataframe.
+```{r}
+# get the ellipse defined by the ml estimators
+el2 <- ellipse::ellipse(x=ml2[[2]], centre=ml2[[1]], level=0.99, npoints = 500)
+df.el2 <- as.data.frame(el2)
+colnames(df.el2) <- c("Temperature", "Precipitation")
+
+# get the ellipse from a multivarite normal model / mahalanobis distance method
+el.ml2 <- ellipse::ellipse(x=ml2[[4]], centre=ml2[[3]], level=0.99)
+df.elml <- as.data.frame(el.ml2)
+colnames(df.elml) <- c("Temperature", "Precipitation")
+```
+\
+
+Plot in ggplot.
+```{r}
+# prepare data as a dataframe for ggplot
+bckgrnd <- data.frame(Temperature = sam.Mpnts2[,1], Precipitation = sam.Mpnts2[,2])
+species <- data.frame(Temperature = sp.occ2[,1], Precipitation = sp.occ2[,2])
+data <- cbind(rbind(bckgrnd[,1:2], species[,1:2]), c(rep(1,nrow(bckgrnd)),rep(2,nrow(species))))
+data2 <- data.frame(Temperature = data[, 1], Precipitation = data[, 2], 
+                    Type = data[,3]) 
+
+# plot
+x11()
+ggplot(data2, aes(x = Temperature, y = Precipitation)) +
+  geom_point(aes(color = factor(Type), shape = factor(Type))) +
+  scale_shape_manual(values=c(1, 19), guide = FALSE) +
+  scale_color_manual(name= "Data",
+                     labels= c("Background", "Presence"),
+                     values= c("1"=colpal[1], "2"= colpal[3])) +
+  theme(legend.position = c(.05, .95), # for x, value of 0 puts it  to the 
+        # left side, value of 1 to the right, for y, value of 0 puts it to 
+        # the bottom, # value of 1 puts it to the top
+        legend.justification = c("left", "top")) +
+  scale_x_continuous("Annual mean temperature (°C*10)") +
+  scale_y_continuous("Annual precipitation (mm)") +
+  # geom_path(data = df_el2, lineend="butt", linejoin="round", linemitre=1, show.legend = "Ellipse from weighted-normal model")
+  geom_path(data = df.el2, color = colpal[2], size = 1.2) +
+  geom_path(data = df.elml, color = colpal[4], size = 1.2)
+```
 
 
 

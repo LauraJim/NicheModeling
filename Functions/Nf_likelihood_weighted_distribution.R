@@ -11,7 +11,7 @@
 ## Parameters sam.polyM:
 # M.shp = a shapefile of the study area (polygon)
 # N = the sample size
-# bios = a rasterstack that contains at least two layers with environmental data
+# Estck = a rasterstack that contains at least two layers with environmental data
 
 ## Parameters negloglike
 # guess = a vector of length 5 when d=2, it contains the mu and A values as elements
@@ -30,10 +30,10 @@
 # Get a random sample of points inside the polygon that delimits M and extract their environmental values
 ## M.shp should be a shapefile containing the polygon that defines the area of study
 ## N sample size
-## bios must be a stack of environmental raster layers
-sam.polyM <- function(M.shp,N,bios){
+## Estck must be a stack of environmental raster layers
+sam.polyM <- function(M.shp, N, Estck){
   # crop and mask the environmental layers with the M polygon
-  clip.M <- mask(crop(bios,M.shp),M.shp)
+  clip.M <- mask(crop(Estck,M.shp),M.shp)
   # get ride of cells with NA values
   ind <- which(!is.na(clip.M[[1]][]))
   # get a random sample of indices
@@ -47,7 +47,7 @@ sam.polyM <- function(M.shp,N,bios){
   #clip <- gIntersection(wrld_simpl, M.tr, byid = TRUE, drop_lower_td = TRUE) #clip polygon 2 with polygon 1
   # get sample of points inside intersection
   #sam <- spsample(clip, n = N, "random")
-  #clim_M <- extract(stck_1_12,M_pnts)
+  #clim_M <- extract(bios,M_pnts)
 }
 
 # Negative log-likelihood function for theta=(mu,A)
@@ -70,17 +70,17 @@ negloglike <- function(guess,sam1,sam2){
 }
 
 # maximum likelihood
-fitNiche <- function(occ, sam2) {
+fitNiche <- function(E.occ, E.samM) {
   # calculate mu
-  mu.ini <- colMeans(occ)
+  mu.ini <- colMeans(E.occ)
   # calculate A (covariance)
-  Sig.ini <- cov(occ)
+  Sig.ini <- cov(E.occ)
   # invert matrix sig.ini
   A.ini <- chol2inv(chol(Sig.ini))
   # whole vector of inicial values
   vals.ini <- c(mu.ini, A.ini[1,1], A.ini[1,2], A.ini[2,2])#c(mu.ini,A.ini[1,1],A.ini[1,2],A.ini[2,2])
   # fix the values of the samples used to evaluate the neg-log-likelihood
-  like.fn <- function(theta){ negloglike(theta, sam1=occ, sam2) } 
+  like.fn <- function(theta){ negloglike(theta, sam1= E.occ, sam2= E.samM) } 
   find.mle <- optim(par=vals.ini, fn=like.fn, method="Nelder-Mead")
   mle <- find.mle$par
   mle.mu <- mle[1:2]
@@ -113,7 +113,7 @@ library(ggplot2)
 # Read environmental layers
 bio1 <- raster("./ClimateData10min/bio1WH.asc")
 bio12 <- raster("./ClimateData10min/bio12WH.asc")
-stck_1_12 <- raster::stack(bio1,bio12)
+bios <- raster::stack(bio1,bio12)
 
 
 
@@ -126,17 +126,17 @@ N <- 10000
 
 
 # Read presence points and M polygon
-sp.occ <- read.csv("./Catasticta_nimbice_bios.csv",header=T)[,-(1:2)]
+sp.occ <- read.csv("./Catasticta_nimbice_occ_GE.csv",header=T)[,-(1:2)]
 
 M.shp <- readOGR("./Shapefiles","C_nimbice")
 
 # get a random sample of points in M and extract its corresponding environmental values
-sam.Mpnts <- sam.polyM(M.shp = M.shp,N = N,bios = stck_1_12)
+sam.Mpnts <- sam.polyM(M.shp = M.shp, N = N, Estck = bios)
 
 
 # Lookig for the MLE of mu and A --------------------------
 # in tutorial add cache=TRUE to avoid running the function every time it knits
-ml <- fitNiche(occ = sp.occ, sam2 = sam.Mpnts)
+ml <- fitNiche(E.occ = sp.occ, E.samM = sam.Mpnts)
 
 ml.table <- cbind(ml$wn.mu, ml$wn.sigma, ml$maha.mu, ml$maha.sigma)
 colnames(ml.table) <- c("wn.mu", "wn.sigma1", "wn.sigma2", "maha.mu", "maha.sigma1", "maha.sigma2")
@@ -177,15 +177,15 @@ dev.off()
 ## Example 2: Threnetes ruckeri in ggplot
 
 # read input data
-sp.occ2 <- read.csv("./Threnetes_ruckeri_occ_bios.csv",header=T)[,-(1:2)]
+sp.occ2 <- read.csv("./Threnetes_ruckeri_occ_GE.csv",header=T)[,-(1:2)]
 
 M.shp2 <- readOGR("./Shapefiles","Threnetes_ruckeri")
 
 # get a random sample of points in M and extract its corresponding environmental values
-sam.Mpnts2 <- sam.polyM(M.shp = M.shp2, N = 5000, bios = stck_bios)
+sam.Mpnts2 <- sam.polyM(M.shp = M.shp2, N = 5000, Estck = bios)
 
 # use function
-ml2 <- fitNiche(occ = sp.occ2, sam2 = sam.Mpnts2)
+ml2 <- fitNiche(E.occ = sp.occ2, E.samM = sam.Mpnts2)
 
 # change function into proper table and rename column names
 ml.table2 <- cbind(ml$wn.mu, ml$wn.sigma, ml$maha.mu, ml$maha.sigma)

@@ -12,7 +12,7 @@
 #       temperature and precipitation 
 # Sigma = the covariance of the environmental data linked with a species' 
 #         occurrence
-# enames = character vector with the names of the environmental variables
+# Enames = character vector with the names of the environmental variables
 # alpha = confidence level
 
 ## Output
@@ -20,7 +20,7 @@
 
 # The functions code: E.ellipse --------------
 
-E.ellipse <- function(mu, Sigma, alpha = 0.95, enames) {
+E.ellipse <- function(mu, Sigma, alpha = 0.95, Enames) {
   # create a list
   els <- list()
   
@@ -39,8 +39,8 @@ E.ellipse <- function(mu, Sigma, alpha = 0.95, enames) {
   ys <- c(min(occ[,2]) -200, max(occ[,2]) +200)
   
   # create a plot that shows the occurences in the environmental space 
-  plot(occ[,1], occ[,2], pch=20, col= "turquoise", xlab=enames[1],
-       ylab=enames[2], main="Environmental Space", xlim = xs, ylim = ys)
+  plot(occ[,1], occ[,2], pch=20, col= "turquoise", xlab=Enames[1],
+       ylab=Enames[2], main="Environmental Space", xlim = xs, ylim = ys)
   
   # create a loop to write ellipse-lines with different gray colors
   for(i in 1:la){
@@ -57,7 +57,7 @@ E.ellipse <- function(mu, Sigma, alpha = 0.95, enames) {
 ## Example 1: three different alpha levels
 
 # read table with occurrences
-occ <- read.csv ("./Threnetes_ruckeri_occ_bios.csv",header=T)[,-(1:2)]
+occ <- read.csv ("./Threnetes_ruckeri_occ_GE.csv",header=T)[,-(1:2)]
 
 # choose alpha level
 alpha1 <- c(0.75, 0.9, 0.95)
@@ -71,11 +71,11 @@ Sigma1 <- cov(occ)
 names1 <- c("Annual mean temperature (°C x 10)","Annual Precipitation (mm)") 
 
 # apply function  
-f <- E.ellipse(mu= mu1, Sigma= Sigma1, alpha= alpha1, enames = names1)
+f <- E.ellipse(mu= mu1, Sigma= Sigma1, alpha= alpha1, Enames = names1)
 
 ## Example 2:
 
-occ <- read.csv("./Catasticta_nimbice_bios.csv",header=T)[,-(1:2)]
+occ <- read.csv("./Catasticta_nimbice_occ_GE.csv",header=T)[,-(1:2)]
 
 # alpha-level as a sequence from 0 to 1, every 0.1 steps
 alpha2 <- seq(0,1,by = 0.1)
@@ -84,4 +84,4 @@ mu2 <- colMeans(occ)
 Sigma2 <- cov(occ)
 names2 <- c("Annual mean temperature (°C x 10)","Annual Precipitation (mm)") 
 
-f <- E.ellipse(mu = mu2, Sigma = Sigma2, alpha = alpha2, enames = names2)
+f2 <- E.ellipse(mu = mu2, Sigma = Sigma2, alpha = alpha2, Enames = names2)

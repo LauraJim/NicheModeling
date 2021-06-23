@@ -33,7 +33,7 @@ The function `sam.polyM` takes a random sample of environmental combinations ins
 * `N` = the sample size
 \
 
-* `bios` = a rasterstack that contains at least two layers with environmental data
+* `Estck` = a rasterstack that contains at least two layers with environmental data
 \
 
 \
@@ -67,9 +67,9 @@ The function `sam.polyM`uses a shapefile of the area of interest as a mask to cl
 ```{r}
 # Get a random sample of points inside the polygon that delimits M (= )
 # and extract their environmental values
-sam.polyM <- function(M.shp,N,bios){
+sam.polyM <- function(M.shp,N,Estck){
   # crop and mask the environmental layers with the M polygon
-  clip.M <- mask(crop(bios,M.shp),M.shp)
+  clip.M <- mask(crop(Estck,M.shp),M.shp)
   # get rid of cells with NA values = indices
   ind <- which(!is.na(clip.M[[1]][]))
   # get a random sample of indices
@@ -99,7 +99,7 @@ A polygon that marks the borders of a species' occurrence or the study area is n
 
 ### *Catasticta nimbice*
 
-First, the rasterstack for the parameter `bios` is prepared. For this example two rasters with the environmental data "annual mean temperature" and "total annual precipitation" are used. The rasterstack will therefore have two layers.
+First, the rasterstack for the parameter `Estck` is prepared. For this example two rasters with the environmental data "annual mean temperature" and "total annual precipitation" are used. The rasterstack will therefore have two layers.
 
 ```{r}
 # Read environmental layers
@@ -118,17 +118,17 @@ M.shp <- readOGR("./Input_Data/shapefiles","nimbice3")
 ```
 \
 
-Apply the function with `bios`, `M.shp`, and `N`. Here, `N` will be 10,000. The generated matrix will therefore have two columns with environmental data from the study area and 10,000 rows.
+Apply the function with `Estck`, `M.shp`, and `N`. Here, `N` will be 10,000. The generated matrix will therefore have two columns with environmental data from the study area and 10,000 rows.
 
 ```{r}
-sam.Mpnts <- sam.polyM(M.shp = M.shp,N = 10000,bios = stck_bios)
+sam.Mpnts <- sam.polyM(M.shp = M.shp,N = 10000,Estck = stck_bios)
 ```
 \
 
-If needed, save the output as a csv-file (do not run every time)
+If needed, save the output as a csv-file.
 
 ```{r, eval=FALSE}
-write.csv(sam.Mpnts,file=paste0("./Output_Data/Catasticta_nimbice","_M_bios.csv"),
+write.csv(sam.Mpnts,file=paste0("./Output_Data/Catasticta_nimbice","_M_E.csv"),
           row.names = F)
 ```
 \
@@ -137,12 +137,12 @@ Create a simple plot of the environmental space (E-Space) with a species' occurr
 
 ```{r, fig.show='hide'}
 # read occurrence data
-occ <- read.csv("./Input_Data/Catasticta_nimbice_bios.csv",header=T) 
+occ <- read.csv("./Input_Data/Catasticta_nimbice_occ_GE.csv",header=T) 
 # set colors
 pal <- c("grey50", "turquoise")
 
 # plot
-x11()
+# x11()
 #   use random points with environmental data for the plot
 plot(sam.Mpnts[,1], sam.Mpnts[,2], pch=".", col=pal[1], 
      xlab="Mean Annual Temperature (°C*10)", ylab="Annual precipitation (mm)", 
@@ -175,10 +175,10 @@ M.shp <- readOGR("./Input_Data/shapefiles","Threnetes_ruckeri")
 ```
 \
 
-Apply the function with `M.shp`, `bios`, and a sample size with `N`.
+Apply the function with `M.shp`, `Estck`, and a sample size with `N`.
 ```{r}
 ## Get a random sample of points in M and extract its corresponding environmental values
-sam.Mpnts <- sam.polyM(M.shp = M.shp,N = 10000,bios = stck_bios)
+sam.Mpnts <- sam.polyM(M.shp = M.shp,N = 10000,Estck = stck_bios)
 
 ```
 \
@@ -199,7 +199,7 @@ col.M2 <- alpha("orangered2",0.1)
 M.cols <- colorRampPalette(c(alpha("white",0.1),alpha("cadetblue4",0.9)))
 
 # plot
-x11()
+# x11()
 plot(fhat.M,display="filled.contour",cont=lvls1,main="",xlab="Mean annual temperature (°C*10)",
      ylab="Annual precipitation (mm)",col=M.cols(length(lvls1)+1))
 # add points used for kernel estimation

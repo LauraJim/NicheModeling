@@ -37,7 +37,9 @@ sigma <- matrix(c(0.021,-0.008,-0.008,0.061),ncol=2,byrow=T)
 cloud <- cbind(runif(5000,0,2),runif(5000,0,2))
 # Use the function to determine which points from the matrix are inside the ellipse
 check <- el.in(cloud,mu,sigma,0.95)
-# Plot the points, ellipse and use different colors for the points inside/outside the ellipse
+
+# Plot the points, ellipse and use different colors for the points inside/
+# outside the ellipse
 x11()
 plot(check[,2],check[,3],pch=".",xlab="",ylab="",main="Points inside an ellipse")     
 el <- ellipse::ellipse(x=sigma,centre = mu,level=0.95)
@@ -46,17 +48,18 @@ points(subset(check,check[,1]==1)[,2:3],pch=19,col=2)
 
 
 # Example 2 ----------------
-occ <- read.csv ("./Threnetes_ruckeri_occ_bios.csv",header=T)[,-(1:2)]
+occ <- read.csv ("./Threnetes_ruckeri_occ_GE.csv",header=T)[,-(1:2)]
 
 # mu calculates the means of the columns that contain the occurrences
 mu <- colMeans(occ)
 # Sigma calculates the covariance of the occurrences
 Sigma <- cov(occ)
 # Define the matrix of points
-cloud <- read.csv("./Threnetes_ruckeri_M_bios.csv",header=T)[,-(1:2)]
+cloud <- read.csv("./Threnetes_ruckeri_M_GE.csv",header=T)[,-(1:2)]
 
 check <- el.in(cloud,mu,Sigma,0.95)
 
+# plot
 x11()
 plot(check[,2],check[,3],pch=20,xlab="",ylab="",main="Points inside an ellipse")     
 el <- ellipse::ellipse(x=Sigma,centre = mu,level=0.95)
@@ -66,17 +69,18 @@ points(subset(check,check[,1]==1)[,2:3],pch=19,col=2)
 
 # example 3 ----------------
 
-occ <- read.csv ("./Catasticta_nimbice_bios.csv",header=T)[,-(1:2)]
+occ <- read.csv ("./Catasticta_nimbice_occ_GE.csv",header=T)[,-(1:2)]
 
-# mu calculates the means of the columns that contain the occurrneces
+# mu calculates the means of the columns that contain the occurrences
 mu <- colMeans(occ)
 # Sigma calculates the covariance of the occurrences
 Sigma <- cov(occ)
 # Define the matrix of points
-cloud <- read.csv("./Catasticta_nimbice_M_bios.csv",header=T)[,-(1:2)]
+cloud <- read.csv("./Catasticta_nimbice_M_GE.csv",header=T)[,-(1:2)]
 
 check <- el.in(cloud,mu,Sigma,0.95)
 
+# plot
 x11()
 plot(check[,2],check[,3],pch=".",xlab="",ylab="",main="Points inside an ellipse")     
 el <- ellipse::ellipse(x=Sigma,centre = mu,level=0.95)
