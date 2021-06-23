@@ -5,7 +5,7 @@
 # an ellipse -------
 
 ## Description: --------------
-# The function `el.in` creates a matrix that determines how many points are 
+# The function `in.el` creates a matrix that determines how many points are 
 # within a confidence region bordered by an ellipse. The ellipse is calculated 
 # based on a species' environmental data and a confidence level. The points 
 # inside the ellipse are potential data points of the niche in which a species 
@@ -18,7 +18,7 @@
 ## alpha == confidence level
 
 
-el.in <- function(cloud,centroid,sigma,alpha){
+in.el <- function(cloud,centroid,sigma,alpha){
   # step 1: calculate de Mahalanobis distance
   maha <- mahalanobis(x=cloud,center=centroid,cov=sigma)
   # step 2: a point is inside the confidence region (1-alpha=confidence%) if
@@ -36,7 +36,7 @@ sigma <- matrix(c(0.021,-0.008,-0.008,0.061),ncol=2,byrow=T)
 # Define the matrix of points
 cloud <- cbind(runif(5000,0,2),runif(5000,0,2))
 # Use the function to determine which points from the matrix are inside the ellipse
-check <- el.in(cloud,mu,sigma,0.95)
+check <- in.el(cloud,mu,sigma,0.95)
 
 # Plot the points, ellipse and use different colors for the points inside/
 # outside the ellipse
@@ -57,7 +57,7 @@ Sigma <- cov(occ)
 # Define the matrix of points
 cloud <- read.csv("./Threnetes_ruckeri_M_GE.csv",header=T)[,-(1:2)]
 
-check <- el.in(cloud,mu,Sigma,0.95)
+check <- in.el(cloud,mu,Sigma,0.95)
 
 # plot
 x11()
@@ -78,7 +78,7 @@ Sigma <- cov(occ)
 # Define the matrix of points
 cloud <- read.csv("./Catasticta_nimbice_M_GE.csv",header=T)[,-(1:2)]
 
-check <- el.in(cloud,mu,Sigma,0.95)
+check <- in.el(cloud,mu,Sigma,0.95)
 
 # plot
 x11()
