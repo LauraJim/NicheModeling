@@ -1,15 +1,15 @@
-# Function: sam.polyM
+# Function: rs.inE
 # Laura Jimenez
 # Last version: June 2021
 # Sampling points for a geographical area
 
 # Description: -----------------------------------------------------------
-# The function "sam.polyM" takes a random sample of environmental combinations 
+# The function "rs.inE" takes a random sample of environmental combinations 
 # inside the study area. The environmental data from a rasterstack is clipped by
 # a shapefile that delimits the area before the sample is taken.
 
 ## Parameters:
-# M.shp = a shapefile of the study area (polygon)
+# region = a shapefile of the study area (polygon)
 # N = the sample size
 # Estck = a rasterstack that contains at least two layers with environmental data
 
@@ -18,21 +18,21 @@
 
 # Function's code: -------------------------------------------------------------
 
-# Get a random sample of points inside the polygon that delimits M (= )
+# Get a random sample of points inside the given polygon
 # and extract their environmental values
-sam.polyM <- function(M.shp,N,Estck){
-  # crop and mask the environmental layers with the M polygon
-  clip.M <- mask(crop(Estck,M.shp),M.shp)
+rs.inE <- function(region,N,Estck){
+  # crop and mask the environmental layers with the polygon
+  clip <- mask(crop(Estck,region),region)
   # get rid of cells with NA values = indices
-  ind <- which(!is.na(clip.M[[1]][]))
+  ind <- which(!is.na(clip[[1]][]))
   # get a random sample of indices
   sam <- sample(ind,N,replace = T)
   # choose the points corresponding to the selected indices
-  Mpnts <- clip.M[][sam,]
-  return(Mpnts)
+  pnts <- clip[][sam,]
+  return(pnts)
 }
 
-# MAIN: How to use sam.polyM ---------------------------------------------------
+# MAIN: How to use rs.inE ---------------------------------------------------
 
 ## libraries
 library(raster)
@@ -54,8 +54,8 @@ stck_bios <- stack(bio1, bio12)
 M.shp <- readOGR("./Shapefiles","C_nimbice")
 
 # Get a random sample of points in M and extract its corresponding environmental values
-# sam.Mpnts <- sam.polyM(M.shp = M.shp,N = N,Estck = stck_bios)
-sam.Mpnts <- sam.polyM(M.shp = M.shp, N = 10000, Estck = stck_bios)
+# sam.Mpnts <- rs.inE(M.shp = M.shp,N = N,Estck = stck_bios)
+sam.Mpnts <- rs.inE(region = M.shp, N = 10000, Estck = stck_bios)
 
 # Example 1
 
@@ -121,7 +121,7 @@ points(sam.Mpnts[,1], sam.Mpnts[,2],col=col.M2,pch=20,cex=0.6)
 M.shp <- readOGR("./Shapefiles","Threnetes_ruckeri") ###
 
 ## Get a random sample of points in M and extract its corresponding environmental values
-sam.Mpnts <- sam.polyM(M.shp = M.shp, N = 10000, Estck = stck_bios)
+sam.Mpnts <- rs.inE(region = M.shp, N = 10000, Estck = stck_bios)
 
 
 ## Use sampled points for a plot

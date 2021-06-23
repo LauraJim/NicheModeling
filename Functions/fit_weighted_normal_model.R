@@ -1,4 +1,4 @@
-# Functions: sam.polyM, negloglike
+# Functions: rs.inE, negloglike
 # Laura Jimenez
 # First version: February 2020
 # Last version: June 2021
@@ -8,8 +8,8 @@
 # a weighted distribution where the weights represent the availability of 
 # environmental combinations inside M. This approach contains three functions.
 
-## Parameters sam.polyM:
-# M.shp = a shapefile of the study area (polygon)
+## Parameters rs.inE:
+# region = a shapefile of the study area (polygon)
 # N = the sample size
 # Estck = a rasterstack that contains at least two layers with environmental data
 
@@ -28,26 +28,19 @@
 # FUNCTIONS -------------------------------------------------------------
 
 # Get a random sample of points inside the polygon that delimits M and extract their environmental values
-## M.shp should be a shapefile containing the polygon that defines the area of study
+## region should be a shapefile containing the polygon that defines the area of study
 ## N sample size
 ## Estck must be a stack of environmental raster layers
-sam.polyM <- function(M.shp, N, Estck){
-  # crop and mask the environmental layers with the M polygon
-  clip.M <- mask(crop(Estck,M.shp),M.shp)
-  # get ride of cells with NA values
-  ind <- which(!is.na(clip.M[[1]][]))
+rs.inE <- function(region,N,Estck){
+  # crop and mask the environmental layers with the polygon
+  clip <- mask(crop(Estck,region),region)
+  # get rid of cells with NA values = indices
+  ind <- which(!is.na(clip[[1]][]))
   # get a random sample of indices
   sam <- sample(ind,N,replace = T)
   # choose the points corresponding to the selected indices
-  Mpnts <- clip.M[][sam,]
-  return(Mpnts)
-  # set coordinate system from world map to M
-  #M.tr <- sp::spTransform(M.shp,crs(wrld_simpl))
-  # clip the continent with extent of polygon
-  #clip <- gIntersection(wrld_simpl, M.tr, byid = TRUE, drop_lower_td = TRUE) #clip polygon 2 with polygon 1
-  # get sample of points inside intersection
-  #sam <- spsample(clip, n = N, "random")
-  #clim_M <- extract(bios,M_pnts)
+  pnts <- clip[][sam,]
+  return(pnts)
 }
 
 # Negative log-likelihood function for theta=(mu,A)
@@ -86,9 +79,9 @@ fitNiche <- function(E.occ, E.samM) {
   mle.mu <- mle[1:2]
   mle.A <- matrix(c(mle[3:4],mle[4:5]),nrow=2,ncol=2)
   mle.Sig <- tryCatch(expr={chol2inv(chol(mle.A))}, error= function(e){NULL})
-<<<<<<< HEAD
+
   return(list(mle.Sig, mle.mu, Sig.ini, mu.ini))
-=======
+
   # change column names for mle.Sig
   if(!is.null(mle.Sig)){
   colnames(mle.Sig) <- colnames(Sig.ini)
@@ -97,7 +90,7 @@ fitNiche <- function(E.occ, E.samM) {
     
   # wn = weighted normal distribution
   return(list(wn.mu = mle.mu, wn.sigma = mle.Sig, maha.mu = mu.ini, maha.sigma = Sig.ini))
->>>>>>> 86f4e27ebe3f5f57d52060aee9a631ef65e94374
+
 }
 
 # MAIN ------------------------------------------------------------------------
@@ -135,7 +128,7 @@ sp.occ <- read.csv("./Catasticta_nimbice_occ_GE.csv",header=T)[,-(1:2)]
 M.shp <- readOGR("./Shapefiles","C_nimbice")
 
 # get a random sample of points in M and extract its corresponding environmental values
-sam.Mpnts <- sam.polyM(M.shp = M.shp, N = N, Estck = bios)
+sam.Mpnts <- rs.inE(region = M.shp, N = N, Estck = bios)
 
 
 # Lookig for the MLE of mu and A --------------------------
@@ -186,7 +179,7 @@ sp.occ2 <- read.csv("./Threnetes_ruckeri_occ_GE.csv",header=T)[,-(1:2)]
 M.shp2 <- readOGR("./Shapefiles","Threnetes_ruckeri")
 
 # get a random sample of points in M and extract its corresponding environmental values
-sam.Mpnts2 <- sam.polyM(M.shp = M.shp2, N = 5000, Estck = bios)
+sam.Mpnts2 <- rs.inE(region = M.shp2, N = 5000, Estck = bios)
 
 # use function
 ml2 <- fitNiche(E.occ = sp.occ2, E.samM = sam.Mpnts2)
