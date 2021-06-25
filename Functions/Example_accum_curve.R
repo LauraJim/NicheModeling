@@ -59,7 +59,8 @@ comp.accplot(mods=modelB,nocc=mod2.big[nrow(mod2.big),1],
 
 #
 #
-#
+# This function is needed to create a table that is an occurrence table with an 
+# additional column
 #
 # Create matrices "output.mod" for MaxEnt and BioClim --------------------------
 get.table <- function(occ,columns,cnames,fname){
@@ -74,7 +75,7 @@ get.table <- function(occ,columns,cnames,fname){
   # Now repeat the previous steps with the occurrence points
   occ1 <- extract(columns,occ[,2:3])
   occ2 <- cbind(occ[,2:3],occ1)
-  colnames(occ2) <- c("long","lat",sdm.name,"bio5","bio6","bio13","bio14")
+  colnames(occ2) <- c("long","lat",sdm.name,"bio1","bio12")
   head(occ2)
   
   # Save the resulting matrix
