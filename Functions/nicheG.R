@@ -182,31 +182,24 @@ ggplot() +
 #
 ## Use function to create maps using output from weighted model and mahalanobis model
 # example Catasticta nimbice
+
+cn.fitN <- read.csv("./Results/Catasticta_nimbice_Estimated_parameters.csv",header=T)[,-1]
+
 # weighted
-cn.fitN <- read.csv("./Results/Catasticta_nimbice_Estimated_parameters.csv",header=T)
-
-center.wn <- cn.fitN[1:2,1]
-center.wn2 <- sapply(center.wn,as.numeric)
-
-boundary.wn <- rbind(cn.fitN[1,2:3], cn.fitN[2,2:3])
-boundary.wn2 <- sapply(boundary.wn,as.numeric)
-
 # define name for the maps
 saveM.wn <- "./Results/Catasticta_nimbice_wn_map"
 
-Cn.wn <- niche.G(Estck = bios, mu = center.wn2, Sigma = boundary.wn2, save.map = saveM.wn)
+Cn.wn <- niche.G(Estck = bios, mu = cn.fitN$wn.mu, 
+                 Sigma = cbind(cn.fitN$wn.sigma1,cn.fitN$wn.sigma2),
+                 save.map = saveM.wn)
 
 # example maha
-center.maha <- cn.fitN[1:2,4]
-center.maha2 <- sapply(center.maha,as.numeric)
-
-boundary.maha <- rbind(cn.fitN[1,5:6], cn.fitN[2,5:6])
-boundary.maha2 <- sapply(boundary.maha,as.numeric)
-
 # define name for the maps
 saveM.maha <- "./Results/Catasticta_nimbice_maha_map"
 
-Cn.maha <- niche.G(Estck = bios, mu = center.maha2, Sigma = boundary.maha2, save.map = saveM.maha)
+Cn.maha <- niche.G(Estck = bios, mu = cn.fitN$maha.mu, 
+                   Sigma = cbind(cn.fitN$maha.sigma1,cn.fitN$maha.sigma2), 
+                   save.map = saveM.maha)
 
 
 # example Threnetes ruckeri
