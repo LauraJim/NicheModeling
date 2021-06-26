@@ -71,7 +71,7 @@ center <- colMeans(occ)
 # Sigma calculates the covariance of the occurrences
 boundary <- cov(occ)
 # define name for the maps
-saveM <- "./Results/Catasticta_nimbice_map"
+saveM <- "./Results/Catasticta_nimbice_maha_map"
 
 result1 <- niche.G(Estck = bios, mu = center, Sigma = boundary, save.map = saveM)
 
@@ -90,7 +90,7 @@ center2 <- colMeans(occ2)
 # Sigma calculates the covariance of the occurrences
 boundary2 <- cov(occ2)
 # define name for the maps
-saveM2 <- "./Results/Threnetes_ruckeri_map"
+saveM2 <- "./Results/Threnetes_ruckeri_maha_map"
 
 result2 <- niche.G(Estck, mu = center2, Sigma = boundary2, save.map = saveM2)
 
