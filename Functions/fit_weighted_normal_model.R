@@ -80,7 +80,7 @@ fitNiche <- function(E.occ, E.samM) {
   mle.A <- matrix(c(mle[3:4],mle[4:5]),nrow=2,ncol=2)
   mle.Sig <- tryCatch(expr={chol2inv(chol(mle.A))}, error= function(e){NULL})
 
-  return(list(mle.Sig, mle.mu, Sig.ini, mu.ini))
+  #return(list(mle.Sig, mle.mu, Sig.ini, mu.ini))
 
   # change column names for mle.Sig
   if(!is.null(mle.Sig)){
@@ -90,7 +90,6 @@ fitNiche <- function(E.occ, E.samM) {
     
   # wn = weighted normal distribution
   return(list(wn.mu = mle.mu, wn.sigma = mle.Sig, maha.mu = mu.ini, maha.sigma = Sig.ini))
-
 }
 
 # MAIN ------------------------------------------------------------------------
@@ -131,14 +130,14 @@ M.shp <- readOGR("./Shapefiles","C_nimbice")
 sam.Mpnts <- rs.inE(region = M.shp, N = N, Estck = bios)
 
 
-# Lookig for the MLE of mu and A --------------------------
+# Looking for the MLE of mu and A --------------------------
 # in tutorial add cache=TRUE to avoid running the function every time it knits
 ml <- fitNiche(E.occ = sp.occ, E.samM = sam.Mpnts)
 
-ml.table <- cbind(ml$wn.mu, ml$wn.sigma, ml$maha.mu, ml$maha.sigma)
+ml.table <- do.call("cbind",ml)
 colnames(ml.table) <- c("wn.mu", "wn.sigma1", "wn.sigma2", "maha.mu", "maha.sigma1", "maha.sigma2")
 
-write.csv(ml.table,"./Results/Catasticta_nimbice_Estimated_parameters.csv",row.names = F)
+write.csv(ml.table,"./Results/Catasticta_nimbice_Estimated_parameters.csv")
 
 # get the ellipse defined by the ml estimators
 el <- ellipse::ellipse(x=ml[[2]], centre=ml[[1]], level=0.99)
@@ -185,13 +184,13 @@ sam.Mpnts2 <- rs.inE(region = M.shp2, N = 5000, Estck = bios)
 ml2 <- fitNiche(E.occ = sp.occ2, E.samM = sam.Mpnts2)
 
 # change function into proper table and rename column names
-ml.table2 <- cbind(ml$wn.mu, ml$wn.sigma, ml$maha.mu, ml$maha.sigma)
+ml.table2 <- do.call("cbind",ml2)
 colnames(ml.table2) <- c("wn.mu", "wn.sigma1", "wn.sigma2", "maha.mu", "maha.sigma1", "maha.sigma2")
 
 # df.ml2 <- as.data.frame(ml.table2)
 
 # write table as a csv
-write.csv(ml.table2,"./Results/Threnetes_ruckeri_Estimated_parameters.csv",row.names = F)
+write.csv(ml.table2,"./Results/Threnetes_ruckeri_Estimated_parameters.csv")
 
 # get the ellipse defined by the ml estimators
 el2 <- ellipse::ellipse(x=ml2[[2]], centre=ml2[[1]], level=0.99, npoints = 500)
