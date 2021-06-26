@@ -193,14 +193,14 @@ Cn.wn <- niche.G(Estck = bios, mu = cn.fitN$wn.mu,
                  Sigma = cbind(cn.fitN$wn.sigma1,cn.fitN$wn.sigma2),
                  save.map = saveM.wn)
 
-# example maha
-# define name for the maps
-saveM.maha <- "./Results/Catasticta_nimbice_maha_map"
-
-Cn.maha <- niche.G(Estck = bios, mu = cn.fitN$maha.mu, 
-                   Sigma = cbind(cn.fitN$maha.sigma1,cn.fitN$maha.sigma2), 
-                   save.map = saveM.maha)
-
+# # example maha
+# # define name for the maps
+# saveM.maha <- "./Results/Catasticta_nimbice_maha_map"
+# 
+# Cn.maha <- niche.G(Estck = bios, mu = cn.fitN$maha.mu, 
+#                    Sigma = cbind(cn.fitN$maha.sigma1,cn.fitN$maha.sigma2), 
+#                    save.map = saveM.maha)
+# 
 
 # example Threnetes ruckeri
 # weighted
