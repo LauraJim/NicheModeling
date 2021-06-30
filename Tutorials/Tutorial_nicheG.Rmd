@@ -13,6 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(raster)
 library(sp)
 library(ggplot2)
+library(ggpubr)
 # needs package mvtnorm to be installed
 ```
 \
@@ -53,6 +54,9 @@ The function niche.G projects ellipses that define suitable environments for a s
 \
 
 * `mvtnorm`
+\
+
+* `ggpubr`
 \
 
 \
@@ -110,7 +114,7 @@ library(ggplot2)
 
 The raster files need to contain information on climatic values that are of interest for the user. The rasters used in the examples below are from [WorldClim](https://worldclim.org/data/index.html) and have a resolution of "10 minutes".
 
-Furthermore, a matrix that contains the corresponding environmental data of a species' occurrence is necessary. The matrix can be created by using the `get.ecoord` function (see tutorial "Function *get.ecoord*"). In this example, the environmental data are mean annual temperature and total annual precipitation.
+Furthermore, a matrix that contains the corresponding environmental data of a species' occurrence is necessary. The matrix can be created by using the `get.Ecoord` function (see tutorial "Function *get.Ecoord*"). In this example, the environmental data are mean annual temperature and total annual precipitation.
 \
 \
 
@@ -173,7 +177,7 @@ knitr::include_graphics("Images/Catasticta_nimbice_tiff.png")
 
 ### Threnetes ruckeri
 
-This example works similar to the previous example, except that it is plotted in `ggplot2`. The raster files are the same as above.
+This example uses the Mahalanobis distance and the weighted normal distribution. The graphs are plotted in `ggplot2`. The raster files are the same as above.
 
 ```{r, eval=FALSE}
 ## Read raster files
@@ -182,69 +186,91 @@ bio2 <- raster("./Input_Data/bio12WH.asc")
 bios <- stack(bio1,bio2)
 ```
 \
-
-Load the species' occurrence data that is linked with the environmental data and calculate the parameters.
+Load the matrix results of the weighted normal distribution that was calculated with the functions `rs.inE`, `negloglike`, and `fitNiche`.
 ```{r}
-
-occ2 <- read.csv("./Input_Data/Threnetes_ruckeri_occ_GE.csv",header=T)[,-(1:2)]
-
-center2 <- colMeans(occ2)
-boundary2 <- cov(occ2)
-saveM2 <- "./Output_Data/Threnetes_ruckeri_map"
-
+thr.fitN <- read.csv("./Input_Data/Threnetes_ruckeri_Estimated_parameters.csv",header=T)[,-1]
 ```
 \
 
-Apply the function with `mu`, `Sigma`, and `save.map`.
+Set the saving name and location for the map of the weighted normal distribution and the Mahalanobis distance model.
+```{r}
+saveM2.wn <- "./Output_Data/Threnetes_ruckeri_wn_map"
+saveM2.maha <- "./Output_Data/Threnetes_ruckeri_maha_map"
+```
+\
+
+Apply the function with `mu`, `Sigma`, and `save.map` for each, the weighted normal distribution and the Mahalanobis distance model.
 ```{r, eval=FALSE}
-result2 <- niche.G(Estck = bios, mu = center2, Sigma = boundary2, save.map = saveM2)
+# weighted normal
+Thr.wn <- niche.G(Estck = bios, mu = thr.fitN$wn.mu, 
+                  Sigma = cbind(thr.fitN$wn.sigma1, thr.fitN$wn.sigma2), 
+                  save.map = saveM2.wn)
+# Mahalanobis
+Thr.maha <- niche.G(Estck = bios, mu = thr.fitN$maha.mu, 
+                    Sigma = cbind(thr.fitN$maha.simga1, thr.fitN$maha.sigma2), 
+                    save.map = saveM2.maha)
 ```
 \
 
 **Create a ggplot**
 
-Load the previously created tif-file with the suitability levels. Optionally, the raster can be cropped be different regions of interest.
+Read the species' occurrence data points that contain geographical information.
 ```{r}
-# Read raster with output from weighted model
-outp <- raster("./Input_Data/Threnetes_ruckeri_map.tif")
-# emap <- extent(-170, 179, -60, 80) # whole world
-# emap <- extent(-140, -110, 30, 65) # USA-CAN
-# emap <- extent(70, 150, 10, 55) # Asia
-# emap <- extent(-15, 30, 35, 60) # Europe
+species <- read.csv("./Input_Data/Threnetes_ruckeri_occ_GE.csv",header=T)
+```
+\
+
+Load the previously created tif-file with the suitability levels for the Mahalanobis distance model and the weighted normal distribution model.
+```{r}
+maha.map <- raster("./Input_Data/Threnetes_ruckeri_maha_map.tif")
+
+wn.map <- raster("./Input_Data/Threnetes_ruckeri_wn_map.tif")
 ```
 \
 
 Convert the raster to points and create a data-frame for ggplot. Name the columns of the new data-frame.
 ```{r}
-# outp1 <- crop(outp, emap)
-outpp <- rasterToPoints(outp)
-outppd <- data.frame(outpp)
-colnames(outppd) <- c("Longitude","Latitude","Suitability")
+# for Mahalanobis model
+maha.mappt <- rasterToPoints(maha.map)
+outp.maha <- data.frame(maha.mappt)
+colnames(outp.maha) <- c("Longitude","Latitude","Suitability")
+
+# for weighted normal model
+wn.mappt <- rasterToPoints(wn.map)
+outp.wn <- data.frame(wn.mappt)
+colnames(outp.wn) <- c("Longitude","Latitude","Suitability")
 ```
 \
 
-Read the species' occurrence data points that are linked with the environmental data (without omitting the coordinates)
-```{r}
-occ3 <- read.csv("./Input_Data/Threnetes_ruckeri_occ_GE.csv",header=T)
-```
-\
 
 Plot in ggplot.
 ```{r, fig.show='hide'}
-# x11()
-ggplot() +
-  geom_tile(data = outppd,aes(x=Longitude, y=Latitude, fill=Suitability)) +
+p1 <- ggplot() +
+  geom_tile(data = outp.maha,aes(x=Longitude, y=Latitude, fill=Suitability)) +
   theme_bw() +
-  #borders("world", xlim = c(-179, 179), ylim = c(-60, 80)) +
   scale_fill_gradient2("Suitability",limits=c(0,1), low = 'grey80',
                        mid='slateblue1', high = 'slateblue4',na.value = NA,
                        midpoint = 0.5, n.breaks=4) +
-  # coord_sf(xlim = emap[1:2], ylim = emap[3:4], expand = FALSE) +
-  geom_point(data = occ3,aes(x=occ3[,1], y=occ3[,2]), shape = 23, fill = "yellowgreen")
+  geom_point(data = species,aes(x=species[,1], y=species[,2]), shape = 23, fill = "yellowgreen") + 
+  labs (title = "Mahalanobis distance model") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+p2 <- ggplot() +
+  geom_tile(data = outp.wn,aes(x=Longitude, y=Latitude, fill=Suitability)) +
+  theme_bw() +
+  scale_fill_gradient2("Suitability",limits=c(0,1), low = 'grey80',
+                       mid='slateblue1', high = 'slateblue4',na.value = NA,
+                       midpoint = 0.5, n.breaks=4) +
+  geom_point(data = species,aes(x=species[,1], y=species[,2]), shape = 23, fill = "yellowgreen") +
+  labs (title = "Weighted normal distribution model") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+# x11()
+ggarrange(p1, p2, ncol = 2, nrow = 1)
 ```
 
 
-```{r, echo=FALSE, fig.cap=" Figure of the geographical space with suitable niches for *Threnetes ruckeri* in `ggplot2`.", out.width = '70%',fig.align="center"}
+```{r, echo=FALSE, fig.cap=" Figure of the geographical space with suitable niches for *Threnetes ruckeri* using the Mahalanobis distance model and the weigthed normal distribution model in `ggplot2`.", out.width = '120%',fig.align="center"}
 options(knitr.duplicate.label = "allow")
 knitr::include_graphics("Images/Threnetes_ruckeri_ggplot.png")
 ```
@@ -252,7 +278,7 @@ knitr::include_graphics("Images/Threnetes_ruckeri_ggplot.png")
 
 Save the plot as a PNG.
 ```{r, eval=FALSE}
-ggsave('./Output_Data/Threnetes_ruckeri_ggplot.png',  width = 24, height = 24, units = "cm",
+ggsave('./Output_Data/Threnetes_ruckeri_ggplot.png',  width = 48, height = 24, units = "cm",
        dpi = 600, pointsize = 6)
 ```
 \
