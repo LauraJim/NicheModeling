@@ -52,6 +52,7 @@ niche.G <- function(Estck, mu, Sigma, save.map) {
 library(raster)
 library(sp)
 library(ggplot2)
+library(ggpubr)
 # needs package mvtnorm to be installed
 
 ## Read environmental layers cropped to the area of interest
@@ -204,25 +205,71 @@ Cn.wn <- niche.G(Estck = bios, mu = cn.fitN$wn.mu,
 
 # example Threnetes ruckeri
 # weighted
-cn.fitN <- read.csv("./Results/Threnetes_ruckeri_Estimated_parameters.csv",header=T)
-
-center2.wn <- cn.fitN[1:2,1]
-center2.wn2 <- sapply(center2.wn,as.numeric)
-
-boundary2.wn <- rbind(cn.fitN[1,2:3], cn.fitN[2,2:3])
-boundary2.wn2 <- sapply(boundary2.wn,as.numeric)
-
+thr.fitN <- read.csv("./Results/Threnetes_ruckeri_Estimated_parameters.csv",header=T)[,-1]
 saveM2.wn <- "./Results/Threnetes_ruckeri_wn_map"
 
-Thr.wn <- niche.G(Estck = bios, mu = center2.wn2, Sigma = boundary2.wn2, save.map = saveM2.wn)
+Thr.wn <- niche.G(Estck = bios, mu = thr.fitN$wn.mu, 
+                  Sigma = cbind(thr.fitN$wn.sigma1, thr.fitN$wn.sigma2), 
+                  save.map = saveM2.wn)
+
+
 
 # example maha
-center2.maha <- cn.fitN[1:2,4]
-center2.maha2 <- sapply(center2.maha,as.numeric)
-
-boundary2.maha <- rbind(cn.fitN[1,5:6], cn.fitN[2,5:6])
-boundary2.maha2 <- sapply(boundary2.maha,as.numeric)
 
 saveM2.maha <- "./Results/Threnetes_ruckeri_maha_map"
 
-Thr.maha <- niche.G(Estck = bios, mu = center2.maha2, Sigma = boundary2.maha2, save.map = saveM2.maha)
+Thr.maha <- niche.G(Estck = bios, mu = thr.fitN$maha.mu, 
+                    Sigma = cbind(thr.fitN$maha.simga1, thr.fitN$maha.sigma2), 
+                    save.map = saveM2.maha)
+
+## plot both models for Threnetes ruckeri ---
+
+# Read presence points 
+species <- read.csv("./Threnetes_ruckeri_occ_GE.csv",header=T)
+# plot 1, maha
+maha.map <- raster("./Results/Threnetes_ruckeri_maha_map.tif")
+
+
+# outp1 <- crop(outp, emap)
+maha.mappt <- rasterToPoints(maha.map)
+outp.maha <- data.frame(maha.mappt)
+colnames(outp.maha) <- c("Longitude","Latitude","Suitability")
+
+
+
+p1 <- ggplot() +
+  geom_tile(data = outp.maha,aes(x=Longitude, y=Latitude, fill=Suitability)) +
+  theme_bw() +
+  scale_fill_gradient2("Suitability",limits=c(0,1), low = 'grey80',
+                       mid='slateblue1', high = 'slateblue4',na.value = NA,
+                       midpoint = 0.5, n.breaks=4) +
+  geom_point(data = species,aes(x=species[,1], y=species[,2]), shape = 23, fill = "yellowgreen") + 
+  labs (title = "Mahalanobis distance model") +
+  theme(plot.title = element_text(hjust = 0.5)) 
+
+
+# plot 2, wn
+wn.map <- raster("./Results/Threnetes_ruckeri_wn_map.tif")
+
+
+# outp1 <- crop(outp, emap)
+wn.mappt <- rasterToPoints(wn.map)
+outp.wn <- data.frame(wn.mappt)
+colnames(outp.wn) <- c("Longitude","Latitude","Suitability")
+
+p2 <- ggplot() +
+  geom_tile(data = outp.wn,aes(x=Longitude, y=Latitude, fill=Suitability)) +
+  theme_bw() +
+  scale_fill_gradient2("Suitability",limits=c(0,1), low = 'grey80',
+                       mid='slateblue1', high = 'slateblue4',na.value = NA,
+                       midpoint = 0.5, n.breaks=4) +
+  geom_point(data = species,aes(x=species[,1], y=species[,2]), shape = 23, fill = "yellowgreen") +
+  labs (title = "Weighted normal distribution model") +
+  theme(plot.title = element_text(hjust = 0.5)) 
+
+x11()
+ggarrange(p1, p2, ncol = 2, nrow = 1)
+
+ggsave('./Results/Threnetes_ruckeri_ggplot.png',  width = 48, height = 24, units = "cm",
+        dpi = 600, pointsize = 6)
+
