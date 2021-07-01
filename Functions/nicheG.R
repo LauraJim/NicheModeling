@@ -31,7 +31,6 @@ niche.G <- function(Estck, mu, Sigma) {
                                              center= mu, cov= Sigma)/2)}
   # apply this function to the whole raster layer
   suit.rast <- calc(Estck,fun=sui.fun)
-  # take exponential to go back to the original scale
   
   return(suit.rast)
 }
@@ -43,12 +42,12 @@ niche.G <- function(Estck, mu, Sigma) {
 ## libraries:
 
 library(raster)
-# library(sp)
+library(sp)
 library(ggplot2)
 library(ggpubr)
 # needs package mvtnorm to be installed
 
-## Read environmental layers cropped to the area of interest
+## Read environmental layers cropped to the area of interest and stack them
 bio1 <- raster(".\\ClimateData10min\\bio1WH.asc")
 bio2 <- raster(".\\ClimateData10min\\bio12WH.asc")
 bios <- stack(bio1,bio2)
@@ -105,7 +104,7 @@ ggplot() +
   # coord_sf(xlim = emap[1:2], ylim = emap[3:4], expand = FALSE) +
   geom_point(data = occ2,aes(x=occ2[,1], y=occ2[,2]), shape = 23, fill = "yellowgreen")
 
-ggsave('./Results/Catasticta_nimbice_ggplot.png',  width = 24, height = 24, 
+ggsave('./Results/Catasticta_nimbice_nicheG_ggplot.png',  width = 24, height = 24, 
        units = "cm", dpi = 600, pointsize = 6)
 
 
