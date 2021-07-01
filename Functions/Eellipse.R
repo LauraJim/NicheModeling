@@ -84,11 +84,9 @@ mu2 <- colMeans(occ)
 Sigma2 <- cov(occ)
 names2 <- c("Annual mean temperature (°C x 10)","Annual Precipitation (mm)") 
 
-<<<<<<< HEAD
-f <- E.ellipse(mu = mu2, Sigma = Sigma2, alpha = alpha2, enames = names2)
+
+f2 <- E.ellipse(mu = mu2, Sigma = Sigma2, alpha = alpha2, enames = names2)
 
 
 # END
-=======
-f2 <- E.ellipse(mu = mu2, Sigma = Sigma2, alpha = alpha2, Enames = names2)
->>>>>>> 92b5677f001c368f40116493b678f48e3847b4f0
+
