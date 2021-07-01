@@ -78,10 +78,10 @@ plot(cn.result)
 
 # Another way to use the function
 # Use estimated values of mu and Sigma directly
-Cn.wn <- niche.G(Estck = bios, mu = c(166.1297518,1265.130825), 
+cn.wn <- niche.G(Estck = bios, mu = c(166.1297518,1265.130825), 
                  Sigma = matrix(c(1427.054608, 7687.724366, 7687.724366, 332940.0973),ncol=2))
-writeRaster(cn.result,"./Results/Catasticta_nimbice_wn_map.tif", overwrite = T)
-writeRaster(cn.result, "./Results/Catasticta_nimbice_wn_map.asc", overwrite = T)
+writeRaster(cn.wn,"./Results/Catasticta_nimbice_wn_map.tif", overwrite = T)
+writeRaster(cn.wn, "./Results/Catasticta_nimbice_wn_map.asc", overwrite = T)
 
 
 ## plot in ggplot
@@ -199,6 +199,5 @@ ggsave('./Results/Threnetes_ruckeri_nicheG_ggplot.png',  width = 48, height = 24
 
 
 # test: try to use colorspace package for gradient filling (currently problem with factor)
-
 
 # End
