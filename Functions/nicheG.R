@@ -57,8 +57,9 @@ bios <- stack(bio1,bio2)
 #               occurrence with environmental data 
 # Catasticta nimbice
 
-occ <- read.csv("./Catasticta_nimbice_occ_GE.csv",header=T)[,-(1:2)]
-
+occ2 <- read.csv("./Catasticta_nimbice_occ_GE.csv",header=T)
+occ <- occ2[,-(1:2)]
+  
 # Set the values of the MLEs (Maximum Likelihood Estimate)
 center <- colMeans(occ)
 # Sigma calculates the covariance of the occurrences
@@ -75,11 +76,18 @@ writeRaster(cn.result, "./Results/Catasticta_nimbice_maha_map.asc", overwrite = 
 x11()
 plot(cn.result)
 
+# Another way to use the function
+# Use estimated values of mu and Sigma directly
+Cn.wn <- niche.G(Estck = bios, mu = c(166.1297518,1265.130825), 
+                 Sigma = matrix(c(1427.054608, 7687.724366, 7687.724366, 332940.0973),ncol=2))
+writeRaster(cn.result,"./Results/Catasticta_nimbice_wn_map.tif", overwrite = T)
+writeRaster(cn.result, "./Results/Catasticta_nimbice_wn_map.asc", overwrite = T)
+
 
 ## plot in ggplot
 
 # Read raster with output from weighted model
-outp <- raster("./Results/Catasticta_nimbice_maha_map.tif")
+outp <- raster("./Results/Catasticta_nimbice_wn_map.tif")
 # emap <- extent(-170, 179, -60, 80) # whole world
 # emap <- extent(-140, -110, 30, 65) # USA-CAN
 # emap <- extent(70, 150, 10, 55) # Asia
@@ -90,8 +98,6 @@ outpp <- rasterToPoints(outp)
 outppd <- data.frame(outpp)
 colnames(outppd) <- c("Longitude","Latitude","Suitability")
 
-# read matrix with species' occurrence
-occ2 <- read.csv("./Catasticta_nimbice_occ_GE.csv",header=T)
 
 x11()
 ggplot() +
@@ -106,8 +112,6 @@ ggplot() +
 
 ggsave('./Results/Catasticta_nimbice_nicheG_ggplot.png',  width = 24, height = 24, 
        units = "cm", dpi = 600, pointsize = 6)
-
-
 
 
 ## Example 2 - use values of  weighted normal distribution and Mahalanobis ----
@@ -196,208 +200,8 @@ ggsave('./Results/Threnetes_ruckeri_nicheG_ggplot.png',  width = 48, height = 24
 
 
 
-# get weighted normal distribution map for Example 1, Catasticta nimbice
-cn.fitN <- read.csv("./Results/Catasticta_nimbice_Estimated_parameters.csv",header=T)[,-1]
-Cn.wn <- niche.G(Estck = bios, mu = cn.fitN$wn.mu, 
-                 Sigma = cbind(cn.fitN$wn.sigma1,cn.fitN$wn.sigma2))
-writeRaster(cn.result,"./Results/Catasticta_nimbice_wn_map.tif", overwrite = T)
-writeRaster(cn.result, "./Results/Catasticta_nimbice_wn_map.asc", overwrite = T)
-
 
 # test: try to use colorspace package for gradient filling (currently problem with factor)
 
 
 # End
-
-####################################################################
-
-occ2 <- read.csv("./Threnetes_ruckeri_occ_GE.csv",header=T)[,-(1:2)]
-
-# calculate parameters
-
-# Set the values of the MLEs (Maximum Likelihood Estimate)
-center2 <- colMeans(occ2)
-# Sigma calculates the covariance of the occurrences
-boundary2 <- cov(occ2)
-# define name for the maps
-saveM2 <- "./Results/Threnetes_ruckeri_maha_map"
-
-result2 <- niche.G(Estck, mu = center2, Sigma = boundary2, save.map = saveM2)
-
-x11()
-plot(result2)
-
-
-
-## Example 1: Threnetes ruckeri
-
-# Read raster with output from weighted model
-outp <- raster("./Results/Threnetes_ruckeri_map.tif")
-# emap <- extent(-170, 179, -60, 80) # whole world
-# emap <- extent(-140, -110, 30, 65) # USA-CAN
-# emap <- extent(70, 150, 10, 55) # Asia
-# emap <- extent(-15, 30, 35, 60) # Europe
-
-# outp1 <- crop(outp, emap)
-outpp <- rasterToPoints(outp)
-outppd <- data.frame(outpp)
-colnames(outppd) <- c("Longitude","Latitude","Suitability")
-
-# Read presence points 
-occ3 <- read.csv("./Threnetes_ruckeri_occ_GE.csv",header=T)
-
-x11()
-ggplot() +
-  geom_tile(data = outppd,aes(x=Longitude, y=Latitude, fill=Suitability)) +
-  theme_bw() +
-  #borders("world", xlim = c(-179, 179), ylim = c(-60, 80)) +
-  scale_fill_gradient2("Suitability",limits=c(0,1), low = 'grey80',
-                       mid='slateblue1', high = 'slateblue4',na.value = NA,
-                       midpoint = 0.5, n.breaks=4) +
-  # coord_sf(xlim = emap[1:2], ylim = emap[3:4], expand = FALSE) +
-  geom_point(data = occ3,aes(x=occ3[,1], y=occ3[,2]), shape = 23, fill = "yellowgreen")
-
-ggsave('./Results/Threnetes_ruckeri_ggplot.png',  width = 24, height = 24, units = "cm",
-       dpi = 600, pointsize = 6)
-
-
-## Example 2: Catasticta nimbice
-
-# Read raster with output from weighted model
-outp2 <- raster("./Results/Catasticta_nimbice_map.tif")
-outpp2 <- rasterToPoints(outp2)
-outppd2 <- data.frame(outpp2)
-colnames(outppd2) <- c("Longitude","Latitude","Suitability")
-
-# Read presence points 
-occ4 <- read.csv("./Catasticta_nimbice_occ_GE.csv",header=T)
-
-# plot
-x11()
-ggplot() +
-  geom_tile(data = outppd2,aes(x=Longitude, y=Latitude, fill=Suitability)) +
-  theme_bw() +
-  #borders("world", xlim = c(-179, 179), ylim = c(-60, 80)) +
-  scale_fill_gradient2("Suitability",limits=c(0,1), low = 'grey80',
-                       mid='slateblue1', high = 'slateblue4',na.value = NA,
-                       midpoint = 0.5, n.breaks=4) +
-  # coord_sf(xlim = emap[1:2], ylim = emap[3:4], expand = FALSE) +
-  geom_point(data = occ4,aes(x=occ4[,1], y=occ4[,2]), shape = 23, fill = "yellowgreen")
-
-ggsave('./Results/Catasticta_nimbice_ggplot.png',  width = 24, height = 24, units = "cm",
-       dpi = 600, pointsize = 6)
-
-
-
-# Test gradient color - still work in progress -------------------
-library(colorspace)
-
-# issue with the discrete color filling, data needs to be converted via factor 
-# but this does not work out (does not finish processing plot)
-
-x11()
-ggplot() +
-  geom_tile(data = outppd2,aes(x=Longitude, y=Latitude, color= Suitability)) +
-#  theme_bw() +
-#  geom_density(alpha = 0.6) +
-  scale_color_discrete_sequential(palette = "BluYl") + 
-  # scale_fill_gradient2("Suitability",limits=c(0,1), low = 'grey80',
-  #                     mid='slateblue1', high = 'slateblue4',na.value = NA,
-  #                     midpoint = 0.5, n.breaks=4) +
-  geom_point(data = occ4,aes(x=occ4[,1], y=occ4[,2]), shape = 23, fill = "yellowgreen")
-
-
-
-#
-## Use function to create maps using output from weighted model and mahalanobis model
-# example Catasticta nimbice
-
-cn.fitN <- read.csv("./Results/Catasticta_nimbice_Estimated_parameters.csv",header=T)[,-1]
-
-# weighted
-# define name for the maps
-saveM.wn <- "./Results/Catasticta_nimbice_wn_map"
-
-Cn.wn <- niche.G(Estck = bios, mu = cn.fitN$wn.mu, 
-                 Sigma = cbind(cn.fitN$wn.sigma1,cn.fitN$wn.sigma2),
-                 save.map = saveM.wn)
-
-# # example maha
-# # define name for the maps
-# saveM.maha <- "./Results/Catasticta_nimbice_maha_map"
-# 
-# Cn.maha <- niche.G(Estck = bios, mu = cn.fitN$maha.mu, 
-#                    Sigma = cbind(cn.fitN$maha.sigma1,cn.fitN$maha.sigma2), 
-#                    save.map = saveM.maha)
-# 
-
-# example Threnetes ruckeri
-# weighted
-thr.fitN <- read.csv("./Results/Threnetes_ruckeri_Estimated_parameters.csv",header=T)[,-1]
-saveM2.wn <- "./Results/Threnetes_ruckeri_wn_map"
-
-Thr.wn <- niche.G(Estck = bios, mu = thr.fitN$wn.mu, 
-                  Sigma = cbind(thr.fitN$wn.sigma1, thr.fitN$wn.sigma2), 
-                  save.map = saveM2.wn)
-
-
-
-# example maha
-
-saveM2.maha <- "./Results/Threnetes_ruckeri_maha_map"
-
-Thr.maha <- niche.G(Estck = bios, mu = thr.fitN$maha.mu, 
-                    Sigma = cbind(thr.fitN$maha.simga1, thr.fitN$maha.sigma2), 
-                    save.map = saveM2.maha)
-
-## plot both models for Threnetes ruckeri ---
-
-# Read presence points 
-species <- read.csv("./Threnetes_ruckeri_occ_GE.csv",header=T)
-# plot 1, maha
-maha.map <- raster("./Results/Threnetes_ruckeri_maha_map.tif")
-
-
-# outp1 <- crop(outp, emap)
-maha.mappt <- rasterToPoints(maha.map)
-outp.maha <- data.frame(maha.mappt)
-colnames(outp.maha) <- c("Longitude","Latitude","Suitability")
-
-
-
-p1 <- ggplot() +
-  geom_tile(data = outp.maha,aes(x=Longitude, y=Latitude, fill=Suitability)) +
-  theme_bw() +
-  scale_fill_gradient2("Suitability",limits=c(0,1), low = 'grey80',
-                       mid='slateblue1', high = 'slateblue4',na.value = NA,
-                       midpoint = 0.5, n.breaks=4) +
-  geom_point(data = species,aes(x=species[,1], y=species[,2]), shape = 23, fill = "yellowgreen") + 
-  labs (title = "Mahalanobis distance model") +
-  theme(plot.title = element_text(hjust = 0.5)) 
-
-
-# plot 2, wn
-wn.map <- raster("./Results/Threnetes_ruckeri_wn_map.tif")
-
-
-# outp1 <- crop(outp, emap)
-wn.mappt <- rasterToPoints(wn.map)
-outp.wn <- data.frame(wn.mappt)
-colnames(outp.wn) <- c("Longitude","Latitude","Suitability")
-
-p2 <- ggplot() +
-  geom_tile(data = outp.wn,aes(x=Longitude, y=Latitude, fill=Suitability)) +
-  theme_bw() +
-  scale_fill_gradient2("Suitability",limits=c(0,1), low = 'grey80',
-                       mid='slateblue1', high = 'slateblue4',na.value = NA,
-                       midpoint = 0.5, n.breaks=4) +
-  geom_point(data = species,aes(x=species[,1], y=species[,2]), shape = 23, fill = "yellowgreen") +
-  labs (title = "Weighted normal distribution model") +
-  theme(plot.title = element_text(hjust = 0.5)) 
-
-x11()
-ggarrange(p1, p2, ncol = 2, nrow = 1)
-
-ggsave('./Results/Threnetes_ruckeri_ggplot.png',  width = 48, height = 24, units = "cm",
-        dpi = 600, pointsize = 6)
-
