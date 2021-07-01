@@ -129,10 +129,6 @@ Thr.wn <- niche.G(Estck = bios, mu = thr.fitN$wn.mu,
 writeRaster(Thr.wn,"./Results/Threnetes_ruckeri_wn_map.tif", overwrite = T)
 writeRaster(Thr.wn, "./Results/Threnetes_ruckeri_wn_map.asc", overwrite = T)
 
-# plot the output
-x11()
-plot(Thr.wn)
-
 # use values of Mahalanobis distance model
 Thr.maha <- niche.G(Estck = bios, mu = thr.fitN$maha.mu, 
                     Sigma = cbind(thr.fitN$maha.sigma1, thr.fitN$maha.sigma2))
@@ -143,8 +139,9 @@ writeRaster(Thr.maha, "./Results/Threnetes_ruckeri_maha_map.asc", overwrite = T)
 
 # plot the output
 x11()
+par(mfrow=c(1,2))
+plot(Thr.wn)
 plot(Thr.maha)
-
 
 
 ## plot both models next to each other in ggplot (Threnetes ruckeri)
