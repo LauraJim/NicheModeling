@@ -47,7 +47,7 @@ The function niche.G projects ellipses that define suitable environments for a s
 * `sp`
 \
 
-* `mvtnorm`
+* `mvtnorm` (only needs to be installed)
 \
 
 * `ggplot2`
@@ -66,23 +66,15 @@ The function niche.G projects ellipses that define suitable environments for a s
 The function `niche.G` calculates suitability regions for a species based on environmental data and projects them onto a raster with geographical information. Each cell of the raster is weighed by an index of suitability.
 
 ```{r}
-niche.G <- function(Estck, mu, Sigma, save.map) {
+niche.G <- function(Estck, mu, Sigma) {
   
-  # Calculate suitabilities in each cell
-  max.val <- mvtnorm::dmvnorm(x=mu,mean = mu, sigma = Sigma)
-  # function that calculates the log(suitability)
-  sui.fun <- function(cell){log(mvtnorm::dmvnorm(x=c(cell[1],cell[2]),mean = mu, 
-                                                 sigma = Sigma))-log(max.val)}
+  # calculate suitability for each cell
+  sui.fun <- function(cell){exp(-mahalanobis(x= c(cell[1],cell[2]), 
+                                             center= mu, cov= Sigma)/2)}
   # apply this function to the whole raster layer
   suit.rast <- calc(Estck,fun=sui.fun)
-  # take exponential to go back to the original scale
-  # save as ASCII
-  suit.rast1 <- calc(suit.rast,fun = exp,
-                     filename= paste0(save.map, ".asc"), overwrite=T)
-  # save as TIFF
-  writeRaster(suit.rast1, paste0(save.map, ".tif"), overwrite = T)
-  
-  return(suit.rast1)
+
+  return(suit.rast)
 }
 ```
 \
@@ -90,7 +82,7 @@ niche.G <- function(Estck, mu, Sigma, save.map) {
 
 ### Output
 
-The function will produce a geographical map that represents areas that have suitable environmental conditions for a species. Those potential ecological niche regions are colored by different degrees of suitability. The map will automatically be saved as a TIFF and as a ASCII file. It should be noted that the calculation of each cell in the raster might take a bit longer. 
+The function will produce a raster of areas that have suitable environmental conditions for a species. Those potential ecological niche regions are colored by different degrees of suitability. The output can be plotted or saved as TIF or ASCI file. 
 \
 \
 
@@ -149,25 +141,59 @@ boundary <- cov(occ)
 ```
 \
 
-Set the path and name under which the rasters will be saved (= `save.map`).
-```{r}
-saveM <- "./Output_Data/Catasticta_nimbice_map"
-```
-\
 
 Apply the function `niche.G` with the parameters `Estck`, `mu`, and `Sigma` and plot it.
 
 ```{r, eval=FALSE}
-result1 <- niche.G(Estck = bios, mu = center, Sigma = boundary, save.map = saveM)
+cn.result <- niche.G(Estck = bios, mu = center, Sigma = boundary)
 
 # x11()
-plot(result1)
+plot(cn.result)
 ```
+\
 
+Save the raster output as TIF or ASCI file.
+```{r, eval=FALSE}
+writeRaster(cn.result,"./Output_Data/Catasticta_nimbice_maha_map.tif", overwrite = T)
+writeRaster(cn.result, "./Output_Data/Catasticta_nimbice_maha_map.asc", overwrite = T)
+```
 
 ```{r, echo=FALSE, fig.cap=" Figure of the geographical space with suitable niches for *Catasticta nimbice* .", out.width = '70%',fig.align="center"}
 options(knitr.duplicate.label = "allow")
 knitr::include_graphics("Images/Catasticta_nimbice_maha_asci.png")
+```
+\
+
+Plot the results in a ggplot.
+```{r, eval=FALSE}
+# Read raster with output from weighted model
+outp <- raster("./Output_Data/Catasticta_nimbice_maha_map.tif")
+# emap <- extent(-170, 179, -60, 80) # whole world
+# emap <- extent(-140, -110, 30, 65) # USA-CAN
+# emap <- extent(70, 150, 10, 55) # Asia
+# emap <- extent(-15, 30, 35, 60) # Europe
+
+# outp1 <- crop(outp, emap)
+outpp <- rasterToPoints(outp)
+outppd <- data.frame(outpp)
+colnames(outppd) <- c("Longitude","Latitude","Suitability")
+
+# read matrix with species' occurrence
+occ2 <- read.csv("./Input_Data/Catasticta_nimbice_occ_GE.csv",header=T)
+
+x11()
+ggplot() +
+  geom_tile(data = outppd,aes(x=Longitude, y=Latitude, fill=Suitability)) +
+  theme_bw() +
+  #borders("world", xlim = c(-179, 179), ylim = c(-60, 80)) +
+  scale_fill_gradient2("Suitability",limits=c(0,1), low = 'grey80',
+                       mid='slateblue1', high = 'slateblue4',na.value = NA,
+                       midpoint = 0.5, n.breaks=4) +
+  # coord_sf(xlim = emap[1:2], ylim = emap[3:4], expand = FALSE) +
+  geom_point(data = occ2,aes(x=occ2[,1], y=occ2[,2]), shape = 23, fill = "yellowgreen")
+
+ggsave('./Output_Data/Catasticta_nimbice_nicheG_ggplot.png',  width = 24, height = 24, 
+       units = "cm", dpi = 600, pointsize = 6)
 ```
 \
 
@@ -190,23 +216,25 @@ thr.fitN <- read.csv("./Input_Data/Threnetes_ruckeri_Estimated_parameters.csv",h
 ```
 \
 
-Set the saving name and location for the map of the weighted normal distribution and the Mahalanobis distance model.
-```{r}
-saveM2.wn <- "./Output_Data/Threnetes_ruckeri_wn_map"
-saveM2.maha <- "./Output_Data/Threnetes_ruckeri_maha_map"
+Apply the function with `Estck`, `mu`, and `Sigma` for each, the weighted normal distribution and the Mahalanobis distance model.
+```{r, eval=FALSE}
+# weighted normal distribution
+Thr.wn <- niche.G(Estck = bios, mu = thr.fitN$wn.mu, 
+                  Sigma = cbind(thr.fitN$wn.sigma1, thr.fitN$wn.sigma2))
+# Mahalanobis distance
+Thr.maha <- niche.G(Estck = bios, mu = thr.fitN$maha.mu, 
+                    Sigma = cbind(thr.fitN$maha.sigma1, thr.fitN$maha.sigma2))
 ```
 \
 
-Apply the function with `mu`, `Sigma`, and `save.map` for each, the weighted normal distribution and the Mahalanobis distance model.
+Save the output as TIF or ASCI file.
 ```{r, eval=FALSE}
-# weighted normal
-Thr.wn <- niche.G(Estck = bios, mu = thr.fitN$wn.mu, 
-                  Sigma = cbind(thr.fitN$wn.sigma1, thr.fitN$wn.sigma2), 
-                  save.map = saveM2.wn)
-# Mahalanobis
-Thr.maha <- niche.G(Estck = bios, mu = thr.fitN$maha.mu, 
-                    Sigma = cbind(thr.fitN$maha.simga1, thr.fitN$maha.sigma2), 
-                    save.map = saveM2.maha)
+# weigthed normal distribution
+writeRaster(Thr.wn,"./Output_Data/Threnetes_ruckeri_wn_map.tif", overwrite = T)
+writeRaster(Thr.wn, "./Output_Data/Threnetes_ruckeri_wn_map.asc", overwrite = T)
+# Mahalanobis distance
+writeRaster(Thr.maha,"./Output_Data/Threnetes_ruckeri_maha_map.tif", overwrite = T)
+writeRaster(Thr.maha, "./Output_Data/Threnetes_ruckeri_maha_map.asc", overwrite = T)
 ```
 \
 
@@ -240,7 +268,6 @@ colnames(outp.wn) <- c("Longitude","Latitude","Suitability")
 ```
 \
 
-
 Plot in ggplot.
 ```{r, fig.show='hide'}
 p1 <- ggplot() +
@@ -270,13 +297,13 @@ ggarrange(p1, p2, ncol = 2, nrow = 1)
 
 ```{r, echo=FALSE, fig.cap=" Figure of the geographical space with suitable niches for *Threnetes ruckeri* using the Mahalanobis distance model and the weigthed normal distribution model in `ggplot2`.", out.width = '120%',fig.align="center"}
 options(knitr.duplicate.label = "allow")
-knitr::include_graphics("Images/Threnetes_ruckeri_ggplot.png")
+knitr::include_graphics("Images/Threnetes_ruckeri_nicheG_ggplot.png")
 ```
 \
 
 Save the plot as a PNG.
 ```{r, eval=FALSE}
-ggsave('./Output_Data/Threnetes_ruckeri_ggplot.png',  width = 48, height = 24, units = "cm",
+ggsave('./Output_Data/Threnetes_ruckeri_nicheG_ggplot.png',  width = 48, height = 24, units = "cm",
        dpi = 600, pointsize = 6)
 ```
 \
