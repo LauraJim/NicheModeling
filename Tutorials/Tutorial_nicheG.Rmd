@@ -37,9 +37,6 @@ The function niche.G projects ellipses that define suitable environments for a s
 * `Sigma` = the covariance of the environmental data linked with a species' occurrence
 \
 
-* `save.map` = set the location and name for saving the map
-\
-
 \
 
 ### Dependencies
@@ -50,10 +47,10 @@ The function niche.G projects ellipses that define suitable environments for a s
 * `sp`
 \
 
-* `ggplot2`
+* `mvtnorm`
 \
 
-* `mvtnorm`
+* `ggplot2`
 \
 
 * `ggpubr`
@@ -106,6 +103,7 @@ The function will produce a geographical map that represents areas that have sui
 library(raster)
 library(sp)
 library(ggplot2)
+library(ggpubr)
 # needs package mvtnorm to be installed
 ```
 \
@@ -157,7 +155,7 @@ saveM <- "./Output_Data/Catasticta_nimbice_map"
 ```
 \
 
-Apply the function `niche.G` with the parameters `Estck`, `mu`, `Sigma`, and `save.map` and plot it.
+Apply the function `niche.G` with the parameters `Estck`, `mu`, and `Sigma` and plot it.
 
 ```{r, eval=FALSE}
 result1 <- niche.G(Estck = bios, mu = center, Sigma = boundary, save.map = saveM)
@@ -169,7 +167,7 @@ plot(result1)
 
 ```{r, echo=FALSE, fig.cap=" Figure of the geographical space with suitable niches for *Catasticta nimbice* .", out.width = '70%',fig.align="center"}
 options(knitr.duplicate.label = "allow")
-knitr::include_graphics("Images/Catasticta_nimbice_tiff.png")
+knitr::include_graphics("Images/Catasticta_nimbice_maha_asci.png")
 ```
 \
 
