@@ -84,5 +84,25 @@ get.table <- function(occ,columns,cnames,fname){
   print("Done!")
 }
 
+## cropped suitability rasters
+library(rgdal)
+library(raster)
+# read rasters with suitability index (from Niche.G), a polygon of the study area and crop
+cn.wn <- raster("./Results/Catasticta_nimbice_wn_map.tif")
+cn.maha <- raster("./Results/Catasticta_nimbice_maha_map.tif")
+thr.wn <- raster("./Results/Threnetes_ruckeri_wn_map.tif")
+thr.maha <- raster("./Results/Threnetes_ruckeri_maha_map.tif")
+
+# read polygon of study area
+cn.shp <- readOGR("./Shapefiles","nimbice3")
+thr.shp <- readOGR("./Shapefiles","Threnetes_ruckeri")
+
+# crop the area to fit the polygon boundaries
+area.cnwn <- mask(crop(cn.wn, cn.shp),cn.shp)
+area.cnmaha <- mask(crop(cn.maha, cn.shp), cn.shp)
+area.thrwn <- mask(crop(thr.wn, thr.shp), thr.shp)
+area.thrmaha <- mask(crop(thr.maha, thr.shp), thr.shp)
+
+
 
 # END
