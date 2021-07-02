@@ -45,6 +45,7 @@ library(raster)
 library(sp)
 library(ggplot2)
 library(ggpubr)
+library(rgdal)
 # needs package mvtnorm to be installed
 
 ## Read environmental layers cropped to the area of interest and stack them
@@ -57,13 +58,14 @@ bios <- stack(bio1,bio2)
 #               occurrence with environmental data 
 # Catasticta nimbice
 
-occ2 <- read.csv("./Catasticta_nimbice_occ_GE.csv",header=T)
-occ <- occ2[,-(1:2)]
+# Read matrix with geographical and environmental information of a species' occurrence
+occ1 <- read.csv("./Catasticta_nimbice_occ_GE.csv",header=T)
+occ2 <- occ1[,-(1:2)]
   
 # Set the values of the MLEs (Maximum Likelihood Estimate)
-center <- colMeans(occ)
+center <- colMeans(occ2)
 # Sigma calculates the covariance of the occurrences
-boundary <- cov(occ)
+boundary <- cov(occ2)
 
 # apply the function
 cn.result <- niche.G(Estck = bios, mu = center, Sigma = boundary)
@@ -77,38 +79,45 @@ x11()
 plot(cn.result)
 
 # Another way to use the function
-# Use estimated values of mu and Sigma directly
+# Use estimated values of mu and Sigma directly (weighted normal distribution)
 cn.wn <- niche.G(Estck = bios, mu = c(166.1297518,1265.130825), 
-                 Sigma = matrix(c(1427.054608, 7687.724366, 7687.724366, 332940.0973),ncol=2))
+                 Sigma = matrix(c(1427.054608, 7687.724366, 
+                                  7687.724366, 332940.0973),ncol=2))
 writeRaster(cn.wn,"./Results/Catasticta_nimbice_wn_map.tif", overwrite = T)
 writeRaster(cn.wn, "./Results/Catasticta_nimbice_wn_map.asc", overwrite = T)
 
 
 ## plot in ggplot
 
-# Read raster with output from weighted model
-outp <- raster("./Results/Catasticta_nimbice_wn_map.tif")
+# crop raster to rectangle of study area either with coordinates or polygon
+
 # emap <- extent(-170, 179, -60, 80) # whole world
 # emap <- extent(-140, -110, 30, 65) # USA-CAN
 # emap <- extent(70, 150, 10, 55) # Asia
 # emap <- extent(-15, 30, 35, 60) # Europe
+# outp1 <- crop(cn.wn, emap)
+cn.shp <- readOGR("./Shapefiles","nimbice3")
+area <- crop(cn.wn, cn.shp)
 
-# outp1 <- crop(outp, emap)
-outpp <- rasterToPoints(outp)
-outppd <- data.frame(outpp)
-colnames(outppd) <- c("Longitude","Latitude","Suitability")
+# calculate raster to points for ggplot
+areap <- rasterToPoints(area)
+areapd <- data.frame(areap)
+colnames(areapd) <- c("Longitude","Latitude","Suitability")
 
 
 x11()
 ggplot() +
-  geom_tile(data = outppd,aes(x=Longitude, y=Latitude, fill=Suitability)) +
+  geom_tile(data = areapd,aes(x=Longitude, y=Latitude, fill=Suitability)) +
   theme_bw() +
   #borders("world", xlim = c(-179, 179), ylim = c(-60, 80)) +
   scale_fill_gradient2("Suitability",limits=c(0,1), low = 'grey80',
                        mid='slateblue1', high = 'slateblue4',na.value = NA,
                        midpoint = 0.5, n.breaks=4) +
   # coord_sf(xlim = emap[1:2], ylim = emap[3:4], expand = FALSE) +
-  geom_point(data = occ2,aes(x=occ2[,1], y=occ2[,2]), shape = 23, fill = "yellowgreen")
+  geom_point(data = occ1,aes(x=occ1[,1], y=occ1[,2]), shape = 21, fill = "orange1", alpha = 0.7) +
+  labs (title = "Catasticta nimbice occurrences in Middle America ") +
+  labs(subtitle = "and suitable niches based on the weighted normal distribution") +
+  theme(plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5)) 
 
 ggsave('./Results/Catasticta_nimbice_nicheG_ggplot.png',  width = 24, height = 24, 
        units = "cm", dpi = 600, pointsize = 6)
