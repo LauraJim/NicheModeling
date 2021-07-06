@@ -59,27 +59,34 @@ comp.accplot(mods=models, nocc=155, ncells=7251,
 # additional column
 #
 # Create matrices "output.mod" for MaxEnt and BioClim --------------------------
-get.table <- function(occ,columns,cnames,fname=NULL){
+get.table <- function(occG,columns){
   # Convert to points so we have long,lat values in the first two columns
   mat1 <- rasterToPoints(columns)
-  colnames(mat1) <- cnames
-  head(mat1)
-  
-  # Save the resulting matrix
-  write.csv(mat1,file=paste0(".\\Rcode-hyperTest\\Example\\",fname,"_M.csv"),row.names = F)
+  # order of index, ask order of rows order (range of indexes)
+  iord <- order(mat1[,3], decreasing = T)
+  # create new matrix with new order by suitability rows (high to low)
+  mat2 <- mat1[iord,]
   
   # Now repeat the previous steps with the occurrence points
-  occ1 <- extract(columns,occ[,2:3])
-  occ2 <- cbind(occ[,2:3],occ1)
-  colnames(occ2) <- c("long","lat",sdm.name,"bio1","bio12")
-  head(occ2)
-  
-  # Save the resulting matrix
-  write.csv(occ2,file=paste0(".\\Rcode-hyperTest\\Example\\",fname,"_occ.csv"),row.names = F)
+  occ1 <- extract(columns,occG[,2:3])
+  occ2 <- na.omit(cbind(occG[,2:3],occ1))
+  # sort the values of vector
+  # order of index, ask order of rows order (range of indexes)
+  iord2 <- order(occ2[,3], decreasing = T) 
+  occ3 <- occ2[iord2,]
+  colnames(occ3) <- colnames(mat2)
+  mat3 <- rbind(occ3, mat2)
+  mat4 <- cbind(mat3, Type=c(rep(1, nrow(occ3)), rep(0, nrow(mat2))))
 
-  print("Done!")
+  return(mat4)
 }
 
+cn.occG <- read.csv("./Catasticta_nimbice_occ_G.csv",header=T)
 
+bio1 <- raster("./ClimateData10min/bio1WH.asc") 
+bio12 <- raster("./ClimateData10min/bio12WH.asc") 
+cn.maharas <- stack(cn.maha, bio1, bio12)
+
+test.cnmaha <- get.table(occG = cn.occG, columns = cn.maharas)
 
 # END
