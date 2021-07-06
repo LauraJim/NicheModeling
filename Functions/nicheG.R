@@ -172,8 +172,6 @@ p1 <- ggplot() +
   scale_fill_gradient2("Suitability",limits=c(0,1), low = 'grey80',
                        mid='slateblue1', high = 'slateblue4',na.value = NA,
                        midpoint = 0.5, n.breaks=4) +
-  geom_point(data = species,aes(x=species[,1], y=species[,2]), 
-             shape = 23, fill = "yellowgreen") + 
   labs (title = "Mahalanobis distance model") +
   theme(plot.title = element_text(hjust = 0.5)) 
 
@@ -193,8 +191,6 @@ p2 <- ggplot() +
   scale_fill_gradient2("Suitability",limits=c(0,1), low = 'grey80',
                        mid='slateblue1', high = 'slateblue4',na.value = NA,
                        midpoint = 0.5, n.breaks=4) +
-  geom_point(data = species,aes(x=species[,1], y=species[,2]), 
-             shape = 23, fill = "yellowgreen") +
   labs (title = "Weighted normal distribution model") +
   theme(plot.title = element_text(hjust = 0.5)) 
 
@@ -206,6 +202,50 @@ ggsave('./Results/Threnetes_ruckeri_nicheG_ggplot.png',  width = 48, height = 24
 
 
 
+# cropped ggplot:
+  
+thr.shp <- readOGR("./Shapefiles","Threnetes_ruckeri")
+
+
+# create points from the raster and give column names
+area.maha <- crop(maha.map, thr.shp)
+maha.mappt <- rasterToPoints(area.maha)
+outp.maha <- data.frame(maha.mappt)
+colnames(outp.maha) <- c("Longitude","Latitude","Suitability")
+
+p1 <- ggplot() +
+  geom_tile(data = outp.maha,aes(x=Longitude, y=Latitude, fill=Suitability)) +
+  theme_bw() +
+  scale_fill_gradient2("Suitability",limits=c(0,1), low = 'grey80',
+                       mid='slateblue1', high = 'slateblue4',na.value = NA,
+                       midpoint = 0.5, n.breaks=4) +
+  geom_point(data = species,aes(x=species[,1], y=species[,2]), 
+             shape = 23, fill = "yellowgreen") + 
+  labs (title = "Mahalanobis distance model") +
+  theme(plot.title = element_text(hjust = 0.5)) 
+
+
+# plot 2, wn
+
+# outp1 <- crop(outp, emap)
+area.wn <- crop(wn.map, thr.shp)
+wn.mappt <- rasterToPoints(area.wn)
+outp.wn <- data.frame(wn.mappt)
+colnames(outp.wn) <- c("Longitude","Latitude","Suitability")
+
+p2 <- ggplot() +
+  geom_tile(data = outp.wn,aes(x=Longitude, y=Latitude, fill=Suitability)) +
+  theme_bw() +
+  scale_fill_gradient2("Suitability",limits=c(0,1), low = 'grey80',
+                       mid='slateblue1', high = 'slateblue4',na.value = NA,
+                       midpoint = 0.5, n.breaks=4) +
+  geom_point(data = species,aes(x=species[,1], y=species[,2]), 
+             shape = 23, fill = "yellowgreen") +
+  labs (title = "Weighted normal distribution model") +
+  theme(plot.title = element_text(hjust = 0.5)) 
+
+x11()
+ggarrange(p1, p2, ncol = 2, nrow = 1)
 
 # test: try to use colorspace package for gradient filling (currently problem with factor)
 
