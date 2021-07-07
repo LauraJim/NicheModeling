@@ -1,8 +1,7 @@
 # Laura Jimenez & Jorge Soberon
 # First version: May, 2018
 
-# Function 1 -------------------------------------------------------------------
-## function "get.table"
+# Function 1: "get.table"--------------------------------------------------------
 # Description:
 # The function "get.table" will extract data from a raster that has information
 # on suitable niches for a species and create a table with the extracted information.
@@ -12,8 +11,8 @@
 # Parameters:
 # G.occ = a matrix with three columns, where the second and third column contain
 #         the coordinates in longitude and latitude
-# suit.Estck = a rasterstack that contains calculated suitability areas and environmental
-#           layers, such as temperature or precipitation
+# suit.Estck = a rasterstack that contains calculated suitability areas for a 
+#           species and and environmental layers, such as temperature or precipitation
 #
 
 get.table <- function(G.occ,suit.Estck){
