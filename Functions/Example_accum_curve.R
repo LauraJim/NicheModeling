@@ -59,16 +59,16 @@ comp.accplot(mods=models, nocc=155, ncells=7251,
 # additional column
 #
 # Create matrices "output.mod" for MaxEnt and BioClim --------------------------
-get.table <- function(G.occ,columns){
+get.table <- function(G.occ,suit.Estck){
   # Convert to points so we have long,lat values in the first two columns
-  mat1 <- rasterToPoints(columns)
+  mat1 <- rasterToPoints(suit.Estck)
   # order of index, ask order of rows order (range of indexes)
   iord <- order(mat1[,3], decreasing = T)
   # create new matrix with new order by suitability rows (high to low)
   mat2 <- mat1[iord,]
   
   # Now repeat the previous steps with the occurrence points
-  occ1 <- extract(columns,G.occ[,2:3])
+  occ1 <- extract(suit.Estck,G.occ[,2:3])
   occ2 <- na.omit(cbind(G.occ[,2:3],occ1))
   # sort the values of vector
   # order of index, ask order of rows order (range of indexes)
@@ -87,6 +87,6 @@ bio1 <- raster("./ClimateData10min/bio1WH.asc")
 bio12 <- raster("./ClimateData10min/bio12WH.asc") 
 cn.maharas <- stack(cn.maha, bio1, bio12)
 
-test.cnmaha <- get.table(G.occ = cn.occG, columns = cn.maharas)
+test.cnmaha <- get.table(G.occ = cn.occG, suit.Estck = cn.maharas)
 
 # END
