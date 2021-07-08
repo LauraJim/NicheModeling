@@ -5,15 +5,19 @@
 # Description:
 # The function "get.table" will extract data from a raster that has information
 # on suitable niches for a species and create a table with the extracted information.
-# The output is a matrix with coordinates, values from applied models such as the
-# Mahalanobis distance, and environmental values.
-
+#
 # Parameters:
 # G.occ = a matrix with three columns, where the second and third column contain
 #         the coordinates in longitude and latitude
 # suit.Estck = a rasterstack that contains calculated suitability areas for a 
-#           species and and environmental layers, such as temperature or precipitation
+#           species and environmental layers, such as temperature or precipitation
 #
+# Output:
+# The output is a matrix with coordinates, values from applied models such as the
+# Mahalanobis distance, and environmental values. The matrix will have three 
+# columns for the coordinates and model values and as many columns as there are
+# environmental layers.
+
 
 get.table <- function(G.occ,suit.Estck){
   # Convert to points so we have long,lat values in the first two columns
