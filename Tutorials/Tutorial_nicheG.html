@@ -233,7 +233,7 @@ pre code {
 </div>
 <div id="output" class="section level3">
 <h3>Output</h3>
-<p>The function will produce a raster of areas that have suitable environmental conditions for a species. Those potential ecological niche regions are colored by different degrees of suitability. The output can be plotted or saved as TIF or ASCI file.<br />
+<p>The function will produce a raster of areas that have suitable environmental conditions for a species. Those potential ecological niche regions are colored by different degrees of suitability. The output can be plotted and saved as TIF or ASCI file.<br />
 <br />
 </p>
 </div>
@@ -313,14 +313,11 @@ writeRaster(cn.wn, &quot;./Output_Data/Catasticta_nimbice_wn_map.asc&quot;, over
 <p><br />
 </p>
 <p>Plot the results in a ggplot. The raster here is cropped to a specific area either by coordinates or by a polygon.</p>
-<pre class="r"><code># crop with coordinates
-# emap &lt;- extent(-170, 179, -60, 80) # whole world
-# emap &lt;- extent(-140, -110, 30, 65) # USA-CAN
-# emap &lt;- extent(70, 150, 10, 55) # Asia
-# emap &lt;- extent(-15, 30, 35, 60) # Europe
-# area &lt;- crop(cn.wn, emap)
+<pre class="r"><code># Option 1: crop with coordinates that describe the study area
+emap &lt;- extent(-130, -70, 0, 40)
+area &lt;- crop(cn.wn, emap)
 
-# crop with polygon
+# Option 2: crop with polygon
 cn.shp &lt;- readOGR(&quot;./Input_Data/shapefiles&quot;,&quot;nimbice3&quot;)
 area &lt;- crop(cn.wn, cn.shp)
 
@@ -392,9 +389,6 @@ writeRaster(Thr.maha, &quot;./Output_Data/Threnetes_ruckeri_maha_map.asc&quot;, 
 <p><br />
 </p>
 <p><em>Plot both models next to each other in a ggplot.</em><br />
-Read the species’ occurrence data points that contain geographical information.</p>
-<pre class="r"><code>species &lt;- read.csv(&quot;./Input_Data/Threnetes_ruckeri_occ_GE.csv&quot;,header=T)</code></pre>
-<p><br />
 </p>
 <p>Load the previously created tif-file with the suitability levels for the Mahalanobis distance model and the weighted normal distribution model.</p>
 <pre class="r"><code>maha.map &lt;- raster(&quot;./Input_Data/Threnetes_ruckeri_maha_map.tif&quot;)
@@ -446,6 +440,8 @@ Figure of the geographical space with suitable niches for <em>Threnetes ruckeri<
 <p>Plot cropped in ggplot.</p>
 <pre class="r"><code># read polygon of study area
 thr.shp &lt;- readOGR(&quot;./Input_Data/shapefiles&quot;,&quot;Threnetes_ruckeri&quot;)
+# read occurrence data of species
+species &lt;- read.csv(&quot;./Input_Data/Threnetes_ruckeri_occ_GE.csv&quot;,header=T)
 
 
 # crop by study area, create points from the raster, and give column names

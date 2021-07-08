@@ -86,7 +86,7 @@ niche.G <- function(Estck, mu, Sigma) {
 
 ### Output
 
-The function will produce a raster of areas that have suitable environmental conditions for a species. Those potential ecological niche regions are colored by different degrees of suitability. The output can be plotted or saved as TIF or ASCI file. 
+The function will produce a raster of areas that have suitable environmental conditions for a species. Those potential ecological niche regions are colored by different degrees of suitability. The output can be plotted and saved as TIF or ASCI file. 
 \
 \
 
@@ -186,14 +186,11 @@ writeRaster(cn.wn, "./Output_Data/Catasticta_nimbice_wn_map.asc", overwrite = T)
 
 Plot the results in a ggplot. The raster here is cropped to a specific area either by coordinates or by a polygon.
 ```{r, fig.show='hide', results='hide'}
-# crop with coordinates
-# emap <- extent(-170, 179, -60, 80) # whole world
-# emap <- extent(-140, -110, 30, 65) # USA-CAN
-# emap <- extent(70, 150, 10, 55) # Asia
-# emap <- extent(-15, 30, 35, 60) # Europe
-# area <- crop(cn.wn, emap)
+# Option 1: crop with coordinates that describe the study area
+emap <- extent(-130, -70, 0, 40)
+area <- crop(cn.wn, emap)
 
-# crop with polygon
+# Option 2: crop with polygon
 cn.shp <- readOGR("./Input_Data/shapefiles","nimbice3")
 area <- crop(cn.wn, cn.shp)
 
@@ -276,11 +273,6 @@ writeRaster(Thr.maha, "./Output_Data/Threnetes_ruckeri_maha_map.asc", overwrite 
 
 *Plot both models next to each other in a ggplot.*
 \
-Read the species' occurrence data points that contain geographical information.
-```{r}
-species <- read.csv("./Input_Data/Threnetes_ruckeri_occ_GE.csv",header=T)
-```
-\
 
 Load the previously created tif-file with the suitability levels for the Mahalanobis distance model and the weighted normal distribution model.
 ```{r}
@@ -339,6 +331,8 @@ Plot cropped in ggplot.
 ```{r, fig.show='hide', results='hide'}
 # read polygon of study area
 thr.shp <- readOGR("./Input_Data/shapefiles","Threnetes_ruckeri")
+# read occurrence data of species
+species <- read.csv("./Input_Data/Threnetes_ruckeri_occ_GE.csv",header=T)
 
 
 # crop by study area, create points from the raster, and give column names
