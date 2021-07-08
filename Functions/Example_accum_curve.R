@@ -28,6 +28,21 @@ area.cnmaha <- mask(crop(cn.maha, cn.shp), cn.shp)
 area.thrwn <- mask(crop(thr.wn, thr.shp), thr.shp)
 area.thrmaha <- mask(crop(thr.maha, thr.shp), thr.shp)
 
+# rasters for rasterstack
+bio1 <- raster("./ClimateData10min/bio1WH.asc")
+bio12 <- raster("./ClimateData10min/bio12WH.asc")
+cn.maharas <- stack(cn.maha, bio1, bio12)
+
+emap <- extent(-130, -70, 0, 40)
+bio1c <- crop(bio1, emap)
+bio12c <- crop(bio12, emap)
+cn.mahac <- crop(cn.maha, emap)
+cn.maharasc <- stack(cn.mahac, bio1c, bio12c)
+
+bio1cr <- mask(crop(bio1, cn.shp), cn.shp)
+bio12cr <- mask(crop(bio12, cn.shp), cn.shp)
+cn.maharc <- stack(area.cnmaha, bio1cr, bio12cr)
+
 # Species name
 spname <- "Catasticta_nimbice"
 
@@ -39,6 +54,8 @@ cn.occ <- read.csv(".\\Catasticta_nimbice_occ_G.csv",header=T)
 # Mahalanobis
 cnmaha.test <- accum.occ1(spname, output.mod=area.cnmaha, occ.pnts=cn.occ,
                          null.mod="hypergeom", conlev=0.95)
+cnmaha.test3 <- accum.occ3(sp.name = spname,G.occ = cn.occ,
+                           suit.Estck = cn.maharc,null.mod="hypergeom",conlev=0.95)
 
 # Weighted normal model 
 cnwn.test <- accum.occ1(spname, output.mod=area.cnwn, occ.pnts=cn.occ,
@@ -83,8 +100,8 @@ get.table <- function(G.occ,suit.Estck){
 
 cn.occG <- read.csv("./Catasticta_nimbice_occ_G.csv",header=T)
 
-bio1 <- raster("./ClimateData10min/bio1WH.asc") 
-bio12 <- raster("./ClimateData10min/bio12WH.asc") 
+bio1 <- raster("./ClimateData10min/bio1WH.asc")
+bio12 <- raster("./ClimateData10min/bio12WH.asc")
 cn.maharas <- stack(cn.maha, bio1, bio12)
 
 test.cnmaha <- get.table(G.occ = cn.occG, suit.Estck = cn.maharas)

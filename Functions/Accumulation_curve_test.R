@@ -390,9 +390,9 @@ accum.occ2 <- function(sp.name,output.mod,occ.pnts,null.mod="hypergeom",conlev=0
 ### FUNCTION v3 ----------
 
 # ARGUMENTS:
-# 'sp.name' -> character chain wiht species name, used for plot legends
+# 'sp.name' -> character chain with species name, used for plot legends
 # 'mod.Ecoords' -> raster with raw output from SDM
-# 'occ.pnts' -> csv file with 3 columns and as many rows as presences of the species.
+# 'G.occ' -> csv file with 3 columns and as many rows as presences of the species.
 #               First column contains the name of the species and columns 2:3 contain the lon,lat coordinates.
 # 'null.mod' -> indicate the distribution used as null model, possible values are "binomial" and "hypergeom".
 # 'conlev' -> probability that indicates the confidence level to be drawn around the null model.
@@ -487,15 +487,15 @@ accum.occ3 <- function(sp.name,G.occ,suit.Estck,null.mod="hypergeom",conlev=0,fl
     # we will use the world map from 'maptools'
     data("wrld_simpl", package="maptools")
     # but, before plotting we need to crop the world map using mod.Ecoords create the clipping polygon
-    mxnt.ext <- bbox(SpatialPoints(mxnt.pns[,1:2]))
+    mod.ext <- bbox(SpatialPoints(mod.ord[,1:2]))
     ###
     # Plot 1: subregions in geographic space
     x11()
-    plot(wrld_simpl,xlim=mxnt.ext[1,],ylim=mxnt.ext[2,],col="wheat1",axes=T,bg="azure2",main="Subregions in Geographical Space")
+    plot(wrld_simpl,xlim=mod.ext[1,],ylim=mod.ext[2,],col="wheat1",axes=T,bg="azure2",main="Subregions in Geographical Space")
     # add points with corresponding gray shades
     points(mod.ord[,1:2],pch=15,col=ci,cex=0.5)
     # add occurrences
-    points(occ.pnts[,2:3],pch=19,col="red")
+    points(G.occ[,2:3],pch=19,col="red")
     ###
     # Plot 2: comparison among counts under random selection hypothesis
     x11()
