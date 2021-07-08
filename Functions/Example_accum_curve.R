@@ -88,5 +88,6 @@ bio12 <- raster("./ClimateData10min/bio12WH.asc")
 cn.maharas <- stack(cn.maha, bio1, bio12)
 
 test.cnmaha <- get.table(G.occ = cn.occG, suit.Estck = cn.maharas)
+dim(test.cnmaha[test.cnmaha$Type==1,])
 
 # END
