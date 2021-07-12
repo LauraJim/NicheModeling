@@ -75,16 +75,12 @@ spname <- "Catasticta_nimbice"
 cn.occ <- read.csv(".\\Catasticta_nimbice_occ_G.csv",header=T)
 
 # Apply evaluation method
-<<<<<<< HEAD
 # Mahalanobis
-cnmaha.test <- accum.occ2(spname, output.mod=area.cnmaha, occ.pnts=cn.occ,
-=======
-# Mahalanobis # this one suddenly does not work???
-cnmaha.test <- accum.occ1(spname, output.mod=cn.maha, occ.pnts=cn.occ,
->>>>>>> f71d7032e0bf5498be7d14d5e8596c282c9f31fc
+
+cnmaha.test <- accum.occ2(spname, output.mod=cn.mahac, occ.pnts=cn.occ,
                          null.mod="hypergeom", conlev=0.95)
 # Weighted normal model 
-cnwn.test <- accum.occ1(spname, output.mod=area.cnwn, occ.pnts=cn.occ,
+cnwn.test <- accum.occ2(spname, output.mod=cn.wnc, occ.pnts=cn.occ,
                           null.mod="hypergeom", conlev=0.95)
 # version 3 test
 cnmaha.test3 <- accum.occ3(sp.name = spname,G.occ = cn.occ,
