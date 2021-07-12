@@ -205,7 +205,7 @@ area <- stack(cn.wnc, bio1c, bio12c)
 Save the cropped environmental layers for later use (see tutorial for the accumulation curve function `accum.occ3`).
 ```{r, eval = FALSE}
 writeRaster(bio1c,"./Output_Data/Catasticta_nimbice_bio1_cropped.tif", overwrite = T)
-writeRaster(bio12c, "./Output_Data/Catasticta_nimbice_bio2_cropped.tif", overwrite = T)
+writeRaster(bio12c, "./Output_Data/Catasticta_nimbice_bio12_cropped.tif", overwrite = T)
 # save the stacked model with environmental layers, also needed for `accum.occ3`
 writeRaster(area, "./Output_Data/Catasticta_nimbice_wn_cropped.tif", overwrite = T)
 ```
