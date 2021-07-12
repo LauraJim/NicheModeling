@@ -18,30 +18,54 @@ cn.maha <- raster("./Results/Catasticta_nimbice_maha_map.tif")
 thr.wn <- raster("./Results/Threnetes_ruckeri_wn_map.tif")
 thr.maha <- raster("./Results/Threnetes_ruckeri_maha_map.tif")
 
+# read raster with environmental data
+bio1 <- raster("./ClimateData10min/bio1WH.asc")
+bio12 <- raster("./ClimateData10min/bio12WH.asc")
+
+
+## cropping with polygon or extents
+
 # read polygon of study area
 cn.shp <- readOGR("./Shapefiles","nimbice3")
 thr.shp <- readOGR("./Shapefiles","Threnetes_ruckeri")
 
 # crop the area to fit the polygon boundaries
-area.cnwn <- mask(crop(cn.wn, cn.shp),cn.shp)
-area.cnmaha <- mask(crop(cn.maha, cn.shp), cn.shp)
-area.thrwn <- mask(crop(thr.wn, thr.shp), thr.shp)
-area.thrmaha <- mask(crop(thr.maha, thr.shp), thr.shp)
+cn.wnc <- mask(crop(cn.wn, cn.shp),cn.shp)
+cn.mahac <- mask(crop(cn.maha, cn.shp), cn.shp)
+thr.wnc <- mask(crop(thr.wn, thr.shp), thr.shp)
+thr.mahac <- mask(crop(thr.maha, thr.shp), thr.shp)
 
-# rasters for rasterstack
-bio1 <- raster("./ClimateData10min/bio1WH.asc")
-bio12 <- raster("./ClimateData10min/bio12WH.asc")
-cn.maharas <- stack(cn.maha, bio1, bio12)
+writeRaster(cn.wnc,"./Rasters/Catasticta_nimbice_wn_cropped.tif", overwrite = T)
+writeRaster(cn.mahac,"./Rasters/Catasticta_nimbice_maha_cropped.tif", overwrite = T)
+writeRaster(thr.wnc,"./Rasters/Threnetes_ruckeri_wn_cropped.tif", overwrite = T)
+writeRaster(thr.mahac,"./Rasters/Threnetes_ruckeri_maha_cropped.tif", overwrite = T)
 
-emap <- extent(-130, -70, 0, 40)
-bio1c <- crop(bio1, emap)
-bio12c <- crop(bio12, emap)
-cn.mahac <- crop(cn.maha, emap)
-cn.maharasc <- stack(cn.mahac, bio1c, bio12c)
 
-bio1cr <- mask(crop(bio1, cn.shp), cn.shp)
-bio12cr <- mask(crop(bio12, cn.shp), cn.shp)
-cn.maharc <- stack(area.cnmaha, bio1cr, bio12cr)
+# emap <- extent(-130, -70, 0, 40)
+# bio1c <- crop(bio1, emap)
+# bio12c <- crop(bio12, emap)
+# cn.mahac <- crop(cn.maha, emap)
+# cn.maharasc <- stack(cn.mahac, bio1c, bio12c)
+
+bio1cn <- mask(crop(bio1, cn.shp), cn.shp)
+bio12cn <- mask(crop(bio12, cn.shp), cn.shp)
+
+bio1thr <- mask(crop(bio1, thr.shp), thr.shp)
+bio12thr <- mask(crop(bio12, thr.shp), thr.shp)
+
+writeRaster(bio1cn,"./Rasters/Catasticta_nimbice_bio1_cropped.tif", overwrite = T)
+writeRaster(bio12cn,"./Rasters/Catasticta_nimbice_bio12_cropped.tif", overwrite = T)
+
+writeRaster(bio1thr,"./Rasters/Threnetes_ruckeri_bio1_cropped.tif", overwrite = T)
+writeRaster(bio12thr,"./Rasters/Threnetes_ruckeri_bio12_cropped.tif", overwrite = T)
+
+# create rasterstacks of cropped environmental rasters and models
+cn.wncE <- stack(cn.wnc, bio1cn, bio12cn)
+cn.mahacE <- stack(cn.mahac, bio1cn, bio12cn)
+thr.wncE <- stack(thr.wnc, bio1thr, bio12thr)
+thr.mahacE <- stack(thr.mahac, bio1thr, bio12thr)
+
+
 
 # Species name
 spname <- "Catasticta_nimbice"
@@ -51,15 +75,15 @@ spname <- "Catasticta_nimbice"
 cn.occ <- read.csv(".\\Catasticta_nimbice_occ_G.csv",header=T)
 
 # Apply evaluation method
-# Mahalanobis
-cnmaha.test <- accum.occ1(spname, output.mod=area.cnmaha, occ.pnts=cn.occ,
+# Mahalanobis # this one suddenly does not work???
+cnmaha.test <- accum.occ1(spname, output.mod=cn.maha, occ.pnts=cn.occ,
                          null.mod="hypergeom", conlev=0.95)
-cnmaha.test3 <- accum.occ3(sp.name = spname,G.occ = cn.occ,
-                           suit.Estck = cn.maharasc,null.mod="hypergeom",conlev=0.95)
-
 # Weighted normal model 
 cnwn.test <- accum.occ1(spname, output.mod=area.cnwn, occ.pnts=cn.occ,
                           null.mod="hypergeom", conlev=0.95)
+# version 3 test
+cnmaha.test3 <- accum.occ3(sp.name = spname,G.occ = cn.occ,
+                           suit.Estck = cn.mahacE,null.mod="hypergeom",conlev=0.95)
 
 # Comparing the models ---------------------------------------------------------
 # create a list with all the matrices using only the first two columns 
