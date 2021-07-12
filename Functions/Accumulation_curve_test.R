@@ -18,7 +18,6 @@
 # columns for the coordinates and model values and as many columns as there are
 # environmental layers.
 
-
 get.table <- function(G.occ,suit.Estck){
   # Convert to points so we have long,lat values in the first two columns
   mat1 <- rasterToPoints(suit.Estck)
@@ -40,6 +39,63 @@ get.table <- function(G.occ,suit.Estck){
   
   return(mat4)
 }
+
+# Function 1: "get.curve"--------------------------------------------------------
+# Description:
+#
+# Parameters:
+#
+# Output:
+
+get_curve <- function(occ.suit,mod.suit){
+  # Number of cells in study area
+  nmod <- length(mod.suit)
+  # Number of occurrences
+  nocc <- length(occ.suit)
+  # Prevalence = number of occurrences / number of cells in G
+  preval <- nocc / (nmod + nocc)
+  # Use vector of suitability values for the occurrences to classify all the cells
+  # according to the partition of the interval (0,1) defined by that vector
+  brks <- unique(occ.suit)
+  if(brks[length(brks)] != 1){ # 1 is not included
+    if(brks[1] != 0){ # 0 is not included
+      mod.cls <- tabulate(cut(mod.suit,breaks=c(0,brks,1),labels=F,right=T))
+    } else{ # 0 is included
+      mod.cls <- tabulate(cut(mod.suit,breaks=c(brks,1),labels=F,right=T))
+    }
+  } else{ # 1 is included
+    if(brks[1] != 0){ # 0 is not included
+      mod.cls <- tabulate(cut(mod.suit,breaks=c(0,brks),labels=F,right=T))
+    } else{ # 0 is included
+      mod.cls <- tabulate(cut(mod.suit,breaks=brks,labels=F,right=T))
+    }
+  }
+  # calculate the accumulated number of cells in the subregions
+  mod.acc <- c(0,cumsum(rev(mod.cls)))
+  # Count the number of occurrence points in each subregion
+  counts <- vector(mode="numeric")
+  dupl <- duplicated(occ.suit)*1 # ==1 if value is duplicated, ==0 otherwise
+  for(i in 1:nocc){
+    if(dupl[i]==0){ # a value can be replicated two or more times
+      counts <- c(counts,1)
+    } else {
+      nn <- length(counts)
+      counts[nn] <- counts[nn] + 1
+    }
+  }
+  # calculate the accumulated number of occurrences in the subregions
+  occ.acc <- c(0,cumsum(counts),rep(nocc,length(mod.acc)-length(counts)-1))
+  # select values that contain important information
+  last <- sum(occ.acc < nocc)
+  if(mod.acc[last] == nmod){
+    ntt <- 1:(last+1)
+  } else{
+    ntt <- 1:length(mod.acc)
+  }
+  
+  return(list(out1=c(nmod,nocc,preval),out2=cbind(mod.acc[ntt],occ.acc[ntt])))
+}
+
 
 ### FUNCTION v1 ----------
 
@@ -411,80 +467,48 @@ accum.occ3 <- function(sp.name,G.occ,suit.Estck,null.mod="hypergeom",conlev=0,fl
   table <- get.table(G.occ,suit.Estck)
   mod.ord <- table[table$Type==0,]
   occ.ord <- table[table$Type==1,]
+  #
+  curve <- get_curve(occ.suit=occ.ord[,3],mod.suit=mod.ord[,3])
   # Number of cells in study area
-  nmod <- nrow(mod.ord)
+  nmod0 <- curve$out1[1]
   # Number of occurrences
-  nocc <- nrow(occ.ord)
+  nocc0 <- curve$out1[2]
   # Prevalence = number of occurrences / number of cells in G
-  preval <- nocc / (nmod + nocc)
-  # Use vector of suitability values for the occurrences to classify all the cells
-  # according to the partition of the interval (0,1) defined by that vector
-  brks <- unique(occ.ord[,3])
-  if(brks[length(brks)] != 1){ # 1 is not included
-    if(brks[1] != 0){ # 0 is not included
-      mod.cls <- tabulate(cut(mod.ord[,3],breaks=c(0,brks,1),labels=F,right=T))
-    } else{ # 0 is included
-      mod.cls <- tabulate(cut(mod.ord[,3],breaks=c(brks,1),labels=F,right=T))
-    }
-  } else{ # 1 is included
-    if(brks[1] != 0){ # 0 is not included
-      mod.cls <- tabulate(cut(mod.ord[,3],breaks=c(0,brks),labels=F,right=T))
-    } else{ # 0 is included
-      mod.cls <- tabulate(cut(mod.ord[,3],breaks=brks,labels=F,right=T))
-    }
-  }
-  # calculate the accumulated number of cells in the subregions
-  mod.acc <- c(0,cumsum(rev(mod.cls)))
-  # Count the number of occurrence points in each subregion
-  counts <- vector(mode="numeric")
-  dupl <- duplicated(occ.ord[,3])*1 # ==1 if value is duplicated, ==0 otherwise
-  for(i in 1:nocc){
-    if(dupl[i]==0){ # a value can be replicated two or more times
-      counts <- c(counts,1)
-    } else {
-      nn <- length(counts)
-      counts[nn] <- counts[nn] + 1
-    }
-  }
-  # calculate the accumulated number of occurrences in the subregions
-  occ.acc <- c(0,cumsum(counts),rep(nocc,length(mod.acc)-length(counts)-1))
-  # select values that contain important information
-  last <- sum(occ.acc < nocc)
-  if(mod.acc[last] == nmod){
-    ntt <- 1:(last+1)
-  } else{
-    ntt <- 1:length(mod.acc)
-  }
+  preval0 <- curve$out1[3]
   # Print the important values
-  print(paste("Number of cells in study area:",nmod),quote=F)
-  print(paste("Number of occurrence points:",nocc),quote=F)
-  print(paste("Probability of selecting an occurrence point:",round(preval,4)),quote=F)
+  print(paste("Number of cells in study area:",nmod0),quote=F)
+  print(paste("Number of occurrence points:",nocc0),quote=F)
+  print(paste("Probability of selecting an occurrence point:",round(preval0,4)),quote=F)
+  # Accumulated number of cells in the subregions
+  mod.acc0 <- curve$out2[,1]
+  # Accumulated number of occurrences in the subregions
+  occ.acc0 <- curve$out2[,2]
 
-    # Calculate values of the confidence intervals around the random line using the null model
+  # Calculate values of the confidence intervals around the random line using the null model
   if(conlev > 0){
     conlev1 <- (1 - conlev) / 2
     if(null.mod == "binomial"){
-      infs <- qbinom(conlev1,mod.acc[ntt],preval)
-      sups <- qbinom(conlev1,mod.acc[ntt],preval,lower.tail = F)
+      infs <- qbinom(conlev1,mod.acc0,preval0)
+      sups <- qbinom(conlev1,mod.acc0,preval0,lower.tail = F)
     }
     if(null.mod == "hypergeom") {
-      infs <- qhyper(conlev1,m=nocc,n=nmod,k=mod.acc[ntt])
-      sups <- qhyper(conlev1,m=nocc,n=nmod,k=mod.acc[ntt],lower.tail = F)
+      infs <- qhyper(conlev1,m=nocc0,n=nmod0,k=mod.acc0)
+      sups <- qhyper(conlev1,m=nocc0,n=nmod0,k=mod.acc0,lower.tail = F)
     }
   }
   # Now make all the plots
   if(flag==T){
     # before making the plots, we will use shades of gray to identify the different subareas
-    nsub <- length(mod.acc)
+    nsub <- length(mod.acc0)
     cols <- gray((0:nsub/nsub)) #zero indicates black, and one indicates white
     ci <- vector("numeric")
     for (i in 1:nsub){
       # black indicates highly suitable, and white indicates highly unsuitable
       if(i==nsub){
-        c <- rep(cols[nsub],nmod-length(ci))
+        c <- rep(cols[nsub],nmod0-length(ci))
         ci <-c(ci,c)
       } else{
-        c <- rep(cols[i],mod.acc[i+1]-mod.acc[i])
+        c <- rep(cols[i],mod.acc0[i+1]-mod.acc0[i])
         ci <-c(ci,c)
       }
     }
@@ -495,37 +519,73 @@ accum.occ3 <- function(sp.name,G.occ,suit.Estck,null.mod="hypergeom",conlev=0,fl
     ###
     # Plot 1: subregions in geographic space
     x11()
-    plot(wrld_simpl,xlim=mod.ext[1,],ylim=mod.ext[2,],col="wheat1",axes=T,bg="azure2",main="Subregions in Geographical Space")
+    plot(wrld_simpl,xlim=mod.ext[1,],ylim=mod.ext[2,],col="wheat1",axes=T,bg="azure2",
+         main="Subregions in Geographical Space")
     # add points with corresponding gray shades
     points(mod.ord[,1:2],pch=15,col=ci,cex=0.5)
     # add occurrences
     points(G.occ[,2:3],pch=19,col="red")
+    
     ###
-    # Plot 2: comparison among counts under random selection hypothesis
+    # Plot 2: subregions in environmental space
+    # NOTE: we plot first the points with low suitability (white/light grey) so they do not 
+    # hide the points with high suitability (dark grey/black)
+    cis <- c(rev(ci),rep(2,nocc0)) # grey shades for subregions + red for occurrence points
+    if((ncol(table)-3)>2){
+      nc <- 4:ncol(output.mod)
+      # build a matrix with background and presence points, sorted for visualization
+      plotm <- rbind(as.matrix(mxnt.ord[nmxnt:1,nc]),as.matrix(occ.pnts[,nc]))
+      pch.occ <- ifelse(nocc<=50,19,20)
+      pcht <- c(rep(18,length(ci)),rep(pch.occ,nocc))
+      mypanel <- function(x,y,col=cis,pch=pcht,bgcolor="steelblue4"){
+        # function used to color the background in the panels from function pairs
+        ll <- par("usr")
+        rect(ll[1], ll[3], ll[2], ll[4], col=bgcolor)
+        points(x,y,col=col,pch=pch,bg=bgcolor)
+      }
+      x11()
+      pairs(plotm,panel=mypanel,main="Subregions in Environmental Space")
+    } else{
+      x11()
+      plot(output.mod[,4],output.mod[,5],type="n",xlab=cn[bios[1]],ylab=cn[bios[2]],
+           main="Subregions in Environmental Space")
+      u <- par("usr")
+      rect(u[1], u[3], u[2], u[4], col = "steelblue4", border = "red")
+      points(mxnt.ord[nmxnt:1,4:5],pch=15,col=rev(ci),cex=0.5)
+      # add occurrences
+      points(occ.pnts[,4:5],pch=19,col="red")
+      legend("topleft",legend=c(sp.name,"Occurence points","Suitability of points in M"),text.col="white",
+             pch=c(19,19,15),col=c("white","red","grey"),bty="n")
+    }
+    
+    ###
+    # Plot 3: comparison among counts under random selection hypothesis
     x11()
-    plot(mod.acc[ntt],mod.acc[ntt]*preval,type="b",col="red",xlab="Number of cells", ylab="Occurrences",
-         main="Accumulation of occurrences",xlim=c(0,mod.acc[length(ntt)]),ylim=c(0,nocc),lwd=2)
+    plot(mod.acc0,mod.acc0*preval0,type="b",col="red",xlab="Number of cells", ylab="Occurrences",
+         main="Accumulation of occurrences",xlim=c(0,mod.acc0[nsub]),
+         ylim=c(0,nocc0),lwd=2)
     # confidence intervals from hypergeom/binomial distribution
     if(conlev > 0){
-      #lines(mod.acc[ntt],infs,type="b",col="skyblue3",lwd=2)
-      #lines(mod.acc[ntt],sups,type="b",col="skyblue3",lwd=2)
-      segments(mod.acc[ntt],infs,mod.acc[ntt],sups,col = "gray")
-      points(mod.acc[ntt],infs,pch=19,col="grey25")
-      points(mod.acc[ntt],sups,pch=19,col="grey25")
+      segments(mod.acc0,infs,mod.acc0,sups,col = "gray")
+      points(mod.acc0,infs,pch=19,col="grey25")
+      points(mod.acc0,sups,pch=19,col="grey25")
       if(null.mod == "binomial") legmod <- paste("Binomial CI, p =",conlev)
       if(null.mod == "hypergeom") legmod <- paste("Hypergeometric CI, p =",conlev)
     }
     # under non-random selection hypothesis
-    lines(mod.acc[ntt],occ.acc[ntt],type="o",col="blue",lwd=2)
-    if(max(ntt)<=50){
-      text(mod.acc[ntt],occ.acc[ntt],labels=occ.acc,pos=2)
+    lines(mod.acc0,occ.acc0,type="o",col="blue",lwd=2)
+    if(nsub<=50){
+      text(mod.acc0,occ.acc0,labels=occ.acc0,pos=2)
     } else {
-      rind <- seq(1,length(ntt),by=200) #%#
-      text(mod.acc[rind],occ.acc[rind],labels=occ.acc[rind],pos=2)
+      rind <- seq(1,nsub,by=20) #%#
+      text(mod.acc0[rind],occ.acc0[rind],labels=occ.acc0[rind],pos=2)
     }
-    legend("bottomright",legend=c(sp.name,"Random counts",legmod,"SDM counts"),lwd=2,col=c("white","red","gray","blue"),bty="n")
+    legend("bottomright",legend=c(sp.name,"Random counts",legmod,"SDM counts"),
+           lwd=2,col=c("white","red","gray","blue"),bty="n")
   }
-  resul <- cbind(occ.acc,mod.acc,round((occ.acc/nocc)*100,2),round((mod.acc/nmod)*100,2))
+  
+  # Return coordinates of accumulation curve and corresponding percentages
+  resul <- cbind(occ.acc0,mod.acc0,round((occ.acc0/nocc0)*100,2),round((mod.acc0/nmod0)*100,2))
   colnames(resul) <- c("No.occurrences","No.cells","%Gained Occ","%Area")
   return(resul)
 }
