@@ -1,0 +1,86 @@
+---
+title: "Input Data"
+author: "Laura Jimenéz and Carola Franzen"
+date: "July 2021"
+output: html_document
+fontsize: 12pt
+linkcolor: dodgerblue4
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(raster)
+library(sp)
+```
+\
+  
+\
+
+# Input data and parameters
+\
+For the tutorials of this package, specific data and parameters are necessary. They will be explained here for reference.
+<!-- write more blabla here -->
+
+\
+
+## Collected Data
+
+The collected data are rasters and tables related to a species of interest and study focus. They will be the basic input data that is necessary to create the parameters for the functions.
+\
+
+### Occurrence observations of species
+
+The tables used for this package are matrices that contain the location information of a species observation. Only presence data is used as absence data plays no role for the models employed.
+
+Occurrence data is available on various open databases. For all examples, data from [GBIF](https://www.gbif.org/) was used. However, the tables from GBIF need to be cleaned up before they can be used as the database is aggregated from various sources with different formats and can contain various errors. There are packages available that aid in the cleaning of the data (e.g. see [CoordinateCleaner]( https://ropensci.github.io/CoordinateCleaner/articles/Cleaning_GBIF_data_with_CoordinateCleaner.html)).
+
+The tables for the examples have been cleaned and contain three columns: species name, longitude, latitude. These occurrence tables with three columns are called `G.occ`.
+
+```{r}
+# table with a species occurrence  
+G.occ <- read.csv("./Input_Data/Catasticta_nimbice_occ_G.csv",header=T)
+head(G.occ, n=3)
+
+G.occ2 <- read.csv("./Input_Data/Threnetes_ruckeri_occ_G.csv",header=T)
+head(G.occ2, n=3)
+
+```
+\
+
+### Rasters with environmental information
+
+The raster files for the functions of this package need to contain information on climatic values that are of interest for the user. The rasters used in the examples are from [WorldClim](https://worldclim.org/data/index.html) and have a resolution of "10 minutes". The files usually do not need further editing.
+
+For our examples, we used the raster of the American continent. The environmental conditions of interest are the *mean annual temperature*, called `bio1` and the the *total mean precipitation*, called `bio12`.
+
+```{r}
+# raster for mean annual temperature
+bio1 <- raster("./Input_Data/bio1WH.asc")
+# raster for mean total precipitation
+bio12 <- raster("./Input_Data/bio12WH.asc")
+
+spplot(bio1)
+plot(bio12)
+
+```
+\
+
+## Generated Data
+
+The generated data (matrices, rasters, etc.) are based on the collected data files and created by using functions of this package.
+
+### Tables
+
+* Gcoord = a matrix with only longitude and latitude data of species observations
+\
+
+* GE.occ = a matrix that contains coordinates and environmental information that corresponds to the occurrence data (created with the function `get.Ecoord`)
+\
+
+* 
+
+
+### Rasters
+* cropped
+* stacked
