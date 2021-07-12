@@ -52,7 +52,7 @@ cn.occ <- read.csv(".\\Catasticta_nimbice_occ_G.csv",header=T)
 
 # Apply evaluation method
 # Mahalanobis
-cnmaha.test <- accum.occ1(spname, output.mod=area.cnmaha, occ.pnts=cn.occ,
+cnmaha.test <- accum.occ2(spname, output.mod=area.cnmaha, occ.pnts=cn.occ,
                          null.mod="hypergeom", conlev=0.95)
 cnmaha.test3 <- accum.occ3(sp.name = spname,G.occ = cn.occ,
                            suit.Estck = cn.maharc,null.mod="hypergeom",conlev=0.95)
