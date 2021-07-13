@@ -74,6 +74,8 @@ spname <- "Catasticta_nimbice"
 # Occurrence data 
 cn.occ <- read.csv(".\\Catasticta_nimbice_occ_G.csv",header=T)
 
+
+
 # Apply evaluation method
 # Mahalanobis
 
