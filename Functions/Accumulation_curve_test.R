@@ -531,12 +531,12 @@ accum.occ3 <- function(sp.name,G.occ,suit.Estck,null.mod="hypergeom",conlev=0,fl
     # NOTE: we plot first the points with low suitability (white/light grey) so they do not 
     # hide the points with high suitability (dark grey/black)
     cis <- c(rev(ci),rep(2,nocc0)) # grey shades for subregions + red for occurrence points
-    if((ncol(table)-3)>2){
-      nc <- 4:ncol(output.mod)
+    if((ncol(table)-4)>2){
+      nc <- 4:(ncol(table) - 1)
       # build a matrix with background and presence points, sorted for visualization
-      plotm <- rbind(as.matrix(mxnt.ord[nmxnt:1,nc]),as.matrix(occ.pnts[,nc]))
-      pch.occ <- ifelse(nocc<=50,19,20)
-      pcht <- c(rep(18,length(ci)),rep(pch.occ,nocc))
+      plotm <- rbind(as.matrix(mod.ord[nmod0:1,nc]),as.matrix(occ.ord[,nc]))
+      pch.occ <- ifelse(nocc0<=50,19,20)
+      pcht <- c(rep(18,length(ci)),rep(pch.occ,nocc0))
       mypanel <- function(x,y,col=cis,pch=pcht,bgcolor="steelblue4"){
         # function used to color the background in the panels from function pairs
         ll <- par("usr")
@@ -547,15 +547,15 @@ accum.occ3 <- function(sp.name,G.occ,suit.Estck,null.mod="hypergeom",conlev=0,fl
       pairs(plotm,panel=mypanel,main="Subregions in Environmental Space")
     } else{
       x11()
-      plot(output.mod[,4],output.mod[,5],type="n",xlab=cn[bios[1]],ylab=cn[bios[2]],
-           main="Subregions in Environmental Space")
+      plot(table[,4],table[,5],type="n",
+           main="Subregions in Environmental Space", xlab= colnames(table)[4], ylab=colnames(table)[5])
       u <- par("usr")
       rect(u[1], u[3], u[2], u[4], col = "steelblue4", border = "red")
-      points(mxnt.ord[nmxnt:1,4:5],pch=15,col=rev(ci),cex=0.5)
+      points(mod.ord[nmod0:1,4:5],pch=15,col=rev(ci),cex=0.5)
       # add occurrences
-      points(occ.pnts[,4:5],pch=19,col="red")
+      points(occ.ord[,4:5],pch=19,col="red")
       legend("topleft",legend=c(sp.name,"Occurence points","Suitability of points in M"),text.col="white",
-             pch=c(19,19,15),col=c("white","red","grey"),bty="n")
+             pch=c(19,19,15),col=c("steelblue4","red","grey"),bty="n")
     }
     
     ###
