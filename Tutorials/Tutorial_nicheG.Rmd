@@ -119,8 +119,8 @@ In this example, the basic plot function is used.
 Read the rasters with environmental data and combine them into a rasterstack with two (or more layers).
 ```{r}
 ## Read raster
-bio1 <- raster("./Input_Data/bio1WH.asc")
-bio12 <- raster("./Input_Data/bio12WH.asc")
+bio1 <- raster("./Initial_Data/bio1WH.asc")
+bio12 <- raster("./Initial_Data/bio12WH.asc")
 # combine the rasters into a RasterStack
 bios <- stack(bio1,bio12)
 ```
@@ -129,7 +129,7 @@ bios <- stack(bio1,bio12)
 For the species' occurrence points in correspondence with environmental data the "occ_GE.csv"-file that was created with `get.Ecoord` is used.
 ```{r}
 # read table and omit columns with coordinates
-occ1 <- read.csv("./Input_Data/Catasticta_nimbice_occ_GE.csv",header=T)
+occ1 <- read.csv("./Generated_Data/Catasticta_nimbice_occ_GE.csv",header=T)
 occ2 <- occ1[,-(1:2)]
 ```
 \
@@ -159,8 +159,8 @@ plot(cn.result)
 
 Save the raster output as TIF or ASCI file.
 ```{r, eval=FALSE}
-writeRaster(cn.result,"./Output_Data/Catasticta_nimbice_maha_map.tif", overwrite = T)
-writeRaster(cn.result, "./Output_Data/Catasticta_nimbice_maha_map.asc", overwrite = T)
+writeRaster(cn.result,"./Generated_Data/Catasticta_nimbice_maha_map.tif", overwrite = T)
+writeRaster(cn.result, "./Generated_Data/Catasticta_nimbice_maha_map.asc", overwrite = T)
 ```
 
 ```{r, echo=FALSE, fig.cap=" Figure of the geographical space with suitable niches for *Catasticta nimbice* .", out.width = '70%',fig.align="center"}
@@ -169,61 +169,45 @@ knitr::include_graphics("Images/Catasticta_nimbice_maha_asci.png")
 ```
 \
 
-Another way to use the function `niche.G` is to use estimated values of `mu` and `Sigma` directly. In this case the numbers of mu and Sigma are from the weighted normal distribution model.
+Another way to use the function `niche.G` is to use estimated values of `mu` and `Sigma` directly. The rasters with environmental data are cropped to the region of interest with a polygon before being stacked together in this version. They can also be cropped with coordinates (see example *Threnetes ruckeri* below).
+```{r, results='hide'}
+# read polygon of the study area
+cn.shp <- readOGR("./Initial_Data/shapefiles","nimbice3")
+
+# crop and mask the rasters with environmental layers
+bio1c <- mask(crop(bio1, cn.shp), cn.shp)
+bio12c <- mask(crop(bio12, cn.shp), cn.shp)
+biosc <- stack(bio1c, bio12c)
+```
+\
+
+For this application, the values for `mu`and `Sigma` from the weighted normal distribution model are used directly.
 ```{r, cache=TRUE}
-cn.wn <- niche.G(Estck = bios, mu = c(166.1297518,1265.130825), 
+cn.wn <- niche.G(Estck = biosc, mu = c(166.1297518,1265.130825), 
                  Sigma = matrix(c(1427.054608, 7687.724366, 
                                   7687.724366, 332940.0973),ncol=2))
 ```
 \
 
-Write the raster as file.
+Write the raster with the model as file (additionally, the cropped environmental layers can be saved as well for later use). 
 ```{r, eval=FALSE}
-writeRaster(cn.wn,"./Output_Data/Catasticta_nimbice_wn_map.tif", overwrite = T)
-writeRaster(cn.wn, "./Output_Data/Catasticta_nimbice_wn_map.asc", overwrite = T)
+writeRaster(cn.wn,"./Generated_Data/Catasticta_nimbice_wn_map.tif", overwrite = T)
+writeRaster(cn.wn, "./Generated_Data/Catasticta_nimbice_wn_map.asc", overwrite = T)
 ```
 \
-
-Crop the rasters before stacking them with a polygon of the study area. Here they are cropped to the specific study area with the help of a polygon. They can also be cropped with coordinates (see example *Threnetes ruckeri* below).
-```{r, results='hide'}
-# read polygon of the study area
-cn.shp <- readOGR("./Input_Data/shapefiles","nimbice3")
-
-# crop and mask the rasters with environmental layers
-bio1c <- mask(crop(bio1, cn.shp), cn.shp)
-bio12c <- mask(crop(bio12, cn.shp), cn.shp)
-
-# crop the raster of the calculated model
-cn.wnc <- mask(crop(cn.wn, cn.shp), cn.shp)
-
-# stack the rasters
-area <- stack(cn.wnc, bio1c, bio12c)
-
-```
-\
-
-Save the cropped environmental layers for later use (see tutorial for the accumulation curve function `accum.occ3`).
-```{r, eval = FALSE}
-writeRaster(bio1c,"./Output_Data/Catasticta_nimbice_bio1_cropped.tif", overwrite = T)
-writeRaster(bio12c, "./Output_Data/Catasticta_nimbice_bio12_cropped.tif", overwrite = T)
-# save the stacked model with environmental layers, also needed for `accum.occ3`
-writeRaster(area, "./Output_Data/Catasticta_nimbice_wn_cropped.tif", overwrite = T)
-```
-\
-
 
 Plot the results in a ggplot.
 ```{r, fig.show='hide', results='hide'}
 
 # calculate raster to points for ggplot
-areap <- rasterToPoints(area)
-areapd <- data.frame(areap)
-colnames(areapd) <- c("Longitude","Latitude","Suitability")
+cn.wnp <- rasterToPoints(cn.wn)
+cn.wnpd <- data.frame(cn.wnp)
+colnames(cn.wnpd) <- c("Longitude","Latitude","Suitability")
 
 
 # x11()
 ggplot() +
-  geom_tile(data = areapd,aes(x=Longitude, y=Latitude, fill=Suitability)) +
+  geom_tile(data = cn.wnpd,aes(x=Longitude, y=Latitude, fill=Suitability)) +
   theme_bw() +
   #borders("world", xlim = c(-179, 179), ylim = c(-60, 80)) +
   scale_fill_gradient2("Suitability",limits=c(0,1), low = 'grey80',
@@ -241,7 +225,7 @@ ggplot() +
 
 Save the ggplot as PNG.
 ```{r, eval=FALSE}
-ggsave('./Output_Data/Catasticta_nimbice_nicheG_ggplot.png',  width = 24, height = 24, 
+ggsave('./Generated_Data/Catasticta_nimbice_nicheG_ggplot.png',  width = 24, height = 24, 
        units = "cm", dpi = 600, pointsize = 6)
 ```
 
@@ -259,14 +243,14 @@ This example uses the Mahalanobis distance and the weighted normal distribution.
 
 ```{r, eval=FALSE}
 ## Read raster files
-bio1 <- raster("./Input_Data/bio1WH.asc")
-bio2 <- raster("./Input_Data/bio12WH.asc")
+bio1 <- raster("./Initial_Data/bio1WH.asc")
+bio2 <- raster("./Initial_Data/bio12WH.asc")
 bios <- stack(bio1,bio2)
 ```
 \
 Load the matrix results of the weighted normal distribution that was calculated with the functions `rs.inE`, `negloglike`, and `fitNiche`.
 ```{r}
-thr.fitN <- read.csv("./Input_Data/Threnetes_ruckeri_Estimated_parameters.csv",header=T)[,-1]
+thr.fitN <- read.csv("./Generated_Data/Threnetes_ruckeri_Estimated_parameters.csv",header=T)[,-1]
 ```
 \
 
@@ -284,11 +268,11 @@ Thr.maha <- niche.G(Estck = bios, mu = thr.fitN$maha.mu,
 Save the output as TIF or ASCI file.
 ```{r, eval=FALSE}
 # weigthed normal distribution
-writeRaster(Thr.wn,"./Output_Data/Threnetes_ruckeri_wn_map.tif", overwrite = T)
-writeRaster(Thr.wn, "./Output_Data/Threnetes_ruckeri_wn_map.asc", overwrite = T)
+writeRaster(Thr.wn,"./Generated_Data/Threnetes_ruckeri_wn_map.tif", overwrite = T)
+writeRaster(Thr.wn, "./Generated_Data/Threnetes_ruckeri_wn_map.asc", overwrite = T)
 # Mahalanobis distance
-writeRaster(Thr.maha,"./Output_Data/Threnetes_ruckeri_maha_map.tif", overwrite = T)
-writeRaster(Thr.maha, "./Output_Data/Threnetes_ruckeri_maha_map.asc", overwrite = T)
+writeRaster(Thr.maha,"./Generated_Data/Threnetes_ruckeri_maha_map.tif", overwrite = T)
+writeRaster(Thr.maha, "./Generated_Data/Threnetes_ruckeri_maha_map.asc", overwrite = T)
 ```
 \
 
@@ -297,9 +281,9 @@ writeRaster(Thr.maha, "./Output_Data/Threnetes_ruckeri_maha_map.asc", overwrite 
 
 Load the previously created tif-file with the suitability levels for the Mahalanobis distance model and the weighted normal distribution model.
 ```{r}
-maha.map <- raster("./Input_Data/Threnetes_ruckeri_maha_map.tif")
+maha.map <- raster("./Generated_Data/Threnetes_ruckeri_maha_map.tif")
 
-wn.map <- raster("./Input_Data/Threnetes_ruckeri_wn_map.tif")
+wn.map <- raster("./Generated_Data/Threnetes_ruckeri_wn_map.tif")
 ```
 \
 
@@ -348,12 +332,12 @@ knitr::include_graphics("Images/Threnetes_ruckeri_nicheG_ggplot.png")
 ```
 \
 
-Plot raster that has been cropped by coordinates in ggplot.
+Plot a raster that has been cropped by coordinates in ggplot. This crop serves as a zoom to the region of interest.
 ```{r, fig.show='hide', results='hide'}
 # read occurrence data of species
-species <- read.csv("./Input_Data/Threnetes_ruckeri_occ_GE.csv",header=T)
+species <- read.csv("./Generated_Data/Threnetes_ruckeri_occ_GE.csv",header=T)
 
-# Option 1: define coordinates that describe the study area
+# define coordinates that describe the study area and crop model raster with it
 emap <- extent(-100, -68, -8, 22)
 area.maha <- crop(maha.map, emap)
 area.wn <- crop(wn.map, emap)
@@ -403,7 +387,7 @@ knitr::include_graphics("Images/Threnetes_ruckeri_nicheG_ggplot2.png")
 
 Save the plot as a PNG.
 ```{r, eval=FALSE}
-ggsave('./Output_Data/Threnetes_ruckeri_nicheG_ggplot.png',  width = 48, height = 24, units = "cm",
+ggsave('./Generated_Data/Threnetes_ruckeri_nicheG_ggplot.png',  width = 48, height = 24, units = "cm",
        dpi = 600, pointsize = 6)
 ```
 \
