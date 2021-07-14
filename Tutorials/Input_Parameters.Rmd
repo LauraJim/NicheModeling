@@ -15,6 +15,7 @@ library(sp)
 library(ggplot2)
 library(rnaturalearth)
 library(rnaturalearthdata)
+library(rgdal)
 
 ```
 \
@@ -43,10 +44,10 @@ The tables for the examples have been cleaned and contain three columns: species
 
 ```{r}
 # table with a species occurrence  
-G.occ <- read.csv("./Input_Data/Catasticta_nimbice_occ_G.csv",header=T)
+G.occ <- read.csv("./Initial_Data/Catasticta_nimbice_occ_G.csv",header=T)
 head(G.occ, n=3)
 
-G.occ2 <- read.csv("./Input_Data/Threnetes_ruckeri_occ_G.csv",header=T)
+G.occ2 <- read.csv("./Initial_Data/Threnetes_ruckeri_occ_G.csv",header=T)
 head(G.occ2, n=3)
 
 ```
@@ -60,9 +61,9 @@ For our examples, we used the raster of the American continent. The environmenta
 
 ```{r}
 # raster for mean annual temperature
-bio1 <- raster("./Input_Data/bio1WH.asc")
+bio1 <- raster("./Initial_Data/bio1WH.asc")
 # raster for mean total precipitation
-bio12 <- raster("./Input_Data/bio12WH.asc")
+bio12 <- raster("./Initial_Data/bio12WH.asc")
 
 spplot(bio1)
 plot(bio12)
@@ -73,11 +74,11 @@ plot(bio12)
 ### Polygons of the study area
 The functions often use a polygon of the region of interest either to serve as a boundary in plots or to delimit rasters or sampled points to the specific region. The polygons used in the examples are shapefiles.
 
-```{r, message=FALSE}
+```{r, results='hide'}
 cn.shp <- readOGR("./Initial_Data/shapefiles","nimbice3")
 thr.shp <- readOGR("./Initial_Data/shapefiles","Threnetes_ruckeri")
 ```
-```{r}
+```{r, results='hide', message=FALSE}
 # ggplot of shapefile
 
     # transform polygon into WGS 84
