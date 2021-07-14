@@ -189,7 +189,7 @@ cn.wn <- niche.G(Estck = biosc, mu = c(166.1297518,1265.130825),
 ```
 \
 
-Write the raster with the model as file (additionally, the cropped environmental layers can be saved as well for later use). 
+Write the raster of the model as file (additionally, the cropped environmental layers can be saved as well for later use). 
 ```{r, eval=FALSE}
 writeRaster(cn.wn,"./Generated_Data/Catasticta_nimbice_wn_map.tif", overwrite = T)
 writeRaster(cn.wn, "./Generated_Data/Catasticta_nimbice_wn_map.asc", overwrite = T)
