@@ -4,89 +4,77 @@
 # Working directory and libraries ----------------------------------------------
 library(dismo)
 library(maptools)
+library(rgdal)
+library(raster)
 # NOTE: package 'maptools' is also needed (used inside function)
 
 # Read functions that create accumulation curves of occurrences
 source(".\\Functions\\Accumulation_curve_test.R")
 
-## cropped suitability rasters
-library(rgdal)
-library(raster)
+
+## Example version 2 -----------------
+# Parameters
+# Occurrence data 
+cn.occ <- read.csv(".\\Catasticta_nimbice_occ_G.csv",header=T)
+thr.occ <- read.csv(".\\Threnetes_ruckeri_occ_G.csv",header=T)
+
 # read rasters with suitability index (from Niche.G), a polygon of the study area and crop
-cn.wn <- raster("./Results/Catasticta_nimbice_wn_map.tif")
-cn.maha <- raster("./Results/Catasticta_nimbice_maha_map.tif")
-thr.wn <- raster("./Results/Threnetes_ruckeri_wn_map.tif")
-thr.maha <- raster("./Results/Threnetes_ruckeri_maha_map.tif")
-
-# read raster with environmental data
-bio1 <- raster("./ClimateData10min/bio1WH.asc")
-bio12 <- raster("./ClimateData10min/bio12WH.asc")
-
-
-## cropping with polygon or extents
-
-# read polygon of study area
-cn.shp <- readOGR("./Shapefiles","nimbice3")
-thr.shp <- readOGR("./Shapefiles","Threnetes_ruckeri")
-
-# crop the area to fit the polygon boundaries
-cn.wnc <- mask(crop(cn.wn, cn.shp),cn.shp)
-cn.mahac <- mask(crop(cn.maha, cn.shp), cn.shp)
-thr.wnc <- mask(crop(thr.wn, thr.shp), thr.shp)
-thr.mahac <- mask(crop(thr.maha, thr.shp), thr.shp)
-
-writeRaster(cn.wnc,"./Rasters/Catasticta_nimbice_wn_cropped.tif", overwrite = T)
-writeRaster(cn.mahac,"./Rasters/Catasticta_nimbice_maha_cropped.tif", overwrite = T)
-writeRaster(thr.wnc,"./Rasters/Threnetes_ruckeri_wn_cropped.tif", overwrite = T)
-writeRaster(thr.mahac,"./Rasters/Threnetes_ruckeri_maha_cropped.tif", overwrite = T)
-
-
-# emap <- extent(-130, -70, 0, 40)
-# bio1c <- crop(bio1, emap)
-# bio12c <- crop(bio12, emap)
-# cn.mahac <- crop(cn.maha, emap)
-# cn.maharasc <- stack(cn.mahac, bio1c, bio12c)
-
-bio1cn <- mask(crop(bio1, cn.shp), cn.shp)
-bio12cn <- mask(crop(bio12, cn.shp), cn.shp)
-
-bio1thr <- mask(crop(bio1, thr.shp), thr.shp)
-bio12thr <- mask(crop(bio12, thr.shp), thr.shp)
-
-writeRaster(bio1cn,"./Rasters/Catasticta_nimbice_bio1_cropped.tif", overwrite = T)
-writeRaster(bio12cn,"./Rasters/Catasticta_nimbice_bio12_cropped.tif", overwrite = T)
-
-writeRaster(bio1thr,"./Rasters/Threnetes_ruckeri_bio1_cropped.tif", overwrite = T)
-writeRaster(bio12thr,"./Rasters/Threnetes_ruckeri_bio12_cropped.tif", overwrite = T)
-
-# create rasterstacks of cropped environmental rasters and models
-cn.wncE <- stack(cn.wnc, bio1cn, bio12cn)
-cn.mahacE <- stack(cn.mahac, bio1cn, bio12cn)
-thr.wncE <- stack(thr.wnc, bio1thr, bio12thr)
-thr.mahacE <- stack(thr.mahac, bio1thr, bio12thr)
-
+cn.wnc <- raster("./Rasters/Catasticta_nimbice_wn_cropped.tif")
+cn.mahac <- raster("./Rasters/Catasticta_nimbice_maha_cropped.tif")
+thr.wnc <- raster("./Rasters/Threnetes_ruckeri_wn_cropped.tif")
+thr.mahac <- raster("./Rasters/Threnetes_ruckeri_maha_cropped.tif")
 
 
 # Species name
 spname <- "Catasticta_nimbice"
-
-# Maxent model -----------------------------------------------------------------
-# Occurrence data 
-cn.occ <- read.csv(".\\Catasticta_nimbice_occ_G.csv",header=T)
-
-
+spname2 <- "Threnetes_ruckeri"
 
 # Apply evaluation method
-# Mahalanobis
-
+# cn
 cnmaha.test <- accum.occ2(spname, output.mod=cn.mahac, occ.pnts=cn.occ,
-                         null.mod="hypergeom", conlev=0.95)
-# Weighted normal model 
-cnwn.test <- accum.occ2(spname, output.mod=cn.wnc, occ.pnts=cn.occ,
                           null.mod="hypergeom", conlev=0.95)
-# version 3 test
+cnwn.test <- accum.occ2(spname, output.mod=cn.wnc, occ.pnts=cn.occ,
+                        null.mod="hypergeom", conlev=0.95)
+
+# thr 
+thrmaha.test <- accum.occ2(spname, output.mod=thr.mahac, occ.pnts=thr.occ,
+                           null.mod="hypergeom", conlev=0.95)
+thrwn.test <- accum.occ2(spname, output.mod=thr.wnc, occ.pnts=thr.occ,
+                        null.mod="hypergeom", conlev=0.95)
+
+
+## Example version 3 --------------------
+# Parameters
+# same occurrence data and species name, and cropped raster as above
+
+# create suitability stack for Catasticta nimbice
+bio1cn <- raster("./Rasters/Catasticta_nimbice_bio1_cropped.tif")
+bio12cn <- raster("./Rasters/Catasticta_nimbice_bio12_cropped.tif")
+
+cn.wncE <- stack(cn.wnc, bio1cn, bio12cn)
+cn.mahacE <- stack(cn.mahac, bio1cn, bio12cn)
+
+# apply function
+cnwn.test3 <- accum.occ3(sp.name = spname,G.occ = cn.occ,
+                           suit.Estck = cn.wncE,null.mod="hypergeom",conlev=0.95)
 cnmaha.test3 <- accum.occ3(sp.name = spname,G.occ = cn.occ,
                            suit.Estck = cn.mahacE,null.mod="hypergeom",conlev=0.95)
+
+# create suitability stack for Threnetes ruckeri
+bio1thr <- raster("./Rasters/Threnetes_ruckeri_bio1_cropped.tif")
+bio12thr <- raster("./Rasters/Threnetes_ruckeri_bio12_cropped.tif")
+
+thr.wncE <- stack(thr.wnc, bio1thr, bio12thr)
+thr.mahacE <- stack(thr.mahac, bio1thr, bio12thr)
+
+# apply function
+thrwn.test3 <- accum.occ3(sp.name = spname2,G.occ = thr.occ,
+                         suit.Estck = thr.wncE,null.mod="hypergeom",conlev=0.95)
+thrmaha.test3 <- accum.occ3(sp.name = spname2,G.occ = thr.occ,
+                           suit.Estck = thr.mahacE,null.mod="hypergeom",conlev=0.95)
+
+
+
 
 # Comparing the models ---------------------------------------------------------
 # create a list with all the matrices using only the first two columns 
