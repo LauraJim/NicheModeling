@@ -243,15 +243,15 @@ pre code {
 <p>To create the parameter <code>Estck</code>, two or more rasters are combined into one rasterstack. For this species we used rasters with the environmental conditions “mean annual temperature” (= bio1) and “total annual precipitation” (= bio12).<br />
 The created rasterstack will have as many layers as rasters are combined together. In this example, there are only two layers: bio1 and bio12.</p>
 <pre class="r"><code># read raster files
-bio1 &lt;- raster(&quot;./Input_Data/bio1WH.asc&quot;)
-bio12 &lt;- raster(&quot;./Input_Data/bio12WH.asc&quot;)
+bio1 &lt;- raster(&quot;./Initial_Data/bio1WH.asc&quot;)
+bio12 &lt;- raster(&quot;./Initial_Data/bio12WH.asc&quot;)
 # combine the rasters into a RasterStack
 bios &lt;- stack(bio1, bio12) #  = Estck</code></pre>
 <p><br />
 </p>
 <p>The parameter <code>Gcoord</code> is a matrix with coordinates of the tracked occurrence of <em>Catasticta nimbice</em>. The cleaned table can be directly read without much modification.</p>
 <pre class="r"><code># read table, set header and omit first column of the table
-occ &lt;- read.csv(&quot;./Input_Data/Catasticta_nimbice_occ_G.csv&quot;,header=T)[,-1] #  = Gcoord
+occ &lt;- read.csv(&quot;./Initial_Data/Catasticta_nimbice_occ_G.csv&quot;,header=T)[,-1] #  = Gcoord
 
 head(occ, n=3)</code></pre>
 <pre><code>##   Longitude Latitude
@@ -276,7 +276,7 @@ head(f, n=3)</code></pre>
 <p><br />
 </p>
 <p>Save the output as a csv-file (but do not run every time):</p>
-<pre class="r"><code>write.csv(f,file=paste0(&quot;./Output_Data/Catasticta_nimbice&quot;,&quot;_occ_GE.csv&quot;),
+<pre class="r"><code>write.csv(f,file=paste0(&quot;./Generated_Data/Catasticta_nimbice&quot;,&quot;_occ_GE.csv&quot;),
           row.names = F)</code></pre>
 <p>This csv-file can now be used as data input for various graphs that highlight the geographical presence of the species and the surrounding environment.<br />
 <br />
@@ -285,14 +285,14 @@ head(f, n=3)</code></pre>
 <div id="threnetes-ruckeri" class="section level3">
 <h3><em>Threnetes ruckeri</em></h3>
 <p>The raster datasets for the species <em>Threnetes ruckeri</em> and names (“bio1” and “bio12”) are the same as the above example.</p>
-<pre class="r"><code>bio1 &lt;- raster(&quot;./Input_Data/bio1WH.asc&quot;) 
-bio12 &lt;- raster(&quot;./Input_Data/bio12WH.asc&quot;) 
+<pre class="r"><code>bio1 &lt;- raster(&quot;./Initial_Data/bio1WH.asc&quot;) 
+bio12 &lt;- raster(&quot;./Initial_Data/bio12WH.asc&quot;) 
 bios &lt;- stack(bio1, bio12)
 
 names1 &lt;- c(&quot;bio1&quot;, &quot;bio12&quot;) </code></pre>
 <p>Unlike the previous example, random points of a study area instead of the occurrence points are combined with extracted environmental data that can be used as a background for maps (e.g. in the tutorials “Function <em>GEspace</em>” and “Function <em>el.in</em>”).</p>
 <pre class="r"><code># read table with random points
-bckgrnd &lt;- read.csv(&quot;./Input_Data/Threnetes_ruckeri_M.csv&quot;,header=T)
+bckgrnd &lt;- read.csv(&quot;./Initial_Data/Threnetes_ruckeri_M.csv&quot;,header=T)
 head(bckgrnd, n=3)</code></pre>
 <pre><code>##        long       lat
 ## 1 -71.58333  6.250003
@@ -305,7 +305,7 @@ head(f2, n=3)</code></pre>
 ## 2 -83.91666 11.916670  256  4614
 ## 3 -69.74999  9.916670  239   586</code></pre>
 <p>Save the output as a csv-file (but do not run it every time):</p>
-<pre class="r"><code>write.csv(f2,file=paste0(&quot;./Output_Data/Threnetes_ruckeri_M&quot;,&quot;_GE.csv&quot;),
+<pre class="r"><code>write.csv(f2,file=paste0(&quot;./Generated_Data/Threnetes_ruckeri_M&quot;,&quot;_GE.csv&quot;),
           row.names = F)</code></pre>
 </div>
 </div>

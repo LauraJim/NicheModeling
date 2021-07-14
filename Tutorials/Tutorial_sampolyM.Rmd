@@ -103,8 +103,8 @@ First, the rasterstack for the parameter `Estck` is prepared. For this example t
 
 ```{r}
 # Read environmental layers
-bio1 <- raster("./Input_Data/bio1WH.asc")
-bio12 <- raster("./Input_Data/bio12WH.asc")
+bio1 <- raster("./Initial_Data/bio1WH.asc")
+bio12 <- raster("./Initial_Data/bio12WH.asc")
 
 # Create a single raster with as many layers as environmental variables
 stck_bios <- stack(bio1, bio12)
@@ -114,7 +114,7 @@ stck_bios <- stack(bio1, bio12)
 Read the parameter for `M.shp`.
 
 ```{r, results='hide', message=FALSE}
-M.shp <- readOGR("./Input_Data/shapefiles","nimbice3")
+M.shp <- readOGR("./Initial_Data/shapefiles","nimbice3")
 ```
 \
 
@@ -128,7 +128,7 @@ sam.Mpnts <- sam.polyM(M.shp = M.shp,N = 10000,Estck = stck_bios)
 If needed, save the output as a csv-file.
 
 ```{r, eval=FALSE}
-write.csv(sam.Mpnts,file=paste0("./Output_Data/Catasticta_nimbice","_M_E.csv"),
+write.csv(sam.Mpnts,file=paste0("./Generated_Data/Catasticta_nimbice","_M_E.csv"),
           row.names = F)
 ```
 \
@@ -137,7 +137,7 @@ Create a simple plot of the environmental space (E-Space) with a species' occurr
 
 ```{r, fig.show='hide'}
 # read occurrence data
-occ <- read.csv("./Input_Data/Catasticta_nimbice_occ_GE.csv",header=T) 
+occ <- read.csv("./Generated_Data/Catasticta_nimbice_occ_GE.csv",header=T) 
 # set colors
 pal <- c("grey50", "turquoise")
 
@@ -170,7 +170,7 @@ The rasterstack is the same as the previous example. In this example, a differen
 
 ```{r, results='hide', message=FALSE}
 # Read M polygon
-M.shp <- readOGR("./Input_Data/shapefiles","Threnetes_ruckeri")
+M.shp <- readOGR("./Initial_Data/shapefiles","Threnetes_ruckeri")
 
 ```
 \

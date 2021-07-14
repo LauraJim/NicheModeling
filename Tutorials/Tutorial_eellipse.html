@@ -263,7 +263,7 @@ pre code {
 </p>
 <p>Load a matrix with environmental data that is linked to the occurrence of a species.</p>
 <pre class="r"><code># read table of occurrences, omit coordinates
-species &lt;- read.csv (&quot;./Input_Data/Threnetes_ruckeri_occ_GE.csv&quot;,header=T)[,-(1:2)]</code></pre>
+species &lt;- read.csv (&quot;./Generated_Data/Threnetes_ruckeri_occ_GE.csv&quot;,header=T)[,-(1:2)]</code></pre>
 <p><br />
 </p>
 <p>Calculate the means of the columns with environmental data.</p>
@@ -300,7 +300,7 @@ Figure of the environmental space of <em>Threnetes ruckeri</em> bordered by thre
 <div id="catasticta-nimbice" class="section level3">
 <h3>Catasticta nimbice</h3>
 <p>In this example, more than three ellipses are created. The confidence levels are defined by a sequence instead of distinct numbers.</p>
-<pre class="r"><code>species2 &lt;- read.csv(&quot;./Input_Data/Catasticta_nimbice_occ_GE.csv&quot;,header=T)[,-(1:2)]
+<pre class="r"><code>species2 &lt;- read.csv(&quot;./Generated_Data/Catasticta_nimbice_occ_GE.csv&quot;,header=T)[,-(1:2)]
 names2 &lt;- c(&quot;Annual mean temperature (°C x 10)&quot;,&quot;Annual Precipitation (mm)&quot;) </code></pre>
 <p><br />
 </p>

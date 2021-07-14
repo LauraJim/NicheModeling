@@ -290,7 +290,7 @@ Distribution of the species *Catasticta nimbice* and its environmental space. In
 For the species' occurrence points in correspondence with environmental data the "occ_GE.csv"-file that was created with `get.Ecoord` is used.
 ```{r}
 # read table of a species occurrence with environmental data points
-species <- read.csv("./Input_Data/Catasticta_nimbice_occ_GE.csv",header=T)
+species <- read.csv("./Generated_Data/Catasticta_nimbice_occ_GE.csv",header=T)
 
 
 ```
@@ -303,7 +303,7 @@ head(species, n=5)
 For the random background points in correspondence with environmental data the "M_GE.csv"-file that was created with `get.Ecoord` is used.  
 ```{r}
 # read table with random background points
-ranpoints <- read.csv("./Input_Data/Catasticta_nimbice_M_GE.csv",header=T)
+ranpoints <- read.csv("./Generated_Data/Catasticta_nimbice_M_GE.csv",header=T)
 
 ```
 ```{r, echo=FALSE}
@@ -315,14 +315,14 @@ head(ranpoints, n=5)
 If a polygon of the distribution area is available, it can be added as a parameter.
 ```{r, results='hide', message=FALSE}
 # read polygon
-shp <- readOGR("./Input_Data/shapefiles","nimbice3")
+shp <- readOGR("./Initial_Data/shapefiles","nimbice3")
 
 ```
 \
 
 If the graph is to be saved, the location and name can be set.
 ```{r}
-saveM <- "./Output_Data/Catasticta_nimbice"
+saveM <- "./Generated_Data/Catasticta_nimbice"
 
 ```
 \
@@ -372,9 +372,9 @@ knitr::include_graphics("Images/Catasticta_nimbice_poly.png")
 Distribution of the species *Threnetes ruckeri* and its environmental space. In this example the number of background points is below 1000 and the point size is not reduced.
 
 ```{r, message=FALSE, results=FALSE, fig.show='hide'}
-ranpoints2 <- read.csv("./Input_Data/Threnetes_ruckeri_M_GE.csv",header=T)
-species2 <- read.csv("./Input_Data/Threnetes_ruckeri_occ_GE.csv",header=T)
-shp2 <- readOGR("./Input_Data/shapefiles","Threnetes_ruckeri")
+ranpoints2 <- read.csv("./Generated_Data/Threnetes_ruckeri_M_GE.csv",header=T)
+species2 <- read.csv("./Generated_Data/Threnetes_ruckeri_occ_GE.csv",header=T)
+shp2 <- readOGR("./Initial_Data/shapefiles","Threnetes_ruckeri")
 
 ```
 

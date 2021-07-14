@@ -96,8 +96,8 @@ The created rasterstack will have as many layers as rasters are combined togethe
 ```{r}
 
 # read raster files
-bio1 <- raster("./Input_Data/bio1WH.asc")
-bio12 <- raster("./Input_Data/bio12WH.asc")
+bio1 <- raster("./Initial_Data/bio1WH.asc")
+bio12 <- raster("./Initial_Data/bio12WH.asc")
 # combine the rasters into a RasterStack
 bios <- stack(bio1, bio12) #  = Estck
 
@@ -107,7 +107,7 @@ bios <- stack(bio1, bio12) #  = Estck
 The parameter `Gcoord` is a matrix with coordinates of the tracked occurrence of *Catasticta nimbice*. The cleaned table can be directly read without much modification.
 ```{r}
 # read table, set header and omit first column of the table
-occ <- read.csv("./Input_Data/Catasticta_nimbice_occ_G.csv",header=T)[,-1] #  = Gcoord
+occ <- read.csv("./Initial_Data/Catasticta_nimbice_occ_G.csv",header=T)[,-1] #  = Gcoord
 
 head(occ, n=3)
 
@@ -134,7 +134,7 @@ head(f, n=3)
 
 Save the output as a csv-file (but do not run every time):
 ```{r, eval=FALSE}
-write.csv(f,file=paste0("./Output_Data/Catasticta_nimbice","_occ_GE.csv"),
+write.csv(f,file=paste0("./Generated_Data/Catasticta_nimbice","_occ_GE.csv"),
           row.names = F)
 ```
 This csv-file can now be used as data input for various graphs that highlight the geographical presence of the species and the surrounding environment.
@@ -146,8 +146,8 @@ This csv-file can now be used as data input for various graphs that highlight th
 The raster datasets for the species *Threnetes ruckeri* and names ("bio1" and "bio12") are the same as the above example.
 
 ```{r, eval=FALSE}
-bio1 <- raster("./Input_Data/bio1WH.asc") 
-bio12 <- raster("./Input_Data/bio12WH.asc") 
+bio1 <- raster("./Initial_Data/bio1WH.asc") 
+bio12 <- raster("./Initial_Data/bio12WH.asc") 
 bios <- stack(bio1, bio12)
 
 names1 <- c("bio1", "bio12") 
@@ -158,7 +158,7 @@ Unlike the previous example, random points of a study area instead of the occurr
 
 ```{r}
 # read table with random points
-bckgrnd <- read.csv("./Input_Data/Threnetes_ruckeri_M.csv",header=T)
+bckgrnd <- read.csv("./Initial_Data/Threnetes_ruckeri_M.csv",header=T)
 head(bckgrnd, n=3)
 
 f2 <- get.ecoord(Estck=bios, Gcoord=bckgrnd, names1) 
@@ -169,7 +169,7 @@ head(f2, n=3)
 Save the output as a csv-file (but do not run it every time):
 ```{r, eval=FALSE}
 
-write.csv(f2,file=paste0("./Output_Data/Threnetes_ruckeri_M","_GE.csv"),
+write.csv(f2,file=paste0("./Generated_Data/Threnetes_ruckeri_M","_GE.csv"),
           row.names = F)
 ```
   

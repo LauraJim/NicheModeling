@@ -251,15 +251,15 @@ sam.polyM &lt;- function(M.shp,N,Estck){
 <h3><em>Catasticta nimbice</em></h3>
 <p>First, the rasterstack for the parameter <code>Estck</code> is prepared. For this example two rasters with the environmental data “annual mean temperature” and “total annual precipitation” are used. The rasterstack will therefore have two layers.</p>
 <pre class="r"><code># Read environmental layers
-bio1 &lt;- raster(&quot;./Input_Data/bio1WH.asc&quot;)
-bio12 &lt;- raster(&quot;./Input_Data/bio12WH.asc&quot;)
+bio1 &lt;- raster(&quot;./Initial_Data/bio1WH.asc&quot;)
+bio12 &lt;- raster(&quot;./Initial_Data/bio12WH.asc&quot;)
 
 # Create a single raster with as many layers as environmental variables
 stck_bios &lt;- stack(bio1, bio12)</code></pre>
 <p><br />
 </p>
 <p>Read the parameter for <code>M.shp</code>.</p>
-<pre class="r"><code>M.shp &lt;- readOGR(&quot;./Input_Data/shapefiles&quot;,&quot;nimbice3&quot;)</code></pre>
+<pre class="r"><code>M.shp &lt;- readOGR(&quot;./Initial_Data/shapefiles&quot;,&quot;nimbice3&quot;)</code></pre>
 <p><br />
 </p>
 <p>Apply the function with <code>Estck</code>, <code>M.shp</code>, and <code>N</code>. Here, <code>N</code> will be 10,000. The generated matrix will therefore have two columns with environmental data from the study area and 10,000 rows.</p>
@@ -267,18 +267,18 @@ stck_bios &lt;- stack(bio1, bio12)</code></pre>
 <p><br />
 </p>
 <p>If needed, save the output as a csv-file.</p>
-<pre class="r"><code>write.csv(sam.Mpnts,file=paste0(&quot;./Output_Data/Catasticta_nimbice&quot;,&quot;_M_E.csv&quot;),
+<pre class="r"><code>write.csv(sam.Mpnts,file=paste0(&quot;./Generated_Data/Catasticta_nimbice&quot;,&quot;_M_E.csv&quot;),
           row.names = F)</code></pre>
 <p><br />
 </p>
 <p>Create a simple plot of the environmental space (E-Space) with a species’ occurrence.</p>
 <pre class="r"><code># read occurrence data
-occ &lt;- read.csv(&quot;./Input_Data/Catasticta_nimbice_occ_GE.csv&quot;,header=T) 
+occ &lt;- read.csv(&quot;./Generated_Data/Catasticta_nimbice_occ_GE.csv&quot;,header=T) 
 # set colors
 pal &lt;- c(&quot;grey50&quot;, &quot;turquoise&quot;)
 
 # plot
-x11()
+# x11()
 #   use random points with environmental data for the plot
 plot(sam.Mpnts[,1], sam.Mpnts[,2], pch=&quot;.&quot;, col=pal[1], 
      xlab=&quot;Mean Annual Temperature (°C*10)&quot;, ylab=&quot;Annual precipitation (mm)&quot;, 
@@ -306,7 +306,7 @@ Figure of the environmental space, where the occurrence points of <em>Catasticta
 <h3><em>Threnetes ruckeri</em></h3>
 <p>The rasterstack is the same as the previous example. In this example, a different graph will be plotted using the sampled points.</p>
 <pre class="r"><code># Read M polygon
-M.shp &lt;- readOGR(&quot;./Input_Data/shapefiles&quot;,&quot;Threnetes_ruckeri&quot;)</code></pre>
+M.shp &lt;- readOGR(&quot;./Initial_Data/shapefiles&quot;,&quot;Threnetes_ruckeri&quot;)</code></pre>
 <p><br />
 </p>
 <p>Apply the function with <code>M.shp</code>, <code>Estck</code>, and a sample size with <code>N</code>.</p>
@@ -327,7 +327,7 @@ col.M2 &lt;- alpha(&quot;orangered2&quot;,0.1)
 M.cols &lt;- colorRampPalette(c(alpha(&quot;white&quot;,0.1),alpha(&quot;cadetblue4&quot;,0.9)))
 
 # plot
-x11()
+# x11()
 plot(fhat.M,display=&quot;filled.contour&quot;,cont=lvls1,main=&quot;&quot;,xlab=&quot;Mean annual temperature (°C*10)&quot;,
      ylab=&quot;Annual precipitation (mm)&quot;,col=M.cols(length(lvls1)+1))
 # add points used for kernel estimation

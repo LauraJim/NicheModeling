@@ -255,15 +255,15 @@ sam.polyM &lt;- function(M.shp,N,Estck){
 <h3><em>Catasticta nimbice</em></h3>
 <p>First, the rasterstack for the parameter <code>Estck</code> is prepared. For this example two rasters with the environmental data “annual mean temperature” and “total annual precipitation” are used. The rasterstack will therefore have two layers.</p>
 <pre class="r"><code># Read environmental layers
-bio1 &lt;- raster(&quot;./Input_Data/bio1WH.asc&quot;)
-bio12 &lt;- raster(&quot;./Input_Data/bio12WH.asc&quot;)
+bio1 &lt;- raster(&quot;./Initial_Data/bio1WH.asc&quot;)
+bio12 &lt;- raster(&quot;./Initial_Data/bio12WH.asc&quot;)
 
 # Create a single raster with as many layers as environmental variables
 stck_bios &lt;- stack(bio1, bio12)</code></pre>
 <p><br />
 </p>
 <p>Read the parameter for <code>M.shp</code>.</p>
-<pre class="r"><code>M.shp &lt;- readOGR(&quot;./Input_Data/shapefiles&quot;,&quot;nimbice3&quot;)</code></pre>
+<pre class="r"><code>M.shp &lt;- readOGR(&quot;./Initial_Data/shapefiles&quot;,&quot;nimbice3&quot;)</code></pre>
 <p><br />
 </p>
 <p>Apply the function with <code>Estck</code>, <code>M.shp</code>, and <code>N</code>. Here, <code>N</code> will be 10,000. The generated matrix will therefore have two columns with environmental data from the study area and 10,000 rows.</p>
@@ -271,13 +271,13 @@ stck_bios &lt;- stack(bio1, bio12)</code></pre>
 <p><br />
 </p>
 <p>If needed, save the output as a csv-file (do not run every time)</p>
-<pre class="r"><code>write.csv(sam.Mpnts,file=paste0(&quot;./Output_Data/Catasticta_nimbice&quot;,&quot;_M_E.csv&quot;),
+<pre class="r"><code>write.csv(sam.Mpnts,file=paste0(&quot;./Generated_Data/Catasticta_nimbice&quot;,&quot;_M_E.csv&quot;),
           row.names = F)</code></pre>
 <p><br />
 </p>
 <p>Create a simple plot of the environmental space (E-Space) with a species’ occurrence.</p>
 <pre class="r"><code># read occurrence data
-occ &lt;- read.csv(&quot;./Input_Data/Catasticta_nimbice_occ_GE.csv&quot;,header=T) 
+occ &lt;- read.csv(&quot;./Generated_Data/Catasticta_nimbice_occ_GE.csv&quot;,header=T) 
 # set colors
 pal &lt;- c(&quot;grey50&quot;, &quot;turquoise&quot;)
 
@@ -310,7 +310,7 @@ Figure of the environmental space, where the occurrence points of <em>Catasticta
 <h3><em>Threnetes ruckeri</em></h3>
 <p>The rasterstack is the same as the previous example. In this example, a different graph will be plotted using the sampled points.</p>
 <pre class="r"><code># Read M polygon
-M.shp &lt;- readOGR(&quot;./Input_Data/shapefiles&quot;,&quot;Threnetes_ruckeri&quot;)</code></pre>
+M.shp &lt;- readOGR(&quot;./Initial_Data/shapefiles&quot;,&quot;Threnetes_ruckeri&quot;)</code></pre>
 <p><br />
 </p>
 <p>Apply the function with <code>M.shp</code>, <code>Estck</code>, and a sample size with <code>N</code>.</p>
@@ -499,7 +499,7 @@ Figure of the environmental space showing layers with various density of the sam
 <div id="catasticta-nimbice-1" class="section level3">
 <h3><em>Catasticta nimbice</em></h3>
 <p>Read the matrix with environmental data of a species’ occurrence.</p>
-<pre class="r"><code>sp.occ &lt;- read.csv(&quot;./Input_Data/Catasticta_nimbice_occ_GE.csv&quot;,header=T)[,-(1:2)]</code></pre>
+<pre class="r"><code>sp.occ &lt;- read.csv(&quot;./Generated_Data/Catasticta_nimbice_occ_GE.csv&quot;,header=T)[,-(1:2)]</code></pre>
 <p><br />
 </p>
 <p>Apply the function with the parameters <code>E.occ</code> and <code>E.samM</code> (the sample `E.samM`` was calculated above and is named <em>sam.Mpnts</em>).</p>
@@ -512,7 +512,7 @@ colnames(ml.table) &lt;- c(&quot;wn.mu&quot;, &quot;wn.sigma1&quot;, &quot;wn.si
 <p><br />
 </p>
 <p>Save the table as a csv-file.</p>
-<pre class="r"><code>write.csv(ml.table,&quot;./Output_Data/Catasticta_nimbice_Estimated_parameters.csv&quot;,row.names = F)</code></pre>
+<pre class="r"><code>write.csv(ml.table,&quot;./Generated_Data/Catasticta_nimbice_Estimated_parameters.csv&quot;,row.names = F)</code></pre>
 <p><br />
 </p>
 <p>Calculate the ellipses for the weighted distribution normal and the multivariate normal distribution.</p>
@@ -527,7 +527,7 @@ el.ml &lt;- ellipse::ellipse(x=ml[[4]], centre=ml[[3]], level=0.99)</code></pre>
 colpal &lt;- c(&quot;grey70&quot;, &quot;chartreuse4&quot;, &quot;coral2&quot;, &quot;cadetblue3&quot;)
 
 # plot will be saved as .png
-png(paste0(&quot;./Output_Data/Catasticta_nimbice&quot;,&quot;_mle.png&quot;),width = 2300, height = 2300, 
+png(paste0(&quot;./Generated_Data/Catasticta_nimbice&quot;,&quot;_mle.png&quot;),width = 2300, height = 2300, 
     res = 600, pointsize = 6)
 x11()
 plot(sam.Mpnts,col=colpal[1],pch=1, xlab=&quot;Annual mean temperature (°C*10)&quot;, 
@@ -546,8 +546,6 @@ legend(&quot;topleft&quot;,legend = c(sp.leg,&quot;Points inside M&quot;,&quot;P
        lwd=c(NA,NA,NA,2,2),bty = &quot;n&quot;)</code></pre>
 <pre class="r"><code># finish saving png
 dev.off()</code></pre>
-<pre><code>## png 
-##   2</code></pre>
 <p><br />
 </p>
 <div class="figure" style="text-align: center">
@@ -566,11 +564,11 @@ Figure of the environmental space of <em>Catasticta nimbice</em>. It shows the o
 <p>For this species the same steps are followed as above until the plot. Here, it will be plotted using <code>ggplot2</code>.<br />
 </p>
 <p>Read the matrix with occurrences combined with environmental data and the shape-file of the study area (the necessary rasterstack was already created in the example above).</p>
-<pre class="r"><code>sp.occ2 &lt;- read.csv(&quot;./Input_Data/Threnetes_ruckeri_occ_GE.csv&quot;,header=T)[,-(1:2)]
+<pre class="r"><code>sp.occ2 &lt;- read.csv(&quot;./Generated_Data/Threnetes_ruckeri_occ_GE.csv&quot;,header=T)[,-(1:2)]
 
-shapefile &lt;- readOGR(&quot;./Input_Data/shapefiles&quot;,&quot;Threnetes_ruckeri&quot;)</code></pre>
+shapefile &lt;- readOGR(&quot;./Initial_Data/shapefiles&quot;,&quot;Threnetes_ruckeri&quot;)</code></pre>
 <pre><code>## OGR data source with driver: ESRI Shapefile 
-## Source: &quot;D:\04_GIS-3D-R\R-Projekte\NicheModelling\NicheModeling\Tutorials\Input_Data\shapefiles&quot;, layer: &quot;Threnetes_ruckeri&quot;
+## Source: &quot;D:\04_GIS-3D-R\R-Projekte\NicheModelling\NicheModeling\Tutorials\Initial_Data\shapefiles&quot;, layer: &quot;Threnetes_ruckeri&quot;
 ## with 1 features
 ## It has 1 fields</code></pre>
 <p><br />

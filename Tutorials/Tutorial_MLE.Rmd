@@ -109,8 +109,8 @@ First, the rasterstack for the parameter `Estck` is prepared. For this example t
 
 ```{r}
 # Read environmental layers
-bio1 <- raster("./Input_Data/bio1WH.asc")
-bio12 <- raster("./Input_Data/bio12WH.asc")
+bio1 <- raster("./Initial_Data/bio1WH.asc")
+bio12 <- raster("./Initial_Data/bio12WH.asc")
 
 # Create a single raster with as many layers as environmental variables
 stck_bios <- stack(bio1, bio12)
@@ -120,7 +120,7 @@ stck_bios <- stack(bio1, bio12)
 Read the parameter for `M.shp`.
 
 ```{r, results='hide', message=FALSE}
-M.shp <- readOGR("./Input_Data/shapefiles","nimbice3")
+M.shp <- readOGR("./Initial_Data/shapefiles","nimbice3")
 ```
 \
 
@@ -134,7 +134,7 @@ sam.Mpnts <- sam.polyM(M.shp = M.shp,N = 10000,Estck = stck_bios)
 If needed, save the output as a csv-file (do not run every time)
 
 ```{r, eval=FALSE}
-write.csv(sam.Mpnts,file=paste0("./Output_Data/Catasticta_nimbice","_M_E.csv"),
+write.csv(sam.Mpnts,file=paste0("./Generated_Data/Catasticta_nimbice","_M_E.csv"),
           row.names = F)
 ```
 \
@@ -143,7 +143,7 @@ Create a simple plot of the environmental space (E-Space) with a species' occurr
 
 ```{r, fig.show='hide'}
 # read occurrence data
-occ <- read.csv("./Input_Data/Catasticta_nimbice_occ_GE.csv",header=T) 
+occ <- read.csv("./Generated_Data/Catasticta_nimbice_occ_GE.csv",header=T) 
 # set colors
 pal <- c("grey50", "turquoise")
 
@@ -176,7 +176,7 @@ The rasterstack is the same as the previous example. In this example, a differen
 
 ```{r, results='hide', message=FALSE}
 # Read M polygon
-M.shp <- readOGR("./Input_Data/shapefiles","Threnetes_ruckeri")
+M.shp <- readOGR("./Initial_Data/shapefiles","Threnetes_ruckeri")
 
 ```
 \
@@ -376,7 +376,7 @@ If the random sample has already been calculated (see above, function `sam.polyM
 
 Read the matrix with environmental data of a species' occurrence.
 ```{r}
-sp.occ <- read.csv("./Input_Data/Catasticta_nimbice_occ_GE.csv",header=T)[,-(1:2)]
+sp.occ <- read.csv("./Generated_Data/Catasticta_nimbice_occ_GE.csv",header=T)[,-(1:2)]
 ```
 \
 
@@ -395,7 +395,7 @@ colnames(ml.table) <- c("wn.mu", "wn.sigma1", "wn.sigma2", "maha.mu", "maha.sigm
 
 Save the table as a csv-file.
 ```{r, eval=FALSE}
-write.csv(ml.table,"./Output_Data/Catasticta_nimbice_Estimated_parameters.csv",row.names = F)
+write.csv(ml.table,"./Generated_Data/Catasticta_nimbice_Estimated_parameters.csv",row.names = F)
 ```
 \
 
@@ -409,12 +409,12 @@ el.ml <- ellipse::ellipse(x=ml[[4]], centre=ml[[3]], level=0.99)
 \
 
 Plot the environmental space with the sampled points, the occurrence points, the ellipse for the weigthed distribution and the ellipse from the Mahalanobis method. The plot will be saved as a png.
-```{r, fig.show='hide'}
+```{r, results='hide', fig.show='hide'}
 # set colorpalette
 colpal <- c("grey70", "chartreuse4", "coral2", "cadetblue3")
 
 # plot will be saved as .png
-png(paste0("./Output_Data/Catasticta_nimbice","_mle.png"),width = 2300, height = 2300, 
+png(paste0("./Generated_Data/Catasticta_nimbice","_mle.png"),width = 2300, height = 2300, 
     res = 600, pointsize = 6)
 x11()
 plot(sam.Mpnts,col=colpal[1],pch=1, xlab="Annual mean temperature (°C*10)", 
@@ -450,9 +450,9 @@ For this species the same steps are followed as above until the plot. Here, it w
 
 Read the matrix with occurrences combined with environmental data and the shape-file of the study area (the necessary rasterstack was already created in the example above).
 ```{r}
-sp.occ2 <- read.csv("./Input_Data/Threnetes_ruckeri_occ_GE.csv",header=T)[,-(1:2)]
+sp.occ2 <- read.csv("./Generated_Data/Threnetes_ruckeri_occ_GE.csv",header=T)[,-(1:2)]
 
-shapefile <- readOGR("./Input_Data/shapefiles","Threnetes_ruckeri")
+shapefile <- readOGR("./Initial_Data/shapefiles","Threnetes_ruckeri")
 ```
 \
 

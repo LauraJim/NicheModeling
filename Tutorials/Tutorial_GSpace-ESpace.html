@@ -423,7 +423,7 @@ library(ggpubr)
 <p>Distribution of the species <em>Catasticta nimbice</em> and its environmental space. In this example the number of background points is above 1000 and the point size is reduced in order to keep a clear display of points.</p>
 <p>For the species’ occurrence points in correspondence with environmental data the “occ_GE.csv”-file that was created with <code>get.Ecoord</code> is used.</p>
 <pre class="r"><code># read table of a species occurrence with environmental data points
-species &lt;- read.csv(&quot;./Input_Data/Catasticta_nimbice_occ_GE.csv&quot;,header=T)</code></pre>
+species &lt;- read.csv(&quot;./Generated_Data/Catasticta_nimbice_occ_GE.csv&quot;,header=T)</code></pre>
 <pre><code>##   Longitude Latitude bio1 bio12
 ## 1 -96.50500 16.06139  191  1249
 ## 2 -96.50083 16.16944  175  1029
@@ -434,7 +434,7 @@ species &lt;- read.csv(&quot;./Input_Data/Catasticta_nimbice_occ_GE.csv&quot;,he
 </p>
 <p>For the random background points in correspondence with environmental data the “M_GE.csv”-file that was created with <code>get.Ecoord</code> is used.</p>
 <pre class="r"><code># read table with random background points
-ranpoints &lt;- read.csv(&quot;./Input_Data/Catasticta_nimbice_M_GE.csv&quot;,header=T)</code></pre>
+ranpoints &lt;- read.csv(&quot;./Generated_Data/Catasticta_nimbice_M_GE.csv&quot;,header=T)</code></pre>
 <pre><code>##        long      lat bio1 bio12
 ## 1 -98.08333 20.41667  194  2307
 ## 2 -97.91667 20.25000  199  2587
@@ -445,11 +445,11 @@ ranpoints &lt;- read.csv(&quot;./Input_Data/Catasticta_nimbice_M_GE.csv&quot;,he
 </p>
 <p>If a polygon of the distribution area is available, it can be added as a parameter.</p>
 <pre class="r"><code># read polygon
-shp &lt;- readOGR(&quot;./Input_Data/shapefiles&quot;,&quot;nimbice3&quot;)</code></pre>
+shp &lt;- readOGR(&quot;./Initial_Data/shapefiles&quot;,&quot;nimbice3&quot;)</code></pre>
 <p><br />
 </p>
 <p>If the graph is to be saved, the location and name can be set.</p>
-<pre class="r"><code>saveM &lt;- &quot;./Output_Data/Catasticta_nimbice&quot;</code></pre>
+<pre class="r"><code>saveM &lt;- &quot;./Generated_Data/Catasticta_nimbice&quot;</code></pre>
 <p><br />
 </p>
 <p><strong>Apply <code>GEspace</code></strong> (but do not run every time):</p>
@@ -487,9 +487,9 @@ Figure of the geographical space with a polygon and clipped worldmap as a backgr
 <p><br />
 </p>
 <p>Distribution of the species <em>Threnetes ruckeri</em> and its environmental space. In this example the number of background points is below 1000 and the point size is not reduced.</p>
-<pre class="r"><code>ranpoints2 &lt;- read.csv(&quot;./Input_Data/Threnetes_ruckeri_M_GE.csv&quot;,header=T)
-species2 &lt;- read.csv(&quot;./Input_Data/Threnetes_ruckeri_occ_GE.csv&quot;,header=T)
-shp2 &lt;- readOGR(&quot;./Input_Data/shapefiles&quot;,&quot;Threnetes_ruckeri&quot;)</code></pre>
+<pre class="r"><code>ranpoints2 &lt;- read.csv(&quot;./Generated_Data/Threnetes_ruckeri_M_GE.csv&quot;,header=T)
+species2 &lt;- read.csv(&quot;./Generated_Data/Threnetes_ruckeri_occ_GE.csv&quot;,header=T)
+shp2 &lt;- readOGR(&quot;./Initial_Data/shapefiles&quot;,&quot;Threnetes_ruckeri&quot;)</code></pre>
 <pre class="r"><code>GEspace(bckgrnd = ranpoints2, E.occ = species2, add.poly = shp2, save.p = &quot;Threnetes_bckgrndmap.png&quot;)
 GEspace(bckgrnd = ranpoints2, E.occ = species2, add.poly = shp2)</code></pre>
 <div class="figure" style="text-align: center">

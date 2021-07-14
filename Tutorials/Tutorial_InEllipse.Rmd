@@ -80,7 +80,7 @@ For this function two matrices are necessary: one that uses random points to cre
 For the random background points in correspondence with environmental data the "M_bios.csv"-file that was created with `get.ecoord` is used.
 ```{r}
 # read table, omit coordinates
-cloud <- read.csv("./Input_Data/Threnetes_ruckeri_M_GE.csv",header=T)[,-(1:2)]
+cloud <- read.csv("./Generated_Data/Threnetes_ruckeri_M_GE.csv",header=T)[,-(1:2)]
 ```
 ```{r, echo=FALSE}
 head(cloud, n=5)
@@ -91,7 +91,7 @@ head(cloud, n=5)
 For the species' occurrence points in correspondence with environmental data the "bios.csv"-file that was created with `get.ecoord` is used.
 ```{r}
 # read table, omit coordinates
-occ <- read.csv("./Input_Data/Threnetes_ruckeri_occ_GE.csv",header=T)[,-(1:2)]
+occ <- read.csv("./Generated_Data/Threnetes_ruckeri_occ_GE.csv",header=T)[,-(1:2)]
 
 ```
 ```{r, echo=FALSE}
@@ -142,10 +142,10 @@ knitr::include_graphics("Images/ThR_ESpace_inellipse.png")
 ### *Catasticta nimbice*
 
 ```{r, fig.show='hide'}
-occ2 <- read.csv ("./Input_Data/Catasticta_nimbice_occ_GE.csv",header=T)[,-(1:2)]
+occ2 <- read.csv ("./Generated_Data/Catasticta_nimbice_occ_GE.csv",header=T)[,-(1:2)]
 mu2 <- colMeans(occ2)
 Sigma2 <- cov(occ2)
-cloud2 <- read.csv("./Input_Data/Catasticta_nimbice_M_GE.csv",header=T)[,-(1:2)]
+cloud2 <- read.csv("./Generated_Data/Catasticta_nimbice_M_GE.csv",header=T)[,-(1:2)]
 
 check2 <- el.in(cloud2, mu2, Sigma2, 0.95)
 
