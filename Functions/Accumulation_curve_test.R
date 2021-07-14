@@ -40,14 +40,30 @@ get.table <- function(G.occ,suit.Estck){
   return(mat4)
 }
 
-# Function 1: "get.curve"--------------------------------------------------------
+# Function 2: "get.curve"--------------------------------------------------------
 # Description:
+# The function "get.curve" classifies and accumulates cells for the study area 
+# and occurrences of a species based on the suitability that was previously 
+# calculated by using a specific model, such as Mahalanobis distance. The 
+# accumulated cells are then counted for the intervals of a curve.
 #
 # Parameters:
+# occ.suit = a matrix with longitude and latitude of a species' occurrence and 
+#             correlating suitability index, environmental conditions, and type
+#             that has been classified and ordered 
+# mod.suit = a matrix with longitude and latitude of the study area/subregions  
+#             and correlating suitability index, environmental conditions, and
+#             type that has been classified and ordered 
 #
 # Output:
+# The first output gives the number of cells in the study are, the number of 
+# occurrence points, and the probability of selecting an occurrence point with 
+# the used model. The second output gives the number of accumulated number of 
+# cells in the subregions and the accumulated number of occurrences in the 
+# subregions. The second output provides the intervals between steps of a curve.
 
-get_curve <- function(occ.suit,mod.suit){
+
+get.curve <- function(occ.suit,mod.suit){
   # Number of cells in study area
   nmod <- length(mod.suit)
   # Number of occurrences
@@ -468,7 +484,7 @@ accum.occ3 <- function(sp.name,G.occ,suit.Estck,null.mod="hypergeom",conlev=0,fl
   mod.ord <- table[table$Type==0,]
   occ.ord <- table[table$Type==1,]
   #
-  curve <- get_curve(occ.suit=occ.ord[,3],mod.suit=mod.ord[,3])
+  curve <- get.curve(occ.suit=occ.ord[,3],mod.suit=mod.ord[,3])
   # Number of cells in study area
   nmod0 <- curve$out1[1]
   # Number of occurrences
