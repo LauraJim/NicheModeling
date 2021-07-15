@@ -112,6 +112,59 @@ get.curve <- function(occ.suit,mod.suit){
   return(list(out1=c(nmod,nocc,preval),out2=cbind(mod.acc[ntt],occ.acc[ntt])))
 }
 
+# Function 3: plot.aco
+# Plots the accumulation curve of occurrences given a confidence level and the
+# output of the function get.curve
+
+plot.aco <- function(species,aco.curve,conlev,model){
+  # Print the important values
+  print(paste("Number of cells in study area:",aco.curve$out1[1]),quote=F)
+  print(paste("Number of occurrence points:",aco.curve$out1[2]),quote=F)
+  print(paste("Probability of selecting an occurrence point:",
+              round(aco.curve$out1[3],4)),quote=F)
+  
+  # Calculate values of the confidence intervals around the random line using the null model
+  if(conlev > 0){
+    conlev1 <- (1 - conlev) / 2
+    if(model == "binomial"){
+      infs <- qbinom(conlev1,aco.curve$out2[,1],aco.curve$out1[3])
+      sups <- qbinom(conlev1,aco.curve$out2[,1],aco.curve$out1[3],lower.tail = F)
+    }
+    if(model == "hypergeom") {
+      infs <- qhyper(conlev1,m=aco.curve$out1[2],n=aco.curve$out1[1],
+                     k=aco.curve$out2[,1])
+      sups <- qhyper(conlev1,m=aco.curve$out1[2],n=aco.curve$out1[1],
+                     k=aco.curve$out2[,1],lower.tail = F)
+    }
+  }
+  nsub0 <- length(aco.curve$out2[,1])
+  # Plot
+  x11()
+  plot(aco.curve$out2[,1],aco.curve$out2[,1]*aco.curve$out1[3],type="b",col="red",
+       xlab="Number of cells", ylab="Occurrences",
+       main="Accumulation of occurrences",xlim=c(0,aco.curve$out2[,1][nsub0]),
+       ylim=c(0,aco.curve$out1[2]),lwd=2)
+  # confidence intervals from hypergeom/binomial distribution
+  if(conlev > 0){
+    segments(aco.curve$out2[,1],infs,aco.curve$out2[,1],sups,col = "gray")
+    points(aco.curve$out2[,1],infs,pch=19,col="grey25")
+    points(aco.curve$out2[,1],sups,pch=19,col="grey25")
+    if(model == "binomial") legmod <- paste("Binomial CI, p =",conlev)
+    if(model == "hypergeom") legmod <- paste("Hypergeometric CI, p =",conlev)
+  }
+  # under non-random selection hypothesis
+  lines(aco.curve$out2[,1],aco.curve$out2[,2],type="o",col="blue",lwd=2)
+  if(nsub0<=50){
+    text(aco.curve$out2[,1],aco.curve$out2[,2],labels=aco.curve$out2[,2],pos=2)
+  } else {
+    rind <- seq(1,nsub0,by=20) #%#
+    text(aco.curve$out2[,1][rind],aco.curve$out2[,2][rind],
+         labels=aco.curve$out2[,2][rind],pos=2)
+  }
+  legend("bottomright",legend=c(species,"Random counts",legmod,"SDM counts"),
+         lwd=2,col=c("white","red","gray","blue"),bty="n")
+}
+
 
 ### FUNCTION v1 ----------
 
@@ -478,7 +531,7 @@ accum.occ2 <- function(sp.name,output.mod,occ.pnts,null.mod="hypergeom",conlev=0
 ## Difference between 'accum.occ' and 'accum.occ1': 'mod.Ecoords' and 'occ.pnts' format is different, and,
 ## the second one don't produce plots in environmental space.
 
-accum.occ3 <- function(sp.name,G.occ,suit.Estck,null.mod="hypergeom",conlev=0,flag=T){
+accum.occ3 <- function(sp.name,G.occ,suit.Estck,null.mod="hypergeom",clev=0,flag=T){
   #
   table <- get.table(G.occ,suit.Estck)
   mod.ord <- table[table$Type==0,]
@@ -491,27 +544,11 @@ accum.occ3 <- function(sp.name,G.occ,suit.Estck,null.mod="hypergeom",conlev=0,fl
   nocc0 <- curve$out1[2]
   # Prevalence = number of occurrences / number of cells in G
   preval0 <- curve$out1[3]
-  # Print the important values
-  print(paste("Number of cells in study area:",nmod0),quote=F)
-  print(paste("Number of occurrence points:",nocc0),quote=F)
-  print(paste("Probability of selecting an occurrence point:",round(preval0,4)),quote=F)
   # Accumulated number of cells in the subregions
   mod.acc0 <- curve$out2[,1]
   # Accumulated number of occurrences in the subregions
   occ.acc0 <- curve$out2[,2]
 
-  # Calculate values of the confidence intervals around the random line using the null model
-  if(conlev > 0){
-    conlev1 <- (1 - conlev) / 2
-    if(null.mod == "binomial"){
-      infs <- qbinom(conlev1,mod.acc0,preval0)
-      sups <- qbinom(conlev1,mod.acc0,preval0,lower.tail = F)
-    }
-    if(null.mod == "hypergeom") {
-      infs <- qhyper(conlev1,m=nocc0,n=nmod0,k=mod.acc0)
-      sups <- qhyper(conlev1,m=nocc0,n=nmod0,k=mod.acc0,lower.tail = F)
-    }
-  }
   # Now make all the plots
   if(flag==T){
     # before making the plots, we will use shades of gray to identify the different subareas
@@ -540,8 +577,7 @@ accum.occ3 <- function(sp.name,G.occ,suit.Estck,null.mod="hypergeom",conlev=0,fl
     # add points with corresponding gray shades
     points(mod.ord[,1:2],pch=15,col=ci,cex=0.5)
     # add occurrences
-    points(G.occ[,2:3],pch=19,col="red")
-    
+    points(occ.ord[,1:2],pch=19,col="red")
     ###
     # Plot 2: subregions in environmental space
     # NOTE: we plot first the points with low suitability (white/light grey) so they do not 
@@ -573,31 +609,9 @@ accum.occ3 <- function(sp.name,G.occ,suit.Estck,null.mod="hypergeom",conlev=0,fl
       legend("topleft",legend=c(sp.name,"Occurence points","Suitability of points in M"),text.col="white",
              pch=c(19,19,15),col=c("steelblue4","red","grey"),bty="n")
     }
-    
     ###
     # Plot 3: comparison among counts under random selection hypothesis
-    x11()
-    plot(mod.acc0,mod.acc0*preval0,type="b",col="red",xlab="Number of cells", ylab="Occurrences",
-         main="Accumulation of occurrences",xlim=c(0,mod.acc0[nsub]),
-         ylim=c(0,nocc0),lwd=2)
-    # confidence intervals from hypergeom/binomial distribution
-    if(conlev > 0){
-      segments(mod.acc0,infs,mod.acc0,sups,col = "gray")
-      points(mod.acc0,infs,pch=19,col="grey25")
-      points(mod.acc0,sups,pch=19,col="grey25")
-      if(null.mod == "binomial") legmod <- paste("Binomial CI, p =",conlev)
-      if(null.mod == "hypergeom") legmod <- paste("Hypergeometric CI, p =",conlev)
-    }
-    # under non-random selection hypothesis
-    lines(mod.acc0,occ.acc0,type="o",col="blue",lwd=2)
-    if(nsub<=50){
-      text(mod.acc0,occ.acc0,labels=occ.acc0,pos=2)
-    } else {
-      rind <- seq(1,nsub,by=20) #%#
-      text(mod.acc0[rind],occ.acc0[rind],labels=occ.acc0[rind],pos=2)
-    }
-    legend("bottomright",legend=c(sp.name,"Random counts",legmod,"SDM counts"),
-           lwd=2,col=c("white","red","gray","blue"),bty="n")
+    plot.aco(sp.name,curve,clev,null.mod)
   }
   
   # Return coordinates of accumulation curve and corresponding percentages
