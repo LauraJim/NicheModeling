@@ -141,8 +141,9 @@ plot.aco <- function(species,aco.curve,conlev,model){
   # Plot
   x11()
   plot(aco.curve$out2[,1],aco.curve$out2[,1]*aco.curve$out1[3],type="b",col="red",
-       xlab="Number of cells", ylab="Occurrences",
-       main="Accumulation of occurrences",xlim=c(0,aco.curve$out2[,1][nsub0]),
+       xlab="Number of cells (oredered from most to least suitable)",
+       ylab="Number of ccurrences",
+       main="Accumulation of curve",xlim=c(0,aco.curve$out2[,1][nsub0]),
        ylim=c(0,aco.curve$out1[2]),lwd=2)
   # confidence intervals from hypergeom/binomial distribution
   if(conlev > 0){
@@ -531,7 +532,7 @@ accum.occ2 <- function(sp.name,output.mod,occ.pnts,null.mod="hypergeom",conlev=0
 ## Difference between 'accum.occ' and 'accum.occ1': 'mod.Ecoords' and 'occ.pnts' format is different, and,
 ## the second one don't produce plots in environmental space.
 
-accum.occ3 <- function(sp.name,G.occ,suit.Estck,null.mod="hypergeom",clev=0,flag=T){
+accum.occ3 <- function(names,G.occ,suit.Estck,null.mod="hypergeom",clev=0,flag=T){
   #
   table <- get.table(G.occ,suit.Estck)
   mod.ord <- table[table$Type==0,]
@@ -573,7 +574,7 @@ accum.occ3 <- function(sp.name,G.occ,suit.Estck,null.mod="hypergeom",clev=0,flag
     # Plot 1: subregions in geographic space
     x11()
     plot(wrld_simpl,xlim=mod.ext[1,],ylim=mod.ext[2,],col="wheat1",axes=T,bg="azure2",
-         main="Subregions in Geographical Space")
+         main="Subregions in Geographical Space",xlab="Longitude",ylab="Latitude")
     # add points with corresponding gray shades
     points(mod.ord[,1:2],pch=15,col=ci,cex=0.5)
     # add occurrences
@@ -598,20 +599,24 @@ accum.occ3 <- function(sp.name,G.occ,suit.Estck,null.mod="hypergeom",clev=0,flag
       x11()
       pairs(plotm,panel=mypanel,main="Subregions in Environmental Space")
     } else{
-      x11()
-      plot(table[,4],table[,5],type="n",
-           main="Subregions in Environmental Space", xlab= colnames(table)[4], ylab=colnames(table)[5])
-      u <- par("usr")
-      rect(u[1], u[3], u[2], u[4], col = "steelblue4", border = "red")
-      points(mod.ord[nmod0:1,4:5],pch=15,col=rev(ci),cex=0.5)
-      # add occurrences
-      points(occ.ord[,4:5],pch=19,col="red")
-      legend("topleft",legend=c(sp.name,"Occurence points","Suitability of points in M"),text.col="white",
-             pch=c(19,19,15),col=c("steelblue4","red","grey"),bty="n")
+      if(length(names)==3){
+        x11()
+        plot(table[,4], table[,5], type="n", main="Subregions in Environmental Space", 
+            xlab= names[2], ylab=names[3])
+        u <- par("usr")
+        rect(u[1], u[3], u[2], u[4], col = "steelblue4", border = "red")
+        points(mod.ord[nmod0:1,4:5],pch=15,col=rev(ci),cex=0.5)
+        # add occurrences
+        points(occ.ord[,4:5],pch=19,col="red")
+        legend("topleft",legend=c(names[1],"Occurence points","Suitability of points in M"),
+               text.col="white",pch=c(19,19,15),col=c("steelblue4","red","grey"),bty="n")
+      } else{
+        print("The vector 'names' should have the species names and the names of the two environmental variables")
+      }
     }
     ###
     # Plot 3: comparison among counts under random selection hypothesis
-    plot.aco(sp.name,curve,clev,null.mod)
+    plot.aco(names[1],curve,clev,null.mod)
   }
   
   # Return coordinates of accumulation curve and corresponding percentages
