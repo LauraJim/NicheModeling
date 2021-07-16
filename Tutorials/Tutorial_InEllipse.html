@@ -289,7 +289,7 @@ Figure of <em>Threnetes ruckeri</em> occurrences in the environmental space deli
 <pre class="r"><code>occ2 &lt;- read.csv (&quot;./Generated_Data/Catasticta_nimbice_occ_GE.csv&quot;,header=T)[,-(1:2)]
 mu2 &lt;- colMeans(occ2)
 Sigma2 &lt;- cov(occ2)
-cloud2 &lt;- read.csv(&quot;./Generated_Data/Catasticta_nimbice_M_GE.csv&quot;,header=T)[,-(1:2)]
+cloud2 &lt;- read.csv(&quot;./Initial_Data/Catasticta_nimbice_M_GE.csv&quot;,header=T)[,-(1:2)]
 
 check2 &lt;- el.in(cloud2, mu2, Sigma2, 0.95)
 

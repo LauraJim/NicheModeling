@@ -303,7 +303,7 @@ head(species, n=5)
 For the random background points in correspondence with environmental data the "M_GE.csv"-file that was created with `get.Ecoord` is used.  
 ```{r}
 # read table with random background points
-ranpoints <- read.csv("./Generated_Data/Catasticta_nimbice_M_GE.csv",header=T)
+ranpoints <- read.csv("./Initial_Data/Catasticta_nimbice_M_GE.csv",header=T)
 
 ```
 ```{r, echo=FALSE}

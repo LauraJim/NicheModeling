@@ -145,7 +145,7 @@ knitr::include_graphics("Images/ThR_ESpace_inellipse.png")
 occ2 <- read.csv ("./Generated_Data/Catasticta_nimbice_occ_GE.csv",header=T)[,-(1:2)]
 mu2 <- colMeans(occ2)
 Sigma2 <- cov(occ2)
-cloud2 <- read.csv("./Generated_Data/Catasticta_nimbice_M_GE.csv",header=T)[,-(1:2)]
+cloud2 <- read.csv("./Initial_Data/Catasticta_nimbice_M_GE.csv",header=T)[,-(1:2)]
 
 check2 <- el.in(cloud2, mu2, Sigma2, 0.95)
 
