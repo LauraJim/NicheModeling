@@ -53,6 +53,65 @@ head(G.occ2, n=3)
 ```
 \
 
+```{r, fig.show='hide', results='hide'}
+# Set the boundaries to which the worldmap is cut
+ext <- extent(-115, -68, -8, 35)
+# worldmap is added from the rnaturalearth packages
+world <- ne_countries(scale = "medium", returnclass = "sf")
+class(world)
+# create dataframe for ggplot with both points
+cn.occ <- data.frame(longitude = G.occ[, 2], latitude = G.occ[, 3])
+thr.occ <- data.frame(longitude = G.occ2[, 2], latitude = G.occ2[, 3])
+data <- cbind(rbind(cn.occ[,1:2],thr.occ[,1:2]),
+              c(rep(1,nrow(cn.occ)),rep(2,nrow(thr.occ))))
+data2 <- data.frame(Longitude = data[, 1], Latitude = data[, 2], 
+                    Type = data[,3])
+    
+# create plot
+ggplot(data = world) +
+  geom_sf( ) +
+  theme_bw() +
+  coord_sf(xlim = c(ext[1], ext[2]),
+           ylim = c(ext[3],ext[4]), expand = FALSE) +
+  theme(panel.grid.major = element_line(color = "white"),
+        panel.background = element_rect(fill = "aliceblue")) + 
+  geom_point(data = data2, alpha=0.5, 
+             aes(x = Longitude, y = Latitude, color=factor(Type), 
+                 shape=factor(Type))) +
+  scale_shape_manual(values= c(19, 19), guide = FALSE) +
+  scale_color_manual(name = "Occurrences",
+                     labels = c("Catasticta nimbice", "Threnetes ruckeri"),
+                     values= c("1" = "seagreen4", "2" = "royalblue3")) +
+  theme(legend.position = c(.03, .05),
+        legend.justification = c("left", "bottom")) 
+```
+```{r, echo=FALSE, fig.cap=" Figure of the of the two species *Catasticta nimbice* and *Threnetes ruckeri* .", out.width = '100%',fig.align="center"}
+options(knitr.duplicate.label = "allow")
+knitr::include_graphics("Images/occurrences.png")
+```
+\
+
+### Random sampled points of the study area
+
+There are two other tables that are used for the functions of this package. They contain random samples of locations of the study area. These points serve as background points for various graphs.
+
+The first table is contains two columns with the longitude and latitude of sampled locations for the species *Threnetes ruckeri*.
+```{r}
+thrM <- read.csv("./Initial_Data/Threnetes_ruckeri_M.csv",header=T)
+head(thrM, n=3)
+dim(thrM)
+```
+\
+
+The second table contains four columns. In addition to the longitude and latitude of random locations of the study are for the species *Catasticta nimbice* the correlating environmental data for mean annual temperature and total annual precipitation. This file can be created by extracting the environmental data from raster layers with the function `get.ecoord` (see tutorial).
+```{r}
+cnM.GE <- read.csv("./Initial_Data/Catasticta_nimbice_M_GE.csv",header=T)
+head(cnM.GE, n=3)
+dim(cnM.GE)
+```
+\
+
+
 ### Rasters with environmental information
 
 The raster files for the functions of this package need to contain information on climatic values that are of interest for the user. The rasters used in the examples are from [WorldClim](https://worldclim.org/data/index.html) and have a resolution of "10 minutes". The files usually do not need further editing.
@@ -65,9 +124,27 @@ bio1 <- raster("./Initial_Data/bio1WH.asc")
 # raster for mean total precipitation
 bio12 <- raster("./Initial_Data/bio12WH.asc")
 
-spplot(bio1)
-plot(bio12)
+```
 
+The raster can simply be plotted by using the `plot()` function:
+```{r, fig.show='hide'}
+plot(bio12)
+```
+
+```{r, echo=FALSE, fig.cap="Figure of the of the total annual precipitation (in ml) for the American continent.", out.width = '90%',fig.align="center"}
+options(knitr.duplicate.label = "allow")
+knitr::include_graphics("Images/Raster_bio12.png")
+```
+\
+
+Another option to plot the raster is the `spplot()` function of the `sp` package:
+```{r, fig.show='hide'}
+spplot(bio1)
+```
+
+```{r, echo=FALSE, fig.cap=" Figure of the of the mean annual temperature (in °C, multiplied by 10) for the American continent..", out.width = '80%',fig.align="center"}
+options(knitr.duplicate.label = "allow")
+knitr::include_graphics("Images/Raster_bio1.png")
 ```
 \
 
@@ -78,35 +155,47 @@ The functions often use a polygon of the region of interest either to serve as a
 cn.shp <- readOGR("./Initial_Data/shapefiles","nimbice3")
 thr.shp <- readOGR("./Initial_Data/shapefiles","Threnetes_ruckeri")
 ```
-```{r, results='hide', message=FALSE}
-# ggplot of shapefile
 
-    # transform polygon into WGS 84
-    M <- spTransform(cn.shp, CRS("+proj=longlat +datum=WGS84"))
-    # This function turns a map into a data frame that can more easily be 
-    # plotted with ggplot2.
-    M <- fortify(M)
-    # takes id that is a "character" and converts it to a number
-    M$id = as.numeric(M$id)
-# Sets the boundaries to which the worldmap is cut
-    Mext <- extent(cn.shp)
-    # worldmap is added from the rnaturalearth packages
-    world <- ne_countries(scale = "medium", returnclass = "sf")
-    class(world)
-    
-    # plot in ggplot
-    ggplot(data = world) +
-      geom_sf( ) +
-      theme_bw() +
-      # alpha -> transparency of polygon, 0.1 = high, 0.5 = medium transparency
-      geom_map(map=M, data=M, aes(map_id=id), color= "springgreen3", fill = "springgreen3", 
-               alpha = 0.4) +
-      coord_sf(xlim = c(Mext[1] - 10 ,Mext[2] + 10), 
-               ylim = c(Mext[3] - 10,Mext[4] + 10), expand = FALSE) +
-      theme(panel.grid.major = element_line(color = "white"),
-            panel.background = element_rect(fill = "aliceblue"))
+```{r, fig.show='hide',results='hide', message=FALSE}
+# in order to plot the shapefiles, they need to be adjusted first
+# transform polygon into WGS 84
+cnM <- spTransform(cn.shp, CRS("+proj=longlat +datum=WGS84"))
+# This function turns a map into a data frame that can more easily be 
+# plotted with ggplot2.
+cnM <- fortify(cnM)
+# takes id that is a "character" and converts it to a number
+cnM$id = as.numeric(cnM$id)
+
+thrM <- spTransform(thr.shp, CRS("+proj=longlat +datum=WGS84"))
+# This function turns a map into a data frame that can more easily be 
+# plotted with ggplot2.
+thrM <- fortify(thrM)
+# takes id that is a "character" and converts it to a number
+thrM$id = as.numeric(thrM$id)
+
+# worldmap is added from the rnaturalearth packages
+world <- ne_countries(scale = "medium", returnclass = "sf")
+class(world)
+
+# plot in ggplot
+ggplot(data = world) +
+  geom_sf( ) +
+  theme_bw() +
+  # alpha -> transparency of polygon, 0.1 = high, 0.5 = medium transparency
+  geom_map(map=cnM, data=cnM, aes(map_id=id), color= "springgreen3", 
+           fill = "springgreen3", size = 1, alpha = 0.2) +
+  geom_map(map=thrM, data=thrM, aes(map_id=id), color= "royalblue3", 
+           fill = "royalblue3", size = 1, alpha = 0.2) +
+  coord_sf(xlim = c(-120, -65), 
+           ylim = c(-10, 35), expand =TRUE) +
+  theme(panel.grid.major = element_line(color = "white"),
+        panel.background = element_rect(fill = "aliceblue"))
 ```
 
+```{r, echo=FALSE, fig.cap=" Figure of the shapefiles for the study area of *Catasticta nimbice* (green) and *Threnetes ruckeri* (blue).", out.width = '80%',fig.align="center"}
+options(knitr.duplicate.label = "allow")
+knitr::include_graphics("Images/shapefiles.png")
+```
 
 ## Generated Data
 
