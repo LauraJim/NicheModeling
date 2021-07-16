@@ -56,9 +56,9 @@ cn.mahacE <- stack(cn.mahac, bio1cn, bio12cn)
 
 # apply function
 cnwn.test3 <- accum.occ3(sp.name = spname,G.occ = cn.occ,
-                           suit.Estck = cn.wncE,null.mod="hypergeom",conlev=0.95)
+                           suit.Estck = cn.wncE,null.mod="hypergeom",clev=0.95)
 cnmaha.test3 <- accum.occ3(sp.name = spname,G.occ = cn.occ,
-                           suit.Estck = cn.mahacE,null.mod="hypergeom",conlev=0.95)
+                           suit.Estck = cn.mahacE,null.mod="hypergeom",clev=0.95)
 
 # create suitability stack for Threnetes ruckeri
 bio1thr <- raster("./Rasters/Threnetes_ruckeri_bio1_cropped.tif")
@@ -69,9 +69,9 @@ thr.mahacE <- stack(thr.mahac, bio1thr, bio12thr)
 
 # apply function
 thrwn.test3 <- accum.occ3(sp.name = spname2,G.occ = thr.occ,
-                         suit.Estck = thr.wncE,null.mod="hypergeom",conlev=0.95)
+                         suit.Estck = thr.wncE,null.mod="hypergeom",clev=0.95)
 thrmaha.test3 <- accum.occ3(sp.name = spname2,G.occ = thr.occ,
-                           suit.Estck = thr.mahacE,null.mod="hypergeom",conlev=0.95)
+                           suit.Estck = thr.mahacE,null.mod="hypergeom",clev=0.95)
 
 
 
