@@ -50,14 +50,16 @@ thrwn.test <- accum.occ2(spname, output.mod=thr.wnc, occ.pnts=thr.occ,
 # create suitability stack for Catasticta nimbice
 bio1cn <- raster("./Rasters/Catasticta_nimbice_bio1_cropped.tif")
 bio12cn <- raster("./Rasters/Catasticta_nimbice_bio12_cropped.tif")
+bio1 <- "Annual mean temperature (°C*10)"
+bio12 <- "Annual precipitation (mm)"
 
 cn.wncE <- stack(cn.wnc, bio1cn, bio12cn)
 cn.mahacE <- stack(cn.mahac, bio1cn, bio12cn)
 
 # apply function
-cnwn.test3 <- accum.occ3(sp.name = spname,G.occ = cn.occ,
+cnwn.test3 <- accum.occ3(names = c(spname,bio1,bio12),G.occ = cn.occ,
                            suit.Estck = cn.wncE,null.mod="hypergeom",clev=0.95)
-cnmaha.test3 <- accum.occ3(sp.name = spname,G.occ = cn.occ,
+cnmaha.test3 <- accum.occ3(names = c(spname,bio1,bio12),G.occ = cn.occ,
                            suit.Estck = cn.mahacE,null.mod="hypergeom",clev=0.95)
 
 # create suitability stack for Threnetes ruckeri
