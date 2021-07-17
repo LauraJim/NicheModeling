@@ -80,10 +80,10 @@ thrmaha.test3 <- accum.occ3(sp.name = spname2,G.occ = thr.occ,
 
 # Comparing the models ---------------------------------------------------------
 # create a list with all the matrices using only the first two columns 
-models <- list(cnmaha.test[,1:2], cnwn.test[,1:2])
+models <- list(cnmaha.test3[,1:2], cnwn.test3[,1:2])
 
 # Apply the function that draws all the models in a single plot
-comp.accplot(mods=models, nocc=155, ncells=7251,
+compare.aco(mods=models, nocc=155, ncells=7251,
              sp.name=spname, mods.names=c("Mahalanobis","Weigthed-Normal"),alpha=0.95)
 
 
