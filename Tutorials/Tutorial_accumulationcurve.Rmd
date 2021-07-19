@@ -1,0 +1,105 @@
+---
+title: "Tutorial Accumulation Curve"
+author: "Laura Jimenéz and Carola Franzen"
+date: "July 2021"
+output: html_document
+fontsize: 12pt
+linkcolor: dodgerblue4
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(dismo)
+library(maptools)
+library(rgdal)
+library(raster)
+# NOTE: package 'maptools' is also needed (used inside function)
+```
+
+# Functions for creating an accumulation curve
+
+
+
+# Function *get.table*
+
+## Creating a table with environmental layers and suitability index
+
+The function `get.table` will extract data from a raster that has information on suitable niches for a species and create a table with the extracted information.
+\
+
+\
+
+### Parameters
+
+* `G.occ` = a matrix with three columns, where the second and third column contain the coordinates in longitude and latitude
+\
+
+* `suit.Estck` = a rasterstack that contains calculated suitability areas for a species and environmental layers, such as temperature or precipitation
+\
+
+### Dependencies
+
+\
+
+## Function's code
+
+### How *get.table* works
+
+The function `get.table`extracts information from the environmental layers and the suitability that was calculated with different models. This process is similar to the function `get.ecoord` (see tutorial for `get.ecoord`. The extracted information is transformed into points and then ordered by the suitability rows. The information is then combined into a matrix.
+
+```{r}
+get.table <- function(G.occ,suit.Estck){
+  # Convert to points so we have long,lat values in the first two columns
+  mat1 <- rasterToPoints(suit.Estck)
+  # order of index, ask order of rows order (range of indexes)
+  iord <- order(mat1[,3], decreasing = T)
+  # create new matrix with new order by suitability rows (high to low)
+  mat2 <- mat1[iord,]
+  
+  # Now repeat the previous steps with the occurrence points
+  occ1 <- extract(suit.Estck,G.occ[,2:3])
+  occ2 <- na.omit(cbind(G.occ[,2:3],occ1))
+  # sort the values of vector
+  # order of index, ask order of rows order (range of indexes)
+  iord2 <- order(occ2[,3], decreasing = T) 
+  occ3 <- occ2[iord2,]
+  colnames(occ3) <- colnames(mat2)
+  mat3 <- rbind(occ3, mat2)
+  mat4 <- cbind(mat3, Type=c(rep(1, nrow(occ3)), rep(0, nrow(mat2))))
+  
+  return(mat4)
+}
+
+```
+\
+
+### Output
+The output is a matrix that has (in this order) two columns for the occurrence coordinates of a species, one column for the suitability index, as many columns as layers, and a last column with the type. Therefore, the table will have four columns and the additional columns for environmental information. The table can be saved but is normally directly used in the main function `accum.occ3`.
+\
+
+## Worked Examples
+
+### Input data
+
+The rasters that are used for this function have information on the suitability of specific locations for a species. These rasters can be created by using the function `niche.G`. The tutorial for `niche.G` currently has examples for two different models to calculate the suitability index: the weigthed normal distribution and the Mahalanobis distance. The finished raster is then usually cropped to the area of study before being further used.
+
+Other rasters that are needed to create the parameter `suit.Estck` are rasters of the area that have environmental information. If the model raster is cropped to a specific area, the rasters with environmental data need to be cropped to the same area as well, else they cannot be stacked.
+
+The observation information of a species does not need any modification and can be directly used from the folder *Initial_Data*.
+\
+
+### Catasticta nimbice
+
+Read the occurrence data table with three columns (Species name, longitude, and latitude), a raster with calculated suitability, and rasters with environmental information.
+```{r}
+cn.occG <- read.csv("./Catasticta_nimbice_occ_G.csv",header=T)
+
+cn.mahac <- raster("./Rasters/Catasticta_nimbice_maha_cropped.tif")
+cn.wnc <- raster("./Rasters/Catasticta_nimbice_wn_cropped.tif")
+
+bio1cn <- raster("./Rasters/Catasticta_nimbice_bio1_cropped.tif")
+bio12cn <- raster("./Rasters/Catasticta_nimbice_bio12_cropped.tif")
+```
+\
+
