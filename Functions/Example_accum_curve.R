@@ -35,6 +35,8 @@ cn.mahac <- raster("./Rasters/Catasticta_nimbice_maha_cropped.tif")
 bio1cn <- raster("./Rasters/Catasticta_nimbice_bio1_cropped.tif")
 bio12cn <- raster("./Rasters/Catasticta_nimbice_bio12_cropped.tif")
 
+bio6 <- raster("./ClimateData10min/Bio6_america.tif") 
+
 # set names for species and layers 
 spname <- "Catasticta_nimbice"
 bio1 <- "Annual mean temperature (°C*10)"
