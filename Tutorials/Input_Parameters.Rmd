@@ -197,21 +197,10 @@ options(knitr.duplicate.label = "allow")
 knitr::include_graphics("Images/shapefiles.png")
 ```
 
-## Generated Data
+## How to crop raster layers
 
-The generated data (matrices, rasters, etc.) are based on the collected data files and created by using functions of this package.
+You need to run this examples and save the resulting raster layers because these will be used in the exercises.
 
-### Tables
+Add code here...
 
-* Gcoord = a matrix with only longitude and latitude data of species observations
-\
-
-* GE.occ = a matrix that contains coordinates and environmental information that corresponds to the occurrence data (created with the function `get.Ecoord`)
-\
-
-* 
-
-
-### Rasters
-* cropped
-* stacked
+Additionally, note that you can use this code to crop and mask any raster layer to the study area of each species. This is somethign you will need to do before doing some future examples. 
