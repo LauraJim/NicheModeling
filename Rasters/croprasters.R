@@ -8,6 +8,7 @@ thr.maha <- raster("./Results/Threnetes_ruckeri_maha_map.tif")
 
 # read raster with environmental data
 bio1 <- raster("./ClimateData10min/bio1WH.asc")
+bio6 <- raster("./ClimateData10min/Bio6_america.tif")
 bio12 <- raster("./ClimateData10min/bio12WH.asc")
 
 
@@ -36,13 +37,23 @@ writeRaster(thr.mahac,"./Rasters/Threnetes_ruckeri_maha_cropped.tif", overwrite 
 # cn.maharasc <- stack(cn.mahac, bio1c, bio12c)
 
 bio1cn <- mask(crop(bio1, cn.shp), cn.shp)
+bio6cn <- mask(crop(bio6, cn.shp), cn.shp)
 bio12cn <- mask(crop(bio12, cn.shp), cn.shp)
+
+# the extent of bio6 is off, therefore it needs to be adjusted 
+# via https://stackoverflow.com/a/53440900
+bio6cn.ext <- raster(vals=values(bio6cn),ext=extent(bio1cn),crs=crs(bio1cn),
+              nrows=dim(bio1cn)[1],ncols=dim(bio1cn)[2])
+
+estack <- stack(bio1cn, bio6cn.ext, bio12cn)
+
 
 bio1thr <- mask(crop(bio1, thr.shp), thr.shp)
 bio12thr <- mask(crop(bio12, thr.shp), thr.shp)
 
 writeRaster(bio1cn,"./Rasters/Catasticta_nimbice_bio1_cropped.tif", overwrite = T)
 writeRaster(bio12cn,"./Rasters/Catasticta_nimbice_bio12_cropped.tif", overwrite = T)
+writeRaster(bio6cn.ext,"./Rasters/Catasticta_nimbice_bio6_cropped.tif", overwrite = T)
 
 writeRaster(bio1thr,"./Rasters/Threnetes_ruckeri_bio1_cropped.tif", overwrite = T)
 writeRaster(bio12thr,"./Rasters/Threnetes_ruckeri_bio12_cropped.tif", overwrite = T)
