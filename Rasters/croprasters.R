@@ -11,6 +11,12 @@ bio1 <- raster("./ClimateData10min/bio1WH.asc")
 bio6 <- raster("./ClimateData10min/Bio6_america.tif")
 bio12 <- raster("./ClimateData10min/bio12WH.asc")
 
+# the extent of bio6 is off, therefore it needs to be adjusted 
+# via https://stackoverflow.com/a/53440900
+bio6.ext <- raster(vals=values(bio6),ext=extent(bio1),crs=crs(bio1),
+                     nrows=dim(bio1)[1],ncols=dim(bio1)[2])
+
+writeRaster(bio6.ext,"./Rasters/bio6.tif", overwrite = T)
 
 ## cropping with polygon or extents
 
@@ -37,15 +43,11 @@ writeRaster(thr.mahac,"./Rasters/Threnetes_ruckeri_maha_cropped.tif", overwrite 
 # cn.maharasc <- stack(cn.mahac, bio1c, bio12c)
 
 bio1cn <- mask(crop(bio1, cn.shp), cn.shp)
-bio6cn <- mask(crop(bio6, cn.shp), cn.shp)
+bio6cn <- mask(crop(bio6.ext, cn.shp), cn.shp)
 bio12cn <- mask(crop(bio12, cn.shp), cn.shp)
 
-# the extent of bio6 is off, therefore it needs to be adjusted 
-# via https://stackoverflow.com/a/53440900
-bio6cn.ext <- raster(vals=values(bio6cn),ext=extent(bio1cn),crs=crs(bio1cn),
-              nrows=dim(bio1cn)[1],ncols=dim(bio1cn)[2])
 
-estack <- stack(bio1cn, bio6cn.ext, bio12cn)
+estack <- stack(bio1cn, bio6cn, bio12cn)
 
 
 bio1thr <- mask(crop(bio1, thr.shp), thr.shp)
