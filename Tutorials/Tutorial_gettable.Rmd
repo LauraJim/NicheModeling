@@ -1,5 +1,5 @@
 ---
-title: "Tutorial Accumulation Curve"
+title: "Extract environmental information and suitability index"
 author: "Laura Jimenéz and Carola Franzen"
 date: "July 2021"
 output: html_document
@@ -18,7 +18,15 @@ library(raster)
 ```
 
 # Functions for creating an accumulation curve
+\
 
+```{r, echo=FALSE}
+nicetable <- read.csv("./Images/gettable_explain.csv",header=T)
+knitr::kable(nicetable)
+```
+\
+
+\
 
 
 # Function *get.table*
@@ -92,14 +100,14 @@ The observation information of a species does not need any modification and can 
 ### Catasticta nimbice
 
 Read the occurrence data table with three columns (Species name, longitude, and latitude), a raster with calculated suitability, and rasters with environmental information.
-```{r}
-cn.occG <- read.csv("./Catasticta_nimbice_occ_G.csv",header=T)
+```{r, eval=FALSE}
+cn.occG <- read.csv("./Initial_Data/Catasticta_nimbice_occ_G.csv",header=T)
 
-cn.mahac <- raster("./Rasters/Catasticta_nimbice_maha_cropped.tif")
-cn.wnc <- raster("./Rasters/Catasticta_nimbice_wn_cropped.tif")
+cn.mahac <- raster("./Generated_Data/Catasticta_nimbice_maha_cropped.tif")
+cn.wnc <- raster("./Generated_Data/Catasticta_nimbice_wn_cropped.tif")
 
-bio1cn <- raster("./Rasters/Catasticta_nimbice_bio1_cropped.tif")
-bio12cn <- raster("./Rasters/Catasticta_nimbice_bio12_cropped.tif")
+bio1cn <- raster("./Generated_Data/Catasticta_nimbice_bio1_cropped.tif")
+bio12cn <- raster("./Generated_Data/Catasticta_nimbice_bio12_cropped.tif")
 ```
 \
 
