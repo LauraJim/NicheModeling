@@ -1,5 +1,5 @@
 ---
-title: " Function *get.ecoord*"
+title: " Function *get.Ecoord*"
 author: "Laura Jiménez and Carola Franzen"
 date: "June 2021"
 output: html_document
@@ -19,7 +19,7 @@ library(dismo)
   
 # Extracting environmental data from raster files from a set of geographic coordinates
 
-The function `get.ecoord` is a simple tool to extract environmental data, such as annual mean temperature or total annual precipitation, from raster-files that contain this type of information. The extracted data is then combined with the occurrence coordinates of a species. The output is a matrix that contains four or more columns: the coordinates of the species' occurrence (latitude and longitude) and the environmental variables for those coordinates.
+The function `get.Ecoord` is a simple tool to extract environmental data, such as annual mean temperature or total annual precipitation, from raster-files that contain this type of information. The extracted data is then combined with the occurrence coordinates of a species. The output is a matrix that contains four or more columns: the coordinates of the species' occurrence (latitude and longitude) and the environmental variables for those coordinates.
 \
   
 \
@@ -41,13 +41,13 @@ For this function, three parameters are necessary:
 ## Function's code
 
 
-### How *get.ecoord* works
+### How *get.Ecoord* works
   
-The function `get.ecoord` will first check the amount of layers that a rasterstack has and makes sure that the numbers of entered names are the same. If the number of names and raster layers are the same amount, the climatic data for the species occurrence points are extracted from the rasters and combined into a matrix. Rows with no occurrence points are deleted. Finally, the columns are renamed by the coordinates and names that were entered into the function.
+The function `get.Ecoord` will first check the amount of layers that a rasterstack has and makes sure that the numbers of entered names are the same. If the number of names and raster layers are the same amount, the climatic data for the species occurrence points are extracted from the rasters and combined into a matrix. Rows with no occurrence points are deleted. Finally, the columns are renamed by the coordinates and names that were entered into the function.
 If less or more names are entered the message "Raster stack and Enames does not have the same length" will be printed.  
 
 ```{r}
-get.ecoord <- function(Estck, Gcoord, Enames) {
+get.Ecoord <- function(Estck, Gcoord, Enames) {
 
   # check the amount of layers in a raster and make sure they are the same as the
   # names that are used
@@ -123,9 +123,9 @@ names1 <- c("bio1", "bio12") #  = Enames
 ```
 \
 
-Apply `get.ecoord` with the parameters `Estck`, `Gcoord`, and `Enames`:
+Apply `get.Ecoord` with the parameters `Estck`, `Gcoord`, and `Enames`:
 ```{r}
-f <- get.ecoord(Estck=bios, Gcoord=occ, Enames=names1)
+f <- get.Ecoord(Estck=bios, Gcoord=occ, Enames=names1)
 
 head(f, n=3)
 
@@ -161,7 +161,7 @@ Unlike the previous example, random points of a study area instead of the occurr
 bckgrnd <- read.csv("./Initial_Data/Threnetes_ruckeri_M.csv",header=T)
 head(bckgrnd, n=3)
 
-f2 <- get.ecoord(Estck=bios, Gcoord=bckgrnd, names1) 
+f2 <- get.Ecoord(Estck=bios, Gcoord=bckgrnd, names1) 
 head(f2, n=3)
 ```
 
