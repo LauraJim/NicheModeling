@@ -79,7 +79,7 @@ The output of the function is a matrix with at least four variables. The first t
   
 ## Worked Examples
 
-### Input data
+### Input files
 
 The raster files need to contain information on climatic values that are of interest for the user. The rasters used in the examples below are from [WorldClim](https://worldclim.org/data/index.html) and have a resolution of "10 minutes". The files usually do not need further editing.
 
@@ -140,6 +140,7 @@ write.csv(f,file=paste0("./Generated_Data/Catasticta_nimbice","_occ_GE.csv"),
 This csv-file can now be used as data input for various graphs that highlight the geographical presence of the species and the surrounding environment.
 \
 \
+Now, repeat this example but using the data of *Threnetes ruckeri*, and save a file called "Threnetes_ruckeri_occ_GE.csv".
 
 ### *Threnetes ruckeri*
 
@@ -172,4 +173,12 @@ Save the output as a csv-file (but do not run it every time):
 write.csv(f2,file=paste0("./Generated_Data/Threnetes_ruckeri_M","_GE.csv"),
           row.names = F)
 ```
-  
+
+Now, repeat this example but using the data of *Catasticta nimbice*, and save a file called...
+
+### Output files
+- Catasticta_nimbice_occ_GE.csv
+- Catasticta_nimbice_M_GE.csv
+- Threnetes_ruckeri_occ_GE.csv
+- Threnetes_ruckeri_M_GE.csv
+
