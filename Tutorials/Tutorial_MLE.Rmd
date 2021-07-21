@@ -22,280 +22,13 @@ library(ggplot2)
 The estimation of the fundamental niche can be approached with the maximum likelihood estimation. It uses a weighted distribution where the weigths represent the availability of environmental combinations inside M. To calculate the maximum likelihood estimation, three functions are necessary: `rs.inE`, `negloglike`, and `like.max`.
 \
 
-# Function *rs.inE*
-
-## Sampling random points from an area of interest
-
-The function `rs.inE` takes a random sample of environmental combinations inside the study area. For this, the environmental data from a rasterstack is clipped by a shapefile that delimits the area before the sample is taken.
-\
 
 \
 
-### Parameters
-
-* `region` = a shapefile of the study area (polygon)
-\
-
-* `N` = the sample size
-\
-
-* `Estck` = a rasterstack that contains at least two layers with environmental data
-\
 
 \
 
-### Dependencies
-
-* `raster`
-\
-
-* `rgdal`
-\
-
-* `rgeos`
-\
-
-* `tools`
-\
-
-* `scales`
-\
-
-\
-
-## Function's code
-
-
-### How *rs.inE* works
-
-The function `rs.inE`uses a shapefile of the area of interest as a mask to clip the rasterstack in order to reduce the information of the rasterstack to the same geographical area. As a next step, cells with an NA value will be deleted from the clipped rasterstack. As a next step, a random sample of indices is generated. With these indices a sample of the clipped rasterstack is taken. The sample size is dictated by N.
-
-```{r}
-# Get a random sample of points inside the polygon that delimits M (= )
-# and extract their environmental values
-rs.inE <- function(region,N,Estck){
-  # crop and mask the environmental layers with the polygon
-  clip <- mask(crop(Estck,region),region)
-  # get rid of cells with NA values = indices
-  ind <- which(!is.na(clip[[1]][]))
-  # get a random sample of indices
-  sam <- sample(ind,N,replace = T)
-  # choose the points corresponding to the selected indices
-  pnts <- clip[][sam,]
-  return(pnts)
-}
-```
-\
-
-### Output
-
-The output of the function is a matrix of random points with as many columns as layers the rasterstack has.
-\
-
-\
-
-## Worked Examples
-
-### Input Data
-
-The raster files need to contain information on climatic values that are of interest for the user. The rasters used in the examples below are from [WorldClim](https://worldclim.org/data/index.html) and have a resolution of "10 minutes". The files usually do not need further editing.
-
-A polygon that marks the borders of a species' occurrence or the study area is necessary. This polygon should be a shapefile.
-\
-
-### *Catasticta nimbice*
-
-First, the rasterstack for the parameter `Estck` is prepared. For this example two rasters with the environmental data "annual mean temperature" and "total annual precipitation" are used. The rasterstack will therefore have two layers.
-
-```{r}
-# Read environmental layers
-bio1 <- raster("./Initial_Data/bio1WH.asc")
-bio12 <- raster("./Initial_Data/bio12WH.asc")
-
-# Create a single raster with as many layers as environmental variables
-stck_bios <- stack(bio1, bio12)
-```
-\
-
-Read the parameter for `region`.
-
-```{r, results='hide', message=FALSE}
-cn.shp <- readOGR("./Initial_Data/shapefiles","nimbice3")
-```
-\
-
-Apply the function with `Estck`, `region`, and `N`. Here, `N` will be 10,000. The generated matrix will therefore have two columns with environmental data from the study area and 10,000 rows.
-
-```{r}
-sam.Mpnts <- rs.inE(region = cn.shp,N = 10000,Estck = stck_bios)
-```
-\
-
-If needed, save the output as a csv-file (do not run every time)
-
-```{r, eval=FALSE}
-write.csv(sam.Mpnts,file=paste0("./Generated_Data/Catasticta_nimbice","_M_E.csv"),
-          row.names = F)
-```
-\
-
-Create a simple plot of the environmental space (E-Space) with a species' occurrence.
-
-```{r, fig.show='hide'}
-# read occurrence data
-occ <- read.csv("./Generated_Data/Catasticta_nimbice_occ_GE.csv",header=T) 
-# set colors
-pal <- c("grey50", "turquoise")
-
-# plot
-x11()
-#   use random points with environmental data for the plot
-plot(sam.Mpnts[,1], sam.Mpnts[,2], pch=".", col=pal[1], 
-     xlab="Mean Annual Temperature (°C*10)", ylab="Annual precipitation (mm)", 
-     main="Environmental Space") 
-# add points of species environmental data
-points(occ$bio1, occ$bio12, pch=19, col=pal[2])
-# add legend
-legend(x= "topleft",
-       legend = c("Study Area", "Occurences"),
-       pch = c(20, 19),
-       col = c(pal[1], pal[2]),
-       bty = "n")
-```
-\
-```{r, echo=FALSE, fig.cap=" Figure of the environmental space, where the occurrence points of *Catasticta nimbice* are plotted over a bunch of background points that were sampled from the rasterstack and polygon.", out.width = '70%',fig.align="center"}
-options(knitr.duplicate.label = "allow")
-knitr::include_graphics("Images/SampleM_Espace.png")
-```
-\
-
-
-### *Threnetes ruckeri*
-
-The rasterstack is the same as the previous example. In this example, a different graph will be plotted using the sampled points.
-
-```{r, results='hide', message=FALSE}
-# Read M polygon
-thr.shp <- readOGR("./Initial_Data/shapefiles","Threnetes_ruckeri")
-
-```
-\
-
-Apply the function with `region`, `Estck`, and a sample size with `N`.
-```{r}
-## Get a random sample of points in M and extract its corresponding environmental values
-sam.Mpnts <- rs.inE(region = thr.shp,N = 10000,Estck = stck_bios)
-
-```
-\
-
-The output is used to plot a graph showing concentrations of sample points marked by a shade. The layers of shades are created by kernel smoothing. The kernel is drawn using the points inside M. There are currently five levels of shades selected (5, 25, 50, 75, and 95). 
-<!-- what does "probability of selecting a point" here mean? --> 
-
-```{r, fig.show='hide'}
-# Calculate and draw the kernel using the points inside M (define M carefully)
-# kernel for contour plot
-fhat.M <- ks::kde(x=cbind(sam.Mpnts[,1], sam.Mpnts[,2]))
-
-## Probability of selecting a point, given the fundamental niche
-# plot estimated kernel of M with points inside M
-lvls1 <- c(5,25,50,75,95)
-# library(scales)
-col.M2 <- alpha("orangered2",0.1)
-M.cols <- colorRampPalette(c(alpha("white",0.1),alpha("cadetblue4",0.9)))
-
-# plot
-plot(fhat.M,display="filled.contour",cont=lvls1,main="",xlab="Mean annual temperature (°C*10)",
-     ylab="Annual precipitation (mm)",col=M.cols(length(lvls1)+1))
-# add points used for kernel estimation
-points(sam.Mpnts[,1], sam.Mpnts[,2],col=col.M2,pch=20,cex=0.6)
-
-```
-
-
-```{r, echo=FALSE, fig.cap=" Figure of the environmental space showing layers with various density of the sampled points from the rasterstack and polygon.", out.width = '70%',fig.align="center"}
-options(knitr.duplicate.label = "allow")
-knitr::include_graphics("Images/ThR_Kernel_shade.png")
-```
-
-<!-- end of function samplingM --> 
-\
-
- ~ End of function `rs.inE` ~ 
-\
-
-\
-
-# Function *negloglike*
-
-## Calculate the negative log-likelihood for theta
-
-<!-- needs description --> 
-The function `negloglike` is an important step for calculating the maximum likelihood distribution. 
-\
-
-### Parameters
-* `guess` =  vector of length 5 when d=2, it contains the mu and A values as elements
-\
-
-* `sam1` = a matrix containing the original sample of environmental combinations that correspond to presences
-\
-
-* `sam2`= a matrix containing a random sample of environmental combinations which come from the area of study (M)
-\
-
-\
-
-### Dependencies
-
-None.
-\
-
-\
-
-## Function's code
-
-
-### How *negloglike* works
-
-<!-- needs description --> 
-Negative log-likelihood function for theta=(mu,A)
-
-```{r}
-negloglike <- function(guess, sam1, sam2){
-  # define the parameters of interest from the guess parameter
-  mu <- guess[1:2]
-  A <- matrix(c(guess[3], guess[4], guess[4], guess[5]), nrow=2, ncol=2)
-  # original sample size: number of presence points in the sample
-  n <- nrow(sam1)
-  # function that calculates quadratic terms, use inverse of matrix
-  quad <- function(xi) { ax<-as.matrix(xi - mu); t(ax) %*% A %*% ax }
-  q1 <- apply(sam1, 1, quad) # quadratic terms of presence points
-  q2 <- apply(sam2, 1, quad) # quadratic terms of M points
-  # negative log-likelihood value
-  S <- 0.5*sum(q1) + n*log(sum(exp(-0.5*q2)))
-  return(S)
-}
-
-```
-\
-
-### Output
-
-<!-- needs description --> 
-
-<!-- examples?? --> 
-\
-
-\
-
-
-~ End of function `negloglike` ~
-\
-
-\
-
-# Function *maxi.like*
+# Function *fitNiche*
 
 ## Calculate the maximum likelihood for the fundamental niche
 <!-- description-->
@@ -323,9 +56,9 @@ negloglike <- function(guess, sam1, sam2){
 
 ## Functions Code
 
-### How *maxi.like* works
+### How *fitNiche* works
 
-The function `maxi.like` calculates the maximum likelihood estimation with a matrix of randomly sampled points within the study area (= result from the function `rs.inE`) and the occurrence data of a species that contains environmental data. At first, the mu and sigma of the occurrence data is calculated. Then, the sigma values are inverted. ###  <!-- description-->
+The function `fitNiche` calculates the maximum likelihood estimation with a matrix of randomly sampled points within the study area (= result from the function `rs.inE`) and the occurrence data of a species that contains environmental data. At first, the mu and sigma of the occurrence data is calculated. Then, the sigma values are inverted. ###  <!-- description-->
 
 ```{r}
 fitNiche <- function(E.occ, E.samM) {
@@ -358,6 +91,27 @@ fitNiche <- function(E.occ, E.samM) {
 ```
 \
 
+The function has another function inside, called `negloglike`. Together with the function `rs.inE`, the input data can be transformed to generate the necessary parameters.
+
+```{r}
+negloglike <- function(guess, sam1, sam2){
+  # define the parameters of interest from the guess parameter
+  mu <- guess[1:2]
+  A <- matrix(c(guess[3], guess[4], guess[4], guess[5]), nrow=2, ncol=2)
+  # original sample size: number of presence points in the sample
+  n <- nrow(sam1)
+  # function that calculates quadratic terms, use inverse of matrix
+  quad <- function(xi) { ax<-as.matrix(xi - mu); t(ax) %*% A %*% ax }
+  q1 <- apply(sam1, 1, quad) # quadratic terms of presence points
+  q2 <- apply(sam2, 1, quad) # quadratic terms of M points
+  # negative log-likelihood value
+  S <- 0.5*sum(q1) + n*log(sum(exp(-0.5*q2)))
+  return(S)
+}
+
+```
+\
+
 ### Output
 
 The output is a list with four different objects: mu and sigma for the weigthed normal distribution, and mu and sigma for the distribution using Mahalanobis distance. This output can be used to calculate and plot ellipses in the environmental space.
@@ -374,15 +128,38 @@ If the random sample has already been calculated (see above, function `rs.inE`),
 
 ### *Catasticta nimbice*
 
-Read the matrix with environmental data of a species' occurrence.
+Read the files necessary for the parameters of `rs.inE` and `fitNiche`.
+```{r, results='hide'}
+cn.shp <- readOGR("./Initial_Data/shapefiles","nimbice3")
+
+bio1 <- raster("./Initial_Data/bio1WH.asc")
+bio12 <- raster("./Initial_Data/bio12WH.asc")
+
+cn.occ <- read.csv("./Generated_Data/Catasticta_nimbice_occ_GE.csv",header=T)[,-(1:2)]
+```
+\
+
+For the parameter `E.samM` the output of the function `rs.inE` is necessary.
 ```{r}
-sp.occ <- read.csv("./Generated_Data/Catasticta_nimbice_occ_GE.csv",header=T)[,-(1:2)]
+source(".\\Functions\\Trandom_sampling_inE.R")
+```
+\
+
+Prepare parameters for `rs.inE`: create rasterstack.
+```{r}
+bios <- stack(bio1, bio12)
+```
+\
+
+Apply the function `rs.inE`.
+```{r}
+cn.sample <- rs.inE(region = cn.shp,N = 10000,Estck = bios)
 ```
 \
 
 Apply the function with the parameters `E.occ` and `E.samM` (the sample `E.samM`` was calculated above and is named *sam.Mpnts*).
 ```{r, cache=TRUE}
-ml <- fitNiche(E.occ = sp.occ, E.samM = sam.Mpnts)
+ml <- fitNiche(E.occ = cn.occ, E.samM = cn.sample)
 ```
 \
 
@@ -417,15 +194,15 @@ colpal <- c("grey70", "chartreuse4", "coral2", "cadetblue3")
 png(paste0("./Generated_Data/Catasticta_nimbice","_mle.png"),width = 2300, height = 2300, 
     res = 600, pointsize = 6)
 x11()
-plot(sam.Mpnts,col=colpal[1],pch=1, xlab="Annual mean temperature (°C*10)", 
+plot(cn.sample,col=colpal[1],pch=1, xlab="Annual mean temperature (°C*10)", 
      ylab="Annual precipitation (mm)")
 # add presence points to the plot
-points(sp.occ,col=colpal[3],pch=20,cex=1.5) # presences used in model
+points(cn.occ,col=colpal[3],pch=20,cex=1.5) # presences used in model
 # ellipse maha
 lines(el,col=colpal[2],lwd=2)
 # ellipse mle
 lines(el.ml,col=colpal[4],lwd=2)
-sp.leg <- paste("Catasticta nimbice","(",nrow(sp.occ),")")
+sp.leg <- paste("Catasticta nimbice","(",nrow(cn.occ),")")
 legend("topleft",legend = c(sp.leg,"Points inside M","Presences",
                             "Ellipse from Mahalanobis method",
                             "Ellipse from weighted-normal model"),
@@ -450,21 +227,21 @@ For this species the same steps are followed as above until the plot. Here, it w
 
 Read the matrix with occurrences combined with environmental data and the shape-file of the study area (the necessary rasterstack was already created in the example above).
 ```{r}
-sp.occ2 <- read.csv("./Generated_Data/Threnetes_ruckeri_occ_GE.csv",header=T)[,-(1:2)]
+thr.occ <- read.csv("./Generated_Data/Threnetes_ruckeri_occ_GE.csv",header=T)[,-(1:2)]
 
-shapefile <- readOGR("./Initial_Data/shapefiles","Threnetes_ruckeri")
+thr.shp <- readOGR("./Initial_Data/shapefiles","Threnetes_ruckeri")
 ```
 \
 
 Sample random points from the area of interest using the `rs.inE` function with the parameters `region`, `N`, and `Estck`.
 ```{r}
-sam.Mpnts2 <- rs.inE(region = shapefile, N = 5000, Estck = stck_bios)
+thr.sample <- rs.inE(region = thr.shp, N = 5000, Estck = bios)
 ```
 \
 
 Apply function fit.Niche and change table.
 ```{r, cache=TRUE}
-ml2 <- fitNiche(E.occ = sp.occ2, E.samM = sam.Mpnts2)
+ml2 <- fitNiche(E.occ = thr.occ, E.samM = thr.sample)
 # change function into proper table and rename column names
 ml.table2 <- cbind(ml$wn.mu, ml$wn.sigma, ml$maha.mu, ml$maha.sigma)
 colnames(ml.table2) <- c("wn.mu", "wn.sigma1", "wn.sigma2", "maha.mu", "maha.sigma1", "maha.sigma2")
@@ -494,8 +271,8 @@ colnames(df.elml) <- c("Temperature", "Precipitation")
 Plot in ggplot.
 ```{r}
 # prepare data as a dataframe for ggplot
-bckgrnd <- data.frame(Temperature = sam.Mpnts2[,1], Precipitation = sam.Mpnts2[,2])
-species <- data.frame(Temperature = sp.occ2[,1], Precipitation = sp.occ2[,2])
+bckgrnd <- data.frame(Temperature = thr.sample[,1], Precipitation = thr.sample[,2])
+species <- data.frame(Temperature = thr.occ[,1], Precipitation = thr.occ[,2])
 data <- cbind(rbind(bckgrnd[,1:2], species[,1:2]), c(rep(1,nrow(bckgrnd)),rep(2,nrow(species))))
 data2 <- data.frame(Temperature = data[, 1], Precipitation = data[, 2], 
                     Type = data[,3]) 
