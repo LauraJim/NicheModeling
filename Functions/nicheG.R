@@ -25,10 +25,12 @@
 # the function's code: niche.G --------------------------------------
 
 niche.G <- function(Estck, mu, Sigma) {
-  
   # calculate suitability for each cell
-  sui.fun <- function(cell){exp(-mahalanobis(x= c(cell[1],cell[2]), 
-                                             center= mu, cov= Sigma)/2)}
+  sui.fun <- function(cell){
+    X <- as.vector(cell, mode = "numeric")
+    sui.ind <- exp(-mahalanobis(x= X, center= mu, cov= Sigma)/2)
+    return(sui.ind)
+  }
   # apply this function to the whole raster layer
   suit.rast <- calc(Estck,fun=sui.fun)
   
