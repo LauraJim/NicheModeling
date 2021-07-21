@@ -1,5 +1,5 @@
 ---
-title: "Function *rs.inE*"
+title: "Random sampling in environmental data"
 author: "Laura Jimenéz and Carola Franzen"
 date: "June 2021"
 output: html_document
@@ -212,5 +212,5 @@ options(knitr.duplicate.label = "allow")
 knitr::include_graphics("Images/ThR_Kernel_shade.png")
 ```
 
-<!-- end of function samplingM --> 
+<!-- end of function random sampling in E --> 
 
