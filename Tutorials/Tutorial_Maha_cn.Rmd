@@ -1,0 +1,143 @@
+---
+title: "Mahalanobis distance"
+author: "Laura Jimenéz and Carola Franzen"
+date: "July 2021"
+output: html_document
+fontsize: 12pt
+linkcolor: dodgerblue4
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dismo)
+library(raster)
+library(rgdal)
+library(rgeos)
+library(tools)
+library(sp)
+library(ggpubr)
+
+```
+
+# Mahalanobis distance
+
+## *Catasticta nimbice*
+
+1: get.Ecoord -> occ_GE3.csv
+2: rs.inE -> get random sample points
+3: fit.Niche -> get mahalanobis calculation
+4: nicheG -> get raster with model
+5: apply accu curve?
+
+### Get environmental information from three raster layers
+
+Read necessary files from the Initial_Data folder for *Catasticta nimbice*: a matrix with coordinates of species observations (latitude and longitude) and the three raster layers for bio1, bio6, and bio12.  
+```{r, results='hide'}
+# read occurrence data
+occ_G <- read.csv("./Initial_Data/Catasticta_nimbice_occ_G.csv",header=T)[,-1]
+
+# read raster files
+bio1 <- raster("./Initial_Data/bio1WH.asc")
+bio6 <- raster("./Initial_Data/Bio6_america.tif")
+bio12 <- raster("./Initial_Data/bio12WH.asc")
+
+# read shapefile of study area
+cn.shp <- readOGR("./Initial_Data/shapefiles","nimbice3")
+```
+\
+
+Prepare the parameters: crop all rasters by the study region (shapefile) and then create a rasterstack of it, and create a vector with the environmental layer names.
+```{r}
+bio1c <- mask(crop(bio1, cn.shp), cn.shp)
+bio12c <- mask(crop(bio12, cn.shp), cn.shp)
+bio6c <- mask(crop(bio6, cn.shp), cn.shp)
+# the extent of bio6 does not match the other layers -> values need to be adjusted
+bio6c.ext <- raster(vals=values(bio6cn),ext=extent(bio1cn),crs=crs(bio1cn),
+              nrows=dim(bio1cn)[1],ncols=dim(bio1cn)[2])
+# stack the layers
+bios <- stack(bio1c, bio6c.ext, bio12c)
+# create vector with names in same order as stack
+E.names <- c("bio1", "bio6", "bio12")
+
+```
+\
+
+Apply source code
+```{r}
+source(".\\Functions\\TgetEcoord.R")
+```
+\
+
+Apply function
+```{r}
+cn.GE3 <- get.Ecoord(Estck = bios, Gcoord = occ_G, Enames = E.names)
+head(cn.GE3, n=4)
+```
+\
+
+Write as csv
+```{r}
+write.csv(cn.GE3,file=paste0("./Generated_Data/Catasticta_nimbice_occ_GE3.csv"),
+          row.names = F)
+```
+\
+
+\
+<!---- put mean and covariance _OR_ do the whole fitniche calculation ---->
+
+### Calculate Mahalanobis distance
+
+Prepare parameters for the function `niche.G`
+
+```{r}
+occ_E <- cn.GE3[,-(1:2)]
+
+center <- colMeans(occ_E)
+
+boundary <- cov(occ_E)
+```
+\
+
+Apply source code for `niche.G`
+```{r}
+source(".\\Functions\\TnicheG.R")
+```
+
+Apply function
+```{r}
+cn.maha <- niche.G(Estck = bios, mu = center, Sigma = boundary)
+```
+\
+
+<!---- _OR_ do the whole fitniche calculation ---->
+
+
+### Produce random samples of the study area for *Catasticta nimbice*
+
+Apply source code
+```{r}
+source(".\\Functions\\Trandom_sampling_inE.R")
+```
+\
+
+Apply the function `rs.inE` with the previously loaded and prepared parameters and decide on a sampling size.
+```{r}
+cn.sample <- rs.inE(region = cn.shp, N = 8000, Estck = bios)
+head(cn.sample, n=3)
+tail(cn.sample, n=3)
+```
+\
+
+### Create values for the Mahalanobis distance with fit.niche
+
+Apply source code
+```{r}
+source(".\\Functions\\Tfit_wn_maha_model.R")
+```
+\
+
+Apply function
+```{r}
+cn.maha2 <- fitNiche(E.occ = occ_E, E.samM = cn.sample)
+```
+
