@@ -173,20 +173,20 @@ pre code {
 
 <p><br />
 </p>
-<p>The estimation of the fundamental niche can be approached with the maximum likelihood estimation. It uses a weighted distribution where the weigths represent the availability of environmental combinations inside M. To calculate the maximum likelihood estimation, three functions are necessary: <code>sam.polyM</code>, <code>negloglike</code>, and <code>like.max</code>.<br />
+<p>The estimation of the fundamental niche can be approached with the maximum likelihood estimation. It uses a weighted distribution where the weigths represent the availability of environmental combinations inside M. To calculate the maximum likelihood estimation, three functions are necessary: <code>rs.inE</code>, <code>negloglike</code>, and <code>like.max</code>.<br />
 </p>
-<div id="function-sam.polym" class="section level1">
-<h1>Function <em>sam.polyM</em></h1>
+<div id="function-rs.ine" class="section level1">
+<h1>Function <em>rs.inE</em></h1>
 <div id="sampling-random-points-from-an-area-of-interest" class="section level2">
 <h2>Sampling random points from an area of interest</h2>
-<p>The function <code>sam.polyM</code> takes a random sample of environmental combinations inside the study area. For this, the environmental data from a rasterstack is clipped by a shapefile that delimits the area before the sample is taken.<br />
+<p>The function <code>rs.inE</code> takes a random sample of environmental combinations inside the study area. For this, the environmental data from a rasterstack is clipped by a shapefile that delimits the area before the sample is taken.<br />
 </p>
 <p><br />
 </p>
 <div id="parameters" class="section level3">
 <h3>Parameters</h3>
 <ul>
-<li><p><code>M.shp</code> = a shapefile of the study area (polygon)<br />
+<li><p><code>region</code> = a shapefile of the study area (polygon)<br />
 </p></li>
 <li><p><code>N</code> = the sample size<br />
 </p></li>
@@ -216,21 +216,21 @@ pre code {
 </div>
 <div id="functions-code" class="section level2">
 <h2>Function’s code</h2>
-<div id="how-sam.polym-works" class="section level3">
-<h3>How <em>sam.polyM</em> works</h3>
-<p>The function <code>sam.polyM</code>uses a shapefile of the area of interest as a mask to clip the rasterstack in order to reduce the information of the rasterstack to the same geographical area. As a next step, cells with an NA value will be deleted from the clipped rasterstack. As a next step, a random sample of indices is generated. With these indices a sample of the clipped rasterstack is taken. The sample size is dictated by N.</p>
+<div id="how-rs.ine-works" class="section level3">
+<h3>How <em>rs.inE</em> works</h3>
+<p>The function <code>rs.inE</code>uses a shapefile of the area of interest as a mask to clip the rasterstack in order to reduce the information of the rasterstack to the same geographical area. As a next step, cells with an NA value will be deleted from the clipped rasterstack. As a next step, a random sample of indices is generated. With these indices a sample of the clipped rasterstack is taken. The sample size is dictated by N.</p>
 <pre class="r"><code># Get a random sample of points inside the polygon that delimits M (= )
 # and extract their environmental values
-sam.polyM &lt;- function(M.shp,N,Estck){
-  # crop and mask the environmental layers with the M polygon
-  clip.M &lt;- mask(crop(Estck,M.shp),M.shp)
+rs.inE &lt;- function(region,N,Estck){
+  # crop and mask the environmental layers with the polygon
+  clip &lt;- mask(crop(Estck,region),region)
   # get rid of cells with NA values = indices
-  ind &lt;- which(!is.na(clip.M[[1]][]))
+  ind &lt;- which(!is.na(clip[[1]][]))
   # get a random sample of indices
   sam &lt;- sample(ind,N,replace = T)
   # choose the points corresponding to the selected indices
-  Mpnts &lt;- clip.M[][sam,]
-  return(Mpnts)
+  pnts &lt;- clip[][sam,]
+  return(pnts)
 }</code></pre>
 <p><br />
 </p>
@@ -262,12 +262,12 @@ bio12 &lt;- raster(&quot;./Initial_Data/bio12WH.asc&quot;)
 stck_bios &lt;- stack(bio1, bio12)</code></pre>
 <p><br />
 </p>
-<p>Read the parameter for <code>M.shp</code>.</p>
-<pre class="r"><code>M.shp &lt;- readOGR(&quot;./Initial_Data/shapefiles&quot;,&quot;nimbice3&quot;)</code></pre>
+<p>Read the parameter for <code>region</code>.</p>
+<pre class="r"><code>cn.shp &lt;- readOGR(&quot;./Initial_Data/shapefiles&quot;,&quot;nimbice3&quot;)</code></pre>
 <p><br />
 </p>
-<p>Apply the function with <code>Estck</code>, <code>M.shp</code>, and <code>N</code>. Here, <code>N</code> will be 10,000. The generated matrix will therefore have two columns with environmental data from the study area and 10,000 rows.</p>
-<pre class="r"><code>sam.Mpnts &lt;- sam.polyM(M.shp = M.shp,N = 10000,Estck = stck_bios)</code></pre>
+<p>Apply the function with <code>Estck</code>, <code>region</code>, and <code>N</code>. Here, <code>N</code> will be 10,000. The generated matrix will therefore have two columns with environmental data from the study area and 10,000 rows.</p>
+<pre class="r"><code>sam.Mpnts &lt;- rs.inE(region = cn.shp,N = 10000,Estck = stck_bios)</code></pre>
 <p><br />
 </p>
 <p>If needed, save the output as a csv-file (do not run every time)</p>
@@ -310,12 +310,12 @@ Figure of the environmental space, where the occurrence points of <em>Catasticta
 <h3><em>Threnetes ruckeri</em></h3>
 <p>The rasterstack is the same as the previous example. In this example, a different graph will be plotted using the sampled points.</p>
 <pre class="r"><code># Read M polygon
-M.shp &lt;- readOGR(&quot;./Initial_Data/shapefiles&quot;,&quot;Threnetes_ruckeri&quot;)</code></pre>
+thr.shp &lt;- readOGR(&quot;./Initial_Data/shapefiles&quot;,&quot;Threnetes_ruckeri&quot;)</code></pre>
 <p><br />
 </p>
-<p>Apply the function with <code>M.shp</code>, <code>Estck</code>, and a sample size with <code>N</code>.</p>
+<p>Apply the function with <code>region</code>, <code>Estck</code>, and a sample size with <code>N</code>.</p>
 <pre class="r"><code>## Get a random sample of points in M and extract its corresponding environmental values
-sam.Mpnts &lt;- sam.polyM(M.shp = M.shp,N = 10000,Estck = stck_bios)</code></pre>
+sam.Mpnts &lt;- rs.inE(region = thr.shp,N = 10000,Estck = stck_bios)</code></pre>
 <p><br />
 </p>
 <p>The output is used to plot a graph showing concentrations of sample points marked by a shade. The layers of shades are created by kernel smoothing. The kernel is drawn using the points inside M. There are currently five levels of shades selected (5, 25, 50, 75, and 95). <!-- what does "probability of selecting a point" here mean? --></p>
@@ -344,7 +344,7 @@ Figure of the environmental space showing layers with various density of the sam
 <!-- end of function samplingM -->
 <dl>
 <dt>\</dt>
-<dd><p>End of function <code>sam.polyM</code> ~<br />
+<dd><p>End of function <code>rs.inE</code> ~<br />
 </p>
 </dd>
 </dl>
@@ -451,7 +451,7 @@ Figure of the environmental space showing layers with various density of the sam
 <h2>Functions Code</h2>
 <div id="how-maxi.like-works" class="section level3">
 <h3>How <em>maxi.like</em> works</h3>
-<p>The function <code>maxi.like</code> calculates the maximum likelihood estimation with a matrix of randomly sampled points within the study area (= result from the function <code>sam.polyM</code>) and the occurrence data of a species that contains environmental data. At first, the mu and sigma of the occurrence data is calculated. Then, the sigma values are inverted. ### <!-- description--></p>
+<p>The function <code>maxi.like</code> calculates the maximum likelihood estimation with a matrix of randomly sampled points within the study area (= result from the function <code>rs.inE</code>) and the occurrence data of a species that contains environmental data. At first, the mu and sigma of the occurrence data is calculated. Then, the sigma values are inverted. ### <!-- description--></p>
 <pre class="r"><code>fitNiche &lt;- function(E.occ, E.samM) {
   # calculate mu
   mu.ini &lt;- colMeans(E.occ)
@@ -493,7 +493,7 @@ Figure of the environmental space showing layers with various density of the sam
 <h2>Worked examples</h2>
 <div id="input-data-1" class="section level3">
 <h3>Input Data</h3>
-<p>If the random sample has already been calculated (see above, function <code>sam.polyM</code>), only the occurrence points of the species of interest are necessary as input data. These occurrence points do not need to contain geographical data but the environmental data. This matrix can be created by using the <code>get.ecoord</code> function (see tutorial “Function <em>get.ecoord</em>”).<br />
+<p>If the random sample has already been calculated (see above, function <code>rs.inE</code>), only the occurrence points of the species of interest are necessary as input data. These occurrence points do not need to contain geographical data but the environmental data. This matrix can be created by using the <code>get.ecoord</code> function (see tutorial “Function <em>get.ecoord</em>”).<br />
 </p>
 </div>
 <div id="catasticta-nimbice-1" class="section level3">
@@ -573,8 +573,8 @@ shapefile &lt;- readOGR(&quot;./Initial_Data/shapefiles&quot;,&quot;Threnetes_ru
 ## It has 1 fields</code></pre>
 <p><br />
 </p>
-<p>Sample random points from the area of interest using the <code>sam.polyM</code> function with the parameters <code>M.shp</code>, <code>N</code>, and <code>Estck</code>.</p>
-<pre class="r"><code>sam.Mpnts2 &lt;- sam.polyM(M.shp = shapefile, N = 5000, Estck = stck_bios)</code></pre>
+<p>Sample random points from the area of interest using the <code>rs.inE</code> function with the parameters <code>region</code>, <code>N</code>, and <code>Estck</code>.</p>
+<pre class="r"><code>sam.Mpnts2 &lt;- rs.inE(region = shapefile, N = 5000, Estck = stck_bios)</code></pre>
 <p><br />
 </p>
 <p>Apply function fit.Niche and change table.</p>
