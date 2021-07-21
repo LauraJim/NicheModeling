@@ -1,5 +1,5 @@
 ---
-title: "Function *sam.polyM*"
+title: "Function *rs.inE*"
 author: "Laura Jimenéz and Carola Franzen"
 date: "June 2021"
 output: html_document
@@ -20,14 +20,14 @@ library(scales)
 
 ## Sampling random points from an area of interest
 
-The function `sam.polyM` takes a random sample of environmental combinations inside the study area. For this, the environmental data from a rasterstack is clipped by a shapefile that delimits the area before the sample is taken.
+The function `rs.inE` takes a random sample of environmental combinations inside the study area. For this, the environmental data from a rasterstack is clipped by a shapefile that delimits the area before the sample is taken.
 \
 
 \
 
 ### Parameters
 
-* `M.shp` = a shapefile of the study area (polygon)
+* `region`` = a shapefile of the study area (polygon)
 \
 
 * `N` = the sample size
@@ -60,24 +60,23 @@ The function `sam.polyM` takes a random sample of environmental combinations ins
 ## Function's code
 
 
-### How *sam.polyM* works
+### How *rs.inE* works
 
-The function `sam.polyM`uses a shapefile of the area of interest as a mask to clip the rasterstack in order to reduce the information of the rasterstack to the same geographical area. As a next step, cells with an NA value will be deleted from the clipped rasterstack. As a next step, a random sample of indices is generated. With these indices a sample of the clipped rasterstack is taken. The sample size is dictated by N.
+The function `rs.inE`uses a shapefile of the area of interest as a mask to clip the rasterstack in order to reduce the information of the rasterstack to the same geographical area. As a next step, cells with an NA value will be deleted from the clipped rasterstack. As a next step, a random sample of indices is generated. With these indices a sample of the clipped rasterstack is taken. The sample size is dictated by N.
 
 ```{r}
 # Get a random sample of points inside the polygon that delimits M (= )
 # and extract their environmental values
-sam.polyM <- function(M.shp,N,Estck){
-  # crop and mask the environmental layers with the M polygon
-  clip.M <- mask(crop(Estck,M.shp),M.shp)
+rs.inE <- function(region,N,Estck){
+  # crop and mask the environmental layers with the polygon
+  clip <- mask(crop(Estck,region),region)
   # get rid of cells with NA values = indices
-  ind <- which(!is.na(clip.M[[1]][]))
+  ind <- which(!is.na(clip[[1]][]))
   # get a random sample of indices
   sam <- sample(ind,N,replace = T)
   # choose the points corresponding to the selected indices
-  Mpnts <- clip.M[][sam,]
-  return(Mpnts)
-}
+  pnts <- clip[][sam,]
+  return(pnts)}
 ```
 \
 
@@ -111,24 +110,24 @@ stck_bios <- stack(bio1, bio12)
 ```
 \
 
-Read the parameter for `M.shp`.
+Read the parameter for `region`.
 
 ```{r, results='hide', message=FALSE}
-M.shp <- readOGR("./Initial_Data/shapefiles","nimbice3")
+cn.shp <- readOGR("./Initial_Data/shapefiles","nimbice3")
 ```
 \
 
-Apply the function with `Estck`, `M.shp`, and `N`. Here, `N` will be 10,000. The generated matrix will therefore have two columns with environmental data from the study area and 10,000 rows.
+Apply the function with `Estck`, `region`, and `N`. Here, `N` will be 10,000. The generated matrix will therefore have two columns with environmental data from the study area and 10,000 rows.
 
 ```{r}
-sam.Mpnts <- sam.polyM(M.shp = M.shp,N = 10000,Estck = stck_bios)
+sam.pnts <- rs.inE(region = cn.shp,N = 10000,Estck = stck_bios)
 ```
 \
 
 If needed, save the output as a csv-file.
 
 ```{r, eval=FALSE}
-write.csv(sam.Mpnts,file=paste0("./Generated_Data/Catasticta_nimbice","_M_E.csv"),
+write.csv(sam.pnts,file=paste0("./Generated_Data/Catasticta_nimbice","_M_E.csv"),
           row.names = F)
 ```
 \
@@ -144,7 +143,7 @@ pal <- c("grey50", "turquoise")
 # plot
 # x11()
 #   use random points with environmental data for the plot
-plot(sam.Mpnts[,1], sam.Mpnts[,2], pch=".", col=pal[1], 
+plot(sam.pnts[,1], sam.pnts[,2], pch=".", col=pal[1], 
      xlab="Mean Annual Temperature (°C*10)", ylab="Annual precipitation (mm)", 
      main="Environmental Space") 
 # add points of species environmental data
@@ -170,15 +169,15 @@ The rasterstack is the same as the previous example. In this example, a differen
 
 ```{r, results='hide', message=FALSE}
 # Read M polygon
-M.shp <- readOGR("./Initial_Data/shapefiles","Threnetes_ruckeri")
+thr.shp <- readOGR("./Initial_Data/shapefiles","Threnetes_ruckeri")
 
 ```
 \
 
-Apply the function with `M.shp`, `Estck`, and a sample size with `N`.
+Apply the function with `region`, `Estck`, and a sample size with `N`.
 ```{r}
 ## Get a random sample of points in M and extract its corresponding environmental values
-sam.Mpnts <- sam.polyM(M.shp = M.shp,N = 10000,Estck = stck_bios)
+sam.pnts2 <- rs.inE(region = thr.shp,N = 10000,Estck = stck_bios)
 
 ```
 \
@@ -189,7 +188,7 @@ The output is used to plot a graph showing concentrations of sample points marke
 ```{r, fig.show='hide'}
 # Calculate and draw the kernel using the points inside M (define M carefully)
 # kernel for contour plot
-fhat.M <- ks::kde(x=cbind(sam.Mpnts[,1], sam.Mpnts[,2]))
+fhat.M <- ks::kde(x=cbind(sam.pnts2[,1], sam.pnts2[,2]))
 
 ## Probability of selecting a point, given the fundamental niche
 # plot estimated kernel of M with points inside M
@@ -203,7 +202,7 @@ M.cols <- colorRampPalette(c(alpha("white",0.1),alpha("cadetblue4",0.9)))
 plot(fhat.M,display="filled.contour",cont=lvls1,main="",xlab="Mean annual temperature (°C*10)",
      ylab="Annual precipitation (mm)",col=M.cols(length(lvls1)+1))
 # add points used for kernel estimation
-points(sam.Mpnts[,1], sam.Mpnts[,2],col=col.M2,pch=20,cex=0.6)
+points(sam.pnts2[,1], sam.pnts2[,2],col=col.M2,pch=20,cex=0.6)
 
 ```
 
