@@ -52,8 +52,8 @@ bio1c <- mask(crop(bio1, cn.shp), cn.shp)
 bio12c <- mask(crop(bio12, cn.shp), cn.shp)
 bio6c <- mask(crop(bio6, cn.shp), cn.shp)
 # the extent of bio6 does not match the other layers -> values need to be adjusted
-bio6c.ext <- raster(vals=values(bio6cn),ext=extent(bio1cn),crs=crs(bio1cn),
-              nrows=dim(bio1cn)[1],ncols=dim(bio1cn)[2])
+bio6c.ext <- raster(vals=values(bio6c),ext=extent(bio1c),crs=crs(bio1c),
+              nrows=dim(bio1c)[1],ncols=dim(bio1c)[2])
 # stack the layers
 bios <- stack(bio1c, bio6c.ext, bio12c)
 # create vector with names in same order as stack
@@ -105,7 +105,7 @@ source(".\\Functions\\TnicheG.R")
 
 Apply function
 ```{r}
-cn.maha <- niche.G(Estck = bios, mu = center, Sigma = boundary)
+#cn.maha <- niche.G(Estck = bios, mu = center, Sigma = boundary)
 ```
 \
 
@@ -138,6 +138,6 @@ source(".\\Functions\\Tfit_wn_maha_model.R")
 
 Apply function
 ```{r}
-cn.maha2 <- fitNiche(E.occ = occ_E, E.samM = cn.sample)
+#cn.maha2 <- fitNiche(E.occ = occ_E, E.samM = cn.sample)
 ```
 
