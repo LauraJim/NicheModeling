@@ -132,6 +132,6 @@ source(".\\Functions\\Tgettable.R")
 
 Apply the function:
 ```{r}
-table.cnmaha <- get.table(G.occ = occ_G, suit.Estck = maha.stack)
+# table.cnmaha <- get.table(G.occ = occ_G, suit.Estck = maha.stack)
 ```
 
