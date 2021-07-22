@@ -111,43 +111,6 @@ dim(cnM.GE)
 ```
 \
 
-
-### Rasters with environmental information
-
-The raster files for the functions of this package need to contain information on climatic values that are of interest for the user. The rasters used in the examples are from [WorldClim](https://worldclim.org/data/index.html) and have a resolution of "10 minutes". The files usually do not need further editing.
-
-For our examples, we used the raster of the American continent. The environmental conditions of interest are the *mean annual temperature*, called `bio1` and the the *total mean precipitation*, called `bio12`.
-
-```{r}
-# raster for mean annual temperature
-bio1 <- raster("./Initial_Data/bio1WH.asc")
-# raster for mean total precipitation
-bio12 <- raster("./Initial_Data/bio12WH.asc")
-
-```
-
-The raster can simply be plotted by using the `plot()` function:
-```{r, fig.show='hide'}
-plot(bio12)
-```
-
-```{r, echo=FALSE, fig.cap="Figure of the of the total annual precipitation (in ml) for the American continent.", out.width = '90%',fig.align="center"}
-options(knitr.duplicate.label = "allow")
-knitr::include_graphics("Images/Raster_bio12.png")
-```
-\
-
-Another option to plot the raster is the `spplot()` function of the `sp` package:
-```{r, fig.show='hide'}
-spplot(bio1)
-```
-
-```{r, echo=FALSE, fig.cap=" Figure of the of the mean annual temperature (in °C, multiplied by 10) for the American continent..", out.width = '80%',fig.align="center"}
-options(knitr.duplicate.label = "allow")
-knitr::include_graphics("Images/Raster_bio1.png")
-```
-\
-
 ### Polygons of the study area
 The functions often use a polygon of the region of interest either to serve as a boundary in plots or to delimit rasters or sampled points to the specific region. The polygons used in the examples are shapefiles.
 
@@ -196,11 +159,105 @@ ggplot(data = world) +
 options(knitr.duplicate.label = "allow")
 knitr::include_graphics("Images/shapefiles.png")
 ```
+\
 
-## How to crop raster layers
+### Rasters with environmental information
+
+The raster files for the functions of this package need to contain information on climatic values that are of interest for the user. The rasters used in the examples are from [WorldClim](https://worldclim.org/data/index.html) and have a resolution of "10 minutes". The files usually do not need further editing.
+
+For our examples, we used the raster of the American continent. The environmental conditions of interest are the *mean annual temperature*, called `bio1` and the the *total mean precipitation*, called `bio12`.
+
+```{r}
+# raster for mean annual temperature (°C x 10)
+bio1 <- raster("./Initial_Data/bio1WH.asc")
+# raster for minimum temperature of the coldest month (°C x 10)
+bio6 <- raster("./Initial_Data/bio6.tif")
+# raster for mean total precipitation (mm)
+bio12 <- raster("./Initial_Data/bio12WH.asc")
+
+```
+
+The raster can simply be plotted by using the `plot()` function:
+```{r, fig.show='hide'}
+plot(bio12)
+```
+
+```{r, echo=FALSE, fig.cap="Figure of the of the total annual precipitation (in ml) for the American continent.", out.width = '90%',fig.align="center"}
+options(knitr.duplicate.label = "allow")
+knitr::include_graphics("Images/Raster_bio12.png")
+```
+\
+
+Another option to plot the raster is the `spplot()` function of the `sp` package:
+```{r, fig.show='hide'}
+spplot(bio1)
+```
+
+```{r, echo=FALSE, fig.cap=" Figure of the of the mean annual temperature (in °C, multiplied by 10) for the American continent..", out.width = '80%',fig.align="center"}
+options(knitr.duplicate.label = "allow")
+knitr::include_graphics("Images/Raster_bio1.png")
+```
+\
+
+
+### How to crop raster layers
 
 You need to run this examples and save the resulting raster layers because these will be used in the exercises.
 
-Add code here...
+```{r}
+# cropped by the shapefile for Catasticta nimbice study area
+bio1cn <- mask(crop(bio1, cn.shp), cn.shp)
+bio6cn <- mask(crop(bio6, cn.shp), cn.shp)
+bio12cn <- mask(crop(bio12, cn.shp), cn.shp)
 
-Additionally, note that you can use this code to crop and mask any raster layer to the study area of each species. This is somethign you will need to do before doing some future examples. 
+# cropped by the shapefile for Threnetes ruckeri study area
+bio1thr <- mask(crop(bio1, thr.shp), thr.shp)
+bio6thr <- mask(crop(bio6, thr.shp), thr.shp)
+bio12thr <- mask(crop(bio12, thr.shp), thr.shp)
+```
+\
+
+Example plot for the cropped raster bio6 (in ggplot):
+```{r}
+# calculate raster to points for ggplot
+bio6thr.p <- rasterToPoints(bio6thr)
+bio6thr.pd <- data.frame(bio6thr.p)
+colnames(bio6thr.pd) <- c("Longitude","Latitude", "MinTemp")
+
+
+# x11()
+ggplot() +
+  geom_tile(data = bio6thr.pd,aes(x=Longitude, y=Latitude, fill=MinTemp)) +
+  theme_bw() +
+  scale_fill_gradient2("Minimum Temperature (°C x 10)",limits=c(50,300), low = 'royalblue3',
+                       mid='seagreen3', high = 'gold2',na.value = NA,
+                       midpoint = 200, n.breaks=6)
+
+```
+\
+
+Save the rasters for later use
+```{r, eval=FALSE}
+writeRaster(bio1cn,"./Generated_Data/Catasticta_nimbice_bio1_cropped.tif", overwrite = T)
+writeRaster(bio6cn,"./Generated_Data/Catasticta_nimbice_bio6_cropped.tif", overwrite = T)
+writeRaster(bio12cn,"./Generated_Data/Catasticta_nimbice_bio12_cropped.tif", overwrite = T)
+
+writeRaster(bio1thr,"./Generated_Data/Threnetes_ruckeri_bio1_cropped.tif", overwrite = T)
+writeRaster(bio6thr,"./Generated_Data/Threnetes_ruckeri_bio6_cropped.tif", overwrite = T)
+writeRaster(bio12thr,"./Generated_Data/Threnetes_ruckeri_bio12_cropped.tif", overwrite = T)
+```
+\
+
+Additionally, note that you can use this code to crop and mask any raster layer to the study area of each species. This is something you will need to do before doing some future examples. 
+
+## Tutorials of this package
+
+This is a list of the tutorials that will explain the different functions of the package that will contain information about the necessary input and which output is generated by the tutorials.
+
+```{r, echo=FALSE}
+nicetable <- read.csv("./Images/table_tutorials.csv",header=T)
+knitr::kable(nicetable)
+```
+
+
+End.
