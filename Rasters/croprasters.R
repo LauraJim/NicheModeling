@@ -51,6 +51,7 @@ estack <- stack(bio1cn, bio6cn, bio12cn)
 
 
 bio1thr <- mask(crop(bio1, thr.shp), thr.shp)
+bio6thr <- mask(crop(bio6, thr.shp), thr.shp)
 bio12thr <- mask(crop(bio12, thr.shp), thr.shp)
 
 writeRaster(bio1cn,"./Rasters/Catasticta_nimbice_bio1_cropped.tif", overwrite = T)
@@ -58,7 +59,11 @@ writeRaster(bio12cn,"./Rasters/Catasticta_nimbice_bio12_cropped.tif", overwrite 
 writeRaster(bio6cn.ext,"./Rasters/Catasticta_nimbice_bio6_cropped.tif", overwrite = T)
 
 writeRaster(bio1thr,"./Rasters/Threnetes_ruckeri_bio1_cropped.tif", overwrite = T)
+writeRaster(bio6thr,"./Rasters/Threnetes_ruckeri_bio6_cropped.tif", overwrite = T)
 writeRaster(bio12thr,"./Rasters/Threnetes_ruckeri_bio12_cropped.tif", overwrite = T)
+
+x11()
+spplot(bio6thr)
 
 # create rasterstacks of cropped environmental rasters and models
 cn.wncE <- stack(cn.wnc, bio1cn, bio12cn)
