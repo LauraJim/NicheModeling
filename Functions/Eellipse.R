@@ -20,39 +20,69 @@
 
 # The functions code: E.ellipse --------------
 
-E.ellipse <- function(mu, Sigma, alpha = 0.95, Enames) {
-  # create a list
+E.ellipse2d <- function(Eoccs, mu, Sigma, alphas = 0.95, Enames) {
+  # create a list to save different ellipses
   els <- list()
-  
-  la <- length(alpha)
+  # number of confidence levles
+  la <- length(alphas)
   
   for(i in 1:la){
-    els[[i]] <- ellipse::ellipse(centre = mu, x= Sigma, level = alpha[i]) 
-    # create a loop that inputs the ellipses into the empty list based on the 
-    # chosen alpha levels (loop repeats for as many alpha levels are put in)
+    # calculate the ellipses and save them into the 'els' list
+    # each ellipse represents a different alpha level
+    els[[i]] <- ellipse::ellipse(centre = mu, x= Sigma, level = alphas[i]) 
   }
-  # create a scale of grays for the ellipses
+  # create a scale of grays to color the ellipses
   pal <- gray(0:(la - 1)/la)
   
-  # define values for xlim and ylim to adjust the margins
-  xs <- c(min(occ[,1]) -20, max(occ[,1]) +20)
-  ys <- c(min(occ[,2]) -200, max(occ[,2]) +200)
+  # define values for xlim and ylim to adjust the margins of the plot
+  s <- 4
+  xs <- c(mu[1]-s*sqrt(Sigma[1,1]), mu[1]+s*sqrt(Sigma[1,1]))
+  ys <- c(mu[2]-s*sqrt(Sigma[2,2]), mu[2]+s*sqrt(Sigma[2,2]))
   
-  # create a plot that shows the occurences in the environmental space 
-  plot(occ[,1], occ[,2], pch=20, col= "turquoise", xlab=Enames[1],
+  # create a plot that first shows the occurrences in the E-space 
+  plot(Eoccs[,1], Eoccs[,2], pch=20, col= "turquoise", xlab=Enames[1],
        ylab=Enames[2], main="Environmental Space", xlim = xs, ylim = ys)
   
-  # create a loop to write ellipse-lines with different gray colors
+  # then, plot the ellipses using the different gray shades as colors
   for(i in 1:la){
     lines(els[[i]], col= pal[i], lwd = 2)
   }
+  # add a legend
+  legend("bottomleft",legend=c("Confidence level",alphas),lwd=2,
+         col=c("white",pal),bty="n")
+}
+
+# Equivalent function for a 3d environmental space
+E.ellipse3d <- function(Eoccs, mu, Sigma, alpha = 0.95){
+  # define objects that contain the points on the surface of each ellipse
+  elli <- ellipse3d(centre = mu, x= Sigma, level = alpha) 
+  
+  # initialize plotting window
+  options(rgl.printRglwidget = TRUE)
+  rgl.open()
+  rgl.spheres(x=Eoccs[,1], y=Eoccs[,2], z=Eoccs[,3], r = 0.2, color = "#D95F02") 
+  # rgl_add_axes(x, y, z, show.bbox = TRUE)
+  # # Compute and draw the ellipse of concentration
+  # ellips <- ellipse3d(cov(cbind(x,y,z)), 
+  #                     centre=c(mean(x), mean(y), mean(z)), level = 0.95)
+  shade3d(elli, col = "#D95F02", alpha = 0.1, lit = FALSE)
+  # wire3d(ellips, col = "#D95F02",  lit = FALSE)
+  # aspect3d(1,1,1)
+  # # create a plot that shows the occurences in the environmental space 
+  # plot(occ[,1], occ[,2], pch=20, col= "turquoise", xlab=Enames[1],
+  #      ylab=Enames[2], main="Environmental Space", xlim = xs, ylim = ys)
+  # 
+  # # create a loop to write ellipse-lines with different gray colors
+  # for(i in 1:la){
+  #   lines(els[[i]], col= pal[i], lwd = 2)
+  # }
   
 }
 
 # Main: How to use "E.ellipse" --------------
 
 ## packages needed: ellipse
-
+library(rgl)
 
 ## Example 1: three different alpha levels
 
@@ -70,22 +100,23 @@ Sigma1 <- cov(occ)
 # Define names for the environmental type
 names1 <- c("Annual mean temperature (°C x 10)","Annual Precipitation (mm)") 
 
-# apply function  
-f <- E.ellipse(mu= mu1, Sigma= Sigma1, alpha= alpha1, Enames = names1)
+# apply function
+x11()
+E.ellipse2d(Eoccs=occ, mu= mu1, Sigma= Sigma1, alphas= alpha1, Enames = names1)
 
 ## Example 2:
 
 occ <- read.csv("./Catasticta_nimbice_occ_GE.csv",header=T)[,-(1:2)]
-
+occ1<-cbind(occ,rnorm(nrow(occ),sd=2))
 # alpha-level as a sequence from 0 to 1, every 0.1 steps
 alpha2 <- seq(0,1,by = 0.1)
 
-mu2 <- colMeans(occ)
-Sigma2 <- cov(occ)
+mu2 <- colMeans(occ1)
+Sigma2 <- cov(occ1)
 names2 <- c("Annual mean temperature (°C x 10)","Annual Precipitation (mm)") 
 
 
-f2 <- E.ellipse(mu = mu2, Sigma = Sigma2, alpha = alpha2, enames = names2)
+E.ellipse3d(Eoccs=occ1, mu = mu2, Sigma = Sigma2)
 
 
 # END
