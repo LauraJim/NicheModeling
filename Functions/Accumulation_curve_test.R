@@ -27,8 +27,8 @@ get.table <- function(G.occ,suit.Estck){
   mat2 <- mat1[iord,]
   
   # Now repeat the previous steps with the occurrence points
-  occ1 <- extract(suit.Estck,G.occ[,2:3])
-  occ2 <- na.omit(cbind(G.occ[,2:3],occ1))
+  occ1 <- extract(suit.Estck,G.occ)
+  occ2 <- na.omit(cbind(G.occ,occ1))
   # sort the values of vector
   # order of index, ask order of rows order (range of indexes)
   iord2 <- order(occ2[,3], decreasing = T) 
