@@ -171,4 +171,16 @@ cn.maharas <- stack(cn.maha, bio1, bio12)
 test.cnmaha <- get.table(G.occ = cn.occG, suit.Estck = cn.maharas)
 dim(test.cnmaha[test.cnmaha$Type==1,])
 
+# test with three layers
+bio1c <- raster("./Rasters/Catasticta_nimbice_bio1_cropped.tif")
+bio6c <- raster("./Rasters/Catasticta_nimbice_bio6_cropped.tif")
+bio12c <- raster("./Rasters/Catasticta_nimbice_bio12_cropped.tif")
+
+cn.mahac3 <- raster("./Rasters/Catasticta_nimbice_maha_cropped.tif")
+
+table.test <- get.table(G.occ = cn.occG, suit.Estck = cn.mahac3)
+dim(table.test[table.test$Type==1,])
+
+
+
 # END
