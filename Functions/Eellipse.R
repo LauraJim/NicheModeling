@@ -53,31 +53,17 @@ E.ellipse2d <- function(Eoccs, mu, Sigma, alphas = 0.95, Enames) {
 }
 
 # Equivalent function for a 3d environmental space
-E.ellipse3d <- function(Eoccs, mu, Sigma, alpha = 0.95){
+E.ellipse3d <- function(Eoccs, mu, Sigma, alpha = 0.95, Enames){
   # define objects that contain the points on the surface of each ellipse
   elli <- ellipse3d(centre = mu, x= Sigma, level = alpha) 
   
-  # initialize plotting window
-  options(rgl.printRglwidget = TRUE)
-  rgl.open()
-  rgl.spheres(x=Eoccs[,1], y=Eoccs[,2], z=Eoccs[,3], r = 0.2, color = "#D95F02") 
-  # rgl_add_axes(x, y, z, show.bbox = TRUE)
-  # # Compute and draw the ellipse of concentration
-  # ellips <- ellipse3d(cov(cbind(x,y,z)), 
-  #                     centre=c(mean(x), mean(y), mean(z)), level = 0.95)
-  shade3d(elli, col = "#D95F02", alpha = 0.1, lit = FALSE)
-  # wire3d(ellips, col = "#D95F02",  lit = FALSE)
-  # aspect3d(1,1,1)
-  # # create a plot that shows the occurences in the environmental space 
-  # plot(occ[,1], occ[,2], pch=20, col= "turquoise", xlab=Enames[1],
-  #      ylab=Enames[2], main="Environmental Space", xlim = xs, ylim = ys)
-  # 
-  # # create a loop to write ellipse-lines with different gray colors
-  # for(i in 1:la){
-  #   lines(els[[i]], col= pal[i], lwd = 2)
-  # }
-  
+  plot3d(x=Eoccs[,1], y=Eoccs[,2], z=Eoccs[,3], box = FALSE,
+         xlab=Enames[1], ylab=Enames[2], zlab=Enames[3],
+         type ="s", col = "darkorange4", size=1) 
+  spheres3d(x=mu[1], y=mu[2], z=mu[3], radius=25)
+  plot3d(elli, col = "darkorange4", alpha = 0.5, add = TRUE, type = "wire")
 }
+
 
 # Main: How to use "E.ellipse" --------------
 
@@ -107,16 +93,16 @@ E.ellipse2d(Eoccs=occ, mu= mu1, Sigma= Sigma1, alphas= alpha1, Enames = names1)
 ## Example 2:
 
 occ <- read.csv("./Catasticta_nimbice_occ_GE.csv",header=T)[,-(1:2)]
-occ1<-cbind(occ,rnorm(nrow(occ),sd=2))
-# alpha-level as a sequence from 0 to 1, every 0.1 steps
-alpha2 <- seq(0,1,by = 0.1)
+occ1<-cbind(occ,rnorm(nrow(occ),mean=734,sd=100))
 
 mu2 <- colMeans(occ1)
 Sigma2 <- cov(occ1)
-names2 <- c("Annual mean temperature (°C x 10)","Annual Precipitation (mm)") 
+names2 <- c("Bio1","Bio12","Bio6") 
 
+# initialize plotting window
+open3d()
 
-E.ellipse3d(Eoccs=occ1, mu = mu2, Sigma = Sigma2)
+E.ellipse3d(Eoccs=occ1, mu = mu2, Sigma = Sigma2, alpha=0.99, Enames = names2)
 
 
 # END
