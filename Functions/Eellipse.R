@@ -73,16 +73,16 @@ library(rgl)
 ## Example 1: three different alpha levels
 
 # read table with occurrences
-occ <- read.csv ("./Threnetes_ruckeri_occ_GE.csv",header=T)[,-(1:2)]
+occ.tr <- read.csv ("./Threnetes_ruckeri_occ_GE.csv",header=T)[,-(1:2)]
 
 # choose alpha level
 alpha1 <- c(0.75, 0.9, 0.95)
 
 # calculate the parameters
 # mu calculates the means of the columns that contain the occurrences
-mu1 <- colMeans(occ)
+mu1 <- colMeans(occ.tr)
 # Sigma calculates the covariance of the occurrences
-Sigma1 <- cov(occ)
+Sigma1 <- cov(occ.tr)
 # Define names for the environmental type
 names1 <- c("Annual mean temperature (°C x 10)","Annual Precipitation (mm)") 
 
@@ -92,17 +92,16 @@ E.ellipse2d(Eoccs=occ, mu= mu1, Sigma= Sigma1, alphas= alpha1, Enames = names1)
 
 ## Example 2:
 
-occ <- read.csv("./Catasticta_nimbice_occ_GE.csv",header=T)[,-(1:2)]
-occ1<-cbind(occ,rnorm(nrow(occ),mean=734,sd=100))
+occ.cn <- read.csv("./Catasticta_nimbice_occ_GE3.csv",header=T)[,-(1:2)]
 
-mu2 <- colMeans(occ1)
-Sigma2 <- cov(occ1)
+mu2 <- colMeans(occ.cn)
+Sigma2 <- cov(occ.cn)
 names2 <- c("Bio1","Bio12","Bio6") 
 
 # initialize plotting window
 open3d()
 
-E.ellipse3d(Eoccs=occ1, mu = mu2, Sigma = Sigma2, alpha=0.99, Enames = names2)
+E.ellipse3d(Eoccs=occ.cn, mu = mu2, Sigma = Sigma2, alpha=0.99, Enames = names2)
 
 
 # END
