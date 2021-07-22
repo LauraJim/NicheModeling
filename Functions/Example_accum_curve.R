@@ -178,7 +178,10 @@ bio12c <- raster("./Rasters/Catasticta_nimbice_bio12_cropped.tif")
 
 cn.mahac3 <- raster("./Rasters/Catasticta_nimbice_maha_cropped.tif")
 
-table.test <- get.table(G.occ = cn.occG, suit.Estck = cn.mahac3)
+stck.cn <- stack(cn.mahac3,bio1c,bio6c,bio12c)
+names(stck.cn) <- c("suitability","Bio1","Bio6","Bio12")
+
+table.test <- get.table(G.occ = cn.occG, suit.Estck = stck.cn)
 dim(table.test[table.test$Type==1,])
 
 
