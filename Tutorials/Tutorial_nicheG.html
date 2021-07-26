@@ -177,7 +177,7 @@ pre code {
 </p>
 <div id="project-resulting-ellipses-back-into-g-space" class="section level1">
 <h1>Project resulting ellipses back into G-space</h1>
-<p>The function niche.G projects ellipses that define suitable environments for a species on a raster map. Those potential niches in the geographical space are colored by different degrees of suitability.<br />
+<p>The function niche.G projects ellipses that define suitable environments for a species on a raster map. Those potential niches in the geographical space are colored by different degrees of suitability. The calculation is based on the Mahalanobis distance (for further explanation, see tutorial <em>Mahalanobis</em>).<br />
 <br />
 </p>
 <div id="parameters" class="section level3">
@@ -271,23 +271,11 @@ bios &lt;- stack(bio1,bio12)</code></pre>
 </p>
 <p>For the species’ occurrence points in correspondence with environmental data the “occ_GE.csv”-file that was created with <code>get.Ecoord</code> is used.</p>
 <pre class="r"><code># read table and omit columns with coordinates
-occ1 &lt;- read.csv(&quot;./Generated_Data/Catasticta_nimbice_occ_GE.csv&quot;,header=T)
-occ2 &lt;- occ1[,-(1:2)]</code></pre>
-<p><br />
-</p>
-<p>The centroid is calculated by taking the means of the two columns in the matrix (<code>mu</code>). This parameter will set the values of the maximum likelhood estimate.</p>
-<pre class="r"><code>center &lt;- colMeans(occ2)</code></pre>
-<p><br />
-</p>
-<p>Calculate the covariance of the environmental data (<code>Sigma</code>).</p>
-<pre class="r"><code>boundary &lt;- cov(occ2)</code></pre>
+occ_E &lt;- read.csv(&quot;./Generated_Data/Catasticta_nimbice_occ_GE.csv&quot;,header=T)[,-(1:2)]</code></pre>
 <p><br />
 </p>
 <p>Apply the function <code>niche.G</code> with the parameters <code>Estck</code>, <code>mu</code>, and <code>Sigma</code> and plot it.</p>
-<pre class="r"><code>cn.result &lt;- niche.G(Estck = bios, mu = center, Sigma = boundary)
-
-# x11()
-plot(cn.result)</code></pre>
+<pre class="r"><code>cn.result &lt;- niche.G(Estck = bios, mu = colMeans(occ_E), Sigma = cov(occ_E))</code></pre>
 <p><br />
 </p>
 <p>Save the raster output as TIF or ASCI file.</p>
@@ -317,7 +305,7 @@ biosc &lt;- stack(bio1c, bio12c)</code></pre>
                                   7687.724366, 332940.0973),ncol=2))</code></pre>
 <p><br />
 </p>
-<p>Write the raster with the model as file (additionally, the cropped environmental layers can be saved as well for later use).</p>
+<p>Write the raster of the model as file (additionally, the cropped environmental layers can be saved as well for later use).</p>
 <pre class="r"><code>writeRaster(cn.wn,&quot;./Generated_Data/Catasticta_nimbice_wn_map.tif&quot;, overwrite = T)
 writeRaster(cn.wn, &quot;./Generated_Data/Catasticta_nimbice_wn_map.asc&quot;, overwrite = T)</code></pre>
 <p><br />
@@ -328,6 +316,8 @@ cn.wnp &lt;- rasterToPoints(cn.wn)
 cn.wnpd &lt;- data.frame(cn.wnp)
 colnames(cn.wnpd) &lt;- c(&quot;Longitude&quot;,&quot;Latitude&quot;,&quot;Suitability&quot;)
 
+# read species occurrence points
+occ_GE &lt;- read.csv(&quot;./Generated_Data/Catasticta_nimbice_occ_GE.csv&quot;,header=T)
 
 # x11()
 ggplot() +
@@ -338,7 +328,7 @@ ggplot() +
                        mid=&#39;slateblue1&#39;, high = &#39;slateblue4&#39;,na.value = NA,
                        midpoint = 0.5, n.breaks=4) +
   # coord_sf(xlim = emap[1:2], ylim = emap[3:4], expand = FALSE) +
-  geom_point(data = occ1,aes(x=occ1[,1], y=occ1[,2]), 
+  geom_point(data = occ_GE,aes(x=occ_GE[,1], y=occ_GE[,2]), 
              shape = 21, fill = &quot;orange1&quot;, alpha = 0.7) +
   labs(title = &quot;Catasticta nimbice occurrences in Middle America&quot;) +
   labs(subtitle = &quot;and suitable niches based on the weighted normal distribution&quot;) +
