@@ -7,8 +7,7 @@
 # on suitable niches for a species and create a table with the extracted information.
 #
 # Parameters:
-# G.occ = a matrix with three columns, where the second and third column contain
-#         the coordinates in longitude and latitude
+# G.occ = a matrix with two columns with the species' occurrence (longitude, latitude)
 # suit.Estck = a rasterstack that contains calculated suitability areas for a 
 #           species and environmental layers, such as temperature or precipitation
 #
@@ -27,8 +26,8 @@ get.table <- function(G.occ,suit.Estck){
   mat2 <- mat1[iord,]
   
   # Now repeat the previous steps with the occurrence points
-  occ1 <- extract(suit.Estck,G.occ[,2:3])
-  occ2 <- na.omit(cbind(G.occ[,2:3],occ1))
+  occ1 <- extract(suit.Estck,G.occ)
+  occ2 <- na.omit(cbind(G.occ,occ1))
   # sort the values of vector
   # order of index, ask order of rows order (range of indexes)
   iord2 <- order(occ2[,3], decreasing = T) 
@@ -39,6 +38,5 @@ get.table <- function(G.occ,suit.Estck){
   
   return(mat4)
 }
-
 
 # END

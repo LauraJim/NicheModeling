@@ -175,47 +175,6 @@ pre code {
 <h1>Functions for creating an accumulation curve</h1>
 <p><br />
 </p>
-<table>
-<thead>
-<tr class="header">
-<th align="left">Function</th>
-<th align="left">Parameter</th>
-<th align="left">Initial.filename</th>
-<th align="left">Initial.filetype</th>
-<th align="left">necessary.modification</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">get.table</td>
-<td align="left">G.occ</td>
-<td align="left">*_occ_G.csv</td>
-<td align="left">matrix</td>
-<td align="left">x</td>
-</tr>
-<tr class="even">
-<td align="left"></td>
-<td align="left">suit.Estck</td>
-<td align="left">bio1WH.asc</td>
-<td align="left">raster</td>
-<td align="left">crop</td>
-</tr>
-<tr class="odd">
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">Bio6_america.tif</td>
-<td align="left">raster</td>
-<td align="left">crop (*needs value adjustment)</td>
-</tr>
-<tr class="even">
-<td align="left"></td>
-<td align="left"></td>
-<td align="left">bio12WH.asc</td>
-<td align="left">raster</td>
-<td align="left">crop</td>
-</tr>
-</tbody>
-</table>
 <p><br />
 </p>
 <p><br />
@@ -232,7 +191,7 @@ pre code {
 <div id="parameters" class="section level3">
 <h3>Parameters</h3>
 <ul>
-<li><p><code>G.occ</code> = a matrix with three columns, where the second and third column contain the coordinates in longitude and latitude<br />
+<li><p><code>G.occ</code> = a matrix with two columns with the geographic coordinates of a species occurrence (longitude and latitude)<br />
 </p></li>
 <li><p><code>suit.Estck</code> = a rasterstack that contains calculated suitability areas for a species and environmental layers, such as temperature or precipitation<br />
 </p></li>
@@ -258,8 +217,8 @@ pre code {
   mat2 &lt;- mat1[iord,]
   
   # Now repeat the previous steps with the occurrence points
-  occ1 &lt;- extract(suit.Estck,G.occ[,2:3])
-  occ2 &lt;- na.omit(cbind(G.occ[,2:3],occ1))
+  occ1 &lt;- extract(suit.Estck,G.occ)
+  occ2 &lt;- na.omit(cbind(G.occ,occ1))
   # sort the values of vector
   # order of index, ask order of rows order (range of indexes)
   iord2 &lt;- order(occ2[,3], decreasing = T) 
@@ -285,21 +244,75 @@ pre code {
 <h3>Input data</h3>
 <p>The rasters that are used for this function have information on the suitability of specific locations for a species. These rasters can be created by using the function <code>niche.G</code>. The tutorial for <code>niche.G</code> currently has examples for two different models to calculate the suitability index: the weigthed normal distribution and the Mahalanobis distance. The finished raster is then usually cropped to the area of study before being further used.</p>
 <p>Other rasters that are needed to create the parameter <code>suit.Estck</code> are rasters of the area that have environmental information. If the model raster is cropped to a specific area, the rasters with environmental data need to be cropped to the same area as well, else they cannot be stacked.</p>
-<p>The observation information of a species does not need any modification and can be directly used from the folder <em>Initial_Data</em>.<br />
+<p>The observation information of a species should only contain the observation coordinates of a species (longitude, latitude).<br />
 </p>
+</div>
+<div id="threnetes-ruckeri" class="section level3">
+<h3>Threnetes ruckeri</h3>
+<p>Read the occurrence data table with two columns (longitude and latitude), a raster with calculated suitability, and rasters with environmental information.</p>
+<pre class="r"><code>thr.occG &lt;- read.csv(&quot;./Initial_Data/Threnetes_ruckeri_occ_G.csv&quot;,header=T)[,-1]</code></pre>
+<p><br />
+</p>
+<p>Raster with suitability index calculated by the weighted normal distribution model.</p>
+<pre class="r"><code>thr.wn &lt;- raster(&quot;Generated_Data/Threnetes_ruckeri_wn_cropped.tif&quot;)</code></pre>
+<p><br />
+</p>
+<p>Cropped environmental layers.</p>
+<pre class="r"><code>bio1th &lt;- raster(&quot;./Generated_Data/Threnetes_ruckeri_bio1_cropped.tif&quot;)
+bio12th &lt;- raster(&quot;./Generated_Data/Threnetes_ruckeri_bio12_cropped.tif&quot;)</code></pre>
+<p><br />
+</p>
+<p>Create a rasterstack with environmental data and suitability.</p>
+<pre class="r"><code>wn.stack &lt;- stack(thr.wn, bio1th, bio12th)
+names(wn.stack) &lt;- c(&quot;suitability&quot;,&quot;Bio1&quot;,&quot;Bio12&quot;)</code></pre>
+<p><br />
+</p>
+<pre class="r"><code>table.thrwn &lt;- get.table(G.occ = thr.occG, suit.Estck = wn.stack)
+head(table.thrwn, n=4)</code></pre>
+<pre><code>##             x         y suitability Bio1 Bio12 Type
+## 85  -78.53148  0.940662   0.9989637  228  3191    1
+## 83  -74.86273  6.228702   0.9940102  230  3090    1
+## 139 -79.08334 -0.016667   0.9922734  228  3299    1
+## 60  -85.04083 10.713011   0.9865071  225  3131    1</code></pre>
+<pre class="r"><code>tail(table.thrwn, n=4)</code></pre>
+<pre><code>##              x          y  suitability Bio1 Bio12 Type
+## 4167 -78.24999 -0.4166636 1.797349e-10   51  1223    0
+## 4168 -78.91666 -1.4166636 5.850677e-11   51   760    0
+## 4169 -72.24999  6.4166701 1.842518e-11   35  2164    0
+## 4170 -77.24999  2.9166699 4.055963e-12  265  9916    0</code></pre>
+<!-- enter example for THr -->
 </div>
 <div id="catasticta-nimbice" class="section level3">
 <h3>Catasticta nimbice</h3>
-<p>Read the occurrence data table with three columns (Species name, longitude, and latitude), a raster with calculated suitability, and rasters with environmental information.</p>
-<pre class="r"><code>cn.occG &lt;- read.csv(&quot;./Initial_Data/Catasticta_nimbice_occ_G.csv&quot;,header=T)
+<p><em>Catasticta nimbice</em> with three environmental layers.</p>
+<pre class="r"><code># read input
+cn.occG &lt;- read.csv(&quot;./Initial_Data/Catasticta_nimbice_occ_G.csv&quot;,header=T)[,-1]
 
-cn.mahac &lt;- raster(&quot;./Generated_Data/Catasticta_nimbice_maha_cropped.tif&quot;)
-cn.wnc &lt;- raster(&quot;./Generated_Data/Catasticta_nimbice_wn_cropped.tif&quot;)
+cnmaha3 &lt;- raster(&quot;./Generated_Data/Catasticta_nimbice_maha3_cropped.tif&quot;)
 
 bio1cn &lt;- raster(&quot;./Generated_Data/Catasticta_nimbice_bio1_cropped.tif&quot;)
-bio12cn &lt;- raster(&quot;./Generated_Data/Catasticta_nimbice_bio12_cropped.tif&quot;)</code></pre>
+bio6cn &lt;- raster(&quot;./Generated_Data/Catasticta_nimbice_bio6_cropped.tif&quot;)
+bio12cn &lt;- raster(&quot;./Generated_Data/Catasticta_nimbice_bio12_cropped.tif&quot;)
+
+# stack rasters and define names for stacked layers
+maha.stack &lt;- stack(cnmaha3, bio1cn, bio6cn, bio12cn)
+names(maha.stack) &lt;- c(&quot;suitability&quot;,&quot;Bio1&quot;,&quot;Bio6&quot;,&quot;Bio12&quot;)</code></pre>
 <p><br />
 </p>
+<p>Load the source:</p>
+<pre class="r"><code># source(&quot;.\\Functions\\Tgettable.R&quot;)</code></pre>
+<p><br />
+</p>
+<p>Apply the function:</p>
+<pre class="r"><code> table.cnmaha &lt;- get.table(G.occ = cn.occG, suit.Estck = maha.stack)</code></pre>
+<p><br />
+</p>
+<pre class="r"><code>head(table.cnmaha, n=4)</code></pre>
+<pre><code>##              x        y suitability Bio1 Bio6 Bio12 Type
+## 59   -99.61444 18.92194   0.9512103  178   49  1129    1
+## 130 -103.40972 20.71000   0.7841870  193   64   954    1
+## 92  -100.47639 19.47222   0.7789280  184   61   913    1
+## 110 -101.75917 20.15306   0.7786452  190   48   816    1</code></pre>
 </div>
 </div>
 </div>

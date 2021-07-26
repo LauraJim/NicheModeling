@@ -88,7 +88,7 @@ names1 <- c("Annual mean temperature (°C x 10)","Annual Precipitation (mm)")
 
 # apply function
 x11()
-E.ellipse2d(Eoccs=occ, mu= mu1, Sigma= Sigma1, alphas= alpha1, Enames = names1)
+E.ellipse2d(Eoccs=occ.tr, mu= mu1, Sigma= Sigma1, alphas= alpha1, Enames = names1)
 
 ## Example 2:
 

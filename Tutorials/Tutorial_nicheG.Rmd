@@ -23,7 +23,7 @@ library(rgdal)
 
 # Project resulting ellipses back into G-space
 
-The function niche.G projects ellipses that define suitable environments for a species on a raster map. Those potential niches in the geographical space are colored by different degrees of suitability.
+The function niche.G projects ellipses that define suitable environments for a species on a raster map. Those potential niches in the geographical space are colored by different degrees of suitability. The calculation is based on the Mahalanobis distance (for further explanation, see tutorial *Mahalanobis*).
 \
 \
 
@@ -129,20 +129,7 @@ bios <- stack(bio1,bio12)
 For the species' occurrence points in correspondence with environmental data the "occ_GE.csv"-file that was created with `get.Ecoord` is used.
 ```{r}
 # read table and omit columns with coordinates
-occ1 <- read.csv("./Generated_Data/Catasticta_nimbice_occ_GE.csv",header=T)
-occ2 <- occ1[,-(1:2)]
-```
-\
-
-The centroid is calculated by taking the means of the two columns in the matrix (`mu`). This parameter will set the values of the maximum likelhood estimate.
-```{r}
-center <- colMeans(occ2)
-```
-\
-
-Calculate the covariance of the environmental data (`Sigma`).
-```{r}
-boundary <- cov(occ2)
+occ_E <- read.csv("./Generated_Data/Catasticta_nimbice_occ_GE.csv",header=T)[,-(1:2)]
 ```
 \
 
@@ -150,10 +137,8 @@ boundary <- cov(occ2)
 Apply the function `niche.G` with the parameters `Estck`, `mu`, and `Sigma` and plot it.
 
 ```{r, cache=TRUE, fig.show='hide'}
-cn.result <- niche.G(Estck = bios, mu = center, Sigma = boundary)
+cn.result <- niche.G(Estck = bios, mu = colMeans(occ_E), Sigma = cov(occ_E))
 
-# x11()
-plot(cn.result)
 ```
 \
 
@@ -204,6 +189,8 @@ cn.wnp <- rasterToPoints(cn.wn)
 cn.wnpd <- data.frame(cn.wnp)
 colnames(cn.wnpd) <- c("Longitude","Latitude","Suitability")
 
+# read species occurrence points
+occ_GE <- read.csv("./Generated_Data/Catasticta_nimbice_occ_GE.csv",header=T)
 
 # x11()
 ggplot() +
@@ -214,7 +201,7 @@ ggplot() +
                        mid='slateblue1', high = 'slateblue4',na.value = NA,
                        midpoint = 0.5, n.breaks=4) +
   # coord_sf(xlim = emap[1:2], ylim = emap[3:4], expand = FALSE) +
-  geom_point(data = occ1,aes(x=occ1[,1], y=occ1[,2]), 
+  geom_point(data = occ_GE,aes(x=occ_GE[,1], y=occ_GE[,2]), 
              shape = 21, fill = "orange1", alpha = 0.7) +
   labs(title = "Catasticta nimbice occurrences in Middle America") +
   labs(subtitle = "and suitable niches based on the weighted normal distribution") +
