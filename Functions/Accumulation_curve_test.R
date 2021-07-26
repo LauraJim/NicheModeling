@@ -4,11 +4,11 @@
 # Function 1: "get.table"--------------------------------------------------------
 # Description:
 # The function "get.table" will extract data from a raster that has information
-# on suitable niches for a species and create a table with the extracted information.
+# on suitable niches for a species and create a table with the extracted 
+# information.
 #
 # Parameters:
-# G.occ = a matrix with three columns, where the second and third column contain
-#         the coordinates in longitude and latitude
+# G.occ = a matrix with two columns with the coordinates of a species occurrence
 # suit.Estck = a rasterstack that contains calculated suitability areas for a 
 #           species and environmental layers, such as temperature or precipitation
 #

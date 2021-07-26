@@ -7,8 +7,7 @@
 # on suitable niches for a species and create a table with the extracted information.
 #
 # Parameters:
-# G.occ = a matrix with three columns, where the second and third column contain
-#         the coordinates in longitude and latitude
+# G.occ = a matrix with two columns with the species' occurrence (longitude, latitude)
 # suit.Estck = a rasterstack that contains calculated suitability areas for a 
 #           species and environmental layers, such as temperature or precipitation
 #

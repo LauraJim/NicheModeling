@@ -40,7 +40,7 @@ The function `get.table` will extract data from a raster that has information on
 
 ### Parameters
 
-* `G.occ` = a matrix with three columns, where the second and third column contain the coordinates in longitude and latitude
+* `G.occ` = a matrix with two columns with the geographic coordinates of a species occurrence (longitude and latitude)
 \
 
 * `suit.Estck` = a rasterstack that contains calculated suitability areas for a species and environmental layers, such as temperature or precipitation
@@ -66,8 +66,8 @@ get.table <- function(G.occ,suit.Estck){
   mat2 <- mat1[iord,]
   
   # Now repeat the previous steps with the occurrence points
-  occ1 <- extract(suit.Estck,G.occ[,2:3])
-  occ2 <- na.omit(cbind(G.occ[,2:3],occ1))
+  occ1 <- extract(suit.Estck,G.occ)
+  occ2 <- na.omit(cbind(G.occ,occ1))
   # sort the values of vector
   # order of index, ask order of rows order (range of indexes)
   iord2 <- order(occ2[,3], decreasing = T) 
@@ -94,7 +94,7 @@ The rasters that are used for this function have information on the suitability 
 
 Other rasters that are needed to create the parameter `suit.Estck` are rasters of the area that have environmental information. If the model raster is cropped to a specific area, the rasters with environmental data need to be cropped to the same area as well, else they cannot be stacked.
 
-The observation information of a species does not need any modification and can be directly used from the folder *Initial_Data*.
+The observation information of a species should only contain the observation coordinates of a species (longitude, latitude).
 \
 
 ### Catasticta nimbice
