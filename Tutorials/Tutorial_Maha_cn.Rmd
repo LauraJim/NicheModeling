@@ -42,38 +42,7 @@ Calculate the covariance of the environmental data (`Sigma`).
 ```
 \
 
-Prepare the rasterstack.
-```{r}
-## Read raster
-bio1 <- raster("./Initial_Data/bio1WH.asc")
-bio12 <- raster("./Initial_Data/bio12WH.asc")
-# combine the rasters into a RasterStack
-bios <- stack(bio1,bio12)
-```
-
-
-Apply source code for `niche.G`
-```{r}
-source(".\\Functions\\TnicheG.R")
-```
-\
-
-Apply function
-```{r}
-thr.maha <- niche.G(Estck = bios, mu = center, Sigma = boundary)
-```
-\
-
-Write raster.
-```{r}
-writeRaster(thr.maha, "./Generated_Data/Threnetes_ruckeri_maha_map.tif", overwrite= T) 
-```
-\
-
-```{r}
-plot(thr.maha)
-```
-
+Here, add example on how to plot the principal axis of the estimated ellipse (use this example: \url{https://multivariate-ecology.netlify.app/lab-5-transformations-eigenvectors-and-eigenvalues.html})
 
 \
 
