@@ -21,8 +21,8 @@ library(raster)
 \
 
 ```{r, echo=FALSE}
-nicetable <- read.csv("./Images/gettable_explain.csv",header=T)
-knitr::kable(nicetable)
+# nicetable <- read.csv("./Images/gettable_explain.csv",header=T)
+# knitr::kable(nicetable)
 ```
 \
 
@@ -97,17 +97,77 @@ Other rasters that are needed to create the parameter `suit.Estck` are rasters o
 The observation information of a species should only contain the observation coordinates of a species (longitude, latitude).
 \
 
-### Catasticta nimbice
 
-Read the occurrence data table with three columns (Species name, longitude, and latitude), a raster with calculated suitability, and rasters with environmental information.
-```{r, eval=FALSE}
-cn.occG <- read.csv("./Initial_Data/Catasticta_nimbice_occ_G.csv",header=T)
-
-cn.mahac <- raster("./Generated_Data/Catasticta_nimbice_maha_cropped.tif")
-cn.wnc <- raster("./Generated_Data/Catasticta_nimbice_wn_cropped.tif")
-
-bio1cn <- raster("./Generated_Data/Catasticta_nimbice_bio1_cropped.tif")
-bio12cn <- raster("./Generated_Data/Catasticta_nimbice_bio12_cropped.tif")
+### Threnetes ruckeri
+Read the occurrence data table with two columns (longitude and latitude), a raster with calculated suitability, and rasters with environmental information.
+```{r}
+thr.occG <- read.csv("./Initial_Data/Threnetes_ruckeri_occ_G.csv",header=T)[,-1]
 ```
 \
+
+Raster with suitability index calculated by the weighted normal distribution model. 
+```{r}
+thr.wn <- raster("Generated_Data/Threnetes_ruckeri_wn_cropped.tif")
+```
+\
+
+Cropped environmental layers.
+```{r}
+bio1th <- raster("./Generated_Data/Threnetes_ruckeri_bio1_cropped.tif")
+bio12th <- raster("./Generated_Data/Threnetes_ruckeri_bio12_cropped.tif")
+
+```
+\
+
+Create a rasterstack with environmental data and suitability.
+```{r}
+wn.stack <- stack(thr.wn, bio1th, bio12th)
+names(wn.stack) <- c("suitability","Bio1","Bio12")
+```
+\
+
+```{r}
+table.thrwn <- get.table(G.occ = thr.occG, suit.Estck = wn.stack)
+head(table.thrwn, n=4)
+tail(table.thrwn, n=4)
+```
+
+
+<!-- enter example for THr --> 
+
+### Catasticta nimbice
+
+
+*Catasticta nimbice* with three environmental layers.
+```{r}
+# read input
+cn.occG <- read.csv("./Initial_Data/Catasticta_nimbice_occ_G.csv",header=T)[,-1]
+
+cnmaha3 <- raster("./Generated_Data/Catasticta_nimbice_maha3_cropped.tif")
+
+bio1cn <- raster("./Generated_Data/Catasticta_nimbice_bio1_cropped.tif")
+bio6cn <- raster("./Generated_Data/Catasticta_nimbice_bio6_cropped.tif")
+bio12cn <- raster("./Generated_Data/Catasticta_nimbice_bio12_cropped.tif")
+
+# stack rasters and define names for stacked layers
+maha.stack <- stack(cnmaha3, bio1cn, bio6cn, bio12cn)
+names(maha.stack) <- c("suitability","Bio1","Bio6","Bio12")
+```
+\
+
+Load the source:
+```{r}
+# source(".\\Functions\\Tgettable.R")
+```
+\
+
+Apply the function:
+```{r}
+ table.cnmaha <- get.table(G.occ = cn.occG, suit.Estck = maha.stack)
+```
+\
+
+```{r}
+head(table.cnmaha, n=4)
+```
 
