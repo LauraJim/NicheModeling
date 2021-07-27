@@ -6,7 +6,6 @@
 # for both species: Catasticta nimbice (cn) and Threnetes ruckeri (thr). The models
 # used are the weighted normal distribution (wn) and Mahalanobis distance (maha).
 
-
 # Main: How the functions work (examples) --------------------------------------
 
 # Working directory and libraries -----------------------------
