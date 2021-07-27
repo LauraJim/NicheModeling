@@ -159,7 +159,7 @@ Unlike the previous example, random points of a study area instead of the occurr
 
 ```{r}
 # read table with random points
-bckgrnd <- read.csv("./Initial_Data/Threnetes_ruckeri_M.csv",header=T)
+bckgrnd <- read.csv("./Initial_Data/Threnetes_ruckeri_M_G.csv",header=T)
 head(bckgrnd, n=3)
 
 f2 <- get.Ecoord(Estck=bios, Gcoord=bckgrnd, names1) 
