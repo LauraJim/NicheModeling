@@ -1,0 +1,25 @@
+---
+title: "Accumulation Curve"
+author: "Laura Jimenéz and Carola Franzen"
+date: "July 2021"
+output: html_document
+fontsize: 12pt
+linkcolor: dodgerblue4
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Accumulation curve
+
+<!-- description -->
+
+### Parameters
+\
+* `G.occ` = a matrix with the coordinates of a species' occurrence
+\
+* `suit.Estck` = a rasterstack of a raster with a calculated suitability index and two or more rasters with environmental variables
+
+### Dependencies
+
