@@ -6,6 +6,7 @@
 # for both species: Catasticta nimbice (cn) and Threnetes ruckeri (thr). The models
 # used are the weighted normal distribution (wn) and Mahalanobis distance (maha).
 
+
 # Main: How the functions work (examples) --------------------------------------
 
 # Working directory and libraries -----------------------------
@@ -24,7 +25,7 @@ source(".\\Functions\\Accumulation_curve_test.R")
 ## Load necessary data and prepare parameters
 
 # Occurrence data, table with three columns
-cn.occ <- read.csv(".\\Catasticta_nimbice_occ_G.csv",header=T)
+cn.occ <- read.csv(".\\Catasticta_nimbice_occ_G.csv",header=T)[,1]
 
 # read cropped rasters with suitability index (from Niche.G) and cropped rasters
 #   with environmental information
@@ -70,7 +71,7 @@ compare.aco(mods=models, nocc=155, ncells=7251,
 ## Load necessary data and prepare parameters
 
 # Occurrence data, table with three columns
-thr.occ <- read.csv(".\\Threnetes_ruckeri_occ_G.csv",header=T)
+thr.occ <- read.csv(".\\Threnetes_ruckeri_occ_G.csv",header=T)[,-1]
 
 # read cropped rasters with suitability index (from Niche.G) and cropped rasters
 #   with environmental information
