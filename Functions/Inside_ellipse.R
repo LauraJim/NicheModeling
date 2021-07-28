@@ -87,3 +87,34 @@ el <- ellipse::ellipse(x=Sigma,centre = mu,level=0.95)
 lines(el,col=2,lwd=2)
 points(subset(check,check[,1]==1)[,2:3],pch=19,col=2)
 
+# 3D example --------------
+library(rgl)
+
+occ_GE3 <- read.csv ("./Catasticta_nimbice_occ_GE3.csv",header=T)[,-(1:2)]
+
+# mu calculates the means of the columns that contain the occurrences
+mu3 <- colMeans(occ_GE3)
+# Sigma calculates the covariance of the occurrences
+Sigma3 <- cov(occ_GE3)
+
+bio1 <- raster("./ClimateData10min/bio1WH.asc") 
+bio6 <- raster("./ClimateData10min/bio6.tif")
+bio12 <- raster("./ClimateData10min/bio12WH.asc") 
+## combine rasters with environmental data into a single RasterStack (w/ two layers)
+bios <- stack(bio1, bio6, bio12)
+# add names for new columns that contain environmental data
+names1 <- c("bio1", "bio6", "bio12") 
+
+M_G <- read.csv ("./Catasticta_nimbice_M_G.csv",header=T)
+
+M_GE3 <- get.Ecoord(Estck=bios, Gcoord= M_G, Enames=names1)
+
+write.csv(M_GE3,file=paste0("./Catasticta_nimbice","_M_GE3.csv"),row.names = F)
+
+# Define the matrix of points
+cloud3 <- read.csv("./Catasticta_nimbice_M_GE3.csv",header=T)[,-(1:2)]
+
+open3d()
+in.el(cloud = cloud3, centroid = mu3, sigma = Sigma3, alpha = 0.95)
+
+# open3d()
