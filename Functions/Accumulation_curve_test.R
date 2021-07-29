@@ -139,7 +139,7 @@ plot.aco <- function(species,aco.curve,conlev,model){
   }
   nsub0 <- length(aco.curve$out2[,1])
   # Plot
-  x11()
+  #x11()
   plot(aco.curve$out2[,1],aco.curve$out2[,1]*aco.curve$out1[3],type="b",col="red",
        xlab="Number of cells (ordered from most to least suitable)",
        ylab="Number of ccurrences",
@@ -616,6 +616,7 @@ accum.occ3 <- function(names,G.occ,suit.Estck,null.mod="hypergeom",clev=0,flag=T
     }
     ###
     # Plot 3: comparison among counts under random selection hypothesis
+    x11()
     plot.aco(names[1],curve,clev,null.mod)
   }
   
