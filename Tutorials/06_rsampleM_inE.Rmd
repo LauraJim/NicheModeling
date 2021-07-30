@@ -102,8 +102,8 @@ First, the rasterstack for the parameter `Estck` is prepared. For this example t
 
 ```{r}
 # Read environmental layers
-bio1 <- raster("./Initial_Data/bio1WH.asc")
-bio12 <- raster("./Initial_Data/bio12WH.asc")
+bio1 <- raster("./Initial_Data/bio1.asc")
+bio12 <- raster("./Initial_Data/bio12.asc")
 
 # Create a single raster with as many layers as environmental variables
 stck_bios <- stack(bio1, bio12)
@@ -113,7 +113,7 @@ stck_bios <- stack(bio1, bio12)
 Read the parameter for `region`.
 
 ```{r, results='hide', message=FALSE}
-cn.shp <- readOGR("./Initial_Data/shapefiles","nimbice3")
+cn.shp <- readOGR("./Initial_Data/shapefiles","Catasticta_nimbice")
 ```
 \
 
