@@ -97,7 +97,7 @@ There are two other tables that are used for the functions of this package. They
 
 The first table is contains two columns with the longitude and latitude of sampled locations for the species *Threnetes ruckeri*.
 ```{r}
-thrM <- read.csv("./Initial_Data/Threnetes_ruckeri_M.csv",header=T)
+thrM <- read.csv("./Initial_Data/Threnetes_ruckeri_M_G.csv",header=T)
 head(thrM, n=3)
 dim(thrM)
 ```
