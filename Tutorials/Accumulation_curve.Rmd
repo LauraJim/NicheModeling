@@ -377,10 +377,18 @@ head(curve.cn$out2, n=6)
 
 Plot the curve with `plot.aco` with the species name for the parameter `species`, the results from `get.curve` as `aco.curve`, 95% confidence level and the `model` set to "hypergeom".
 ```{r}
+x11()
 plot.aco(species = "Catasticta nimbice", aco.curve = curve.cn, conlev = 0.95, model = "hypergeom")
-
 ```
-<!-- plot with aco.curve?-->
+
+To save the plot (as a PNG), the code for applying the function needs to be placed within the plot for saving a picture. 
+```{r, eval=FALSE}
+png(paste0("./Generated_Data/Catasticta_nimbice","_maha_curve.png"),width = 2300, height = 2300, 
+    res = 600, pointsize = 6)
+plot.aco(species = "Catasticta nimbice", aco.curve = curve.cn, conlev = 0.95, model = "hypergeom")
+dev.off()
+```
+
 
 ```{r, echo=FALSE, fig.cap=" Figure of the accumulation curve for *Catasticta nimbice*.", out.width = '80%',fig.align="center"}
 options(knitr.duplicate.label = "allow")
