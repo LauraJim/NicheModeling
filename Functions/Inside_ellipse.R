@@ -90,12 +90,12 @@ points(subset(check,check[,1]==1)[,2:3],pch=19,col=2)
 # 3D example --------------
 library(rgl)
 
-occ_GE3 <- read.csv ("./Catasticta_nimbice_occ_GE3.csv",header=T)[,-(1:2)]
+occ_E3 <- read.csv ("./Catasticta_nimbice_occ_GE3.csv",header=T)[,-(1:2)]
 
 # mu calculates the means of the columns that contain the occurrences
-mu3 <- colMeans(occ_GE3)
+mu3 <- colMeans(occ_E3)
 # Sigma calculates the covariance of the occurrences
-Sigma3 <- cov(occ_GE3)
+Sigma3 <- cov(occ_E3)
 
 bio1 <- raster("./ClimateData10min/bio1WH.asc") 
 bio6 <- raster("./ClimateData10min/bio6.tif")
@@ -105,16 +105,29 @@ bios <- stack(bio1, bio6, bio12)
 # add names for new columns that contain environmental data
 names1 <- c("bio1", "bio6", "bio12") 
 
-M_G <- read.csv ("./Catasticta_nimbice_M_G.csv",header=T)
-
-M_GE3 <- get.Ecoord(Estck=bios, Gcoord= M_G, Enames=names1)
-
-write.csv(M_GE3,file=paste0("./Catasticta_nimbice","_M_GE3.csv"),row.names = F)
+# M_G <- read.csv ("./Catasticta_nimbice_M_G.csv",header=T)
+# M_GE3 <- get.Ecoord(Estck=bios, Gcoord= M_G, Enames=names1)
+# write.csv(M_GE3,file=paste0("./Catasticta_nimbice","_M_GE3.csv"),row.names = F)
 
 # Define the matrix of points
 cloud3 <- read.csv("./Catasticta_nimbice_M_GE3.csv",header=T)[,-(1:2)]
 
-open3d()
-in.el(cloud = cloud3, centroid = mu3, sigma = Sigma3, alpha = 0.95)
+check3 <- in.el(cloud = cloud3, centroid = mu3, sigma = Sigma3, alpha = 0.95)
 
-# open3d()
+elli <- ellipse3d(centre = mu3, x= Sigma3, level = 0.95)
+
+open3d()
+plot3d(x=check3[,2], y=check3[,3], z=check3[,4], box = FALSE,
+       xlab="bio1", ylab="bio6", zlab="bio12",
+       type ="s", col ="grey", size=0.5) 
+spheres3d(x=mu3[1], y=mu3[2], z=mu3[3], radius=25)
+plot3d(elli, col = "darkorange4", alpha = 0.5, add = TRUE, type = "wire")
+
+open3d()
+plot3d(subset(check3,check3[,1]==1)[,2:4], box = FALSE, 
+       xlab="bio1", ylab="bio6", zlab="bio12", type = "s", size= 1, col="darkorange4")
+points3d(subset(check3,check3[,1]==0)[,2:4], pointstyle = "s", size= 4, col= "grey")
+spheres3d(x=mu3[1], y=mu3[2], z=mu3[3], radius=25)
+plot3d(elli, col = "darkorange4", alpha = 0.5, add = TRUE, type = "wire")
+
+
