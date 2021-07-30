@@ -6,7 +6,12 @@ output: html_document
 fontsize: 12pt
 linkcolor: dodgerblue4
 bibliography: ENM-references.bib
+csl: ecology-letters.csl
 ---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
 
 # Introduction
 
