@@ -1,0 +1,184 @@
+---
+title: "Getting environmental values for the study sites"
+author: "Laura Jiménez and Carola Franzen"
+date: "June 2021"
+output: html_document
+fontsize: 12pt
+linkcolor: dodgerblue4
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(dismo)
+
+```
+\
+\
+  
+# Extracting environmental data from raster files from a set of geographic coordinates
+
+The function `get.Ecoord` is a simple tool to extract environmental data, such as annual mean temperature or total annual precipitation, from raster-files that contain this type of information. The extracted data is then combined with the occurrence coordinates of a species. The output is a matrix that contains four or more columns: the coordinates of the species' occurrence (latitude and longitude) and the environmental variables for those coordinates.
+\
+  
+\
+  
+## Parameters
+
+For this function, three parameters are necessary:
+\
+
+* `Estck` = a raster stack that has two or more climatic layers
+\
+
+* `Gcoord` = a matrix with two columns whose rows are geographic coordinates of species' occurrence in the study area
+\
+
+* `Enames` = names for the extracted environmental variables in form of a character vector for the output table
+\
+  
+## Function's code
+
+
+### How *get.Ecoord* works
+  
+The function `get.Ecoord` will first check the amount of layers that a rasterstack has and makes sure that the numbers of entered names are the same. If the number of names and raster layers are the same amount, the climatic data for the species occurrence points are extracted from the rasters and combined into a matrix. Rows with no occurrence points are deleted. Finally, the columns are renamed by the coordinates and names that were entered into the function.
+If less or more names are entered the message "Raster stack and Enames does not have the same length" will be printed.  
+
+```{r}
+get.Ecoord <- function(Estck, Gcoord, Enames) {
+
+  # check the amount of layers in a raster and make sure they are the same as the
+  # names that are used
+  if (length(Estck@layers)==length(Enames)) {  
+    # extract climatic data from a raster
+    a <- extract(Estck,Gcoord)  
+    # combine columns of extracted coordinates with column of environmental data
+    # and deletes rows with data points that are marked as NA
+    b <- na.omit(cbind(Gcoord,a)) 
+    # rename the columns 
+    colnames(b) <- c(colnames(Gcoord),Enames) 
+    return(b)
+  }
+  else { 
+    # if the amount of layers is not the same as the amount of added column names,
+    # this message is printed instead
+    print("Raster stack and Enames does not have the same length.") 
+  }
+}
+```
+\
+
+### Output
+
+The output of the function is a matrix with at least four variables. The first two columns are the longitude and latitude coordinates of the species' occurrence. The following columns are the environmental data that has been extracted from the raster files. The matrix can be saved as a csv-file that serves as data input for other functions.
+\
+
+\
+  
+## Worked Examples
+
+### Input files
+
+The raster files need to contain information on climatic values that are of interest for the user. The rasters used in the examples below are from [WorldClim](https://worldclim.org/data/index.html) and have a resolution of "10 minutes". The files usually do not need further editing.
+
+The presence data of the species of interest needs to contain the coordinates of occurrence (longitude and latitude) in form of a table. 
+Occurrence data is available on various open databases. For the examples below, data from [GBIF](https://www.gbif.org/) was used. However, the tables from GBIF need to be cleaned up before they can be used as the database is aggregated from various sources with different formats and can contain various errors. There are packages available that aid in the cleaning of the data (e.g. see [CoordinateCleaner]( https://ropensci.github.io/CoordinateCleaner/articles/Cleaning_GBIF_data_with_CoordinateCleaner.html)).
+
+The same function can also be used to extract environmental data and combine it with random points of a study area if a matrix with random points is available.
+\
+  
+### *Catasticta nimbice*
+
+To create the parameter `Estck`, two or more rasters are combined into one rasterstack. For this species we used rasters with the environmental conditions "mean annual temperature" (= bio1) and "total annual precipitation" (= bio12).  
+The created rasterstack will have as many layers as rasters are combined together. In this example, there are only two layers: bio1 and bio12.
+```{r}
+
+# read raster files
+bio1 <- raster("./Initial_Data/bio1.asc")
+bio12 <- raster("./Initial_Data/bio12.asc")
+# combine the rasters into a RasterStack
+bios <- stack(bio1, bio12) #  = Estck
+
+```
+\
+  
+The parameter `Gcoord` is a matrix with coordinates of the tracked occurrence of *Catasticta nimbice*. The cleaned table can be directly read without much modification.
+```{r}
+# read table, set header and omit first column of the table
+occ <- read.csv("./Initial_Data/Catasticta_nimbice_occ_G.csv",header=T)[,-1] #  = Gcoord
+
+head(occ, n=3)
+
+```
+\
+
+In order to set names for the new columns that will be created by the function, the parameter `Enames` will be set with as many names as rasters have been stacked. In this example, the first column name is bio1 and the second is bio12. 
+```{r}
+# write names for the column heads of the environmental data
+names1 <- c("bio1", "bio12") #  = Enames
+
+
+```
+\
+
+Apply `get.Ecoord` with the parameters `Estck`, `Gcoord`, and `Enames`:
+```{r}
+f <- get.Ecoord(Estck=bios, Gcoord=occ, Enames=names1)
+
+head(f, n=3)
+
+```
+\
+
+Save the output as a csv-file (but do not run every time):
+```{r, eval=FALSE}
+write.csv(f,file=paste0("./Generated_Data/Catasticta_nimbice","_occ_GE.csv"),
+          row.names = F)
+```
+This csv-file can now be used as data input for various graphs that highlight the geographical presence of the species and the surrounding environment.
+\
+\
+Now, repeat this example but using the data of *Threnetes ruckeri*, and save a file called "Threnetes_ruckeri_occ_GE.csv".
+
+### *Threnetes ruckeri*
+
+The raster datasets for the species *Threnetes ruckeri* and names ("bio1" and "bio12") are the same as the above example.
+
+```{r, eval=FALSE}
+bio1 <- raster("./Initial_Data/bio1.asc") 
+bio12 <- raster("./Initial_Data/bio12.asc") 
+bios <- stack(bio1, bio12)
+
+names1 <- c("bio1", "bio12") 
+
+```
+  
+Unlike the previous example, random points of a study area instead of the occurrence points are combined with extracted environmental data that can be used as a background for maps (e.g. in the tutorials "Function *GEspace*" and "Function *el.in*").
+
+```{r}
+# read table with random points
+bckgrnd <- read.csv("./Initial_Data/Threnetes_ruckeri_M_G.csv",header=T)
+head(bckgrnd, n=3)
+
+f2 <- get.Ecoord(Estck=bios, Gcoord=bckgrnd, names1) 
+head(f2, n=3)
+```
+
+
+Save the output as a csv-file (but do not run it every time):
+```{r, eval=FALSE}
+
+write.csv(f2,file=paste0("./Generated_Data/Threnetes_ruckeri_M","_GE.csv"),
+          row.names = F)
+```
+
+Now, repeat this example but using the data of *Catasticta nimbice*, and save a file called "Catasticta_nimbice_M_GE.csv"
+
+### Output files
+- Catasticta_nimbice_occ_GE.csv
+- Catasticta_nimbice_M_GE.csv
+- Threnetes_ruckeri_occ_GE.csv
+- Threnetes_ruckeri_M_GE.csv
+
