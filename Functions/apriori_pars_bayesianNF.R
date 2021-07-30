@@ -28,7 +28,4 @@ priorpar <- function(tolran,nsd,alpha=2)
 limits <- read.csv("./T_ruckeri_tolerances.csv")
 
 priorpar(limits[,2:3],6,2)
-<<<<<<< HEAD
 
-=======
->>>>>>> c8e7f23f163c9ce1f8aed10d9dfd0eee3c59634d
