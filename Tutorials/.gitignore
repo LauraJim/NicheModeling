@@ -1,15 +1,11 @@
-<<<<<<< HEAD
-Tutorial_InEllipse.html
-Tutorial_eellipse.html
-Tutorial_Getecoord.html
-Tutorial_GSpace-ESpace.html
-Tutorial_nicheG.html
-Tutorial_sampolyM.html
-=======
-Tutorial_nicheG.html
-Tutorial_eellipse.html
-Tutorial_Getecoord.html
-Tutorial_InEllipse.html
-Tutorial_sampolyM.html
-Output_Data
->>>>>>> 9e2b0db2d345bb919744ceb1555603e732fcb47d
+00_Introduction.html
+01_Initial_data.html
+02_Get_Ecoords.html
+03_Plot_Gspace_Espace.html
+04_Mahalanobis.html
+05_Plot_Eellipse.html
+06_rsampleM_inE.html
+07_Inside_ellipse.html
+08_Weigthed_normal.html
+09_ProjectNf_intoGspace.html
+10_Evaluation_method.html
