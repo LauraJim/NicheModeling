@@ -1,0 +1,7 @@
+base
+sp
+raster
+rgdal
+rgeos
+scales
+ggplot2

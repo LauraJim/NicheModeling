@@ -130,7 +130,7 @@ If the random sample has already been calculated (see above, function `rs.inE`),
 
 Read the files necessary for the parameters of `rs.inE` and `fitNiche`.
 ```{r, results='hide'}
-cn.shp <- readOGR("./Initial_Data/shapefiles","Catasticta_nimbice3")
+cn.shp <- readOGR("./Initial_Data/shapefiles","Catasticta_nimbice")
 
 bio1 <- raster("./Initial_Data/bio1.asc")
 bio12 <- raster("./Initial_Data/bio12.asc")

@@ -131,7 +131,7 @@ boundary <- cov(occ_E)
 
 Apply source code for `niche.G`
 ```{r}
-# source(".\\Functions\\TnicheG.R")
+source(".\\Functions\\TnicheG.R")
 ```
 \
 
