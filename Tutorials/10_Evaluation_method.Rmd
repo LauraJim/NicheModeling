@@ -364,7 +364,7 @@ curve.cn <- get.curve(occ.suit = table.cn[table.cn$Type==1,][,3], mod.suit = tab
 
 The first output provides 1) the number of cells in study area, 2) the number of occurrences, and 3) the prevalence (number of occurrences / number of cells in G).
 ```{r}
-(curve.cn$out1)
+round(curve.cn$out1,3)
 ```
 \
 
