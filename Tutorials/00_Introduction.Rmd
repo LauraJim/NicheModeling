@@ -17,7 +17,7 @@ Our package contains all the functions needed to estimate the climatic fundament
 
 2) Weigthed-normal model *sensu* @Jimenez2021, this model has the same assumptions as the Mahalanobis model regarding the shape of the fundamental niche, however, it takes into account that not all the environmental combinations in niche space have the same probability of being observed in a sample of occurrences. 
 
-3) Bayesian normal model *sensu* @Jimenez2021, which takes the Mahalanobis as the underlying models for the fundamental niche of a species and assumes that there is relevant *a priori* information that can be incorporated into de model, usually from physiological experiments.
+3) Bayesian normal model *sensu* @Jimenez2019, which takes the Mahalanobis as the underlying models for the fundamental niche of a species and assumes that there is relevant *a priori* information that can be incorporated into de model, usually from physiological experiments.
 
 Additionally, we included the functions used to apply the evaluation method based on a hypergeometric test presented by @Jimenez2020.
 
