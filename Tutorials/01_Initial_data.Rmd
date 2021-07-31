@@ -9,32 +9,27 @@ linkcolor: dodgerblue4
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-
-library(raster)
-library(sp)
-library(ggplot2)
-library(rnaturalearth)
-library(rnaturalearthdata)
-library(rgdal)
-
 ```
-\
-  
-\
 
-# Input data and parameters
-\
-For the tutorials of this package, specific data and parameters are necessary. They will be explained here for reference.
-<!-- write more blabla here -->
+## Species under study and necessary files to start an analysis
 
-\
+We selected two species as our focus species for all the analysis and examples:
 
-## Collected Data
+- *Threnetes rucheri*, the band-tailed barbthroat hummingbird, resident from Central America.
 
-The collected data are rasters and tables related to a species of interest and study focus. They will be the basic input data that is necessary to create the parameters for the functions.
-\
+- *Catasticta nimbice*, the pine white or Mexican dartwhite butterfly, known to occur from Costa Rica north to Mexico.
 
-### Occurrence observations of species
+Three types of files are needed to reproduce the ecological niche modeling exercises included in this tutorial:
+
+- A csv file that contains the geographic coordinates of the sites where the species has been recorded as present,
+
+- A shapefile containing a polygon which delimits the study region,
+
+- Raster files with the environmental variables to be used in the analysis and an extent larger or equal to the extent of the shapefile.
+
+Below, we describe the files that we created for our two focus species so you can create similar files for the species of your interest.
+
+## Occurrence data
 
 The tables used for this package are matrices that contain the location information of a species observation. Only presence data is used as absence data plays no role for the models employed.
 
@@ -51,7 +46,19 @@ G.occ2 <- read.csv("./Initial_Data/Threnetes_ruckeri_occ_G.csv",header=T)
 head(G.occ2, n=3)
 
 ```
-\
+
+### How to plot occurrence data using `ggplot`
+
+```{r pcks, echo=FALSE, warning=FALSE, message=FALSE}
+library(raster)
+library(sp)
+library(ggplot2)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(rgdal)
+
+```
+
 
 ```{r, fig.show='hide', results='hide'}
 # Set the boundaries to which the worldmap is cut
@@ -91,7 +98,7 @@ knitr::include_graphics("Images/occurrences.png")
 ```
 \
 
-### Random sampled points of the study area
+## Points inside the study area to plot Hutchinson's duality
 
 There are two other tables that are used for the functions of this package. They contain random samples of locations of the study area. These points serve as background points for various graphs.
 
@@ -111,7 +118,7 @@ dim(cnM.GE)
 ```
 \
 
-### Polygons of the study area
+## Polygons of the study area
 The functions often use a polygon of the region of interest either to serve as a boundary in plots or to delimit rasters or sampled points to the specific region. The polygons used in the examples are shapefiles.
 
 ```{r, results='hide'}
@@ -161,7 +168,7 @@ knitr::include_graphics("Images/shapefiles.png")
 ```
 \
 
-### Rasters with environmental information
+## Rasters with environmental information
 
 The raster files for the functions of this package need to contain information on climatic values that are of interest for the user. The rasters used in the examples are from [WorldClim](https://worldclim.org/data/index.html) and have a resolution of "10 minutes". The files usually do not need further editing.
 

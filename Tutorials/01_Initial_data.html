@@ -171,22 +171,23 @@ pre code {
 </div>
 
 
-<p><br />
-</p>
-<p><br />
-</p>
-<div id="input-data-and-parameters" class="section level1">
-<h1>Input data and parameters</h1>
-<p><br />
-For the tutorials of this package, specific data and parameters are necessary. They will be explained here for reference. <!-- write more blabla here --></p>
-<p><br />
-</p>
-<div id="collected-data" class="section level2">
-<h2>Collected Data</h2>
-<p>The collected data are rasters and tables related to a species of interest and study focus. They will be the basic input data that is necessary to create the parameters for the functions.<br />
-</p>
-<div id="occurrence-observations-of-species" class="section level3">
-<h3>Occurrence observations of species</h3>
+<div id="species-under-study-and-necessary-files-to-start-an-analysis" class="section level2">
+<h2>Species under study and necessary files to start an analysis</h2>
+<p>We selected two species as our focus species for all the analysis and examples:</p>
+<ul>
+<li><p><em>Threnetes rucheri</em>, the band-tailed barbthroat hummingbird, resident from Central America.</p></li>
+<li><p><em>Catasticta nimbice</em>, the pine white or Mexican dartwhite butterfly, known to occur from Costa Rica north to Mexico.</p></li>
+</ul>
+<p>Three types of files are needed to reproduce the ecological niche modeling exercises included in this tutorial:</p>
+<ul>
+<li><p>A csv file that contains the geographic coordinates of the sites where the species has been recorded as present,</p></li>
+<li><p>A shapefile containing a polygon which delimits the study region,</p></li>
+<li><p>Raster files with the environmental variables to be used in the analysis and an extent larger or equal to the extent of the shapefile.</p></li>
+</ul>
+<p>Below, we describe the files that we created for our two focus species so you can create similar files for the species of your interest.</p>
+</div>
+<div id="occurrence-data" class="section level2">
+<h2>Occurrence data</h2>
 <p>The tables used for this package are matrices that contain the location information of a species observation. Only presence data is used as absence data plays no role for the models employed.</p>
 <p>Occurrence data is available on various open databases. For all examples, data from <a href="https://www.gbif.org/">GBIF</a> was used. However, the tables from GBIF need to be cleaned up before they can be used as the database is aggregated from various sources with different formats and can contain various errors. There are packages available that aid in the cleaning of the data (e.g. see <a href="https://ropensci.github.io/CoordinateCleaner/articles/Cleaning_GBIF_data_with_CoordinateCleaner.html">CoordinateCleaner</a>).</p>
 <p>The tables for the examples have been cleaned and contain three columns: species name, longitude, latitude. These occurrence tables with three columns are called <code>G.occ</code>.</p>
@@ -203,8 +204,8 @@ head(G.occ2, n=3)</code></pre>
 ## 1 Threnetes_ruckeri -79.42474  9.225965
 ## 2 Threnetes_ruckeri -84.01280 10.428800
 ## 3 Threnetes_ruckeri -82.95325  9.867804</code></pre>
-<p><br />
-</p>
+<div id="how-to-plot-occurrence-data-using-ggplot" class="section level3">
+<h3>How to plot occurrence data using <code>ggplot</code></h3>
 <pre class="r"><code># Set the boundaries to which the worldmap is cut
 ext &lt;- extent(-115, -68, -8, 35)
 # worldmap is added from the rnaturalearth packages
@@ -244,8 +245,9 @@ Figure of the of the two species <em>Catasticta nimbice</em> and <em>Threnetes r
 <p><br />
 </p>
 </div>
-<div id="random-sampled-points-of-the-study-area" class="section level3">
-<h3>Random sampled points of the study area</h3>
+</div>
+<div id="points-inside-the-study-area-to-plot-hutchinsons-duality" class="section level2">
+<h2>Points inside the study area to plot Hutchinson’s duality</h2>
 <p>There are two other tables that are used for the functions of this package. They contain random samples of locations of the study area. These points serve as background points for various graphs.</p>
 <p>The first table is contains two columns with the longitude and latitude of sampled locations for the species <em>Threnetes ruckeri</em>.</p>
 <pre class="r"><code>thrM &lt;- read.csv(&quot;./Initial_Data/Threnetes_ruckeri_M_G.csv&quot;,header=T)
@@ -270,8 +272,8 @@ head(cnM.GE, n=3)</code></pre>
 <p><br />
 </p>
 </div>
-<div id="polygons-of-the-study-area" class="section level3">
-<h3>Polygons of the study area</h3>
+<div id="polygons-of-the-study-area" class="section level2">
+<h2>Polygons of the study area</h2>
 <p>The functions often use a polygon of the region of interest either to serve as a boundary in plots or to delimit rasters or sampled points to the specific region. The polygons used in the examples are shapefiles.</p>
 <pre class="r"><code>cn.shp &lt;- readOGR(&quot;./Initial_Data/shapefiles&quot;,&quot;Catasticta_nimbice&quot;)
 thr.shp &lt;- readOGR(&quot;./Initial_Data/shapefiles&quot;,&quot;Threnetes_ruckeri&quot;)</code></pre>
@@ -317,8 +319,8 @@ Figure of the shapefiles for the study area of <em>Catasticta nimbice</em> (gree
 <p><br />
 </p>
 </div>
-<div id="rasters-with-environmental-information" class="section level3">
-<h3>Rasters with environmental information</h3>
+<div id="rasters-with-environmental-information" class="section level2">
+<h2>Rasters with environmental information</h2>
 <p>The raster files for the functions of this package need to contain information on climatic values that are of interest for the user. The rasters used in the examples are from <a href="https://worldclim.org/data/index.html">WorldClim</a> and have a resolution of “10 minutes”. The files usually do not need further editing.</p>
 <p>For our examples, we used the raster of the American continent. The environmental conditions of interest are the <em>mean annual temperature</em>, called <code>bio1</code> and the the <em>total mean precipitation</em>, called <code>bio12</code>.</p>
 <pre class="r"><code># raster for mean annual temperature (°C x 10)
@@ -348,7 +350,6 @@ Figure of the of the mean annual temperature (in °C, multiplied by 10) for the 
 </div>
 <p><br />
 </p>
-</div>
 <div id="how-to-crop-raster-layers" class="section level3">
 <h3>How to crop raster layers</h3>
 <p>You need to run this examples and save the resulting raster layers because these will be used in the exercises.</p>
@@ -392,7 +393,6 @@ writeRaster(bio12thr,&quot;./Generated_Data/tr_bio12_cropped.tif&quot;, overwrit
 <p>Additionally, note that you can use this code to crop and mask any raster layer to the study area of each species. This is something you will need to do before doing some future examples.<br />
 </p>
 <p>~~ End ~~</p>
-</div>
 </div>
 </div>
 
