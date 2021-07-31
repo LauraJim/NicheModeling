@@ -9,7 +9,7 @@ bibliography: ENM-references.bib
 csl: ecology-letters.csl
 ---
 
-# Introduction
+## Introduction
 
 Our package contains all the functions needed to estimate the climatic fundamental niche of a species in a multivariate space defined by two or three environmental variables. We included three different statistical models to estimate the fundamental niche:
 
@@ -21,9 +21,9 @@ Our package contains all the functions needed to estimate the climatic fundament
 
 Additionally, we included the functions used to apply the evaluation method based on a hypergeometric test presented by @Jimenez2020.
 
-The main goal of this tutorial is to provide worked examples that teach you how to use all the functions included in the package. In the following section, we provide a detailed description of the datasets that are included in the package and that can be used to reproduce these examples. Although we chose two arbitrary species as our focus species (a hummingbird, *Threnetes ruckeri*, and a butterfly, *Catasticta nimbice*), you should be able to apply all the functions to datasets of any species and any geographic region.
+The main goal of this tutorial is to provide worked examples that teach you how to use all the functions included in the package. Although we chose two arbitrary species as our focus species (a hummingbird, *Threnetes ruckeri*, and a butterfly, *Catasticta nimbice*), you should be able to apply all the functions to any species and any geographic region. In the following section, we provide a detailed description of the datasets that are included in the package and that can be used to reproduce all the examples, as well as to prepare other datasets for future analysis with other species and study regions.
 
-## Organization within the tutorial
+### Organization within the tutorial
 
 In each section of the tutorial, you will find a section called **Input data** which will indicate which are the files that you need beforehand to be able to reproduce the examples, and, a section called **Output data** which indicates what are the files that you would generate after reproducing the examples. In some cases, we only show how to make the analysis for one of the species and ask you to repeat the analysis for the second species as an exercise. It is important that you generate all the files listed in the **Output data** section since they will be used in subsequent sections of the tutorial.
 
