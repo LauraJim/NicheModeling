@@ -1,5 +1,5 @@
 ---
-title: "Function *e.ellipse*"
+title: "Plotting an ellipsoid in E-space"
 author: "Laura Jiménez and Carola Franzen"
 date: "June 2021"
 output: html_document

@@ -1,5 +1,5 @@
 ---
-title: "Function *niche.G*"
+title: "Projecting an estimated niche into G-space"
 author: "Laura Jiménez and Carola Franzen"
 date: "June 2021"
 output: html_document

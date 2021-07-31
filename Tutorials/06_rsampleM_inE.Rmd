@@ -1,6 +1,6 @@
 ---
 title: "Random sampling in environmental data"
-author: "Laura Jimenéz and Carola Franzen"
+author: "Laura Jiménez and Carola Franzen"
 date: "June 2021"
 output: html_document
 fontsize: 12pt

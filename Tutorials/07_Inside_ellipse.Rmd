@@ -1,5 +1,5 @@
 ---
-title: "Function *el.in*"
+title: "How to identify points inside and outside the fundamental niche"
 author: "Laura Jiménez and Carola Franzen"
 date: "June 2021"
 output: html_document

@@ -1,6 +1,6 @@
 ---
-title: "Accumulation Curve"
-author: "Laura Jimenéz and Carola Franzen"
+title: "Evaluation method: building accumulation curve of occurrences"
+author: "Laura Jiménez and Carola Franzen"
 date: "July 2021"
 output: html_document
 fontsize: 12pt
