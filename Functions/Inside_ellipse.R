@@ -125,9 +125,11 @@ plot3d(elli, col = "darkorange4", alpha = 0.5, add = TRUE, type = "wire")
 
 open3d()
 plot3d(subset(check3,check3[,1]==1)[,2:4], box = FALSE, 
-       xlab="bio1", ylab="bio6", zlab="bio12", type = "s", size= 1, col="darkorange4")
-points3d(subset(check3,check3[,1]==0)[,2:4], pointstyle = "s", size= 4, col= "grey")
-spheres3d(x=mu3[1], y=mu3[2], z=mu3[3], radius=25)
+       xlab="bio1", ylab="bio6", zlab="bio12", type = "s", size= 0.6,
+       col="orange")
+points3d(subset(check3,check3[,1]==0)[,2:4], pointstyle = "s", size= 4,
+         col= "grey")
+spheres3d(x=mu3[1], y=mu3[2], z=mu3[3], radius=25, col="darkblue")
 plot3d(elli, col = "darkorange4", alpha = 0.5, add = TRUE, type = "wire")
 
 
