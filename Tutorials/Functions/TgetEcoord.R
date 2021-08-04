@@ -42,6 +42,8 @@ get.Ecoord <- function(Estck,Gcoord, Enames) {
 }
 
 
-## libraries
+## read library ----------------
 library(dismo)
 
+
+# End

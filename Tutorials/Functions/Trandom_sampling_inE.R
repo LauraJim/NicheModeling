@@ -32,12 +32,12 @@ rs.inE <- function(region,N,Estck){
   return(pnts)
 }
 
-# MAIN: How to use rs.inE ---------------------------------------------------
 
-## libraries
+## read libraries --------------
 library(raster)
 library(rgdal)
 library(rgeos)
 library(tools)
 
 
+# End

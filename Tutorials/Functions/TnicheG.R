@@ -38,10 +38,12 @@ niche.G <- function(Estck, mu, Sigma) {
 }
 
   
-## libraries:
+## read libraries -------------------
 
 library(raster)
 library(sp)
 library(ggplot2)
 library(ggpubr)
 library(rgdal)
+
+# End

@@ -74,9 +74,11 @@ fitNiche <- function(E.occ, E.samM) {
   return(list(wn.mu = mle.mu, wn.sigma = mle.Sig, maha.mu = mu.ini, maha.sigma = Sig.ini))
 }
 
-## Read libraries
+
+## Read libraries -------------- 
 # library(sp)
 library(raster)
 library(rgdal)
 library(rgeos)
 
+# End
