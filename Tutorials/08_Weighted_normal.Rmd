@@ -19,7 +19,7 @@ library(ggplot2)
 ```
 \
 
-The estimation of the fundamental niche can be approached with the maximum likelihood estimation. It uses a weighted distribution where the weigths represent the availability of environmental combinations inside M. To calculate the maximum likelihood estimation, three functions are necessary: `rs.inE`, `negloglike`, and `like.max`.
+The estimation of the fundamental niche can be approached with the maximum likelihood estimation. It uses a weighted distribution where the weigths represent the availability of environmental combinations inside M. To calculate the maximum likelihood estimation, three functions are necessary: `rs.inE`, `negloglike`, and `fitNiche`.
 \
 
 
@@ -120,13 +120,21 @@ The output is a list with four different objects: mu and sigma for the weigthed 
 \
 
 ## Worked examples
-
-### Input Data
-
-If the random sample has already been calculated (see above, function `rs.inE`), only the occurrence points of the species of interest are necessary as input data. These occurrence points do not need to contain geographical data but the environmental data. This matrix can be created by using the `get.ecoord` function (see tutorial "Function *get.ecoord*"). 
 \
 
 ### *Catasticta nimbice*
+\
+**Input Files**
+
+* Catasticta_nimbice_occ_GE.csv
+
+* Catasticta_nimbice.shp (and associated files)
+
+* bio1.asc
+
+* bio12.asc
+\
+
 
 Read the files necessary for the parameters of `rs.inE` and `fitNiche`.
 ```{r, results='hide'}
@@ -179,9 +187,9 @@ write.csv(ml.table,"./Generated_Data/cn_mu_sigma_estimates.csv",row.names = F)
 Calculate the ellipses for the weighted distribution normal and the multivariate normal distribution.
 ```{r}
 # get the ellipse defined by the ml estimators
-el <- ellipse::ellipse(x=ml[[2]], centre=ml[[1]], level=0.99)
+el.wn <- ellipse::ellipse(x=ml[[2]], centre=ml[[1]], level=0.99)
 # get the ellipse from a multivarite normal model / mahalanobis distance method
-el.ml <- ellipse::ellipse(x=ml[[4]], centre=ml[[3]], level=0.99)
+el.maha <- ellipse::ellipse(x=ml[[4]], centre=ml[[3]], level=0.99)
 ```
 \
 
@@ -193,40 +201,57 @@ colpal <- c("grey70", "chartreuse4", "coral2", "cadetblue3")
 # plot will be saved as .png
 png(paste0("./Generated_Data/Catasticta_nimbice","_mle.png"),width = 2300, height = 2300, 
     res = 600, pointsize = 6)
-x11()
+# x11()
 plot(cn.sample,col=colpal[1],pch=1, xlab="Annual mean temperature (°C*10)", 
      ylab="Annual precipitation (mm)")
 # add presence points to the plot
 points(cn.occ,col=colpal[3],pch=20,cex=1.5) # presences used in model
 # ellipse maha
-lines(el,col=colpal[2],lwd=2)
-# ellipse mle
-lines(el.ml,col=colpal[4],lwd=2)
+lines(el.maha,col=colpal[4],lwd=2)
+# ellipse wn
+lines(el.wn,col=colpal[2],lwd=2)
 sp.leg <- paste("Catasticta nimbice","(",nrow(cn.occ),")")
 legend("topleft",legend = c(sp.leg,"Points inside M","Presences",
                             "Ellipse from Mahalanobis method",
                             "Ellipse from weighted-normal model"),
-       pch=c(NA,1,19,NA,NA),col = c("white", colpal[1], colpal[3], colpal[2], colpal[4]),
+       pch=c(NA,1,19,NA,NA),col = c("white", colpal[1], colpal[3], colpal[4], colpal[2]),
        lwd=c(NA,NA,NA,2,2),bty = "n")
 # finish saving png
 dev.off()
 ```
-\
+
 
 ```{r, echo=FALSE, fig.cap=" Figure of the environmental space of *Catasticta nimbice*. It shows the occurrence points of a species with two possible niches delineated by the Mahalanobis method and the weighted normal method.", out.width = '70%',fig.align="center"}
 knitr::include_graphics("Images/Catasticta_nimbice_mle.png")
 ```
 \
 
+**Output Files**
+
+* cn_mu_sigma_estimates.csv
+
+* Catasticta_nimbice_mle.png
+\
+
 \
 
 ### *Threnetes ruckeri*
+\
+**Input Files**
 
-For this species the same steps are followed as above until the plot. Here, it will be plotted using `ggplot2`.
+* Threnetes_ruckeri_occ_GE.csv
+
+* Threnetes_ruckeri.shp (and associated files)
+
+* bio1.asc
+
+* bio12.asc
 \
 
+For this species the same steps are followed as above until the plot. Here, it will be plotted using `ggplot2`.
+
 Read the matrix with occurrences combined with environmental data and the shape-file of the study area (the necessary rasterstack was already created in the example above).
-```{r}
+```{r, results='hide'}
 thr.occ <- read.csv("./Generated_Data/Threnetes_ruckeri_occ_GE.csv",header=T)[,-(1:2)]
 
 thr.shp <- readOGR("./Initial_Data/shapefiles","Threnetes_ruckeri")
@@ -250,26 +275,26 @@ colnames(ml.table2) <- c("wn.mu", "wn.sigma1", "wn.sigma2", "maha.mu", "maha.sig
 
 Write results as a table.
 ```{r, eval=FALSE}
-write.csv(ml.table2,"./Results/tr_mu_sigma_estimates.csv",row.names = F)
+write.csv(ml.table2,"./Generated_Data/tr_mu_sigma_estimates.csv",row.names = F)
 ```
 \
 
 Calculate ellipses and change them into a dataframe.
 ```{r}
 # get the ellipse defined by the ml estimators
-el2 <- ellipse::ellipse(x=ml2[[2]], centre=ml2[[1]], level=0.99, npoints = 500)
-df.el2 <- as.data.frame(el2)
+el.wn2 <- ellipse::ellipse(x=ml2[[2]], centre=ml2[[1]], level=0.99, npoints = 500)
+df.el2 <- as.data.frame(el.wn2)
 colnames(df.el2) <- c("Temperature", "Precipitation")
 
 # get the ellipse from a multivarite normal model / mahalanobis distance method
-el.ml2 <- ellipse::ellipse(x=ml2[[4]], centre=ml2[[3]], level=0.99)
-df.elml <- as.data.frame(el.ml2)
-colnames(df.elml) <- c("Temperature", "Precipitation")
+el.maha2 <- ellipse::ellipse(x=ml2[[4]], centre=ml2[[3]], level=0.99)
+df.elmh2 <- as.data.frame(el.maha2)
+colnames(df.elmh2) <- c("Temperature", "Precipitation")
 ```
 \
 
 Plot in ggplot.
-```{r}
+```{r, fig.show='hide'}
 # prepare data as a dataframe for ggplot
 bckgrnd <- data.frame(Temperature = thr.sample[,1], Precipitation = thr.sample[,2])
 species <- data.frame(Temperature = thr.occ[,1], Precipitation = thr.occ[,2])
@@ -293,8 +318,16 @@ ggplot(data2, aes(x = Temperature, y = Precipitation)) +
   scale_y_continuous("Annual precipitation (mm)") +
   # geom_path(data = df_el2, lineend="butt", linejoin="round", linemitre=1, show.legend = "Ellipse from weighted-normal model")
   geom_path(data = df.el2, color = colpal[2], size = 1.2) +
-  geom_path(data = df.elml, color = colpal[4], size = 1.2)
+  geom_path(data = df.elmh2, color = colpal[4], size = 1.2)
 ```
 
 
+```{r, echo=FALSE, fig.cap=" Figure of the environmental space of *Threnetes ruckeri*. It shows the occurrence points of a species with two possible niches delineated by the Mahalanobis method (blue) and the weighted normal method (green).", out.width = '70%',fig.align="center"}
+knitr::include_graphics("Images/ThR_mle.png")
+```
+\
+
+**Output Files**
+
+* tr_mu_sigma_estimates.csv
 

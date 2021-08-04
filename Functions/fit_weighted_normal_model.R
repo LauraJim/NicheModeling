@@ -122,7 +122,7 @@ N <- 10000
 # Read presence points and M polygon
 sp.occ <- read.csv("./Catasticta_nimbice_occ_GE.csv",header=T)[,-(1:2)]
 
-M.shp <- readOGR("./Shapefiles","C_nimbice")
+M.shp <- readOGR("./Shapefiles","nimbice3")
 
 # get a random sample of points in M and extract its corresponding environmental values
 sam.Mpnts <- rs.inE(region = M.shp, N = N, Estck = bios)
@@ -155,14 +155,14 @@ plot(sam.Mpnts,col=colpal[1],pch=1, xlab="Annual mean temperature (°C*10)",
 # add presence points to the plot
 points(sp.occ,col=colpal[3],pch=20,cex=1.5) # presences used in model
 # ellipse maha
-lines(el,col=colpal[2],lwd=2)
-# ellipse mle
 lines(el.ml,col=colpal[4],lwd=2)
+# ellipse wn
+lines(el,col=colpal[2],lwd=2)
 sp.leg <- paste("Catasticta nimbice","(",nrow(sp.occ),")")
 legend("topleft",legend = c(sp.leg,"Points inside M","Presences",
                             "Ellipse from Mahalanobis method",
                             "Ellipse from weighted-normal model"),
-       pch=c(NA,1,19,NA,NA),col = c("white", colpal[1], colpal[3], colpal[2], colpal[4]),
+       pch=c(NA,1,19,NA,NA),col = c("white", colpal[1], colpal[3], colpal[4], colpal[2]),
        lwd=c(NA,NA,NA,2,2),bty = "n")
 # finish saving png
 dev.off()
