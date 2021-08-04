@@ -23,8 +23,14 @@ library(rgdal)
 
 # Project resulting ellipses back into G-space
 
-The function niche.G projects ellipses that define suitable environments for a species on a raster map. Those potential niches in the geographical space are colored by different degrees of suitability. The calculation is based on the Mahalanobis distance (for further explanation, see tutorial *Mahalanobis*).
+The function `niche.G` projects ellipses that define suitable environments for a species on a raster map. Those potential niches in the geographical space are colored by different degrees of suitability. The calculation is based on the Mahalanobis distance (for further explanation, see tutorial *04_Mahalanobis*).
 \
+\
+
+## The Function *niche.G*
+
+
+The function `niche.G` calculates suitability regions for a species based on environmental data and projects them onto a raster with geographical information. Each cell of the raster is weighed by an index of suitability. The function structure is `niche.G(Estck, mu, Sigma)`.
 \
 
 ### Parameters
@@ -63,37 +69,23 @@ The function niche.G projects ellipses that define suitable environments for a s
 \
 
 
-## Function's code
+### Input and Output
 
-### How *niche.G* works
-
-The function `niche.G` calculates suitability regions for a species based on environmental data and projects them onto a raster with geographical information. Each cell of the raster is weighed by an index of suitability.
-
-```{r}
-niche.G <- function(Estck, mu, Sigma) {
-  
-  # calculate suitability for each cell
-  sui.fun <- function(cell){exp(-mahalanobis(x= c(cell[1],cell[2]), 
-                                             center= mu, cov= Sigma)/2)}
-  # apply this function to the whole raster layer
-  suit.rast <- calc(Estck,fun=sui.fun)
-
-  return(suit.rast)
-}
-```
-\
+The function needs raster files with environmental layers and a matrix with occurrence data of a species that correlates with environmental variables. The latter can be created by using the `get.Ecoord` function (see tutorial *02_Get_Ecoords*"). This matrix can be replaced by a matrix that contains already calculated values using the Mahalanobis distance and weigthed normal distribution. This matrix can be created by using the function `fitNiche` (see tutorial *08_Weigthed_normal*). In case the result is to be plotted in ggplot, other files might be necessary, such as a shapefile that describes the study area or cropped rasters.
 \
 
-### Output
-
-The function will produce a raster of areas that have suitable environmental conditions for a species. Those potential ecological niche regions are colored by different degrees of suitability. The output can be plotted and saved as TIF or ASCI file. 
+The function will produce a raster of areas that have suitable environmental conditions for a species. Those potential ecological niche regions are colored by different degrees of suitability. The output can be plotted and saved as TIF or ASCI file. Be aware that some older GIS program versions might have an issue with properly displaying the tif-file.
 \
 \
 
 ## Worked Examples
 
 <!-- Where should the library notice go? Is here okay? -->
-### Upload libraries
+### Read libraries and source code
+```{r}
+source(".\\Functions\\TnicheG.R")
+```
+
 
 ```{r, eval=FALSE}
 library(raster)
@@ -103,18 +95,26 @@ library(ggpubr)
 # needs package mvtnorm to be installed
 ```
 \
-
-### Input Data
-
-The raster files need to contain information on climatic values that are of interest for the user. The rasters used in the examples below are from [WorldClim](https://worldclim.org/data/index.html) and have a resolution of "10 minutes".
-
-Furthermore, a matrix that contains the corresponding environmental data of a species' occurrence is necessary. The matrix can be created by using the `get.Ecoord` function (see tutorial "Function *get.Ecoord*"). In this example, the environmental data are mean annual temperature and total annual precipitation.
-\
 \
 
 ### *Catasticta nimbice*
+\
 
-In this example, the basic plot function is used.
+**Input Files**
+
+* bio1.asc
+
+* bio12.asc
+
+* Catasticta_nimbice_occ_GE.csv
+
+* Catasticta_nimbice.shp (and associated files)
+\
+
+\
+
+**Prepare Parameters**
+\
 
 Read the rasters with environmental data and combine them into a rasterstack with two (or more layers).
 ```{r}
@@ -133,9 +133,10 @@ occ_E <- read.csv("./Generated_Data/Catasticta_nimbice_occ_GE.csv",header=T)[,-(
 ```
 \
 
+#### Apply the function and automatically plot with basic plot
+\
 
-Apply the function `niche.G` with the parameters `Estck`, `mu`, and `Sigma` and plot it.
-
+Apply the function `niche.G` with the parameters `Estck`, `mu`, and `Sigma`. The results are plotted in the basic plot function.
 ```{r, cache=TRUE, fig.show='hide'}
 cn.result <- niche.G(Estck = bios, mu = colMeans(occ_E), Sigma = cov(occ_E))
 
@@ -145,7 +146,7 @@ cn.result <- niche.G(Estck = bios, mu = colMeans(occ_E), Sigma = cov(occ_E))
 Save the raster output as TIF or ASCI file.
 ```{r, eval=FALSE}
 writeRaster(cn.result,"./Generated_Data/Catasticta_nimbice_maha_map.tif", overwrite = T)
-writeRaster(cn.result, "./Generated_Data/Catasticta_nimbice_maha_map.asc", overwrite = T)
+# writeRaster(cn.result, "./Generated_Data/Catasticta_nimbice_maha_map.asc", overwrite = T)
 ```
 
 ```{r, echo=FALSE, fig.cap=" Figure of the geographical space with suitable niches for *Catasticta nimbice* .", out.width = '70%',fig.align="center"}
@@ -154,7 +155,10 @@ knitr::include_graphics("Images/Catasticta_nimbice_maha_asci.png")
 ```
 \
 
-Another way to use the function `niche.G` is to use estimated values of `mu` and `Sigma` directly. The rasters with environmental data are cropped to the region of interest with a polygon before being stacked together in this version. They can also be cropped with coordinates (see example *Threnetes ruckeri* below).
+#### Apply the function and plot with ggplot
+\
+
+Another way to use the function `niche.G` is to use estimated values of `mu` and `Sigma` directly. The rasters with environmental data are cropped to the region of interest with a polygon before being stacked together in this version. They can also be cropped with coordinates (see the example for *Threnetes ruckeri* below).
 ```{r, results='hide'}
 # read polygon of the study area
 cn.shp <- readOGR("./Initial_Data/shapefiles","Catasticta_nimbice")
@@ -177,7 +181,7 @@ cn.wn <- niche.G(Estck = biosc, mu = c(166.1297518,1265.130825),
 Write the raster of the model as file (additionally, the cropped environmental layers can be saved as well for later use). 
 ```{r, eval=FALSE}
 writeRaster(cn.wn,"./Generated_Data/Catasticta_nimbice_wn_map.tif", overwrite = T)
-writeRaster(cn.wn, "./Generated_Data/Catasticta_nimbice_wn_map.asc", overwrite = T)
+# writeRaster(cn.wn, "./Generated_Data/Catasticta_nimbice_wn_map.asc", overwrite = T)
 ```
 \
 
@@ -212,7 +216,7 @@ ggplot() +
 
 Save the ggplot as PNG.
 ```{r, eval=FALSE}
-ggsave('./Generated_Data/Catasticta_nimbice_nicheG_ggplot.png',  width = 24, height = 24, 
+ggsave('./Generated_Data/Catasticta_nimbice_wn_map_ggplot.png',  width = 24, height = 24, 
        units = "cm", dpi = 600, pointsize = 6)
 ```
 
@@ -222,22 +226,45 @@ knitr::include_graphics("Images/Catasticta_nimbice_nicheG_ggplot.png")
 ```
 \
 
+**Output files**
+
+
+* Catasticta_nimbice_maha_map.tif
+
+* Catasticta_nimbice_wn_map.tif
+
+* Catasticta_nimbice_wn_map_ggplot.png
+
 \
 
-### Threnetes ruckeri
+\
 
-This example uses the Mahalanobis distance and the weighted normal distribution. The graphs are plotted in `ggplot2`. The raster files are the same as above.
+### *Threnetes ruckeri*
+\
 
+**Input Files**
+
+* bio1.asc
+
+* bio12.asc
+
+* tr_mu_sigma_estimates.csv
+
+* Threnetes_ruckeri_occ_GE.csv
+
+
+This example uses the Mahalanobis distance and the weighted normal distribution. The graphs are plotted in `ggplot2`. The raster files used here are the same as the ones used for the *Catasticta nimbice* examples.
 ```{r, eval=FALSE}
 ## Read raster files
-bio1 <- raster("./Initial_Data/bio1WH.asc")
-bio2 <- raster("./Initial_Data/bio12WH.asc")
+# bio1 <- raster("./Initial_Data/bio1.asc")
+# bio2 <- raster("./Initial_Data/bio12.asc")
 bios <- stack(bio1,bio2)
 ```
 \
+
 Load the matrix results of the weighted normal distribution that was calculated with the functions `rs.inE`, `negloglike`, and `fitNiche`.
 ```{r}
-thr.fitN <- read.csv("./Generated_Data/Threnetes_ruckeri_Estimated_parameters.csv",header=T)[,-1]
+thr.fitN <- read.csv("./Generated_Data/tr_mu_sigma_estimates.csv",header=T)[,-1]
 ```
 \
 
@@ -256,17 +283,18 @@ Save the output as TIF or ASCI file.
 ```{r, eval=FALSE}
 # weigthed normal distribution
 writeRaster(Thr.wn,"./Generated_Data/Threnetes_ruckeri_wn_map.tif", overwrite = T)
-writeRaster(Thr.wn, "./Generated_Data/Threnetes_ruckeri_wn_map.asc", overwrite = T)
+# writeRaster(Thr.wn, "./Generated_Data/Threnetes_ruckeri_wn_map.asc", overwrite = T)
+
 # Mahalanobis distance
 writeRaster(Thr.maha,"./Generated_Data/Threnetes_ruckeri_maha_map.tif", overwrite = T)
-writeRaster(Thr.maha, "./Generated_Data/Threnetes_ruckeri_maha_map.asc", overwrite = T)
+# writeRaster(Thr.maha, "./Generated_Data/Threnetes_ruckeri_maha_map.asc", overwrite = T)
 ```
 \
 
-*Plot both models next to each other in a ggplot.*
+**Plot both models next to each other in a ggplot**
 \
 
-Load the previously created tif-file with the suitability levels for the Mahalanobis distance model and the weighted normal distribution model.
+Load the previously created tif-file with the suitability levels for the Mahalanobis distance model and the weighted normal distribution model or directly apply the results.
 ```{r}
 maha.map <- raster("./Generated_Data/Threnetes_ruckeri_maha_map.tif")
 
