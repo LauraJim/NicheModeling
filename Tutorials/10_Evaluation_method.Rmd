@@ -306,13 +306,13 @@ For this example, three environmental layers instead of the usual two are used.
 
 * Catasticta_nimbice_occ_G.csv
 
-* Catasticta_nimbice_maha3_cropped.tif
+* cn_maha3_cropped.tif
 
-* Catasticta_nimbice_bio1_cropped.tif
+* cn_bio1_cropped.tif
 
-* Catasticta_nimbice_bio6_cropped.tif
+* cn_bio6_cropped.tif
 
-* Catasticta_nimbice_bio12_cropped.tif
+* cn_bio12_cropped.tif
 \
 
 \
@@ -325,12 +325,12 @@ Read the necessary input files. Besides the occurrence points of *Catasticta nim
 cn.occG <- read.csv("./Initial_Data/Catasticta_nimbice_occ_G.csv",header=T)[,-1]
 
 # read raster with calculated suitability index of three environmental layers
-cnmaha3 <- raster("./Generated_Data/Catasticta_nimbice_maha3_cropped.tif")
+cnmaha3 <- raster("./Generated_Data/cn_maha3_cropped.tif")
 
 # read raster files
-bio1cn <- raster("./Generated_Data/Catasticta_nimbice_bio1_cropped.tif")
-bio6cn <- raster("./Generated_Data/Catasticta_nimbice_bio6_cropped.tif")
-bio12cn <- raster("./Generated_Data/Catasticta_nimbice_bio12_cropped.tif")
+bio1cn <- raster("./Generated_Data/cn_bio1_cropped.tif")
+bio6cn <- raster("./Generated_Data/cn_bio6_cropped.tif")
+bio12cn <- raster("./Generated_Data/cn_bio12_cropped.tif")
 ```
 \
 
@@ -446,11 +446,13 @@ knitr::include_graphics("Images/CN_maha_acc_curve.png")
 
 * Threnetes_ruckeri_occ_G.csv
 
-* Threnetes_ruckeri_wn_cropped.tif
+* tr_wn_cropped.tif
 
-* Threnetes_ruckeri_bio1_cropped.tif
+* tr_maha_cropped.tif
 
-* Threnetes_ruckeri_bio12_cropped.tif
+* tr_bio1_cropped.tif
+
+* tr_bio12_cropped.tif
 \
 
 \
@@ -462,12 +464,12 @@ knitr::include_graphics("Images/CN_maha_acc_curve.png")
 thr.occG <- read.csv("./Initial_Data/Threnetes_ruckeri_occ_G.csv",header=T)[,-1]
 
 # read raster with calculated suitability index of three environmental layers
-thrwn <- raster("./Generated_Data/Threnetes_ruckeri_wn_cropped.tif")
-thrmaha <- raster("./Generated_Data/Threnetes_ruckeri_maha_cropped.tif")
+thrwn <- raster("./Generated_Data/tr_wn_cropped.tif")
+thrmaha <- raster("./Generated_Data/tr_maha_cropped.tif")
 
 # read raster files
-bio1th <- raster("./Generated_Data/Threnetes_ruckeri_bio1_cropped.tif")
-bio12th <- raster("./Generated_Data/Threnetes_ruckeri_bio12_cropped.tif")
+bio1th <- raster("./Generated_Data/tr_bio1_cropped.tif")
+bio12th <- raster("./Generated_Data/tr_bio12_cropped.tif")
 
 # create rasterstacks
 wn.stack <- stack(thrwn, bio1th, bio12th)
@@ -494,7 +496,8 @@ thrmaha.curve <- accum.occ(names = c(spname2, bio1, bio12),G.occ = thr.occG,
 \
 
 ```{r}
-head(thrmaha.curve, n=4)
+head(thrmaha.curve, n=5)
+tail(thrmaha.curve, n=5)
 ```
 \
 
