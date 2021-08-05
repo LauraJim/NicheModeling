@@ -44,14 +44,20 @@ limits <- read.csv("./T_ruckeri_tolerances.csv")
 
 # apply the function priorpar to receive boundaries for a species
 boundary <- priorpar(limits[,2:3],6,2)
+mu0 <<- boundary$mu0
+A0 <<- boundary$A0
+CholA0 <- chol(A0)
+Sigma0 <<- chol2inv(CholA0)    # precision matrix
+W0 <<- boundary$W0
 
 el<-ellipse::ellipse(x=boundary$Sigma0,centre = boundary$mu0,level=0.95)
 
-# Number of environmental variables in the study
-# dd <- 2
+
 
 # Define a valid interval for mu, depending on the rage of the environmental variables
-# mu.lim <<- c(min(Et[,1])-0.5,max(Et[,1])+0.5,min(Et[,2])-0.5,max(Et[,2])+0.5)
+b1 <- 10 
+b2 <- 100
+mu.lim <<- c(min(Et[,1],limits[1,2])-b1,max(Et[,1],limits[1,3])+b1,min(Et[,2],limits[2,2])-b2,max(Et[,2],limits[2,3])+b2)
 
 
 # First Plot: GSpace and ESpace ----------------------
@@ -65,7 +71,8 @@ points(data[,1],data[,2],pch=20,col=spcol)
 
 ## Environmental Space:
 # Plot environmental variables of species data and the location of reported presences of the species on top
-plot(env.d, pch=".", col=1,xlab="Mean Annual Temperature (°C *10)",ylab="Total Annual Precipitation (mm)",main="Environmental space")
+plot(env.d, pch=".", col=1, xlim=mu.lim[1:2], ylim=mu.lim[3:4], xlab="Mean Annual Temperature (°C *10)",
+     ylab="Total Annual Precipitation (mm)",main="Environmental space")
 points(env.sp, pch=20, col=spcol)
 rect(xleft = limits[1,2], xright= limits[1,3], ybottom = limits[2,2], ytop = limits[2,3], border="gold",lwd=2)
 legend("topleft",legend=c("Species presences:",rotule,"Tolerance ranges"),pch=c(20,NA,NA),
@@ -137,3 +144,7 @@ ggarrange(p1, p2, ncol = 2, nrow = 1)
 
 
 ## -------------
+# Number of environmental variables in the study
+ dd <- 2
+ 
+ 
