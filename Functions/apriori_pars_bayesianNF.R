@@ -41,9 +41,13 @@ priorpar <- function(tolran,nsd,alpha=2)
     }
     # Define covariance matrix for the a priori distribution of the mean
     sigma0 <- diag(s.prior)
-    A0 <- chol2inv(chol(sigma0))    # precision matrix
+    A <- chol2inv(chol(sigma0))    # precision matrix
+    W <- alpha*A
+    CholW <- chol(W)
+    Winv <- chol2inv(CholW)
+    
   }
-  return(list(mu0 = mu.prior, Sigma0 = sigma0, W0 = alpha*A0))
+  return(list(mu0 = mu.prior, A0 = A, W0 = Winv))
 }
 
 # Main: How to use "priorpar --------------
