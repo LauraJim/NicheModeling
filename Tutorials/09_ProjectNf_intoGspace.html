@@ -182,7 +182,10 @@ pre code {
 </p>
 <div id="the-function-niche.g" class="section level2">
 <h2>The Function <em>niche.G</em></h2>
-<p>The function <code>niche.G</code> calculates suitability regions for a species based on environmental data and projects them onto a raster with geographical information. Each cell of the raster is weighed by an index of suitability. The function structure is <code>niche.G(Estck, mu, Sigma)</code>.<br />
+<p>The function <code>niche.G</code> calculates suitability regions for a species based on environmental data and projects them onto a raster with geographical information. Each cell of the raster is weighed by an index of suitability.</p>
+<p>How to use the function:</p>
+<pre class="r"><code>niche.G(Estck, mu, Sigma)</code></pre>
+<p><br />
 </p>
 <div id="parameters" class="section level3">
 <h3>Parameters</h3>
@@ -196,23 +199,6 @@ pre code {
 </ul>
 <p><br />
 </p>
-</div>
-<div id="dependencies" class="section level3">
-<h3>Dependencies</h3>
-<ul>
-<li><p><code>raster</code><br />
-</p></li>
-<li><p><code>sp</code><br />
-</p></li>
-<li><p><code>mvtnorm</code> (only needs to be installed)<br />
-</p></li>
-<li><p><code>ggplot2</code><br />
-</p></li>
-<li><p><code>ggpubr</code><br />
-</p></li>
-<li><p><code>rgdal</code><br />
-</p></li>
-</ul>
 <p><br />
 </p>
 </div>
@@ -221,8 +207,12 @@ pre code {
 <p>The function needs raster files with environmental layers and a matrix with occurrence data of a species that correlates with environmental variables. The latter can be created by using the <code>get.Ecoord</code> function (see tutorial <em>02_Get_Ecoords</em>&quot;). This matrix can be replaced by a matrix that contains already calculated values using the Mahalanobis distance and weigthed normal distribution. This matrix can be created by using the function <code>fitNiche</code> (see tutorial <em>08_Weigthed_normal</em>). In case the result is to be plotted in ggplot, other files might be necessary, such as a shapefile that describes the study area or cropped rasters.<br />
 </p>
 <p>The function will produce a raster of areas that have suitable environmental conditions for a species. Those potential ecological niche regions are colored by different degrees of suitability. The output can be plotted and saved as TIF or ASCI file. Be aware that some older GIS program versions might have an issue with properly displaying the tif-file.<br />
-<br />
 </p>
+<div id="dependencies" class="section level4">
+<h4>Dependencies</h4>
+<p><strong>Function:</strong> <code>raster</code> <strong>Examples:</strong> <code>sp</code>, <code>mvtnorm</code> (only needs to be installed),<code>ggplot2</code>, <code>ggpubr</code>, <code>rgdal</code><br />
+</p>
+</div>
 </div>
 </div>
 <div id="worked-examples" class="section level2">
@@ -231,13 +221,13 @@ pre code {
 <div id="read-libraries-and-source-code" class="section level3">
 <h3>Read libraries and source code</h3>
 <pre class="r"><code>source(&quot;.\\Functions\\TnicheG.R&quot;)</code></pre>
-<pre class="r"><code>library(raster)
-library(sp)
+<p><br />
+</p>
+<pre class="r"><code>library(sp)
 library(ggplot2)
 library(ggpubr)
-# needs package mvtnorm to be installed</code></pre>
+library(rgdal)</code></pre>
 <p><br />
-<br />
 </p>
 </div>
 <div id="catasticta-nimbice" class="section level3">
@@ -354,7 +344,9 @@ Figure of the geographical space with suitable niches for <em>Catasticta nimbice
 <p><strong>Output files</strong></p>
 <ul>
 <li><p>Catasticta_nimbice_maha_map.tif</p></li>
+<li><p>Catasticta_nimbice_maha_map.asc</p></li>
 <li><p>Catasticta_nimbice_wn_map.tif</p></li>
+<li><p>Catasticta_nimbice_wn_map.asc</p></li>
 <li><p>Catasticta_nimbice_wn_map_ggplot.png</p></li>
 </ul>
 <p><br />
@@ -509,6 +501,15 @@ Figure of the geographical space with suitable niches for <em>Threnetes ruckeri<
        dpi = 600, pointsize = 6)</code></pre>
 <p><br />
 </p>
+<p><strong>Output Files</strong></p>
+<ul>
+<li><p>Threnetes_ruckeri_wn_map.tif</p></li>
+<li><p>Threnetes_ruckeri_wn_map.asc</p></li>
+<li><p>Threnetes_ruckeri_maha_map.tif</p></li>
+<li><p>Threnetes_ruckeri_maha_map.asc</p></li>
+<li><p>Threnetes_ruckeri_nicheG_ggplot.png</p></li>
+</ul>
+<p><em>END</em></p>
 </div>
 </div>
 </div>

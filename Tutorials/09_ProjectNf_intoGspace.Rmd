@@ -10,12 +10,6 @@ linkcolor: dodgerblue4
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-library(raster)
-library(sp)
-library(ggplot2)
-library(ggpubr)
-library(rgdal)
-# needs package mvtnorm to be installed
 ```
 \
   
@@ -30,7 +24,12 @@ The function `niche.G` projects ellipses that define suitable environments for a
 ## The Function *niche.G*
 
 
-The function `niche.G` calculates suitability regions for a species based on environmental data and projects them onto a raster with geographical information. Each cell of the raster is weighed by an index of suitability. The function structure is `niche.G(Estck, mu, Sigma)`.
+The function `niche.G` calculates suitability regions for a species based on environmental data and projects them onto a raster with geographical information. Each cell of the raster is weighed by an index of suitability. 
+
+How to use the function:
+```{r, eval=FALSE}
+niche.G(Estck, mu, Sigma)
+```
 \
 
 ### Parameters
@@ -46,25 +45,6 @@ The function `niche.G` calculates suitability regions for a species based on env
 
 \
 
-### Dependencies
-
-* `raster`
-\
-
-* `sp`
-\
-
-* `mvtnorm` (only needs to be installed)
-\
-
-* `ggplot2`
-\
-
-* `ggpubr`
-\
-
-* `rgdal`
-\
 
 \
 
@@ -76,25 +56,27 @@ The function needs raster files with environmental layers and a matrix with occu
 
 The function will produce a raster of areas that have suitable environmental conditions for a species. Those potential ecological niche regions are colored by different degrees of suitability. The output can be plotted and saved as TIF or ASCI file. Be aware that some older GIS program versions might have an issue with properly displaying the tif-file.
 \
+
+#### Dependencies 
+**Function:** `raster`
+**Examples:** `sp`, `mvtnorm` (only needs to be installed),`ggplot2`, `ggpubr`, `rgdal`
 \
 
 ## Worked Examples
 
 <!-- Where should the library notice go? Is here okay? -->
 ### Read libraries and source code
-```{r}
+```{r, message=FALSE}
 source(".\\Functions\\TnicheG.R")
 ```
+\
 
-
-```{r, eval=FALSE}
-library(raster)
+```{r, message=FALSE}
 library(sp)
 library(ggplot2)
 library(ggpubr)
-# needs package mvtnorm to be installed
+library(rgdal)
 ```
-\
 \
 
 ### *Catasticta nimbice*
@@ -231,7 +213,11 @@ knitr::include_graphics("Images/Catasticta_nimbice_nicheG_ggplot.png")
 
 * Catasticta_nimbice_maha_map.tif
 
+* Catasticta_nimbice_maha_map.asc
+
 * Catasticta_nimbice_wn_map.tif
+
+* Catasticta_nimbice_wn_map.asc
 
 * Catasticta_nimbice_wn_map_ggplot.png
 
@@ -407,4 +393,16 @@ ggsave('./Generated_Data/Threnetes_ruckeri_nicheG_ggplot.png',  width = 48, heig
 ```
 \
 
+**Output Files**
 
+* Threnetes_ruckeri_wn_map.tif
+
+* Threnetes_ruckeri_wn_map.asc
+
+* Threnetes_ruckeri_maha_map.tif
+
+* Threnetes_ruckeri_maha_map.asc
+
+* Threnetes_ruckeri_nicheG_ggplot.png
+
+*END*
