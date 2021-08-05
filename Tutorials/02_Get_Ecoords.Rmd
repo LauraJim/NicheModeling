@@ -178,7 +178,7 @@ Now, repeat this example but using the data of *Catasticta nimbice*, and save a 
 
 ### Output files
 - Catasticta_nimbice_occ_GE.csv
-- Catasticta_nimbice_M_GE.csv
-- Threnetes_ruckeri_occ_GE.csv
+- <span style="color: red;">Catasticta_nimbice_M_GE.csv</span>
+- <span style="color: red;">Threnetes_ruckeri_occ_GE.csv</span>
 - Threnetes_ruckeri_M_GE.csv
 
