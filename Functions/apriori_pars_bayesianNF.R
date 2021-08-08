@@ -58,5 +58,9 @@ priorpar <- function(tolran,nsd,alpha=2)
 #  (these are made up example values) of a species
 limits <- read.csv("./T_ruckeri_tolerances.csv")
 
-priorpar(limits[,2:3],6,2)
+boundary <- priorpar(limits[,2:3],6,2)
 
+# write csv for accumulation curve comparison (needed for nicheG)
+write.csv(boundary,file=paste0("./Results/Threnetes_ruckeri","_bayesian.csv"),row.names = F)
+
+# End
