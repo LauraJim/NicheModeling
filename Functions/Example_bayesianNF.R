@@ -194,6 +194,6 @@ el<-ellipse::ellipse(x=Sigma0,centre = mu0,level=0.95)
 lines(el,col="gold",lwd=2)
 
 fname <- paste0(paste(rotule,"7K","output",sep="_"),".csv")
-save.all(info,2000,200,paste0("./Results",fname))
+save.all(info,2000,200,paste0("./Results/",fname))
 
 ### END
