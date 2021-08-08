@@ -97,7 +97,13 @@ thrmaha.test3 <- accum.occ3(names = c(spname2, bio1, bio12),G.occ = thr.occ,
                             suit.Estck = thr.mahacE,null.mod="hypergeom",clev=0.95)
 
 
+## use bayesian model
 
+thr.bayc <- raster("./Rasters/Thr_bay_cropped.tif")
+thr.baycE <- stack(thr.bayc, bio1thr, bio12thr)
+
+thrbay.test3 <- accum.occ3(names = c(spname2, bio1, bio12),G.occ = thr.occ,
+                           suit.Estck = thr.baycE, null.mod="hypergeom",clev=0.95)
 
 # Model Comparison Example 2: Threnetes ruckeri ---------------------------
 
@@ -108,10 +114,12 @@ models2 <- list(thrmaha.test3[,1:2], thrwn.test3[,1:2])
 compare.aco(mods=models2, nocc=171, ncells=4170,
             sp.name=spname2, mods.names=c("Mahalanobis","Weigthed-Normal"),alpha=0.95)
 
+# test three models:
+models3 <- list(thrmaha.test3[,1:2], thrwn.test3[,1:2], thrbay.test3[,1:2])
 
 
-
-
+compare.aco(mods=models3, nocc=171, ncells=4170,
+            sp.name=spname2, mods.names=c("Mahalanobis","Weigthed-Normal", "Bayesian"),alpha=0.95)
 
 
 
