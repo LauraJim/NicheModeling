@@ -50,7 +50,7 @@ CholA0 <- chol(A0)
 Sigma0 <<- chol2inv(CholA0)    # precision matrix
 W0 <<- boundary$W0
 
-el<-ellipse::ellipse(x=boundary$Sigma0,centre = boundary$mu0,level=0.95)
+el<-ellipse::ellipse(x=Sigma0,centre = mu0,level=0.95)
 
 
 
@@ -63,11 +63,12 @@ mu.lim <<- c(min(Et[,1],limits[1,2])-b1,max(Et[,1],limits[1,3])+b1,min(Et[,2],li
 # First Plot: GSpace and ESpace ----------------------
 ### Plot the geographical and environmental spaces with the occurrence of the species on top
 x11()
-par(mfrow=c(1,2))
+# par(mfrow=c(1,2))
 ## Geographical Space:
 # Plot the geographical locations of reported presences of the species, on top of the global environmental variables
-plot(envall[,1],envall[,2],pch=".",col=1,xlab="Longitude",ylab="Latitude",main="Geographical space")
-points(data[,1],data[,2],pch=20,col=spcol)
+
+# plot(envall[,1],envall[,2],pch=".",col=1,xlab="Longitude",ylab="Latitude",main="Geographical space")
+# points(data[,1],data[,2],pch=20,col=spcol)
 
 ## Environmental Space:
 # Plot environmental variables of species data and the location of reported presences of the species on top
@@ -80,13 +81,7 @@ legend("topleft",legend=c("Species presences:",rotule,"Tolerance ranges"),pch=c(
 # Plot the contour line in the environmental space:
 lines(el,col="gold",lwd=2)
 
-# For the precision matrix, it is a Wishart distribution with
-# alpha <- 2 #shape parameter, default, do not move for now
-# W <- alpha*A0  #scale matrix W.
-W <- boundary$W0
-CholW <- chol(W)
-Winv <- chol2inv(CholW)
-W
+
 # The prior expected value for the precision matrix is E(A) = W
 
 
@@ -143,8 +138,62 @@ x11()
 ggarrange(p1, p2, ncol = 2, nrow = 1)
 
 
-## -------------
+## Prepare for other functions ------------- 
 # Number of environmental variables in the study
- dd <- 2
+dd <- 2
  
- 
+CholSigma0 <<- chol(Sigma0)
+# For the precision matrix, it is a Wishart distribution with
+ alpha <- 2 #shape parameter, default, do not move for now
+# W <- alpha*A0  #scale matrix W.
+W <- boundary$W0
+CholW <<- chol(W)
+# Winv <- chol2inv(CholW)
+W
+
+# Energy = - log ( posterior ) ----------
+wi <<- rep(1,n)
+# This is called right after Supp: mu, A and detA are already defined, th is ignored
+Energy <- function(th)
+{ # This is called right after Supp: mu, A and detA are already defined, th is ignored
+  ax1 <- (mu - mu0)
+  ax2 <- apply( env.sp, 1, function(xi) { ax<-as.matrix(xi - mu); t(ax) %*% A %*% ax })
+  # first two terms are generic in the posterior due to the normal model
+  S <- 0.5*sum(wi*ax2) + n*log(suma.Et)
+  # these terms correspond to the priors:
+  S <- S + 0.5*( t(ax1) %*% A0 %*% ax1 + sum(diag(A %*% W0)) - (alpha-dd-1)*log(detA) )
+  
+  S # + 10**6 numerical artifact
+}
+
+# Run the MCMC to produce simulations from the posterior ---------
+library(Rtwalk)
+Run <- function(Tr=20000)
+{
+  info <- Runtwalk( Tr=Tr, dim=5, Obj=Energy, Supp=Supp, x0=Initth(), xp0=Initth())
+  x11()
+  PlotIterations( info )
+  
+  info
+}
+
+############## cannot run info because CholSigma0 is not found!! ###############
+ptm <- proc.time()
+info <- Run(Tr=7000)
+proc.time() - ptm
+
+# Plotting results:
+mu
+chol2inv(chol(A))
+# save al the values of mu and A
+
+x11()
+PlotIterations(info,col=spcol,main=paste(rotule,"7K",sep="_"))
+# a priori ellipse
+el<-ellipse::ellipse(x=Sigma0,centre = mu0,level=0.95)
+lines(el,col="gold",lwd=2)
+
+fname <- paste0(paste(rotule,"7K","output",sep="_"),".csv")
+save.all(info,2000,200,paste0("./Results",fname))
+
+### END
