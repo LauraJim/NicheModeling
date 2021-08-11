@@ -77,7 +77,7 @@ library(dismo)
 
 * Catasticta_nimbice_M_G.csv
 \
-
+\
 
 To create the parameter `Estck`, two or more rasters are combined into one rasterstack. For this species we used rasters with the environmental conditions "mean annual temperature" (= bio1) and "total annual precipitation" (= bio12).  
 The created rasterstack will have as many layers as rasters are combined together. In this example, there are only two layers: bio1 and bio12.
