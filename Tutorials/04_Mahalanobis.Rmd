@@ -107,7 +107,7 @@ write.csv(cn.GE3,file=paste0("./Generated_Data/Catasticta_nimbice_occ_GE3.csv"),
 \
 <!---- from here it is niche.G ---->
 
-### Calculate Mahalanobis distance
+### Calculate suitability index
 
 Prepare parameters for the function `niche.G`. For this, a table with only the variables is necessary.
 
@@ -152,5 +152,12 @@ plot(cn.maha)
 ```
 \
 
-### Create a table with a suitability index
+### Comparing suitability index against Mahalanobis distance
 
+maha.fun <- function(cell){
+    X <- as.vector(cell, mode = "numeric")
+    sui.ind <- mahalanobis(x= X, center= center, cov= boundary)
+    return(sui.ind)
+}
+
+maha.map <- calc(bios,fun=maha.fun)
