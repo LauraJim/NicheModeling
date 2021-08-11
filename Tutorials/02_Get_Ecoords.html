@@ -176,9 +176,10 @@ pre code {
 </p>
 <div id="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates" class="section level1">
 <h1>Extracting environmental data from raster files from a set of geographic coordinates</h1>
-<p>The function <code>get.Ecoord</code> is a simple tool to extract environmental data, such as annual mean temperature or total annual precipitation, from raster-files that contain this type of information. The extracted data is then combined with the occurrence coordinates of a species. The output is a matrix that contains four or more columns: the coordinates of the species’ occurrence (latitude and longitude) and the environmental variables for those coordinates.<br />
-</p>
+<p>The function <code>get.Ecoord</code> is a simple tool to extract environmental data, such as annual mean temperature or total annual precipitation, from raster-files that contain this type of information. The extracted data is then combined with the occurrence coordinates of a species. The output is a matrix that contains four or more columns: the coordinates of the species’ occurrence (latitude and longitude) and the environmental variables for those coordinates. The same function can also be used to extract environmental data and combine it with random points of a study area if a matrix with random points is available.</p>
+<pre class="r"><code>get.Ecoord(Estck, Gcoord, Enames)</code></pre>
 <p><br />
+<br />
 </p>
 <div id="parameters" class="section level2">
 <h2>Parameters</h2>
@@ -190,56 +191,43 @@ pre code {
 <li><p><code>Gcoord</code> = a matrix with two columns whose rows are geographic coordinates of species’ occurrence in the study area<br />
 </p></li>
 <li><p><code>Enames</code> = names for the extracted environmental variables in form of a character vector for the output table<br />
+<br />
 </p></li>
 </ul>
-</div>
-<div id="functions-code" class="section level2">
-<h2>Function’s code</h2>
-<div id="how-get.ecoord-works" class="section level3">
-<h3>How <em>get.Ecoord</em> works</h3>
-<p>The function <code>get.Ecoord</code> will first check the amount of layers that a rasterstack has and makes sure that the numbers of entered names are the same. If the number of names and raster layers are the same amount, the climatic data for the species occurrence points are extracted from the rasters and combined into a matrix. Rows with no occurrence points are deleted. Finally, the columns are renamed by the coordinates and names that were entered into the function. If less or more names are entered the message “Raster stack and Enames does not have the same length” will be printed.</p>
-<pre class="r"><code>get.Ecoord &lt;- function(Estck, Gcoord, Enames) {
-
-  # check the amount of layers in a raster and make sure they are the same as the
-  # names that are used
-  if (length(Estck@layers)==length(Enames)) {  
-    # extract climatic data from a raster
-    a &lt;- extract(Estck,Gcoord)  
-    # combine columns of extracted coordinates with column of environmental data
-    # and deletes rows with data points that are marked as NA
-    b &lt;- na.omit(cbind(Gcoord,a)) 
-    # rename the columns 
-    colnames(b) &lt;- c(colnames(Gcoord),Enames) 
-    return(b)
-  }
-  else { 
-    # if the amount of layers is not the same as the amount of added column names,
-    # this message is printed instead
-    print(&quot;Raster stack and Enames does not have the same length.&quot;) 
-  }
-}</code></pre>
-<p><br />
-</p>
-</div>
-<div id="output" class="section level3">
-<h3>Output</h3>
+<div id="input-and-output" class="section level3">
+<h3>Input and Output</h3>
+<p>The input for the function are raster files with climatic values and presence information of a species (for more information on these files, see the explanation for the initial dataset that comes along with this package).</p>
 <p>The output of the function is a matrix with at least four variables. The first two columns are the longitude and latitude coordinates of the species’ occurrence. The following columns are the environmental data that has been extracted from the raster files. The matrix can be saved as a csv-file that serves as data input for other functions.<br />
+<br />
 </p>
-<p><br />
+<div id="dependencies" class="section level4">
+<h4>Dependencies</h4>
+<p><strong>Function:</strong> dismo<br />
+<br />
 </p>
+</div>
 </div>
 </div>
 <div id="worked-examples" class="section level2">
 <h2>Worked Examples</h2>
-<div id="input-files" class="section level3">
-<h3>Input files</h3>
-<p>The raster files need to contain information on climatic values that are of interest for the user. The rasters used in the examples below are from <a href="https://worldclim.org/data/index.html">WorldClim</a> and have a resolution of “10 minutes”. The files usually do not need further editing.</p>
-<p>The presence data of the species of interest needs to contain the coordinates of occurrence (longitude and latitude) in form of a table. Occurrence data is available on various open databases. For the examples below, data from <a href="https://www.gbif.org/">GBIF</a> was used. However, the tables from GBIF need to be cleaned up before they can be used as the database is aggregated from various sources with different formats and can contain various errors. There are packages available that aid in the cleaning of the data (e.g. see <a href="https://ropensci.github.io/CoordinateCleaner/articles/Cleaning_GBIF_data_with_CoordinateCleaner.html">CoordinateCleaner</a>).</p>
-<p>The same function can also be used to extract environmental data and combine it with random points of a study area if a matrix with random points is available.<br />
+<div id="read-source-code-and-libraries" class="section level3">
+<h3>Read source code and libraries</h3>
+<pre class="r"><code>source(&quot;.\\Functions\\TgetEcoord.R&quot;)</code></pre>
+<pre class="r"><code>library(dismo)</code></pre>
+<p><br />
 </p>
 </div>
 <div id="catasticta-nimbice" class="section level3">
 <h3><em>Catasticta nimbice</em></h3>
+<p><strong>Input Files</strong><br />
+</p>
+<ul>
+<li><p>bio1.asc</p></li>
+<li><p>bio12.asc</p></li>
+<li><p>Catasticta_nimbice_occ_G.csv</p></li>
+<li><p>Catasticta_nimbice_M_G.csv<br />
+</p></li>
+</ul>
 <p>To create the parameter <code>Estck</code>, two or more rasters are combined into one rasterstack. For this species we used rasters with the environmental conditions “mean annual temperature” (= bio1) and “total annual precipitation” (= bio12).<br />
 The created rasterstack will have as many layers as rasters are combined together. In this example, there are only two layers: bio1 and bio12.</p>
 <pre class="r"><code># read raster files
@@ -247,8 +235,6 @@ bio1 &lt;- raster(&quot;./Initial_Data/bio1.asc&quot;)
 bio12 &lt;- raster(&quot;./Initial_Data/bio12.asc&quot;)
 # combine the rasters into a RasterStack
 bios &lt;- stack(bio1, bio12) #  = Estck</code></pre>
-<p><br />
-</p>
 <p>The parameter <code>Gcoord</code> is a matrix with coordinates of the tracked occurrence of <em>Catasticta nimbice</em>. The cleaned table can be directly read without much modification.</p>
 <pre class="r"><code># read table, set header and omit first column of the table
 occ &lt;- read.csv(&quot;./Initial_Data/Catasticta_nimbice_occ_G.csv&quot;,header=T)[,-1] #  = Gcoord
@@ -258,13 +244,9 @@ head(occ, n=3)</code></pre>
 ## 1 -96.50500 16.06139
 ## 2 -96.50083 16.16944
 ## 3 -96.57000 16.31722</code></pre>
-<p><br />
-</p>
 <p>In order to set names for the new columns that will be created by the function, the parameter <code>Enames</code> will be set with as many names as rasters have been stacked. In this example, the first column name is bio1 and the second is bio12.</p>
 <pre class="r"><code># write names for the column heads of the environmental data
 names1 &lt;- c(&quot;bio1&quot;, &quot;bio12&quot;) #  = Enames</code></pre>
-<p><br />
-</p>
 <p>Apply <code>get.Ecoord</code> with the parameters <code>Estck</code>, <code>Gcoord</code>, and <code>Enames</code>:</p>
 <pre class="r"><code>f &lt;- get.Ecoord(Estck=bios, Gcoord=occ, Enames=names1)
 
@@ -273,17 +255,36 @@ head(f, n=3)</code></pre>
 ## 1 -96.50500 16.06139  191  1249
 ## 2 -96.50083 16.16944  175  1029
 ## 3 -96.57000 16.31722  175  1029</code></pre>
-<p><br />
-</p>
 <p>Save the output as a csv-file (but do not run every time):</p>
 <pre class="r"><code>write.csv(f,file=paste0(&quot;./Generated_Data/Catasticta_nimbice&quot;,&quot;_occ_GE.csv&quot;),
           row.names = F)</code></pre>
 <p>This csv-file can now be used as data input for various graphs that highlight the geographical presence of the species and the surrounding environment.<br />
 <br />
-Now, repeat this example but using the data of <em>Threnetes ruckeri</em>, and save a file called “Threnetes_ruckeri_occ_GE.csv”.</p>
+</p>
+<p><strong>Output files</strong><br />
+</p>
+<ul>
+<li><p>Catasticta_nimbice_occ_GE.csv</p></li>
+<li><p><span style="color: red;">Catasticta_nimbice_M_GE.csv</span></p></li>
+<li><p><span style="color: red;">Catasticta_nimbice_occ_GE3.csv</span><br />
+<br />
+</p></li>
+</ul>
 </div>
 <div id="threnetes-ruckeri" class="section level3">
 <h3><em>Threnetes ruckeri</em></h3>
+<p><br />
+</p>
+<p><strong>Input files</strong><br />
+</p>
+<ul>
+<li><p>bio1.asc</p></li>
+<li><p>bio12.asc</p></li>
+<li><p>Threnetes_ruckeri_M_G.csv</p></li>
+<li><p>Threnetes_ruckeri_occ_G.csv<br />
+<br />
+</p></li>
+</ul>
 <p>The raster datasets for the species <em>Threnetes ruckeri</em> and names (“bio1” and “bio12”) are the same as the above example.</p>
 <pre class="r"><code>bio1 &lt;- raster(&quot;./Initial_Data/bio1.asc&quot;) 
 bio12 &lt;- raster(&quot;./Initial_Data/bio12.asc&quot;) 
@@ -307,16 +308,18 @@ head(f2, n=3)</code></pre>
 <p>Save the output as a csv-file (but do not run it every time):</p>
 <pre class="r"><code>write.csv(f2,file=paste0(&quot;./Generated_Data/Threnetes_ruckeri_M&quot;,&quot;_GE.csv&quot;),
           row.names = F)</code></pre>
-<p>Now, repeat this example but using the data of <em>Catasticta nimbice</em>, and save a file called “Catasticta_nimbice_M_GE.csv”</p>
-</div>
-<div id="output-files" class="section level3">
-<h3>Output files</h3>
+<p>Now, repeat this example but using the data of <em>Catasticta nimbice</em>, and save a file called “Catasticta_nimbice_M_GE.csv”<br />
+<br />
+</p>
+<p><strong>Output files</strong><br />
+</p>
 <ul>
-<li>Catasticta_nimbice_occ_GE.csv</li>
-<li><span style="color: red;">Catasticta_nimbice_M_GE.csv</span></li>
-<li><span style="color: red;">Threnetes_ruckeri_occ_GE.csv</span></li>
-<li>Threnetes_ruckeri_M_GE.csv</li>
+<li><p>Threnetes_ruckeri_M_GE.csv</p></li>
+<li><p><span style="color: red;">Threnetes_ruckeri_occ_GE.csv</span><br />
+<br />
+</p></li>
 </ul>
+<p><em>End of tutorial</em></p>
 </div>
 </div>
 </div>
