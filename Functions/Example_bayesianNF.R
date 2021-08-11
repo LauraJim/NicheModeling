@@ -169,20 +169,28 @@ ptm <- proc.time()
 info <- Run(Tr=niter)
 proc.time() - ptm
 
-# Estimated parameters = MAPs
-mu
-chol2inv(chol(A))
-# save the values of mu and A!!!
 
 # Plot results ------------------
+# Checking MCMC convergence
 x11()
-PlotIterations(info,col=spcol,main=paste(rotule,niter,sep="_"),
+plot(1:(niter+1),-info$Ups,type = "l",xlab = "iteration",ylab = "LogPost",main = "dim=5")
+abline(v=3000,col="red")
+
+# Save results from MCMC algorithm
+fname <- paste0(paste(rotule,niter,"output",sep="_"),".csv")
+save.all(info,3000,300,paste0("./Results/",fname))
+
+# Plot simulated ellipses
+x11()
+PlotIterations(info, from=3000, thin=300,col=spcol,
+               main=paste(rotule,niter,sep="_"),
                xlim=mu.lim[1:2], ylim=mu.lim[3:4])
 # a priori ellipse
 lines(el,col="gold",lwd=2)
 
-# Save results from MCMC algorithm
-fname <- paste0(paste(rotule,niter,"output",sep="_"),".csv")
-save.all(info,2000,200,paste0("./Results/",fname))
+# Estimated parameters = MAPs
+mu
+chol2inv(chol(A))
+# save the values of mu and A!!!
 
 ### END
