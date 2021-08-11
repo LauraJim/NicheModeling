@@ -32,35 +32,49 @@ priorpar <- function(tolran,nsd,alpha=2)
     s.prior <- mu.prior
     for (j in 1:nrow(tolran)) {
       if(tolran[j,2] > tolran[j,1]){
-        # Estimate mean and variance of every environmental variable
+        # Estimate mean and variance for every environmental variable
         mu.prior[j] <- tolran[j,1] + (tolran[j,2]-tolran[j,1])/2
         s.prior[j] <- ((tolran[j,2]-tolran[j,1])/nsd)^2
       } else { 
         warning("the maximum values should be greater than the minimum values")
       }
     }
+    # Fix value of mu0
+    mu0 <<- mu.prior
+    
     # Define covariance matrix for the a priori distribution of the mean
     sigma0 <- diag(s.prior)
-    A <- chol2inv(chol(sigma0))    # precision matrix
-    W <- alpha*A
-    CholW <- chol(W)
-    Winv <- chol2inv(CholW)
     
+    # Fix value of Choleski decomposition of covariance matrix
+    CholSigma0 <<- chol(sigma0)   
+    
+    # Define the scale parameter of the Wishart distribution
+    W <- alpha*chol2inv(CholSigma0)
+    
+    # Fix value of Choleski decomposition of the scale parameter
+    CholW <<- chol(W)
   }
-  return(list(mu0 = mu.prior, A0 = A, W0 = Winv))
 }
 
 # Main: How to use "priorpar --------------
 
 # Example: Threnetes ruckeri
 
-# read matrix with tolerance range for two environmental conditions 
-#  (these are made up example values) of a species
+# read matrix with tolerance ranges for two environmental variables
 limits <- read.csv("./T_ruckeri_tolerances.csv")
 
-boundary <- priorpar(limits[,2:3],6,2)
+# apply function using only the columns with the tolerance limits
+priorpar(limits[,2:3],nsd=6)
+# Note that nsd=6 means that the tolerance ranges will cover
+# 6 standard deviations around the mean value, mu0
 
+# after applying this function, the following objects became global variables
+mu0
+CholSigma0
+CholW
+
+# Change:
 # write csv for accumulation curve comparison (needed for nicheG)
-write.csv(boundary,file=paste0("./Results/Threnetes_ruckeri","_bayesian.csv"),row.names = F)
+#write.csv(boundary,file=paste0("./Results/Threnetes_ruckeri","_bayesian.csv"),row.names = F)
 
 # End
