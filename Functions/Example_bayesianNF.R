@@ -29,19 +29,24 @@ envall <- read.csv("Threnetes_ruckeri_M_GE.csv",header=T)
 # occurrences
 data <- read.csv("Threnetes_ruckeri_occ_GE.csv",header=T)
 
+# Specify species name
+rotule <- "Threnetes_ruckeri"
+# select species color for plots
+spcol <- "royalblue3"
+
 # Fixing the species and environmental variables to work with
 # Indicate which columns from the occurrence and background files contain the environmental variables
 DefineSp( env = envall, data.sp = data, Comp1=c(3,3), Comp2=c(4,4))
 # Now we have fixed: Comp1, Comp2, env.d, env.sp, n, m, N, Et
 
-# specify species name
-rotule <- "Threnetes_ruckeri"
-# select species color for plots
-spcol <- "royalblue3"
-
-# read matrix with tolerance range for two environmental conditions of a species
-#  (these are made up example values) 
+# Read matrix with tolerance ranges for two environmental conditions of the species
 limits <- read.csv("./T_ruckeri_tolerances.csv")
+
+# Define a valid interval for mu, depending on the rage of the environmental variables
+b1 <- 10 
+b2 <- 100
+mu.lim <<- c(min(Et[,1],limits[1,2])-b1,max(Et[,1],limits[1,3])+b1,
+             min(Et[,2],limits[2,2])-b2,max(Et[,2],limits[2,3])+b2)
 
 # apply the function 'priorpar' to calculate a priori parameters
 alpha0 <<- 2
@@ -58,16 +63,8 @@ mu0
 # define the 95% confidence region so we can add it to the plot
 el <- ellipse::ellipse(x=Sigma0,centre = mu0,level=0.95)
 
-# Define a valid interval for mu, depending on the rage of the environmental variables
-b1 <- 10 
-b2 <- 100
-mu.lim <<- c(min(Et[,1],limits[1,2])-b1,max(Et[,1],limits[1,3])+b1,min(Et[,2],limits[2,2])-b2,max(Et[,2],limits[2,3])+b2)
-
-
-# First Plot: GSpace and ESpace ----------------------
-### Plot the geographical and environmental spaces with the occurrence of the species on top
+# Environmental space ----------------------
 x11()
-## Environmental Space:
 # Plot background points
 plot(env.d, pch=".", col=1, xlim=mu.lim[1:2], ylim=mu.lim[3:4],
      xlab="Mean Annual Temperature (°C *10)",
@@ -137,11 +134,11 @@ legend("topleft",legend=c("Species presences:",rotule,"Tolerance ranges"),pch=c(
 # ggarrange(p1, p2, ncol = 2, nrow = 1)
 
 
-## Prepare for other functions ------------- 
 # Number of environmental variables in the study
 dd <- 2
  
-# Energy = - log ( posterior ) ----------
+# Define objective function ---------------
+# Energy = - log ( posterior ) 
 # This is called right after Supp: mu, A and detA are already defined, th is ignored
 Energy <- function(th)
 { # This is called right after Supp: mu, A and detA are already defined, th is ignored
@@ -155,7 +152,7 @@ Energy <- function(th)
   S # + 10**6 numerical artifact
 }
 
-# Run the MCMC to produce simulations from the posterior ---------
+# Function that runs and plots the MCMC simulations from the posterior
 Run <- function(Tr=20000)
 {
   info <- Runtwalk( Tr=Tr, dim=5, Obj=Energy, Supp=Supp, x0=Initth(), xp0=Initth())
@@ -177,7 +174,7 @@ mu
 chol2inv(chol(A))
 # save the values of mu and A!!!
 
-# Plot results
+# Plot results ------------------
 x11()
 PlotIterations(info,col=spcol,main=paste(rotule,niter,sep="_"),
                xlim=mu.lim[1:2], ylim=mu.lim[3:4])
