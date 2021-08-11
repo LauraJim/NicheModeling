@@ -173,16 +173,17 @@ proc.time() - ptm
 # Plot results ------------------
 # Checking MCMC convergence
 x11()
-plot(1:(niter+1),-info$Ups,type = "l",xlab = "iteration",ylab = "LogPost",main = "dim=5")
-abline(v=3000,col="red")
+plot(1:(niter+1),-info$Ups,type = "l",xlab = "iteration",ylab = "LogPost",
+     main = "dim=5")
+abline(v=2000,col="red")
 
 # Save results from MCMC algorithm
 fname <- paste0(paste(rotule,niter,"output",sep="_"),".csv")
-save.all(info,3000,300,paste0("./Results/",fname))
+save.all(info,2000,400,paste0("./Results/",fname))
 
 # Plot simulated ellipses
 x11()
-PlotIterations(info, from=3000, thin=300,col=spcol,
+PlotIterations(info, from=2000, thin=400,col=spcol,
                main=paste(rotule,niter,sep="_"),
                xlim=mu.lim[1:2], ylim=mu.lim[3:4])
 # a priori ellipse
