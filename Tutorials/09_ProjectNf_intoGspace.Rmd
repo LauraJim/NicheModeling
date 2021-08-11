@@ -215,9 +215,13 @@ knitr::include_graphics("Images/Catasticta_nimbice_nicheG_ggplot.png")
 
 * Catasticta_nimbice_maha_map.asc
 
+* <span style="color: red;">cn_maha_cropped.tif</span>
+
 * Catasticta_nimbice_wn_map.tif
 
 * Catasticta_nimbice_wn_map.asc
+
+* <span style="color: red;">tr_wn_cropped.tif</span>
 
 * Catasticta_nimbice_wn_map_ggplot.png
 
@@ -399,10 +403,15 @@ ggsave('./Generated_Data/Threnetes_ruckeri_nicheG_ggplot.png',  width = 48, heig
 
 * Threnetes_ruckeri_wn_map.asc
 
+* <span style="color: red;">tr_wn_cropped.tif</span>
+
 * Threnetes_ruckeri_maha_map.tif
 
 * Threnetes_ruckeri_maha_map.asc
 
-* Threnetes_ruckeri_nicheG_ggplot.png
+* <span style="color: red;">tr_bay_cropped.tif</span>
 
-*END*
+* Threnetes_ruckeri_nicheG_ggplot.png
+\
+
+*End of the Tutorial*
