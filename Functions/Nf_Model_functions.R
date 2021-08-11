@@ -57,7 +57,7 @@ Initth <- function()
   
   A <- X1 %*% t(X1) + X2 %*% t(X2)  ### This works for alpha = 2
   
-  c( mu[1], mu[2], A[1,1], A[2,2], A[1,2])
+  c(mu[1], mu[2], A[1,1], A[2,2], A[1,2])
   
   #dg <- rgamma(1, 0.1, rate=1)
   #A <- solve(matrix( c(	rgamma(1, alpha, rate=W[1,1]), dg, dg, rgamma(1, alpha, rate=W[2,2])), nrow=2, ncol=2))
