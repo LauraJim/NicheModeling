@@ -250,22 +250,6 @@ x11()
 ggarrange(p1, p2, ncol = 2, nrow = 1)
 
 
-## Threnetes ruckeri with bayesian
-
-thr.by <- read.csv("./Results/Threnetes_ruckeri_bayesian.csv",header=T)
-A0.tr <- cbind(thr.by$A0.1, thr.by$A0.2)
-CholA0.tr <- chol(A0.tr)
-thr.bay <- niche.G(Estck = bios, mu = thr.by$mu0, Sigma = chol2inv(CholA0.tr))
-
-x11()
-plot(thr.bay)
-
-writeRaster(thr.bay,"./Results/Threnetes_ruckeri_bay_map.tif", overwrite = T)
-
-thr.bayc <- mask(crop(thr.bay, thr.shp), thr.shp)
-
-writeRaster(thr.bayc,"./Rasters/Thr_bay_cropped.tif", overwrite = T)
-
 # test: try to use colorspace package for gradient filling (currently problem with factor)
 
 # End
