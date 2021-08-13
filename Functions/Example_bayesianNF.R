@@ -66,7 +66,7 @@ el <- ellipse::ellipse(x=Sigma0,centre = mu0,level=0.95)
 # Environmental space ----------------------
 x11()
 # Plot background points
-plot(env.d, pch=".", col=1, xlim=mu.lim[1:2], ylim=mu.lim[3:4],
+plot(env.d, pch=".", xlim=mu.lim[1:2], ylim=mu.lim[3:4],
      xlab="Mean Annual Temperature (°C *10)",
      ylab="Total Annual Precipitation (mm)",main="Environmental space")
 # add occurrences
