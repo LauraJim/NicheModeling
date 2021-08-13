@@ -67,7 +67,7 @@ Initth <- function()
 ## Plot environmental variables Comp1 and Comp2 of species data env.sp
 # If th not NULL, then also plot a Bivariate Normal with parameters th (See function Supp above)
 # It's posible to add other valid parameters for the function contour or change the color (See function PlotBN above)
-PlotXYEnvVars <- function( th=NULL, col="red", lev=0.95, ...)
+PlotXYEnvVars <- function( th=NULL, col, lev=0.95, ...)
 {
   plot( env.d, pch=".", col="black", ...)
   points( env.sp, pch=19, col=col)
@@ -75,20 +75,20 @@ PlotXYEnvVars <- function( th=NULL, col="red", lev=0.95, ...)
     if (Supp(th))
     {
       el<-ellipse::ellipse(x=chol2inv(chol(A)),centre = mu,level=lev)
-      lines(el,col="blue",lwd=2)
+      lines(el,col="red",lwd=2)
     }
 }
 
 ## After running the MCMC this will plot a selection (indices) of the MCMC iterations
 # from gives the start iteration and thin the separation between iterations
-PlotIterations <- function( info, from=2000, thin=200, lev=0.95,...)
+PlotIterations <- function( info, from=2000, thin=200, lev=0.95, ...)
 {
   post <- exp(-info$Us - max(-info$Us) + 500)/exp(500) ## This is a normalized posterior from 0 to 1
   post1 <- sort(post)
   
   ix <- which( post1 == max(post))[1] ## looking for the MAP
   th <- info$output[ix,]
-  PlotXYEnvVars(th,xlab="Comp1",ylab="Comp2",lev=lev,...)
+  PlotXYEnvVars(th,xlab="Comp1",ylab="Comp2",lev=lev, ...)
   
   indices <- seq(from, info$Tr, thin)
   #colo <- colorRamp(col.ran)
@@ -118,6 +118,7 @@ save.all <- function(info,from,thin,filename){
   for(j in 1:nrow(th))
     # save values in the right order
     save[j,] <- c(th[j,1:3],th[j,5],th[j,5],th[j,4])
+  colnames(save) <- c("mu1","mu2","s11","s12","s21","s22")
   write.csv(save,file=filename,row.names = F)
 }
 
