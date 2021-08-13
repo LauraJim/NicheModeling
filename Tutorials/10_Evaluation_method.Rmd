@@ -420,7 +420,7 @@ el.maha <- ellipse::ellipse(x=cbind(trpar1$maha.sigma1,trpar1$maha.sigma2),
                             centre=trpar1$maha.mu, level=0.99)
 el.wn <- ellipse::ellipse(x=cbind(trpar1$wn.sigma1, trpar1$wn.sigma2), 
                           centre=trpar1$wn.mu, level=0.99)
-el.bay <- ellipse::ellipse(x=c(trpar2$Sigma1, trpar2$Sigma2), centre=trpar2$mu, level=0.99)
+el.bay <- ellipse::ellipse(x=cbind(trpar2$Sigma1, trpar2$Sigma2), centre=trpar2$mu, level=0.99)
 
 
 ## plot
