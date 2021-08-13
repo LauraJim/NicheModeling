@@ -75,7 +75,7 @@ save.all(info, from, thin, filename)
 
 The files that need to be prepared to run these functions are: a matrix that contains tolerance limits of environmental conditions that a species can survive in, a matrix that contains the occurrence points of a species and correlated environmental data, and a matrix that contains a random sample of points inside a study area that are correlated with environmental information. The information on the tolerance limits of a species needs to be obtained through lab experiments. The two other files can be created by using the function `get.Ecoord` (see tutorial "Getting environmental values for the study sites").
 
-The output are several graphs that show the tolerance limits within the environmental space as well as the iterations from the MCMC algorithm. 
+The output are several graphs that show the tolerance limits within the environmental space as well as the iterations from the MCMC algorithm. Furthermore, a matrix with the calculated iterations will be created.
 \
 
 ### Dependencies
@@ -95,7 +95,6 @@ source(".\\Functions\\TNf_Model_functions.R")
 
 ```{r, message=FALSE}
 library(Rtwalk)
-library(rgdal)
 ```
 \
 
@@ -172,6 +171,203 @@ W0 <<- chol2inv(CholW)
 # covariance matrix
 Sigma0 <<- t(CholSigma0) %*% CholSigma0
 ```
+\
+
+Plot the the a priori parameters as an ellipse and the tolerance limits as a rectangle in the environmental space.
+```{r, fig.show='hide'}
+# create an ellipse with a 95% confidence region (=lev)
+el <- ellipse::ellipse(x = Sigma0, centre = mu0,level = 0.95)
+
+# png(paste0("./Images/Thr","_apriori.png"),width = 2300, height = 2300, 
+#    res = 600, pointsize = 6)
+# x11()
+# Plot background points
+plot(env.d, pch=1, col= "grey80", xlim=mu.lim[1:2], ylim=mu.lim[3:4],
+     xlab="Mean Annual Temperature (°C *10)",
+     ylab="Total Annual Precipitation (mm)",main="Environmental space")
+# add occurrences
+points(env.sp, pch=19, col=spcol)
+# add tolerance limits
+rect(xleft = limits[1,2], xright= limits[1,3], ybottom = limits[2,2],
+     ytop = limits[2,3], border="gold", lwd=2)
+# add ellipse corresponding to the selected confidence region
+lines(el,col="gold",lwd=2)
+legend("topleft",legend=c(rotule, "Species presences", "Points inside M", "Tolerance ranges"),pch=c(NA,19,1,NA),
+       bty="n",lty=c(0,0,0,1),col=c("white", spcol, "grey80", "gold"),lwd=2)
+#dev.off()
+```
+
+
+```{r, echo=FALSE, fig.cap=" Figure of the suitable niches constructed by a priori parameters in the environmental space for the species *Threnetes ruckeri* .", out.width = '80%',fig.align="center"}
+options(knitr.duplicate.label = "allow")
+knitr::include_graphics("Images/Thr_apriori.png")
+```
+\
+
+The next step is to calculate the Markov Chain Monte Carlocreate for the Bayesian model. For this, two functions are utilized: `Energy` and `Run`. Both functions need to be adjusted based on the dataset and the resulting estimations. The previously defined variables are necessary for these calculations. Another variable that is needed is the number of environmental variables in the study. In this case we have two (bio1 and bio12).
+
+```{r}
+dd <- 2
+```
+\
+
+Apply the function `Engery` that calculates a negative logarithm (posterior) of the a priori parameters.
+```{r}
+# This is called right after Supp: mu, A and detA are already defined, th is ignored
+Energy <- function(th)
+{ # This is called right after Supp: mu, A and detA are already defined, th is ignored
+  ax1 <- (mu - mu0)
+  ax2 <- apply( env.sp, 1, function(xi) { ax<-as.matrix(xi - mu); t(ax) %*% A %*% ax })
+  # first two terms are generic in the posterior due to the normal model
+  S <- 0.5*sum(ax2) + n*log(suma.Et)
+  # these terms correspond to the priors:
+  S <- S + 0.5*( t(ax1) %*% A0 %*% ax1 + sum(diag(A %*% W0)) - (alpha0-dd-1)*log(detA) )
+  
+  S # + 10**6 numerical artifact
+}
+```
+\
+
+The next function is `Run`, which runs and plots the MCMC simulations from the posterior. 10000 or 20000 iterations are normal.
+```{r}
+Run <- function(Tr=20000)
+{
+  info <- Runtwalk( Tr=Tr, dim=5, Obj=Energy, Supp=Supp, x0=Initth(), xp0=Initth())
+  x11()
+  PlotIterations( info )
+  
+  info
+}
+```
+\
+
+With the resulting output of `Run`, the MCMC algorithm can be run. Calling info will draw the iterations in as many plots as dimensions where entered for Run (in this case: 5). Niter are the amount of iterations. 1000 iterations would be quite fast but it is better to use at least 10000.
+```{r}
+# number of iterations
+niter <- 10000
+ptm <- proc.time()
+info <- Run(Tr=niter)
+proc.time() - ptm
+```
+The resulting values in the beginning are quite large and not of interest. Smaller iterations are of interest.
+
+
+```{r}
+str(info)
+```
+\
+
+Plot the results to check the MCMC convergence. The resulting values in the beginning are usually quite large and not of interest. Smaller iterations are of interest. Adjust the line depending on how the iterations turn out to catch the smaller iterations.
+```{r}
+# x11()
+plot(1:(niter+1), -info$Ups, type = "l", xlab = "iteration", ylab = "LogPost",
+     main = "dim=5")
+abline(v=2000, col="red")
+```
+\
+
+Save the results as a csv-file. `From` defines from which iteration the output is saved and `thin` defines the steps in between the iterations.
+```{r}
+fname <- paste0(paste(rotule,niter,"output",sep="_"),".csv")
+save.all(info,from = 2000, thin = 400, paste0("./Generated_Data/",fname))
+```
+\
+
+Since the MCMC calculation simulates values of a distribution, for each simulation an ellipse can be drawn. The blue ellipse is supposed to present the best estimation for the niche of a species. However, this might not always be true and is quite dependend on the amount of iterations used.
+```{r, fig.show='hide'}
+# Plot simulated ellipses
+# x11()
+# png(paste0("./Images/Thr","_MCMC_ellipses.png"),width = 2300, height = 2300, 
+#    res = 600, pointsize = 6)
+PlotIterations(info, from=2000, thin=400,col=spcol,
+               main=paste(rotule, niter, sep="_"),
+               xlim=mu.lim[1:2], ylim=mu.lim[3:4])
+# a priori ellipse
+lines(el,col="gold",lwd=2)
+# dev.off()
+```
+
+```{r, echo=FALSE, fig.cap=" Figure of the suitable niches constructed by the MCMC iterations in the environmental space for the species *Threnetes ruckeri* .", out.width = '80%',fig.align="center"}
+options(knitr.duplicate.label = "allow")
+knitr::include_graphics("Images/Thr_MCMC_ellipses.png")
+```
+\
+
+Save the values mu and Sigma into a csv-file for further use.  Estimated parameters = MAPs
+
+```{r}
+# Define mu and Sigma
+mu
+chol2inv(chol(A))
+
+# save the estimated parameters for further use as a matrix (csv)
+mat <- cbind(mu, chol2inv(chol(A)))
+colnames(mat) <- c("mu", "Sigma1", "Sigma2")
+
+write.csv(mat,"./Generated_Data/tr_bay_mu_sigma_estimates.csv",row.names = F)
+
+```
+\
+
+**Output files**
+
+* Threnetes_ruckeri_10000_output.csv
+
+* tr_bay_mu_sigma_estimates.csv
+\
 
 
 
+### Using the Bayesian model for the projection into G-Space
+\
+
+Read source and library.
+```{r, message=FALSE}
+source(".\\Functions\\TnicheG.R")
+
+library(rgdal)
+```
+\
+
+**Input files**
+
+* bio1.asc
+
+* bio12.asc
+
+* Threnetes_ruckeri.shp (and associated files)
+\
+\
+
+Read rasters with environmental information and stack them.
+```{r}
+bio1 <- raster(".\\Initial_Data\\bio1.asc")
+bio2 <- raster(".\\Initial_Data\\bio12.asc")
+bios <- stack(bio1,bio2)
+```
+\
+
+Apply the function `Niche.G` to create a raster with a suitability index based on the Bayesian model.
+```{r}
+thr.bay <- niche.G(Estck = bios, mu = mu, Sigma = chol2inv(chol(A)))
+```
+\
+
+The new raster can be either saved like this or be sized to the study area. For further application a cropped raster is necessary. Read a shapefile that defines the study area, crop the raster with it and save the result.
+```{r, message=FALSE}
+thr.shp <- readOGR("./Initial_Data/shapefiles","Threnetes_ruckeri")
+
+thr.bayc <- mask(crop(thr.bay, thr.shp), thr.shp)
+
+writeRaster(thr.bayc,"./Generated_Data/tr_bay_cropped.tif", overwrite = T)
+
+```
+\
+
+**Output files**
+
+* tr_bay_cropped.tif
+\
+\
+
+*End of tutorial*
