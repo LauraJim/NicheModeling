@@ -81,30 +81,8 @@ legend("topleft",legend=c("Species presences:",rotule,"Tolerance ranges"),pch=c(
 
 
 # 
-# # in ggplot
+# # in ggplot Environmental Space:
 # 
-# # Geographic Space:
-# # create new data-frame with combined coordinates of random background points
-# # and occurrence. 
-# bckgrnd1 <- data.frame(longitude = envall[, 1], latitude = envall[, 2])
-# occ1 <- data.frame(longitude = data[, 1], latitude = data[, 2])
-# data1 <- cbind(rbind(bckgrnd1[,1:2],occ1[,1:2]),
-#               # an extra column is added to differentiate bckgrnd and E.occ 
-#               # (1 for bckgrnd, 2 for E.occ)
-#               c(rep(1,nrow(bckgrnd1)),rep(2,nrow(occ1))))
-# # rename columns
-# data2 <- data.frame(Longitude = data1[, 1], Latitude = data1[, 2], 
-#                     Type = data1[,3])
-# 
-# # create plot for G-Space
-# p1 <- ggplot(data2, aes(x = Longitude, y = Latitude, color = factor(Type), 
-#                         shape = factor(Type))) +
-#   geom_point(alpha=0.5) +
-#   scale_shape_manual(values=c(20,19), guide = FALSE) +
-#   scale_color_manual(values= c("grey45", spcol), guide = FALSE)
-# 
-# 
-# # Environmental Space:
 # bckgrnd2 <- data.frame(Temperature = envall[,3], Precipitation = envall[,4])
 # species <- data.frame(Temperature = data[,3], Precipitation = data[,4])
 # data3 <- cbind(rbind(bckgrnd2[,1:2], species[,1:2]), c(rep(1,nrow(bckgrnd2)),rep(2,nrow(species))))
@@ -192,7 +170,35 @@ lines(el,col="gold",lwd=2)
 # Estimated parameters = MAPs
 mu
 chol2inv(chol(A))
-# save the values of mu and A!!!
+
+# save the estimated parameters for further use as a matrix (csv)
+mat <- cbind(mu, chol2inv(chol(A)))
+colnames(mat) <- c("mu", "Sigma1", "Sigma2")
+
+write.csv(mat,"./Results/tr_bay_mu_sigma_estimates.csv",row.names = F)
+
+
+## Projecting the bayesian model into G-Space -----------------
+
+source(".\\Tutorials\\Functions\\TnicheG.R")
+
+bio1 <- raster(".\\ClimateData10min\\bio1WH.asc")
+bio2 <- raster(".\\ClimateData10min\\bio12WH.asc")
+bios <- stack(bio1,bio2)
+
+thr.bay <- niche.G(Estck = bios, mu = mu, Sigma = chol2inv(chol(A)))
+
+x11()
+plot(thr.bay)
+
+writeRaster(thr.bay,"./Results/Threnetes_ruckeri_bay_map.tif", overwrite = T)
+
+library(rgdal)
+thr.shp <- readOGR("./Shapefiles","Threnetes_ruckeri")
+
+thr.bayc <- mask(crop(thr.bay, thr.shp), thr.shp)
+
+writeRaster(thr.bayc,"./Rasters/tr_bay_cropped.tif", overwrite = T)
 
 
 ### END
