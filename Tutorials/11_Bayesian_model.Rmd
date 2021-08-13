@@ -1,0 +1,177 @@
+---
+title: 'Bayesian model: adding tolerance limits'
+author: "Laura Jiménez and Carola Franzen"
+date: " August 2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+\
+
+# Bayesian model: adding tolerance limits
+
+This tutorial shows how to use the Bayesian model with tolerance limits to create estimates for the fundamental niche of a species. Various functions are necessary for this process that are within the file **Nf_Model_functions.R**: `priorpar`, `DefineSp`, `Supp`, `Initth`, `PlotXYEnvVars`, `PlotIterations`, and `save.all`. Out of these, `Supp`, `Initth`, and `PlotXYEnvVars` are directly used within other functions. Other functions (`Energy` and `Run`) are used directly in the example as they need to be adjusted based on the example and estimation results.
+<!--- Add more description --->
+\
+\
+
+## How the main functions work
+
+The function `DefineSp` fixes the values for species and environmental variables that are worked with. The fixed values are `Comp1` and `Comp2` (providing columns), `env.d` (a matrix with environmental information of randomly sampled locations of a study area), `env.sp` (a matrix with environmental information of the presence points of a species), `n` (number of occurrences), m (number of randomly sampled points), `N` (total amount of data points, including occurrences and sample), `Et` (a matrix with the combined environmental information of occurrences and samples).
+```{r, eval=FALSE}
+DefineSp(env, data.sp, Comp1, Comp2)
+```
+\
+
+The function `priorpar` uses data of environmental tolerance limits (maximum and minimum) of a species to determine the values of the parameters that define the a priori distribution. 
+```{r, eval=FALSE}
+priorpar(tolran, nsd, alpha)
+```
+\
+
+The functions `Energy` and `Run` calculate the Bayesian inference using the Markov Chain Monte Carlocreate (MCMC). `Energy` calculates the negative logarithm of the posterior and `Run` runs and plots the MCMC simulations from the posterior. The functions `Supp` and `Initth` are essential for using the t-walk algorithm. <span style="color: red;"> ##### this needs a much better explanation #####</span>
+\
+\
+
+The function `PlotIterations` is used after calculating MCMC. It will plot a selection (indices) of the MCMC iterations. 
+```{r, eval=FALSE}
+PlotIterations(info, from, thin, lev,...)
+```
+\
+
+The function `save.all` saves all the values of mu and Sigma simulated from the posterior.
+```{r, eval=FALSE}
+save.all(info, from, thin, filename)
+```
+\
+
+### Parameters
+
+* `env` = random sample of points inside a study area that contain environmental information
+
+* `data.sp` = a matrix that contains the occurrence points of a species and correlated environmental data
+
+* `Comp1` = two numbers that define the column number which contains the first environmental condition of a matrix 
+
+* `Comp2` = two numbers that define the column number which contains the second environmental condition of a matrix 
+
+* `tolran` = a matrix that contains the minimum and maximum values of the tolerance limits of a species (two columns for min and max and as many rows as environmental variables are used)
+
+* `nsd` = number of standard deviations covered by a tolerance range
+
+* `alpha` = number of degrees of freedom in the a priori Wishart distribution
+
+* `info` = a list of the output from the function `Run`
+
+* `from` = gives the start iteration 
+
+* `thin` = the separation between iterations
+\
+\
+
+### Input and Output
+
+The files that need to be prepared to run these functions are: a matrix that contains tolerance limits of environmental conditions that a species can survive in, a matrix that contains the occurrence points of a species and correlated environmental data, and a matrix that contains a random sample of points inside a study area that are correlated with environmental information. The information on the tolerance limits of a species needs to be obtained through lab experiments. The two other files can be created by using the function `get.Ecoord` (see tutorial "Getting environmental values for the study sites").
+
+The output are several graphs that show the tolerance limits within the environmental space as well as the iterations from the MCMC algorithm. 
+\
+
+### Dependencies
+**Functions:** `Rtwalk`
+
+**Example:** `rgdal`
+\
+\
+
+## Worked Example: *Threnetes ruckeri*
+\
+
+### Read source codes and libraries
+```{r, message=FALSE}
+source(".\\Functions\\TNf_Model_functions.R")
+```
+
+```{r, message=FALSE}
+library(Rtwalk)
+library(rgdal)
+```
+\
+
+**Input files**
+
+* Threnetes_ruckeri_occ_GE.csv
+
+* Threnetes_ruckeri_M_GE.csv
+
+* T_ruckeri_tolerances.csv
+\
+\
+
+### Main code
+\
+
+**Read files and prepare the parameters**
+\
+
+```{r}
+# Read random sampled points with GE information and occurrences with GE information
+envall <- read.csv("./Generated_Data/Threnetes_ruckeri_M_GE.csv",header=T) 
+data <- read.csv("./Generated_Data/Threnetes_ruckeri_occ_GE.csv",header=T)
+
+# Read matrix with tolerance ranges for two environmental conditions of the species
+limits <- read.csv("./Initial_Data/T_ruckeri_tolerances.csv")
+
+# Specify species name
+rotule <- "Threnetes_ruckeri"
+# select species color for plots
+spcol <- "royalblue3"
+```
+\
+
+Fixing the species and environmental variables with the function `DefineSp`. The numbers in Comp1 and Comp2 are the numbers of the columns in the loaded matrices that contain the environmental information. After calling the function, the values Comp1, Comp2, env.d, env.sp, n, m, N, Et are fixed for further use.
+```{r}
+DefineSp( env = envall, data.sp = data, Comp1=c(3,3), Comp2=c(4,4))
+```
+
+```{r}
+n # number of occurrences
+head(env.sp, n=4) # environmental information of occurrence points
+m # 
+head(env.d, n=4) # environmental information of randomly sampled points
+N # number of randomly sampled points
+head(Et, n=4) # combined environmental information of occurrences and samples
+tail(Et, n=4)
+```
+\
+
+Define a valid interval for mu, depending on the range of the environmental variables. These limits are used for the plots as well as for the function `Supp`.
+```{r}
+b1 <- 10 
+b2 <- 100
+mu.lim <<- c(min(Et[,1],limits[1,2])-b1,max(Et[,1],limits[1,3])+b1,
+             min(Et[,2],limits[2,2])-b2,max(Et[,2],limits[2,3])+b2)
+```
+\
+
+Apply the function `priorpar` to calculate a priori parameters with the tolerance limits.
+```{r}
+# number of d.f. in the a priori Wishart distribution
+alpha0 <<- 2
+
+# Apply function
+priorpar(limits[,2:3], nsd=6, alpha=alpha0)
+
+# a priori mean
+# mu0
+# precision matrix
+A0 <<- chol2inv(CholSigma0) 
+# scale matrix
+W0 <<- chol2inv(CholW) 
+# covariance matrix
+Sigma0 <<- t(CholSigma0) %*% CholSigma0
+```
+
+
+
