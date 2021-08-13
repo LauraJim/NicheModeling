@@ -228,29 +228,15 @@ Energy <- function(th)
 ```
 \
 
-The next function is `Run`, which runs and plots the MCMC simulations from the posterior. 10000 or 20000 iterations are normal.
-```{r}
-Run <- function(Tr=20000)
-{
-  info <- Runtwalk( Tr=Tr, dim=5, Obj=Energy, Supp=Supp, x0=Initth(), xp0=Initth())
-  x11()
-  PlotIterations( info )
-  
-  info
-}
-```
-\
+The next step is to run the MCMC simulation of the posterior with the output of Energy. 1000 iterations would be quite fast but it is better to use at least 10000 or 20000. The resulting values in the beginning are quite large and not of interest. Smaller iterations are of interest.
 
-With the resulting output of `Run`, the MCMC algorithm can be run. Calling info will draw the iterations in as many plots as dimensions where entered for Run (in this case: 5). Niter are the amount of iterations. 1000 iterations would be quite fast but it is better to use at least 10000.
 ```{r}
 # number of iterations
 niter <- 10000
-ptm <- proc.time()
-info <- Run(Tr=niter)
-proc.time() - ptm
+# draw the iterations in as many plots as dimensions where entered for Run (in this case: 5)
+info <- Runtwalk( Tr=niter, dim=5, Obj=Energy, Supp=Supp, x0=Initth(), xp0=Initth())
 ```
-The resulting values in the beginning are quite large and not of interest. Smaller iterations are of interest.
-
+\
 
 ```{r}
 str(info)
