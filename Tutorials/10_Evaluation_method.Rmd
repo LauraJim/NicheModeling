@@ -415,17 +415,12 @@ thr.ME <- read.csv("./Generated_Data/Threnetes_ruckeri_M_GE.csv",header=T)[,-(1:
 trpar1 <- read.csv("./Generated_Data/tr_mu_sigma_estimates.csv",header=T)[,-1]
 trpar2 <- read.csv("./Generated_Data/tr_bay_mu_sigma_estimates.csv",header=T)
 
-# define Sigma0
-A0 <- cbind(trpar2$A0.1, trpar2$A0.2)
-CholA0 <- chol(A0)
-Sigma0 <- chol2inv(CholA0) 
-
 # calculate ellipses
 el.maha <- ellipse::ellipse(x=cbind(trpar1$maha.sigma1,trpar1$maha.sigma2), 
                             centre=trpar1$maha.mu, level=0.99)
 el.wn <- ellipse::ellipse(x=cbind(trpar1$wn.sigma1, trpar1$wn.sigma2), 
                           centre=trpar1$wn.mu, level=0.99)
-el.bay <- ellipse::ellipse(x=Sigma0, centre=trpar2$mu0, level=0.99)
+el.bay <- ellipse::ellipse(x=c(trpar2$Sigma1, trpar2$Sigma2), centre=trpar2$mu, level=0.99)
 
 
 ## plot
@@ -433,7 +428,7 @@ el.bay <- ellipse::ellipse(x=Sigma0, centre=trpar2$mu0, level=0.99)
 colpal <- c("grey70", "chartreuse4", "coral2", "cadetblue3", "slateblue4")
 
 # png(paste0("./Generated_Data/Thr","_threemodels.png"),width = 2300, height = 2300, 
-#    res = 600, pointsize = 6)
+#   res = 600, pointsize = 6)
 #x11()
 plot(thr.ME,col=colpal[1],pch=1, xlab="Annual mean temperature (°C*10)", 
      ylab="Annual precipitation (mm)", xlim= c(0, 320), ylim= c(0, 8000))
