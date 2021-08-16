@@ -6,7 +6,10 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  echo = TRUE)
 ```
 \
 
@@ -31,7 +34,7 @@ priorpar(tolran, nsd, alpha)
 ```
 \
 
-The functions `Energy` and `Run` calculate the Bayesian inference using the Markov Chain Monte Carlocreate (MCMC). `Energy` calculates the negative logarithm of the posterior and `Run` runs and plots the MCMC simulations from the posterior. The functions `Supp` and `Initth` are essential for using the t-walk algorithm. <span style="color: red;"> ##### this needs a much better explanation #####</span>
+The functions `Supp` and `Initth` are essential for using the t-walk algorithm. Alongside `PlotXYEnvVars`, these functions are used later in the simulations.  <span style="color: red;"> ##### this needs a much better explanation #####</span>
 \
 \
 
@@ -63,7 +66,11 @@ save.all(info, from, thin, filename)
 
 * `alpha` = number of degrees of freedom in the a priori Wishart distribution
 
-* `info` = a list of the output from the function `Run`
+* `th` = a vector of five elements (first two are values of mu, 3,4, and 5 are values of A)
+
+* `…` = with this parameter, further graphical parameters can be supplied as arguments to the plot
+
+* `info` = a list of iterations calculated with the `Rtwalk` function (MCMC)
 
 * `from` = gives the start iteration 
 
@@ -81,7 +88,7 @@ The output are several graphs that show the tolerance limits within the environm
 ### Dependencies
 **Functions:** `Rtwalk`
 
-**Example:** `rgdal`
+**Example:** `rgdal`, `raster``
 \
 \
 
@@ -163,13 +170,13 @@ alpha0 <<- 2
 priorpar(limits[,2:3], nsd=6, alpha=alpha0)
 
 # a priori mean
-# mu0
+mu0
 # precision matrix
-A0 <<- chol2inv(CholSigma0) 
+(A0 <<- chol2inv(CholSigma0)) 
 # scale matrix
-W0 <<- chol2inv(CholW) 
+(W0 <<- chol2inv(CholW)) 
 # covariance matrix
-Sigma0 <<- t(CholSigma0) %*% CholSigma0
+(Sigma0 <<- t(CholSigma0) %*% CholSigma0)
 ```
 \
 
@@ -204,14 +211,15 @@ knitr::include_graphics("Images/Thr_apriori.png")
 ```
 \
 
-The next step is to calculate the Markov Chain Monte Carlocreate for the Bayesian model. For this, two functions are utilized: `Energy` and `Run`. Both functions need to be adjusted based on the dataset and the resulting estimations. The previously defined variables are necessary for these calculations. Another variable that is needed is the number of environmental variables in the study. In this case we have two (bio1 and bio12).
+The next step is to calculate the Markov Chain Monte Carlocreate for the Bayesian model with the function `Energy`. It creates a negative logarithm of the posterior function of the parameters of interest. 
 
+This function needs to be adjusted based on the datasets and the resulting estimations. The previously defined variables are necessary for these calculations. Another variable that is needed is the number of environmental variables in the study. In this case we have two (bio1 and bio12).
 ```{r}
 dd <- 2
 ```
 \
 
-Apply the function `Engery` that calculates a negative logarithm (posterior) of the a priori parameters.
+Apply the function `Engery` and adjust accordingly.
 ```{r}
 # This is called right after Supp: mu, A and detA are already defined, th is ignored
 Energy <- function(th)
@@ -228,9 +236,8 @@ Energy <- function(th)
 ```
 \
 
-The next step is to run the MCMC simulation of the posterior with the output of Energy. 1000 iterations would be quite fast but it is better to use at least 10000 or 20000. The resulting values in the beginning are quite large and not of interest. Smaller iterations are of interest.
-
-```{r}
+The next step is to run the MCMC simulation of the posterior with the output of Energy. 1000 iterations would be quite fast but it is better to use at least 10000 or 20000. The resulting values in the beginning are quite large and not of interest. The main focus should be on smaller iterations.
+```{r, fig.show='hide', message=FALSE, warning=FALSE}
 # number of iterations
 niter <- 10000
 # draw the iterations in as many plots as dimensions where entered for Run (in this case: 5)
@@ -263,14 +270,14 @@ Since the MCMC calculation simulates values of a distribution, for each simulati
 ```{r, fig.show='hide'}
 # Plot simulated ellipses
 # x11()
-# png(paste0("./Images/Thr","_MCMC_ellipses.png"),width = 2300, height = 2300, 
-#    res = 600, pointsize = 6)
+png(paste0("./Images/Thr","_MCMC_ellipses.png"),width = 2300, height = 2300, 
+    res = 600, pointsize = 6)
 PlotIterations(info, from=2000, thin=400,col=spcol,
                main=paste(rotule, niter, sep="_"),
                xlim=mu.lim[1:2], ylim=mu.lim[3:4])
 # a priori ellipse
 lines(el,col="gold",lwd=2)
-# dev.off()
+dev.off()
 ```
 
 ```{r, echo=FALSE, fig.cap=" Figure of the suitable niches constructed by the MCMC iterations in the environmental space for the species *Threnetes ruckeri* .", out.width = '80%',fig.align="center"}
@@ -312,6 +319,7 @@ Read source and library.
 source(".\\Functions\\TnicheG.R")
 
 library(rgdal)
+library(raster)
 ```
 \
 
@@ -340,15 +348,24 @@ thr.bay <- niche.G(Estck = bios, mu = mu, Sigma = chol2inv(chol(A)))
 \
 
 The new raster can be either saved like this or be sized to the study area. For further application a cropped raster is necessary. Read a shapefile that defines the study area, crop the raster with it and save the result.
-```{r, message=FALSE}
+```{r, message=FALSE, results='hide'}
 thr.shp <- readOGR("./Initial_Data/shapefiles","Threnetes_ruckeri")
 
 thr.bayc <- mask(crop(thr.bay, thr.shp), thr.shp)
-
+```
+```{r}
 writeRaster(thr.bayc,"./Generated_Data/tr_bay_cropped.tif", overwrite = T)
-
 ```
 \
+
+Plot of the suitability index of the Bayesian model.
+```{r}
+# library(raster)
+# thr.bayc2 <- raster("./Generated_Data/tr_bay_cropped.tif")
+plot(thr.bayc)
+```
+
+
 
 **Output files**
 
