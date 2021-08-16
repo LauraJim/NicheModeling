@@ -172,8 +172,8 @@ head(curve.cn$out2, n=6)
 \
 
 Plot the curve with `plot.aco` with the species name for the parameter `species`, the results from `get.curve` as `aco.curve`, 95% confidence level and the `model` set to "hypergeom".
-```{r}
-x11()
+```{r, fig.show='hide'}
+# x11()
 plot.aco(species = "Catasticta nimbice", aco.curve = curve.cn, conlev = 0.95, model = "hypergeom")
 ```
 
@@ -388,13 +388,13 @@ The necessary parameters for this function are the results of the accumulation c
 
 First, create a list with all the matrices using only the first two columns of the matrix created by the accumulation curve.
 ```{r}
-models2 <- list(thrmaha.curve[,1:2], thrwn.curve[,1:2], thrbay.curve[,1:2])
+models3 <- list(thrmaha.curve[,1:2], thrwn.curve[,1:2], thrbay.curve[,1:2])
 ```
 \
 
 Next, apply the function that draws all the models in a single plot.
-```{r}
-compare.aco(mods=models2, nocc=171, ncells=4170,
+```{r, fig.show='hide'}
+compare.aco(mods=models3, nocc=171, ncells=4170,
             sp.name=spname2, mods.names=c("Mahalanobis","Weigthed-Normal", "Bayesian"),alpha=0.95)
 ```
 
@@ -406,7 +406,7 @@ knitr::include_graphics("Images/THR_compare_maha-wn-bay.png")
 \
 
 Plot of all three suitability ellipses in the environmental space:
-```{r, fig.show='hide'}
+```{r}
 # load environmental space of occurrence points and background points for the plot
 thr.occE <- read.csv("./Generated_Data/Threnetes_ruckeri_occ_GE.csv",header=T)[,-(1:2)]
 thr.ME <- read.csv("./Generated_Data/Threnetes_ruckeri_M_GE.csv",header=T)[,-(1:2)]
