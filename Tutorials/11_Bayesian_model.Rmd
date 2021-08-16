@@ -223,7 +223,7 @@ Apply the function `Engery` and adjust accordingly.
 ```{r}
 # This is called right after Supp: mu, A and detA are already defined, th is ignored
 Energy <- function(th)
-{ # This is called right after Supp: mu, A and detA are already defined, th is ignored
+{ 
   ax1 <- (mu - mu0)
   ax2 <- apply( env.sp, 1, function(xi) { ax<-as.matrix(xi - mu); t(ax) %*% A %*% ax })
   # first two terms are generic in the posterior due to the normal model
@@ -231,7 +231,7 @@ Energy <- function(th)
   # these terms correspond to the priors:
   S <- S + 0.5*( t(ax1) %*% A0 %*% ax1 + sum(diag(A %*% W0)) - (alpha0-dd-1)*log(detA) )
   
-  S # + 10**6 numerical artifact
+  S 
 }
 ```
 \
