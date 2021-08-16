@@ -181,7 +181,7 @@ cn.maha <- niche.G(Estck = bios, mu = center, Sigma = boundary)
 
 Save resulting raster. This file will be necessary for further calculations.
 ```{r}
-writeRaster(cn.maha, "./Generated_Data/Catasticta_nimbice_maha3_cropped.tif", overwrite= T) 
+writeRaster(cn.maha, "./Generated_Data/cn_maha3_cropped.tif", overwrite= T) 
 ```
 \
 
