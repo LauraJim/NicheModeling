@@ -436,7 +436,7 @@ plot(thr.ME,col=colpal[1],pch=1, xlab="Annual mean temperature (°C*10)",
 points(thr.occE,col=colpal[3],pch=20,cex=1.5) # presences used in model
 # add center points for the ellipses
 points(rbind(trpar1$maha.mu,trpar1$wn.mu, trpar2$mu), 
-       col= c(colpal[4], colpal[2], colpal[5]), pch=8)
+       col= c(colpal[4], colpal[2], colpal[5]), pch=20,cex=1.5)
 # ellipse maha
 lines(el.maha,col=colpal[4],lwd=2)
 # ellipse wn
