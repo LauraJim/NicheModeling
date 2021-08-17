@@ -1,8 +1,5 @@
 base
-methods
-datasets
-utils
-grDevices
-graphics
-stats
 Rtwalk
+sp
+raster
+rgdal
