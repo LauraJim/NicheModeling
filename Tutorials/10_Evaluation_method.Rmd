@@ -238,7 +238,8 @@ knitr::include_graphics("Images/CN_maha_acc_curve.png")
 ### *Threnetes ruckeri* with two environmental layers
 \
 
-For this example, three different suitability models are applied: the weighted normal distribution, the Mahalanobis distance, and the bayesian model.
+For this example, three different suitability models are applied: the weighted normal distribution, the Mahalanobis distance, and the Bayesian model. Only the graphs of the Mahalanobis model are displayed in this tutorial. The calculations are a preparation for the next anaylsis: comparing the curves.
+
 \
 
 **Input files**
@@ -403,10 +404,13 @@ compare.aco(mods=models3, nocc=171, ncells=4170,
 options(knitr.duplicate.label = "allow")
 knitr::include_graphics("Images/THR_compare_maha-wn-bay.png")
 ```
+
+As the plot shows, the weighted normal distribution model and the Bayesian model have better estimates than the Mahalanobis model as their curve is above the latter.
 \
 
+
 Plot of all three suitability ellipses in the environmental space:
-```{r}
+```{r, fig.show='hide'}
 # load environmental space of occurrence points and background points for the plot
 thr.occE <- read.csv("./Generated_Data/Threnetes_ruckeri_occ_GE.csv",header=T)[,-(1:2)]
 thr.ME <- read.csv("./Generated_Data/Threnetes_ruckeri_M_GE.csv",header=T)[,-(1:2)]
@@ -427,16 +431,14 @@ el.bay <- ellipse::ellipse(x=cbind(trpar2$Sigma1, trpar2$Sigma2), centre=trpar2$
 # set colorpalette
 colpal <- c("grey70", "chartreuse4", "coral2", "cadetblue3", "slateblue4")
 
-# png(paste0("./Generated_Data/Thr","_threemodels.png"),width = 2300, height = 2300, 
-#   res = 600, pointsize = 6)
-#x11()
+# x11()
 plot(thr.ME,col=colpal[1],pch=1, xlab="Annual mean temperature (°C*10)", 
      ylab="Annual precipitation (mm)", xlim= c(0, 320), ylim= c(0, 8000))
 # add presence points to the plot
 points(thr.occE,col=colpal[3],pch=20,cex=1.5) # presences used in model
 # add center points for the ellipses
 points(rbind(trpar1$maha.mu,trpar1$wn.mu, trpar2$mu), 
-       col= c(colpal[4], colpal[2], colpal[5]), pch=20,cex=1.5)
+       col= c(colpal[4], colpal[2], colpal[5]), pch=20, cex=1.5)
 # ellipse maha
 lines(el.maha,col=colpal[4],lwd=2)
 # ellipse wn
@@ -451,7 +453,6 @@ legend("topleft",legend = c(sp.leg,"Points inside M","Presences",
        pch=c(NA,1,19,NA,NA, NA),col = c("white", colpal[1], colpal[3], 
                                         colpal[4], colpal[2], colpal[5]),
        lwd=c(NA,NA,NA,2,2,2),bty = "n")
-# dev.off()
 ```
 
 ```{r, echo=FALSE, fig.cap=" Figure of the three models in Espace for the species *Threnetes ruckeri*.", out.width = '80%',fig.align="center"}
