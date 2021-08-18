@@ -34,8 +34,8 @@ priorpar(tolran, nsd, alpha)
 ```
 \
 
-The functions `Supp` and `Initth` are essential for using the t-walk algorithm. Alongside `PlotXYEnvVars`, these functions are used later in the simulations.  <span style="color: red;"> ##### this needs a much better explanation #####</span>
-\
+The functions `Supp` and `Initth` are essential for using the t-walk algorithm. Alongside `PlotXYEnvVars`, these functions are used later in the simulations.  
+<!-- Add more description -->
 \
 
 The function `PlotIterations` is used after calculating MCMC. It will plot a selection (indices) of the MCMC iterations. 
@@ -249,19 +249,18 @@ str(info)
 \
 
 Plot the results to check the MCMC convergence. The resulting values in the beginning are usually quite large and not of interest. Smaller iterations are of interest. Adjust the line depending on how the iterations turn out to catch the smaller iterations.
-```{r}
+```{r, fig.show='hide'}
 # define a parameter for the number at which a line is drawn and used as a 
 # lower limit for the plot iterations
 marker <- 2000
 
-png(filename = "./Images/Thr_Iterations_abline.png",width = 2300, height = 2300, 
-    res = 600, pointsize = 6)
 # x11()
 plot(1:(niter+1), -info$Ups, type = "l", xlab = "iteration", ylab = "LogPost",
      main = "dim=5")
 abline(v=marker, col="red")
-dev.off()
+
 ```
+
 ```{r, echo=FALSE, fig.cap=" Figure of the Bayesian iterations for the species *Threnetes ruckeri* marked with the lower limit.", out.width = '80%',fig.align="center"}
 options(knitr.duplicate.label = "allow")
 knitr::include_graphics("Images/Thr_Iterations_abline.png")
@@ -278,15 +277,13 @@ save.all(info,from = marker, thin = 400, paste0("./Generated_Data/",fname))
 Since the MCMC calculation simulates values of a distribution, for each simulation an ellipse can be drawn. The blue ellipse is supposed to present the best estimation for the niche of a species. However, this might not always be true and is quite dependend on the amount of iterations used.
 ```{r, fig.show='hide'}
 # Plot simulated ellipses
+
 # x11()
-png(filename = "./Images/Thr_MCMC_ellipses.png",width = 2300, height = 2300, 
-    res = 600, pointsize = 6)
 PlotIterations(info, from=marker, thin=400,col=spcol,
                main=paste(rotule, niter, sep="_"),
                xlim=mu.lim[1:2], ylim=mu.lim[3:4])
 # a priori ellipse
 lines(el,col="gold",lwd=2)
-dev.off()
 ```
 
 ```{r, echo=FALSE, fig.cap=" Figure of the suitable niches constructed by the MCMC iterations in the environmental space for the species *Threnetes ruckeri* .", out.width = '80%',fig.align="center"}
