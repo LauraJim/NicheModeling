@@ -234,6 +234,7 @@ Energy <- function(th)
 \
 
 The next step is to run the MCMC simulation of the posterior with the output of Energy. 1000 iterations would be quite fast but it is better to use at least 10000 or 20000. The resulting values in the beginning are quite large and not of interest. The main focus should be on smaller iterations.
+<!-- don't touch the code here unless you want to rerun the iterations several times and re-save the following images; beware of the cache!-->
 ```{r, fig.show='hide', message=FALSE, warning=FALSE, cache=TRUE}
 # number of iterations
 niter <- 10000
@@ -348,6 +349,7 @@ bios <- stack(bio1,bio2)
 \
 
 Apply the function `Niche.G` to create a raster with a suitability index based on the Bayesian model.
+<!-- renew the cache if the iteration chunk is changed and run again -->
 ```{r, cache=TRUE}
 thr.bay <- niche.G(Estck = bios, mu = mu, Sigma = chol2inv(chol(A)))
 ```
