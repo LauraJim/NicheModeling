@@ -51,6 +51,10 @@ library(raster)
 library(rgdal)
 library(tools)
 library(sp)
+library(ggplot2)
+#library(rnaturalearth)
+#library(rnaturalearthdata)
+library(ggpubr)
 ```
 \
 
@@ -147,7 +151,7 @@ write.csv(cn.GE3,file=paste0("./Generated_Data/Catasticta_nimbice_occ_GE3.csv"),
 \
 
 
-### 2) Calculate suitability index
+### 2) Estimate Mahalanobis Model Parameters
 \
 
 **Input Data**
@@ -171,6 +175,10 @@ Calculate the covariance of the environmental data (`Sigma`).
 ```{r}
 boundary <- cov(occ_E)
 ```
+\
+\
+
+### 3) Calculate Suitability Index
 \
 
 Apply function
@@ -229,4 +237,44 @@ mahacompare <- stack(maha.map, cn.maha)
 plot(mahacompare)
 ```
 
+Comparison of the Mahalanobis distance and the Mahalanobis model (in ggplot).
+```{r}
+
+ext <- extent(-120, -75, 0, 35)
+# Mahalanobis distance
+# calculate raster to points for ggplot
+mahamap.p <- rasterToPoints(maha.map)
+mahamap.pd <- data.frame(mahamap.p)
+colnames(mahamap.pd) <- c("Longitude","Latitude", "Maha")
+
+
+
+p1 <- ggplot() +
+        geom_tile(data = mahamap.pd,aes(x=Longitude, y=Latitude, fill=Maha)) +
+        theme_bw() +
+        coord_sf(xlim = c(ext[1], ext[2]),
+           ylim = c(ext[3],ext[4]), expand = FALSE) +
+        scale_fill_gradient2("Mahalanobis distance",limits=c(0,100), 
+                             low = 'royalblue3', mid='seagreen3', high = 'gold2',
+                             na.value = NA, midpoint = 50, n.breaks=6)
+
+# Suitability index
+# calculate raster to points for ggplot
+mahasuit.p <- rasterToPoints(cn.maha)
+mahasuit.pd <- data.frame(mahasuit.p)
+colnames(mahasuit.pd) <- c("Longitude","Latitude", "Suitability")
+
+
+
+p2 <- ggplot() +
+        geom_tile(data = mahasuit.pd,aes(x=Longitude, y=Latitude, fill=Suitability)) +
+        theme_bw() +
+        coord_sf(xlim = c(ext[1], ext[2]),
+           ylim = c(ext[3],ext[4]), expand = FALSE) +
+        scale_fill_gradient2("Suitability index",limits=c(0, 1), 
+                             low = 'gold2', mid='seagreen3', high = 'royalblue3',
+                             na.value = NA, midpoint = 0.5, n.breaks=6)
+ x11()
+ggarrange(p1, p2, ncol = 2, nrow = 1)
+```
 
