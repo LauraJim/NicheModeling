@@ -208,7 +208,7 @@ plot(cn.maha)
 ### 3) Comparing suitability index against Mahalanobis distance
 \
 
-The Mahalanobis distance and the suitability index calculated with the Mahalanobis model are slightly different. If applied to the raster cells, the patterns might look the same but the scale of the values will look different. 
+The Mahalanobis distance and the suitability index calculated with the Mahalanobis model are slightly different. If applied to the raster cells, the patterns can turn out similar, they are however different. 
 
 \
 
@@ -230,24 +230,16 @@ maha.map <- calc(bios,fun=maha.fun)
 ```
 \
 
-If applied to the raster cells, the patterns will look the same but the scale of the values will look different:
-```{r}
-mahacompare <- stack(maha.map, cn.maha)
-
-plot(mahacompare)
-```
-
-Comparison of the Mahalanobis distance and the Mahalanobis model (in ggplot).
-```{r}
+For easier comparison, the Mahalanobis distance and the Mahalanobis model rasters are plotted in ggplot. 
+```{r, fig.show='hide'}
 
 ext <- extent(-120, -75, 0, 35)
+
 # Mahalanobis distance
 # calculate raster to points for ggplot
 mahamap.p <- rasterToPoints(maha.map)
 mahamap.pd <- data.frame(mahamap.p)
 colnames(mahamap.pd) <- c("Longitude","Latitude", "Maha")
-
-
 
 p1 <- ggplot() +
         geom_tile(data = mahamap.pd,aes(x=Longitude, y=Latitude, fill=Maha)) +
@@ -264,17 +256,26 @@ mahasuit.p <- rasterToPoints(cn.maha)
 mahasuit.pd <- data.frame(mahasuit.p)
 colnames(mahasuit.pd) <- c("Longitude","Latitude", "Suitability")
 
-
-
 p2 <- ggplot() +
         geom_tile(data = mahasuit.pd,aes(x=Longitude, y=Latitude, fill=Suitability)) +
         theme_bw() +
         coord_sf(xlim = c(ext[1], ext[2]),
            ylim = c(ext[3],ext[4]), expand = FALSE) +
         scale_fill_gradient2("Suitability index",limits=c(0, 1), 
-                             low = 'gold2', mid='seagreen3', high = 'royalblue3',
+                             low = 'royalblue3', mid='seagreen3', high = 'gold2',
                              na.value = NA, midpoint = 0.5, n.breaks=6)
- x11()
-ggarrange(p1, p2, ncol = 2, nrow = 1)
+# x11()
+ggarrange(p1, p2, ncol = 2, nrow = 1, widths = c(1.5,1.38), heights = c(1.5,1.38))
 ```
+\
 
+This example clearly shows that both methods are using the Mahalanobis distance but produce different results. On the left side, the Mahalanobis distance, the lower values show the area of importance (close to 0), while on the right hand side, the suitability index calculated with the Mahalanobis model shows important areas in higher values (close to 1)
+
+```{r, echo=FALSE, fig.cap=" Figure of the differently calculated rasters.", out.width = '100%',fig.align="center"}
+options(knitr.duplicate.label = "allow")
+knitr::include_graphics("Images/Maharas_compare.png")
+```
+\
+\
+
+*End of Tutorial*
