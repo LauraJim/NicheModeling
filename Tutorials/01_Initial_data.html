@@ -178,11 +178,12 @@ pre code {
 <li><p><em>Threnetes rucheri</em>, the band-tailed barbthroat hummingbird, resident from Central America.</p></li>
 <li><p><em>Catasticta nimbice</em>, the pine white or Mexican dartwhite butterfly, known to occur from Costa Rica north to Mexico.</p></li>
 </ul>
-<p>Three types of files are needed to reproduce the ecological niche modeling exercises included in this tutorial:</p>
+<p>Four types of files are needed to reproduce the ecological niche modeling exercises included in this tutorial:</p>
 <ul>
 <li><p>A csv file that contains the geographic coordinates of the sites where the species has been recorded as present,</p></li>
 <li><p>A shapefile containing a polygon which delimits the study region,</p></li>
-<li><p>Raster files with the environmental variables to be used in the analysis and an extent larger or equal to the extent of the shapefile.</p></li>
+<li><p>Raster files with the environmental variables to be used in the analysis and an extent larger or equal to the extent of the shapefile,</p></li>
+<li><p>A csv file that contains tolerance limits of a species.</p></li>
 </ul>
 <p>Below, we describe the files that we created for our two focus species so you can create similar files for the species of your interest.</p>
 </div>
@@ -204,6 +205,8 @@ head(G.occ2, n=3)</code></pre>
 ## 1 Threnetes_ruckeri -79.42474  9.225965
 ## 2 Threnetes_ruckeri -84.01280 10.428800
 ## 3 Threnetes_ruckeri -82.95325  9.867804</code></pre>
+<p><br />
+</p>
 <div id="how-to-plot-occurrence-data-using-ggplot" class="section level3">
 <h3>How to plot occurrence data using <code>ggplot</code></h3>
 <pre class="r"><code># Set the boundaries to which the worldmap is cut
@@ -269,6 +272,17 @@ head(cnM.GE, n=3)</code></pre>
 ## 3 -99.08333 21.41667  184  1781</code></pre>
 <pre class="r"><code>dim(cnM.GE)</code></pre>
 <pre><code>## [1] 7486    4</code></pre>
+<p><br />
+</p>
+</div>
+<div id="table-with-species-tolerance-limit" class="section level2">
+<h2>Table with species’ tolerance limit</h2>
+<p>The table for a species’ tolerance limit contains the lower and upper limits of an environmental condition. In the example provided, we estimated these limits for the species <em>Threnetes ruckeri</em>, which is necessary information for using the Bayesian model (see Tutorial “Bayesian model”). Please keep in mind that the provided example is not estimated with a scientific method and only meant to aid in using and understanding the tutorial. For scientific research, the tolerance limits of a species need to be tested within a controlled lab environment.</p>
+<p>The matrix needs to have at two columns that provide the lower limit in the first column, and the upper limit in the second column. There should be as many rows as environmental conditions (usually two). The example contains the estimated tolerance limits for the mean annual temperature (MAT) and the total annual precipitation (AP).</p>
+<pre class="r"><code>(limits &lt;- read.csv(&quot;./Initial_Data/T_ruckeri_tolerances.csv&quot;))</code></pre>
+<pre><code>##   variable minimum maximum units
+## 1      MAT     200     300  C*10
+## 2       AP     500    5000    mm</code></pre>
 <p><br />
 </p>
 </div>

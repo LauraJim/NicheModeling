@@ -19,13 +19,16 @@ We selected two species as our focus species for all the analysis and examples:
 
 - *Catasticta nimbice*, the pine white or Mexican dartwhite butterfly, known to occur from Costa Rica north to Mexico.
 
-Three types of files are needed to reproduce the ecological niche modeling exercises included in this tutorial:
+Four types of files are needed to reproduce the ecological niche modeling exercises included in this tutorial:
 
 - A csv file that contains the geographic coordinates of the sites where the species has been recorded as present,
 
 - A shapefile containing a polygon which delimits the study region,
 
-- Raster files with the environmental variables to be used in the analysis and an extent larger or equal to the extent of the shapefile.
+- Raster files with the environmental variables to be used in the analysis and an extent larger or equal to the extent of the shapefile,
+
+- A csv file that contains tolerance limits of a species.
+
 
 Below, we describe the files that we created for our two focus species so you can create similar files for the species of your interest.
 
@@ -46,6 +49,7 @@ G.occ2 <- read.csv("./Initial_Data/Threnetes_ruckeri_occ_G.csv",header=T)
 head(G.occ2, n=3)
 
 ```
+\
 
 ### How to plot occurrence data using `ggplot`
 
@@ -117,6 +121,17 @@ head(cnM.GE, n=3)
 dim(cnM.GE)
 ```
 \
+
+## Table with species' tolerance limit
+
+The table for a species' tolerance limit contains the lower and upper limits of an environmental condition. In the example provided, we estimated these limits for the species *Threnetes ruckeri*, which is necessary information for using the Bayesian model (see Tutorial "Bayesian model"). Please keep in mind that the provided example is not estimated with a scientific method and only meant to aid in using and understanding the tutorial. For scientific research, the tolerance limits of a species need to be tested within a controlled lab environment.
+
+The matrix needs to have at two columns that provide the lower limit in the first column, and the upper limit in the second column. There should be as many rows as environmental conditions (usually two). The example contains the estimated tolerance limits for the mean annual temperature (MAT) and the total annual precipitation (AP).
+```{r}
+(limits <- read.csv("./Initial_Data/T_ruckeri_tolerances.csv"))
+```
+\
+
 
 ## Polygons of the study area
 The functions often use a polygon of the region of interest either to serve as a boundary in plots or to delimit rasters or sampled points to the specific region. The polygons used in the examples are shapefiles.
