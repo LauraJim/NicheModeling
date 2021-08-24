@@ -172,8 +172,7 @@ pre code {
 
 
 <p><br />
-</p>
-<p><br />
+<br />
 </p>
 <div id="project-resulting-ellipses-back-into-g-space" class="section level1">
 <h1>Project resulting ellipses back into G-space</h1>
@@ -190,39 +189,34 @@ pre code {
 <div id="parameters" class="section level3">
 <h3>Parameters</h3>
 <ul>
-<li><p><code>Estck</code> = a raster stack with more than two climatic layers<br />
-</p></li>
-<li><p><code>mu</code> = the mean of the columns that contain environmental data, such as temperature and precipitation<br />
-</p></li>
+<li><p><code>Estck</code> = a raster stack with more than two climatic layers</p></li>
+<li><p><code>mu</code> = the mean of the columns that contain environmental data, such as temperature and precipitation</p></li>
 <li><p><code>Sigma</code> = the covariance of the environmental data linked with a species’ occurrence<br />
+<br />
 </p></li>
 </ul>
-<p><br />
-</p>
-<p><br />
-</p>
 </div>
 <div id="input-and-output" class="section level3">
 <h3>Input and Output</h3>
-<p>The function needs raster files with environmental layers and a matrix with occurrence data of a species that correlates with environmental variables. The latter can be created by using the <code>get.Ecoord</code> function (see tutorial <em>02_Get_Ecoords</em>&quot;). This matrix can be replaced by a matrix that contains already calculated values using the Mahalanobis distance and weigthed normal distribution. This matrix can be created by using the function <code>fitNiche</code> (see tutorial <em>08_Weigthed_normal</em>). In case the result is to be plotted in ggplot, other files might be necessary, such as a shapefile that describes the study area or cropped rasters.<br />
+<p>The function needs raster files with environmental layers and a matrix with occurrence data of a species that correlates with environmental variables. The latter can be created by using the <code>get.Ecoord</code> function (see tutorial “Getting environmental values for the study sites”). This matrix can be replaced by a matrix that contains already calculated values using the Mahalanobis distance and weigthed normal distribution. This matrix can be created by using the function <code>fitNiche</code> (see tutorial “Weighted-normal model”). In case the result is to be plotted in ggplot, other files might be necessary, such as a shapefile that describes the study area or cropped rasters.<br />
 </p>
 <p>The function will produce a raster of areas that have suitable environmental conditions for a species. Those potential ecological niche regions are colored by different degrees of suitability. The output can be plotted and saved as TIF or ASCI file. Be aware that some older GIS program versions might have an issue with properly displaying the tif-file.<br />
-</p>
-<div id="dependencies" class="section level4">
-<h4>Dependencies</h4>
-<p><strong>Function:</strong> <code>raster</code> <strong>Examples:</strong> <code>sp</code>, <code>mvtnorm</code> (only needs to be installed),<code>ggplot2</code>, <code>ggpubr</code>, <code>rgdal</code><br />
+<br />
 </p>
 </div>
+<div id="dependencies" class="section level3">
+<h3>Dependencies</h3>
+<p><strong>Function:</strong> <code>raster</code></p>
+<p><strong>Examples:</strong> <code>sp</code>, <code>mvtnorm</code> (only needs to be installed),<code>ggplot2</code>, <code>ggpubr</code>, <code>rgdal</code><br />
+<br />
+</p>
 </div>
 </div>
 <div id="worked-examples" class="section level2">
 <h2>Worked Examples</h2>
-<!-- Where should the library notice go? Is here okay? -->
-<div id="read-libraries-and-source-code" class="section level3">
-<h3>Read libraries and source code</h3>
+<div id="read-source-code-and-libraries" class="section level3">
+<h3>Read source code and libraries</h3>
 <pre class="r"><code>source(&quot;.\\Functions\\TnicheG.R&quot;)</code></pre>
-<p><br />
-</p>
 <pre class="r"><code>library(sp)
 library(ggplot2)
 library(ggpubr)
@@ -244,8 +238,6 @@ library(rgdal)</code></pre>
 </ul>
 <p><br />
 </p>
-<p><strong>Prepare Parameters</strong><br />
-</p>
 <p>Read the rasters with environmental data and combine them into a rasterstack with two (or more layers).</p>
 <pre class="r"><code>## Read raster
 bio1 &lt;- raster(&quot;./Initial_Data/bio1.asc&quot;)
@@ -260,7 +252,7 @@ occ_E &lt;- read.csv(&quot;./Generated_Data/Catasticta_nimbice_occ_GE.csv&quot;,
 <p><br />
 </p>
 <div id="apply-the-function-and-automatically-plot-with-basic-plot" class="section level4">
-<h4>Apply the function and automatically plot with basic plot</h4>
+<h4>1) Apply the function and automatically plot with basic plot</h4>
 <p><br />
 </p>
 <p>Apply the function <code>niche.G</code> with the parameters <code>Estck</code>, <code>mu</code>, and <code>Sigma</code>. The results are plotted in the basic plot function.</p>
@@ -280,7 +272,7 @@ Figure of the geographical space with suitable niches for <em>Catasticta nimbice
 </p>
 </div>
 <div id="apply-the-function-and-plot-with-ggplot" class="section level4">
-<h4>Apply the function and plot with ggplot</h4>
+<h4>2) Apply the function and plot with ggplot</h4>
 <p><br />
 </p>
 <p>Another way to use the function <code>niche.G</code> is to use estimated values of <code>mu</code> and <code>Sigma</code> directly. The rasters with environmental data are cropped to the region of interest with a polygon before being stacked together in this version. They can also be cropped with coordinates (see the example for <em>Threnetes ruckeri</em> below).</p>
@@ -349,10 +341,9 @@ Figure of the geographical space with suitable niches for <em>Catasticta nimbice
 <li><p>Catasticta_nimbice_wn_map.tif</p></li>
 <li><p>Catasticta_nimbice_wn_map.asc</p></li>
 <li><p><span style="color: red;">tr_wn_cropped.tif</span></p></li>
-<li><p>Catasticta_nimbice_wn_map_ggplot.png</p></li>
+<li><p>Catasticta_nimbice_wn_map_ggplot.png<br />
+</p></li>
 </ul>
-<p><br />
-</p>
 <p><br />
 </p>
 </div>
@@ -366,7 +357,9 @@ Figure of the geographical space with suitable niches for <em>Catasticta nimbice
 <li><p>bio1.asc</p></li>
 <li><p>bio12.asc</p></li>
 <li><p>tr_mu_sigma_estimates.csv</p></li>
-<li><p>Threnetes_ruckeri_occ_GE.csv</p></li>
+<li><p>Threnetes_ruckeri_occ_GE.csv<br />
+<br />
+</p></li>
 </ul>
 <p>This example uses the Mahalanobis distance and the weighted normal distribution. The graphs are plotted in <code>ggplot2</code>. The raster files used here are the same as the ones used for the <em>Catasticta nimbice</em> examples.</p>
 <pre class="r"><code>## Read raster files
@@ -512,6 +505,7 @@ Figure of the geographical space with suitable niches for <em>Threnetes ruckeri<
 <li><p>Threnetes_ruckeri_maha_map.asc</p></li>
 <li><p><span style="color: red;">tr_bay_cropped.tif</span></p></li>
 <li><p>Threnetes_ruckeri_nicheG_ggplot.png<br />
+<br />
 </p></li>
 </ul>
 <p><em>End of the Tutorial</em></p>

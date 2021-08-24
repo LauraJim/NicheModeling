@@ -8,11 +8,11 @@ linkcolor: dodgerblue4
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-
+knitr::opts_chunk$set(echo = TRUE,
+                      message = FALSE,
+                      warning = FALSE)
 ```
 \
-  
 \
 
 # Project resulting ellipses back into G-space
@@ -34,42 +34,37 @@ niche.G(Estck, mu, Sigma)
 
 ### Parameters
 
-* `Estck` = a raster stack with more than two climatic layers
+- `Estck` = a raster stack with more than two climatic layers
+
+- `mu` = the mean of the columns that contain environmental data, such as temperature and precipitation 
+
+- `Sigma` = the covariance of the environmental data linked with a species' occurrence
 \
-
-* `mu` = the mean of the columns that contain environmental data, such as temperature and precipitation 
 \
-
-* `Sigma` = the covariance of the environmental data linked with a species' occurrence
-\
-
-\
-
-
-\
-
 
 ### Input and Output
 
-The function needs raster files with environmental layers and a matrix with occurrence data of a species that correlates with environmental variables. The latter can be created by using the `get.Ecoord` function (see tutorial *02_Get_Ecoords*"). This matrix can be replaced by a matrix that contains already calculated values using the Mahalanobis distance and weigthed normal distribution. This matrix can be created by using the function `fitNiche` (see tutorial *08_Weigthed_normal*). In case the result is to be plotted in ggplot, other files might be necessary, such as a shapefile that describes the study area or cropped rasters.
+The function needs raster files with environmental layers and a matrix with occurrence data of a species that correlates with environmental variables. The latter can be created by using the `get.Ecoord` function (see tutorial “Getting environmental values for the study sites”). This matrix can be replaced by a matrix that contains already calculated values using the Mahalanobis distance and weigthed normal distribution. This matrix can be created by using the function `fitNiche` (see tutorial "Weighted-normal model"). In case the result is to be plotted in ggplot, other files might be necessary, such as a shapefile that describes the study area or cropped rasters.
 \
 
 The function will produce a raster of areas that have suitable environmental conditions for a species. Those potential ecological niche regions are colored by different degrees of suitability. The output can be plotted and saved as TIF or ASCI file. Be aware that some older GIS program versions might have an issue with properly displaying the tif-file.
 \
+\
 
-#### Dependencies 
+### Dependencies 
+
 **Function:** `raster`
+
 **Examples:** `sp`, `mvtnorm` (only needs to be installed),`ggplot2`, `ggpubr`, `rgdal`
+\
 \
 
 ## Worked Examples
 
-<!-- Where should the library notice go? Is here okay? -->
-### Read libraries and source code
+### Read source code and libraries
 ```{r, message=FALSE}
 source(".\\Functions\\TnicheG.R")
 ```
-\
 
 ```{r, message=FALSE}
 library(sp)
@@ -84,18 +79,15 @@ library(rgdal)
 
 **Input Files**
 
-* bio1.asc
+- bio1.asc
 
-* bio12.asc
+- bio12.asc
 
-* Catasticta_nimbice_occ_GE.csv
+- Catasticta_nimbice_occ_GE.csv
 
-* Catasticta_nimbice.shp (and associated files)
+- Catasticta_nimbice.shp (and associated files)
 \
 
-\
-
-**Prepare Parameters**
 \
 
 Read the rasters with environmental data and combine them into a rasterstack with two (or more layers).
@@ -113,9 +105,10 @@ For the species' occurrence points in correspondence with environmental data the
 # read table and omit columns with coordinates
 occ_E <- read.csv("./Generated_Data/Catasticta_nimbice_occ_GE.csv",header=T)[,-(1:2)]
 ```
+
 \
 
-#### Apply the function and automatically plot with basic plot
+#### 1) Apply the function and automatically plot with basic plot
 \
 
 Apply the function `niche.G` with the parameters `Estck`, `mu`, and `Sigma`. The results are plotted in the basic plot function.
@@ -137,7 +130,7 @@ knitr::include_graphics("Images/Catasticta_nimbice_maha_asci.png")
 ```
 \
 
-#### Apply the function and plot with ggplot
+#### 2) Apply the function and plot with ggplot
 \
 
 Another way to use the function `niche.G` is to use estimated values of `mu` and `Sigma` directly. The rasters with environmental data are cropped to the region of interest with a polygon before being stacked together in this version. They can also be cropped with coordinates (see the example for *Threnetes ruckeri* below).
@@ -224,7 +217,6 @@ knitr::include_graphics("Images/Catasticta_nimbice_nicheG_ggplot.png")
 * <span style="color: red;">tr_wn_cropped.tif</span>
 
 * Catasticta_nimbice_wn_map_ggplot.png
-
 \
 
 \
@@ -241,6 +233,8 @@ knitr::include_graphics("Images/Catasticta_nimbice_nicheG_ggplot.png")
 * tr_mu_sigma_estimates.csv
 
 * Threnetes_ruckeri_occ_GE.csv
+\
+\
 
 
 This example uses the Mahalanobis distance and the weighted normal distribution. The graphs are plotted in `ggplot2`. The raster files used here are the same as the ones used for the *Catasticta nimbice* examples.
@@ -412,6 +406,7 @@ ggsave('./Generated_Data/Threnetes_ruckeri_nicheG_ggplot.png',  width = 48, heig
 * <span style="color: red;">tr_bay_cropped.tif</span>
 
 * Threnetes_ruckeri_nicheG_ggplot.png
+\
 \
 
 *End of the Tutorial*
