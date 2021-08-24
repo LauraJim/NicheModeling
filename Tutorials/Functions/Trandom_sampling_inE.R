@@ -36,8 +36,6 @@ rs.inE <- function(region,N,Estck){
 ## read libraries --------------
 library(raster)
 library(rgdal)
-library(rgeos)
-library(tools)
 
 
 # End
