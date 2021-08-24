@@ -132,6 +132,15 @@ The matrix needs to have at two columns that provide the lower limit in the firs
 ```
 \
 
+```{r, echo=FALSE}
+library(kableExtra)
+limits %>%
+  kbl(caption = "Threnetes ruckeri tolerance limits") %>%
+  kable_classic(full_width = F, html_font = "Cambria", position = "left")
+```
+\
+\
+
 
 ## Polygons of the study area
 The functions often use a polygon of the region of interest either to serve as a boundary in plots or to delimit rasters or sampled points to the specific region. The polygons used in the examples are shapefiles.
