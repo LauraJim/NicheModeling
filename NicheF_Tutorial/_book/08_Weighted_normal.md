@@ -94,14 +94,14 @@ bios <- stack(bio1, bio12)
 ```
 
 
-Apply the function `rs.inE`.
+Apply the function `rs.inE` to get a set of sampled points with environmental information.
 
 ```r
 cn.sample <- rs.inE(region = cn.shp,N = 10000,Estck = bios)
 ```
 
 
-Apply the function with the parameters `E.occ` and `E.samM` (the sample `E.samM`` was calculated above and is named *sam.Mpnts*).
+Apply the function with the parameters `E.occ` and `E.samM` to receive estimated parameters.
 
 ```r
 ml <- fitNiche(E.occ = cn.occ, E.samM = cn.sample)

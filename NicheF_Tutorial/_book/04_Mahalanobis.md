@@ -37,8 +37,6 @@ library(rgdal)
 library(tools)
 library(sp)
 library(ggplot2)
-#library(rnaturalearth)
-#library(rnaturalearthdata)
 library(ggpubr)
 ```
 

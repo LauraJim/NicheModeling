@@ -86,7 +86,7 @@ Apply `get.Ecoord` with the parameters `Estck`, `Gcoord`, and `Enames`:
 ```{r}
 cn.GE <- get.Ecoord(Estck=bios, Gcoord=occ, Enames=names1)
 
-head(f, n=3)
+head(cn.GE, n=3)
 
 ```
 
@@ -138,7 +138,7 @@ bckgrnd <- read.csv("./Initial_Data/Threnetes_ruckeri_M_G.csv",header=T)
 head(bckgrnd, n=3)
 
 trM.GE <- get.Ecoord(Estck=bios, Gcoord=bckgrnd, names1) 
-head(f2, n=3)
+head(trM.GE, n=3)
 ```
 
 Save the output as a csv-file (but do not run it every time):

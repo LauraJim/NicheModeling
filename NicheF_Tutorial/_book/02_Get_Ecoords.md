@@ -95,9 +95,9 @@ names1 <- c("bio1", "bio12") #  = Enames
 Apply `get.Ecoord` with the parameters `Estck`, `Gcoord`, and `Enames`:
 
 ```r
-f <- get.Ecoord(Estck=bios, Gcoord=occ, Enames=names1)
+cn.GE <- get.Ecoord(Estck=bios, Gcoord=occ, Enames=names1)
 
-head(f, n=3)
+head(cn.GE, n=3)
 ```
 
 ```
@@ -110,7 +110,7 @@ head(f, n=3)
 Save the output as a csv-file (but do not run every time):
 
 ```r
-write.csv(f,file=paste0("./Generated_Data/Catasticta_nimbice","_occ_GE.csv"),
+write.csv(cn.GE,file=paste0("./Generated_Data/Catasticta_nimbice","_occ_GE.csv"),
           row.names = F)
 ```
 This csv-file can now be used as data input for various graphs that highlight the geographical presence of the species and the surrounding environment.
@@ -122,7 +122,7 @@ This csv-file can now be used as data input for various graphs that highlight th
 
 - <span style="color: red;">Catasticta_nimbice_M_GE.csv</span>
 
-- <span style="color: red;">Catasticta_nimbice_occ_GE3.csv</span>
+- <span style="color: red;">Catasticta_nimbice_occ_GE3.csv</span>  (see tutorial "Mahalanobis model" for detailed steps)
 
 
 ### *Threnetes ruckeri*
@@ -165,8 +165,8 @@ head(bckgrnd, n=3)
 ```
 
 ```r
-f2 <- get.Ecoord(Estck=bios, Gcoord=bckgrnd, names1) 
-head(f2, n=3)
+trM.GE <- get.Ecoord(Estck=bios, Gcoord=bckgrnd, names1) 
+head(trM.GE, n=3)
 ```
 
 ```
@@ -179,7 +179,7 @@ head(f2, n=3)
 Save the output as a csv-file (but do not run it every time):
 
 ```r
-write.csv(f2,file=paste0("./Generated_Data/Threnetes_ruckeri_M","_GE.csv"),
+write.csv(trM.GE,file=paste0("./Generated_Data/Threnetes_ruckeri_M","_GE.csv"),
           row.names = F)
 ```
 

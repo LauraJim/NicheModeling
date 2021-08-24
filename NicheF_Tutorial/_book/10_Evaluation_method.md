@@ -55,8 +55,9 @@ The rasters that are used in this tutorial need to have cells with suitability v
 
 The output are information on the number of cells in study area, the number of occurrence points, and the probability of selecting an occurrence point. Additionally, three graphs are generated: the subregions and occurrences mapped in the geographical space, the subregions and occurrences mapped into the environmental space (as a 2D or 3D plot, depending on the number of environmental variables), and a graph of the accumulation curve.
 
-EDIT EDIT EDIT The output of `get.table` is a matrix with geographical information, a suitability index, environmental information. The function `get.curve` produces a list that contains information on the calculated curve. The output of `plot.aco` is a plot of the accumulation curve. The function `accum.occ` produces plots and a matrix with information on the accumulation curve: EDIT EDIT EDIT
-
+<!--  edit this part -->
+The output of `get.table` is a matrix with geographical information, a suitability index, environmental information. The function `get.curve` produces a list that contains information on the calculated curve. The output of `plot.aco` is a plot of the accumulation curve. The function `accum.occ` produces plots and a matrix with information on the accumulation curve: EDIT EDIT EDIT
+<!-- needs better description -->
 
 ## Worked Examples
 ### Read libraries and source codes

@@ -20,7 +20,7 @@ E.ellipse3d(Eoccs, mu, Sigma, alpha = 0.95, Enames)
 ```
 
 
-## Parameters
+### Parameters
 
 For both functions, five parameters are necessary:
 
@@ -36,7 +36,7 @@ For both functions, five parameters are necessary:
 - `alpha` = the chosen alpha level(s)
 
 
-## Input and Output
+### Input and Output
 
 For this function a matrix that contains the corresponding environmental data of a species' occurrence is necessary. The matrix can be created by using the `get.Ecoord` function (see tutorial “Getting environmental values for the study sites”).
 
@@ -47,8 +47,8 @@ The output is a two- or three-dimensional plot with the environmental space of a
 
 **Example:** `rgl`
 
-The package rgl and its functions are only for the display of three dimensional plots and have specific requirements that are not necessarily provided by an operating system. Here is a website that has instructions on how to run rgl in windows 10:
-[link](https://medium.com/@bhargav.chippada/how-to-setup-opengl-on-mingw-w64-in-windows-10-64-bits-b77f350cea7e).
+The package rgl and its functions are only for the display of three dimensional plots and have specific requirements that are not necessarily provided by an operating system. Here is a website that has instructions on 
+[how to run rgl in Windows 10](https://medium.com/@bhargav.chippada/how-to-setup-opengl-on-mingw-w64-in-windows-10-64-bits-b77f350cea7e).
 
 
 ## Worked Examples
