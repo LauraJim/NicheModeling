@@ -63,8 +63,6 @@ source(".\\Functions\\Trandom_sampling_inE.R")
 ```{r}
 library(raster)
 library(rgdal)
-#library(rgeos)
-#library(tools)
 library(scales)
 ```
 \
