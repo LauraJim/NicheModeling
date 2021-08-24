@@ -8,133 +8,86 @@ linkcolor: dodgerblue4
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-
-library(raster)
-library(rgdal)
-library(rgeos)
-library(tools)
-library(scales)
-library(ggplot2)
+knitr::opts_chunk$set(echo = TRUE,
+                      message = FALSE,
+                      warning = FALSE)
 ```
 \
 
-The estimation of the fundamental niche can be approached with the maximum likelihood estimation. It uses a weighted distribution where the weigths represent the availability of environmental combinations inside M. To calculate the maximum likelihood estimation, three functions are necessary: `rs.inE`, `negloglike`, and `fitNiche`.
+The estimation of the fundamental niche can be approached with the maximum likelihood estimation. It uses a weighted distribution where the weights represent the availability of environmental combinations inside M. To calculate the maximum likelihood estimation, three functions are necessary: `rs.inE`, `negloglike`, and `fitNiche`.
 \
-
-
-\
-
 
 \
 
-# Function *fitNiche*
+## How the functions work
 
-## Calculate the maximum likelihood for the fundamental niche
-<!-- description-->
+The main function of this tutorial is `fitNiche`. It estimates the fundamental niche of a species with a weighted normal distribution. 
+```{r, eval=FALSE}
+fitNiche(E.occ, E.samM)
+```
 
+The `fitNiche` function makes use of another function, called `negloglike`, that calculates negative log-likelihood values. 
+```{r, eval=FALSE}
+negloglike(guess, sam1, sam2)
+```
+\
 
 ### Parameters
 
-* `occ` = a matrix with occurrence and corresponding environmental data of a species
+Only two parameters are needed, as the parameters for `negloglike` will be derived from those as well.
+
+- `E.occ` = a matrix with occurrence and corresponding environmental data of a species
+
+- `E.samM` = a matrix containing a random sample of environmental combinations which come from the area of study (M)
+\
 \
 
-* `sam2` = a matrix containing a random sample of environmental combinations which come from the area of study (M)
-\
+### Input and Output
 
+In order to use `fitNiche`, a matrix of randomly sampled points within the study area (= result from the function `rs.inE`) and the occurrence data of a species that contains environmental data are needed.
+
+The output is a list with four different objects: mu and sigma for the weigthed normal distribution, and mu and sigma for the distribution using Mahalanobis distance. These parameter estimates can be used to calculate and plot ellipses in the environmental space. They can also be used for raster calculations (see following tutorials).
+\
 \
 
 ### Dependencies
 
-* `ggplot2`
+**Functions:** `rgeos`
+
+**Examples:** `raster`, `rgdal`, `ggplot2`
 \
-
-* `ellipse`
-\
-
-\
-
-## Functions Code
-
-### How *fitNiche* works
-
-The function `fitNiche` calculates the maximum likelihood estimation with a matrix of randomly sampled points within the study area (= result from the function `rs.inE`) and the occurrence data of a species that contains environmental data. At first, the mu and sigma of the occurrence data is calculated. Then, the sigma values are inverted. ###  <!-- description-->
-
-```{r}
-fitNiche <- function(E.occ, E.samM) {
-  # calculate mu
-  mu.ini <- colMeans(E.occ)
-  # calculate A (covariance)
-  Sig.ini <- cov(E.occ)
-  # invert matrix sig.ini
-  A.ini <- chol2inv(chol(Sig.ini))
-  # whole vector of inicial values
-  vals.ini <- c(mu.ini, A.ini[1,1], A.ini[1,2], A.ini[2,2])#c(mu.ini,A.ini[1,1],A.ini[1,2],A.ini[2,2])
-  # fix the values of the samples used to evaluate the neg-log-likelihood
-  like.fn <- function(theta){ negloglike(theta, sam1=E.occ, sam2=E.samM) } 
-  find.mle <- optim(par=vals.ini, fn=like.fn, method="Nelder-Mead")
-  mle <- find.mle$par
-  mle.mu <- mle[1:2]
-  mle.A <- matrix(c(mle[3:4],mle[4:5]),nrow=2,ncol=2)
-  mle.Sig <- tryCatch(expr={chol2inv(chol(mle.A))}, error= function(e){NULL})
-  
-  # change column names for mle.Sig
-  if(!is.null(mle.Sig)){
-  colnames(mle.Sig) <- colnames(Sig.ini)
-  rownames(mle.Sig) <- rownames(Sig.ini)
-  }
-    
-  # wn = weighted normal distribution
-  return(list(wn.mu = mle.mu, wn.sigma = mle.Sig, maha.mu = mu.ini, maha.sigma = Sig.ini))
-}
-
-```
-\
-
-The function has another function inside, called `negloglike`. Together with the function `rs.inE`, the input data can be transformed to generate the necessary parameters.
-
-```{r}
-negloglike <- function(guess, sam1, sam2){
-  # define the parameters of interest from the guess parameter
-  mu <- guess[1:2]
-  A <- matrix(c(guess[3], guess[4], guess[4], guess[5]), nrow=2, ncol=2)
-  # original sample size: number of presence points in the sample
-  n <- nrow(sam1)
-  # function that calculates quadratic terms, use inverse of matrix
-  quad <- function(xi) { ax<-as.matrix(xi - mu); t(ax) %*% A %*% ax }
-  q1 <- apply(sam1, 1, quad) # quadratic terms of presence points
-  q2 <- apply(sam2, 1, quad) # quadratic terms of M points
-  # negative log-likelihood value
-  S <- 0.5*sum(q1) + n*log(sum(exp(-0.5*q2)))
-  return(S)
-}
-
-```
-\
-
-### Output
-
-The output is a list with four different objects: mu and sigma for the weigthed normal distribution, and mu and sigma for the distribution using Mahalanobis distance. This output can be used to calculate and plot ellipses in the environmental space.
-\
-
 \
 
 ## Worked examples
+
+### Read sources and libraries
+
+```{r}
+source(".\\Functions\\Trandom_sampling_inE.R")
+source(".\\Functions\\Tfit_wn_maha_model.R")
+```
+
+```{r}
+library(raster)
+library(rgdal)
+library(rgeos)
+library(ggplot2)
+```
 \
 
 ### *Catasticta nimbice*
 \
 **Input Files**
 
-* Catasticta_nimbice_occ_GE.csv
+- Catasticta_nimbice_occ_GE.csv
 
-* Catasticta_nimbice.shp (and associated files)
+- Catasticta_nimbice.shp (and associated files)
 
-* bio1.asc
+- bio1.asc
 
-* bio12.asc
+- bio12.asc
 \
-
+\
 
 Read the files necessary for the parameters of `rs.inE` and `fitNiche`.
 ```{r, results='hide'}
@@ -148,11 +101,6 @@ cn.occ <- read.csv("./Generated_Data/Catasticta_nimbice_occ_GE.csv",header=T)[,-
 \
 
 For the parameter `E.samM` the output of the function `rs.inE` is necessary.
-```{r}
-source(".\\Functions\\Trandom_sampling_inE.R")
-```
-\
-
 Prepare parameters for `rs.inE`: create rasterstack.
 ```{r}
 bios <- stack(bio1, bio12)
@@ -224,13 +172,13 @@ dev.off()
 ```{r, echo=FALSE, fig.cap=" Figure of the environmental space of *Catasticta nimbice*. It shows the occurrence points of a species with two possible niches delineated by the Mahalanobis method and the weighted normal method.", out.width = '70%',fig.align="center"}
 knitr::include_graphics("Images/Catasticta_nimbice_mle.png")
 ```
-\
+
 
 **Output Files**
 
-* cn_mu_sigma_estimates.csv
+- cn_mu_sigma_estimates.csv
 
-* Catasticta_nimbice_mle.png
+- Catasticta_nimbice_mle.png
 \
 
 \
@@ -239,13 +187,14 @@ knitr::include_graphics("Images/Catasticta_nimbice_mle.png")
 \
 **Input Files**
 
-* Threnetes_ruckeri_occ_GE.csv
+- Threnetes_ruckeri_occ_GE.csv
 
-* Threnetes_ruckeri.shp (and associated files)
+- Threnetes_ruckeri.shp (and associated files)
 
-* bio1.asc
+- bio1.asc
 
-* bio12.asc
+- bio12.asc
+\
 \
 
 For this species the same steps are followed as above until the plot. Here, it will be plotted using `ggplot2`.
@@ -302,8 +251,8 @@ data <- cbind(rbind(bckgrnd[,1:2], species[,1:2]), c(rep(1,nrow(bckgrnd)),rep(2,
 data2 <- data.frame(Temperature = data[, 1], Precipitation = data[, 2], 
                     Type = data[,3]) 
 
-# plot
-x11()
+# plot the ellipses in E-Space
+# x11()
 ggplot(data2, aes(x = Temperature, y = Precipitation)) +
   geom_point(aes(color = factor(Type), shape = factor(Type))) +
   scale_shape_manual(values=c(1, 19), guide = FALSE) +
@@ -316,7 +265,6 @@ ggplot(data2, aes(x = Temperature, y = Precipitation)) +
         legend.justification = c("left", "top")) +
   scale_x_continuous("Annual mean temperature (°C*10)") +
   scale_y_continuous("Annual precipitation (mm)") +
-  # geom_path(data = df_el2, lineend="butt", linejoin="round", linemitre=1, show.legend = "Ellipse from weighted-normal model")
   geom_path(data = df.el2, color = colpal[2], size = 1.2) +
   geom_path(data = df.elmh2, color = colpal[4], size = 1.2)
 ```
@@ -327,7 +275,19 @@ knitr::include_graphics("Images/ThR_mle.png")
 ```
 \
 
+Save the plot if needed.
+```{r, eval=FALSE}
+ggsave("./Generated_Data/Threnetes_ruckeri_mle.png", width = 12, height = 12, units = "cm",
+             dpi = 600, pointsize = 6)
+```
+\
+
 **Output Files**
 
-* tr_mu_sigma_estimates.csv
+- tr_mu_sigma_estimates.csv
 
+- Threnetes_ruckeri_mle.png
+\
+\
+
+*End of tutorial*

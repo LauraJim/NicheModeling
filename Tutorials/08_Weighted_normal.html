@@ -173,103 +173,56 @@ pre code {
 
 <p><br />
 </p>
-<p>The estimation of the fundamental niche can be approached with the maximum likelihood estimation. It uses a weighted distribution where the weigths represent the availability of environmental combinations inside M. To calculate the maximum likelihood estimation, three functions are necessary: <code>rs.inE</code>, <code>negloglike</code>, and <code>fitNiche</code>.<br />
+<p>The estimation of the fundamental niche can be approached with the maximum likelihood estimation. It uses a weighted distribution where the weights represent the availability of environmental combinations inside M. To calculate the maximum likelihood estimation, three functions are necessary: <code>rs.inE</code>, <code>negloglike</code>, and <code>fitNiche</code>.<br />
 </p>
 <p><br />
 </p>
+<div id="how-the-functions-work" class="section level2">
+<h2>How the functions work</h2>
+<p>The main function of this tutorial is <code>fitNiche</code>. It estimates the fundamental niche of a species with a weighted normal distribution.</p>
+<pre class="r"><code>fitNiche(E.occ, E.samM)</code></pre>
+<p>The <code>fitNiche</code> function makes use of another function, called <code>negloglike</code>, that calculates negative log-likelihood values.</p>
+<pre class="r"><code>negloglike(guess, sam1, sam2)</code></pre>
 <p><br />
 </p>
-<div id="function-fitniche" class="section level1">
-<h1>Function <em>fitNiche</em></h1>
-<div id="calculate-the-maximum-likelihood-for-the-fundamental-niche" class="section level2">
-<h2>Calculate the maximum likelihood for the fundamental niche</h2>
-<!-- description-->
 <div id="parameters" class="section level3">
 <h3>Parameters</h3>
+<p>Only two parameters are needed, as the parameters for <code>negloglike</code> will be derived from those as well.</p>
 <ul>
-<li><p><code>occ</code> = a matrix with occurrence and corresponding environmental data of a species<br />
-</p></li>
-<li><p><code>sam2</code> = a matrix containing a random sample of environmental combinations which come from the area of study (M)<br />
+<li><p><code>E.occ</code> = a matrix with occurrence and corresponding environmental data of a species</p></li>
+<li><p><code>E.samM</code> = a matrix containing a random sample of environmental combinations which come from the area of study (M)<br />
+<br />
 </p></li>
 </ul>
-<p><br />
+</div>
+<div id="input-and-output" class="section level3">
+<h3>Input and Output</h3>
+<p>In order to use <code>fitNiche</code>, a matrix of randomly sampled points within the study area (= result from the function <code>rs.inE</code>) and the occurrence data of a species that contains environmental data are needed.</p>
+<p>The output is a list with four different objects: mu and sigma for the weigthed normal distribution, and mu and sigma for the distribution using Mahalanobis distance. These parameter estimates can be used to calculate and plot ellipses in the environmental space. They can also be used for raster calculations (see following tutorials).<br />
+<br />
 </p>
 </div>
 <div id="dependencies" class="section level3">
 <h3>Dependencies</h3>
-<ul>
-<li><p><code>ggplot2</code><br />
-</p></li>
-<li><p><code>ellipse</code><br />
-</p></li>
-</ul>
-<p><br />
-</p>
-</div>
-</div>
-<div id="functions-code" class="section level2">
-<h2>Functions Code</h2>
-<div id="how-fitniche-works" class="section level3">
-<h3>How <em>fitNiche</em> works</h3>
-<p>The function <code>fitNiche</code> calculates the maximum likelihood estimation with a matrix of randomly sampled points within the study area (= result from the function <code>rs.inE</code>) and the occurrence data of a species that contains environmental data. At first, the mu and sigma of the occurrence data is calculated. Then, the sigma values are inverted. ### <!-- description--></p>
-<pre class="r"><code>fitNiche &lt;- function(E.occ, E.samM) {
-  # calculate mu
-  mu.ini &lt;- colMeans(E.occ)
-  # calculate A (covariance)
-  Sig.ini &lt;- cov(E.occ)
-  # invert matrix sig.ini
-  A.ini &lt;- chol2inv(chol(Sig.ini))
-  # whole vector of inicial values
-  vals.ini &lt;- c(mu.ini, A.ini[1,1], A.ini[1,2], A.ini[2,2])#c(mu.ini,A.ini[1,1],A.ini[1,2],A.ini[2,2])
-  # fix the values of the samples used to evaluate the neg-log-likelihood
-  like.fn &lt;- function(theta){ negloglike(theta, sam1=E.occ, sam2=E.samM) } 
-  find.mle &lt;- optim(par=vals.ini, fn=like.fn, method=&quot;Nelder-Mead&quot;)
-  mle &lt;- find.mle$par
-  mle.mu &lt;- mle[1:2]
-  mle.A &lt;- matrix(c(mle[3:4],mle[4:5]),nrow=2,ncol=2)
-  mle.Sig &lt;- tryCatch(expr={chol2inv(chol(mle.A))}, error= function(e){NULL})
-  
-  # change column names for mle.Sig
-  if(!is.null(mle.Sig)){
-  colnames(mle.Sig) &lt;- colnames(Sig.ini)
-  rownames(mle.Sig) &lt;- rownames(Sig.ini)
-  }
-    
-  # wn = weighted normal distribution
-  return(list(wn.mu = mle.mu, wn.sigma = mle.Sig, maha.mu = mu.ini, maha.sigma = Sig.ini))
-}</code></pre>
-<p><br />
-</p>
-<p>The function has another function inside, called <code>negloglike</code>. Together with the function <code>rs.inE</code>, the input data can be transformed to generate the necessary parameters.</p>
-<pre class="r"><code>negloglike &lt;- function(guess, sam1, sam2){
-  # define the parameters of interest from the guess parameter
-  mu &lt;- guess[1:2]
-  A &lt;- matrix(c(guess[3], guess[4], guess[4], guess[5]), nrow=2, ncol=2)
-  # original sample size: number of presence points in the sample
-  n &lt;- nrow(sam1)
-  # function that calculates quadratic terms, use inverse of matrix
-  quad &lt;- function(xi) { ax&lt;-as.matrix(xi - mu); t(ax) %*% A %*% ax }
-  q1 &lt;- apply(sam1, 1, quad) # quadratic terms of presence points
-  q2 &lt;- apply(sam2, 1, quad) # quadratic terms of M points
-  # negative log-likelihood value
-  S &lt;- 0.5*sum(q1) + n*log(sum(exp(-0.5*q2)))
-  return(S)
-}</code></pre>
-<p><br />
-</p>
-</div>
-<div id="output" class="section level3">
-<h3>Output</h3>
-<p>The output is a list with four different objects: mu and sigma for the weigthed normal distribution, and mu and sigma for the distribution using Mahalanobis distance. This output can be used to calculate and plot ellipses in the environmental space.<br />
-</p>
-<p><br />
+<p><strong>Functions:</strong> <code>rgeos</code></p>
+<p><strong>Examples:</strong> <code>raster</code>, <code>rgdal</code>, <code>ggplot2</code><br />
+<br />
 </p>
 </div>
 </div>
 <div id="worked-examples" class="section level2">
 <h2>Worked examples</h2>
+<div id="read-sources-and-libraries" class="section level3">
+<h3>Read sources and libraries</h3>
+<pre class="r"><code>source(&quot;.\\Functions\\Trandom_sampling_inE.R&quot;)
+source(&quot;.\\Functions\\Tfit_wn_maha_model.R&quot;)</code></pre>
+<pre class="r"><code>library(raster)
+library(rgdal)
+library(rgeos)
+library(ggplot2)</code></pre>
 <p><br />
 </p>
+</div>
 <div id="catasticta-nimbice" class="section level3">
 <h3><em>Catasticta nimbice</em></h3>
 <p><br />
@@ -279,6 +232,7 @@ pre code {
 <li><p>Catasticta_nimbice.shp (and associated files)</p></li>
 <li><p>bio1.asc</p></li>
 <li><p>bio12.asc<br />
+<br />
 </p></li>
 </ul>
 <p>Read the files necessary for the parameters of <code>rs.inE</code> and <code>fitNiche</code>.</p>
@@ -290,11 +244,7 @@ bio12 &lt;- raster(&quot;./Initial_Data/bio12.asc&quot;)
 cn.occ &lt;- read.csv(&quot;./Generated_Data/Catasticta_nimbice_occ_GE.csv&quot;,header=T)[,-(1:2)]</code></pre>
 <p><br />
 </p>
-<p>For the parameter <code>E.samM</code> the output of the function <code>rs.inE</code> is necessary.</p>
-<pre class="r"><code>source(&quot;.\\Functions\\Trandom_sampling_inE.R&quot;)</code></pre>
-<p><br />
-</p>
-<p>Prepare parameters for <code>rs.inE</code>: create rasterstack.</p>
+<p>For the parameter <code>E.samM</code> the output of the function <code>rs.inE</code> is necessary. Prepare parameters for <code>rs.inE</code>: create rasterstack.</p>
 <pre class="r"><code>bios &lt;- stack(bio1, bio12)</code></pre>
 <p><br />
 </p>
@@ -352,8 +302,6 @@ dev.off()</code></pre>
 Figure of the environmental space of <em>Catasticta nimbice</em>. It shows the occurrence points of a species with two possible niches delineated by the Mahalanobis method and the weighted normal method.
 </p>
 </div>
-<p><br />
-</p>
 <p><strong>Output Files</strong></p>
 <ul>
 <li><p>cn_mu_sigma_estimates.csv</p></li>
@@ -372,6 +320,7 @@ Figure of the environmental space of <em>Catasticta nimbice</em>. It shows the o
 <li><p>Threnetes_ruckeri.shp (and associated files)</p></li>
 <li><p>bio1.asc</p></li>
 <li><p>bio12.asc<br />
+<br />
 </p></li>
 </ul>
 <p>For this species the same steps are followed as above until the plot. Here, it will be plotted using <code>ggplot2</code>.</p>
@@ -416,8 +365,8 @@ data &lt;- cbind(rbind(bckgrnd[,1:2], species[,1:2]), c(rep(1,nrow(bckgrnd)),rep
 data2 &lt;- data.frame(Temperature = data[, 1], Precipitation = data[, 2], 
                     Type = data[,3]) 
 
-# plot
-x11()
+# plot the ellipses in E-Space
+# x11()
 ggplot(data2, aes(x = Temperature, y = Precipitation)) +
   geom_point(aes(color = factor(Type), shape = factor(Type))) +
   scale_shape_manual(values=c(1, 19), guide = FALSE) +
@@ -430,7 +379,6 @@ ggplot(data2, aes(x = Temperature, y = Precipitation)) +
         legend.justification = c(&quot;left&quot;, &quot;top&quot;)) +
   scale_x_continuous(&quot;Annual mean temperature (°C*10)&quot;) +
   scale_y_continuous(&quot;Annual precipitation (mm)&quot;) +
-  # geom_path(data = df_el2, lineend=&quot;butt&quot;, linejoin=&quot;round&quot;, linemitre=1, show.legend = &quot;Ellipse from weighted-normal model&quot;)
   geom_path(data = df.el2, color = colpal[2], size = 1.2) +
   geom_path(data = df.elmh2, color = colpal[4], size = 1.2)</code></pre>
 <div class="figure" style="text-align: center">
@@ -441,11 +389,19 @@ Figure of the environmental space of <em>Threnetes ruckeri</em>. It shows the oc
 </div>
 <p><br />
 </p>
+<p>Save the plot if needed.</p>
+<pre class="r"><code>ggsave(&quot;./Generated_Data/Threnetes_ruckeri_mle.png&quot;, width = 12, height = 12, units = &quot;cm&quot;,
+             dpi = 600, pointsize = 6)</code></pre>
+<p><br />
+</p>
 <p><strong>Output Files</strong></p>
 <ul>
-<li>tr_mu_sigma_estimates.csv</li>
+<li><p>tr_mu_sigma_estimates.csv</p></li>
+<li><p>Threnetes_ruckeri_mle.png<br />
+<br />
+</p></li>
 </ul>
-</div>
+<p><em>End of tutorial</em></p>
 </div>
 </div>
 
