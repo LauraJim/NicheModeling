@@ -8,98 +8,83 @@ linkcolor: dodgerblue4
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-
-library(raster)
-library(rgdal)
-library(rgeos)
-library(tools)
-library(scales)
+knitr::opts_chunk$set(echo = TRUE,
+                      message = FALSE,
+                      warning = FALSE)
 ```
 \
 
 ## Sampling random points from an area of interest
 
 The function `rs.inE` takes a random sample of environmental combinations inside the study area. For this, the environmental data from a rasterstack is clipped by a shapefile that delimits the area before the sample is taken.
-\
 
+```{r, eval=FALSE}
+rs.inE(region, N, Estck)
+```
 \
 
 ### Parameters
 
-* `region`` = a shapefile of the study area (polygon)
+
+- `region` = a shapefile of the study area (polygon)
+
+- `N` = the sample size
+
+- `Estck` = a rasterstack that contains at least two layers with environmental data
+\
 \
 
-* `N` = the sample size
-\
+### Input and Output
 
-* `Estck` = a rasterstack that contains at least two layers with environmental data
+As input, rasters with environmental information and a shapefile that defines the region of interest are needed. 
+The output of the function is a matrix of random points with as many columns as layers the rasterstack has.
 \
-
 \
 
 ### Dependencies
 
-* `raster`
-\
 
-* `rgdal`
-\
+**Parameters:** `raster`, `rgdal`
 
-* `rgeos`
-\
-
-* `tools`
-\
-
-* `scales`
-\
-
-\
-
-## Function's code
-
-
-### How *rs.inE* works
-
-The function `rs.inE`uses a shapefile of the area of interest as a mask to clip the rasterstack in order to reduce the information of the rasterstack to the same geographical area. As a next step, cells with an NA value will be deleted from the clipped rasterstack. As a next step, a random sample of indices is generated. With these indices a sample of the clipped rasterstack is taken. The sample size is dictated by N.
-
-```{r}
-# Get a random sample of points inside the polygon that delimits M (= )
-# and extract their environmental values
-rs.inE <- function(region,N,Estck){
-  # crop and mask the environmental layers with the polygon
-  clip <- mask(crop(Estck,region),region)
-  # get rid of cells with NA values = indices
-  ind <- which(!is.na(clip[[1]][]))
-  # get a random sample of indices
-  sam <- sample(ind,N,replace = T)
-  # choose the points corresponding to the selected indices
-  pnts <- clip[][sam,]
-  return(pnts)}
-```
-\
-
-### Output
-
-The output of the function is a matrix of random points with as many columns as layers the rasterstack has.
+**Example plot:** `scales`
 \
 
 \
 
 ## Worked Examples
 
-### Input Data
+### Read source code and libraries
 
-The raster files need to contain information on climatic values that are of interest for the user. The rasters used in the examples below are from [WorldClim](https://worldclim.org/data/index.html) and have a resolution of "10 minutes". The files usually do not need further editing.
+```{r}
+source(".\\Functions\\Trandom_sampling_inE.R")
+```
 
-A polygon that marks the borders of a species' occurrence or the study area is necessary. This polygon should be a shapefile.
+
+```{r}
+library(raster)
+library(rgdal)
+#library(rgeos)
+#library(tools)
+library(scales)
+```
 \
 
+
 ### *Catasticta nimbice*
+\
+
+**Input Data**
+\
+
+- bio1.asc
+
+- bio12.asc
+
+- Catasticta_nimbice.shp (and associated files)
+\
+\
 
 First, the rasterstack for the parameter `Estck` is prepared. For this example two rasters with the environmental data "annual mean temperature" and "total annual precipitation" are used. The rasterstack will therefore have two layers.
-
 ```{r}
 # Read environmental layers
 bio1 <- raster("./Initial_Data/bio1.asc")
@@ -111,21 +96,18 @@ stck_bios <- stack(bio1, bio12)
 \
 
 Read the parameter for `region`.
-
 ```{r, results='hide', message=FALSE}
 cn.shp <- readOGR("./Initial_Data/shapefiles","Catasticta_nimbice")
 ```
 \
 
 Apply the function with `Estck`, `region`, and `N`. Here, `N` will be 10,000. The generated matrix will therefore have two columns with environmental data from the study area and 10,000 rows.
-
 ```{r}
-sam.pnts <- rs.inE(region = cn.shp,N = 10000,Estck = stck_bios)
+sam.pnts <- rs.inE(region = cn.shp, N = 10000, Estck = stck_bios)
 ```
 \
 
 If needed, save the output as a csv-file.
-
 ```{r, eval=FALSE}
 write.csv(sam.pnts,file=paste0("./Generated_Data/Catasticta_nimbice","_M_E.csv"),
           row.names = F)
@@ -133,7 +115,6 @@ write.csv(sam.pnts,file=paste0("./Generated_Data/Catasticta_nimbice","_M_E.csv")
 \
 
 Create a simple plot of the environmental space (E-Space) with a species' occurrence.
-
 ```{r, fig.show='hide'}
 # read occurrence data
 occ <- read.csv("./Generated_Data/Catasticta_nimbice_occ_GE.csv",header=T) 
@@ -164,9 +145,22 @@ knitr::include_graphics("Images/SampleM_Espace.png")
 
 
 ### *Threnetes ruckeri*
+\
 
-The rasterstack is the same as the previous example. In this example, a different graph will be plotted using the sampled points.
+**Input Data**
+\
 
+- bio1.asc
+
+- bio12.asc
+
+- Threnetes_ruckeri.shp (and associated files)
+\
+\
+
+In this example, a different graph will be plotted using the sampled points.
+
+Read the shapefile. The rasterstack was already prepared in the previous example and it is not necessary to redo the process.
 ```{r, results='hide', message=FALSE}
 # Read M polygon
 thr.shp <- readOGR("./Initial_Data/shapefiles","Threnetes_ruckeri")
@@ -184,7 +178,6 @@ sam.pnts2 <- rs.inE(region = thr.shp,N = 10000,Estck = stck_bios)
 
 The output is used to plot a graph showing concentrations of sample points marked by a shade. The layers of shades are created by kernel smoothing. The kernel is drawn using the points inside M. There are currently five levels of shades selected (5, 25, 50, 75, and 95). 
 <!-- what does "probability of selecting a point" here mean? --> 
-
 ```{r, fig.show='hide'}
 # Calculate and draw the kernel using the points inside M (define M carefully)
 # kernel for contour plot
@@ -206,11 +199,13 @@ points(sam.pnts2[,1], sam.pnts2[,2],col=col.M2,pch=20,cex=0.6)
 
 ```
 
-
 ```{r, echo=FALSE, fig.cap=" Figure of the environmental space showing layers with various density of the sampled points from the rasterstack and polygon.", out.width = '70%',fig.align="center"}
 options(knitr.duplicate.label = "allow")
 knitr::include_graphics("Images/ThR_Kernel_shade.png")
 ```
+\
+\
 
-<!-- end of function random sampling in E --> 
+*End of tutorial*
+
 

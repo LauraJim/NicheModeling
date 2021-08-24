@@ -9,7 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Laura Jimenéz and Carola Franzen" />
+<meta name="author" content="Laura Jiménez and Carola Franzen" />
 
 
 <title>Random sampling in environmental data</title>
@@ -165,7 +165,7 @@ pre code {
 
 
 <h1 class="title toc-ignore">Random sampling in environmental data</h1>
-<h4 class="author">Laura Jimenéz and Carola Franzen</h4>
+<h4 class="author">Laura Jiménez and Carola Franzen</h4>
 <h4 class="date">June 2021</h4>
 
 </div>
@@ -175,64 +175,30 @@ pre code {
 </p>
 <div id="sampling-random-points-from-an-area-of-interest" class="section level2">
 <h2>Sampling random points from an area of interest</h2>
-<p>The function <code>rs.inE</code> takes a random sample of environmental combinations inside the study area. For this, the environmental data from a rasterstack is clipped by a shapefile that delimits the area before the sample is taken.<br />
-</p>
+<p>The function <code>rs.inE</code> takes a random sample of environmental combinations inside the study area. For this, the environmental data from a rasterstack is clipped by a shapefile that delimits the area before the sample is taken.</p>
+<pre class="r"><code>rs.inE(region, N, Estck)</code></pre>
 <p><br />
 </p>
 <div id="parameters" class="section level3">
 <h3>Parameters</h3>
 <ul>
-<li><p>`region`` = a shapefile of the study area (polygon)<br />
-</p></li>
-<li><p><code>N</code> = the sample size<br />
-</p></li>
+<li><p><code>region</code> = a shapefile of the study area (polygon)</p></li>
+<li><p><code>N</code> = the sample size</p></li>
 <li><p><code>Estck</code> = a rasterstack that contains at least two layers with environmental data<br />
+<br />
 </p></li>
 </ul>
-<p><br />
+</div>
+<div id="input-and-output" class="section level3">
+<h3>Input and Output</h3>
+<p>As input, rasters with environmental information and a shapefile that defines the region of interest are needed. The output of the function is a matrix of random points with as many columns as layers the rasterstack has.<br />
+<br />
 </p>
 </div>
 <div id="dependencies" class="section level3">
 <h3>Dependencies</h3>
-<ul>
-<li><p><code>raster</code><br />
-</p></li>
-<li><p><code>rgdal</code><br />
-</p></li>
-<li><p><code>rgeos</code><br />
-</p></li>
-<li><p><code>tools</code><br />
-</p></li>
-<li><p><code>scales</code><br />
-</p></li>
-</ul>
-<p><br />
-</p>
-</div>
-</div>
-<div id="functions-code" class="section level2">
-<h2>Function’s code</h2>
-<div id="how-rs.ine-works" class="section level3">
-<h3>How <em>rs.inE</em> works</h3>
-<p>The function <code>rs.inE</code>uses a shapefile of the area of interest as a mask to clip the rasterstack in order to reduce the information of the rasterstack to the same geographical area. As a next step, cells with an NA value will be deleted from the clipped rasterstack. As a next step, a random sample of indices is generated. With these indices a sample of the clipped rasterstack is taken. The sample size is dictated by N.</p>
-<pre class="r"><code># Get a random sample of points inside the polygon that delimits M (= )
-# and extract their environmental values
-rs.inE &lt;- function(region,N,Estck){
-  # crop and mask the environmental layers with the polygon
-  clip &lt;- mask(crop(Estck,region),region)
-  # get rid of cells with NA values = indices
-  ind &lt;- which(!is.na(clip[[1]][]))
-  # get a random sample of indices
-  sam &lt;- sample(ind,N,replace = T)
-  # choose the points corresponding to the selected indices
-  pnts &lt;- clip[][sam,]
-  return(pnts)}</code></pre>
-<p><br />
-</p>
-</div>
-<div id="output" class="section level3">
-<h3>Output</h3>
-<p>The output of the function is a matrix of random points with as many columns as layers the rasterstack has.<br />
+<p><strong>Parameters:</strong> <code>raster</code>, <code>rgdal</code></p>
+<p><strong>Example plot:</strong> <code>scales</code><br />
 </p>
 <p><br />
 </p>
@@ -240,14 +206,30 @@ rs.inE &lt;- function(region,N,Estck){
 </div>
 <div id="worked-examples" class="section level2">
 <h2>Worked Examples</h2>
-<div id="input-data" class="section level3">
-<h3>Input Data</h3>
-<p>The raster files need to contain information on climatic values that are of interest for the user. The rasters used in the examples below are from <a href="https://worldclim.org/data/index.html">WorldClim</a> and have a resolution of “10 minutes”. The files usually do not need further editing.</p>
-<p>A polygon that marks the borders of a species’ occurrence or the study area is necessary. This polygon should be a shapefile.<br />
+<div id="read-source-code-and-libraries" class="section level3">
+<h3>Read source code and libraries</h3>
+<pre class="r"><code>source(&quot;.\\Functions\\Trandom_sampling_inE.R&quot;)</code></pre>
+<pre class="r"><code>library(raster)
+library(rgdal)
+#library(rgeos)
+#library(tools)
+library(scales)</code></pre>
+<p><br />
 </p>
 </div>
 <div id="catasticta-nimbice" class="section level3">
 <h3><em>Catasticta nimbice</em></h3>
+<p><br />
+</p>
+<p><strong>Input Data</strong><br />
+</p>
+<ul>
+<li><p>bio1.asc</p></li>
+<li><p>bio12.asc</p></li>
+<li><p>Catasticta_nimbice.shp (and associated files)<br />
+<br />
+</p></li>
+</ul>
 <p>First, the rasterstack for the parameter <code>Estck</code> is prepared. For this example two rasters with the environmental data “annual mean temperature” and “total annual precipitation” are used. The rasterstack will therefore have two layers.</p>
 <pre class="r"><code># Read environmental layers
 bio1 &lt;- raster(&quot;./Initial_Data/bio1.asc&quot;)
@@ -262,7 +244,7 @@ stck_bios &lt;- stack(bio1, bio12)</code></pre>
 <p><br />
 </p>
 <p>Apply the function with <code>Estck</code>, <code>region</code>, and <code>N</code>. Here, <code>N</code> will be 10,000. The generated matrix will therefore have two columns with environmental data from the study area and 10,000 rows.</p>
-<pre class="r"><code>sam.pnts &lt;- rs.inE(region = cn.shp,N = 10000,Estck = stck_bios)</code></pre>
+<pre class="r"><code>sam.pnts &lt;- rs.inE(region = cn.shp, N = 10000, Estck = stck_bios)</code></pre>
 <p><br />
 </p>
 <p>If needed, save the output as a csv-file.</p>
@@ -303,7 +285,19 @@ Figure of the environmental space, where the occurrence points of <em>Catasticta
 </div>
 <div id="threnetes-ruckeri" class="section level3">
 <h3><em>Threnetes ruckeri</em></h3>
-<p>The rasterstack is the same as the previous example. In this example, a different graph will be plotted using the sampled points.</p>
+<p><br />
+</p>
+<p><strong>Input Data</strong><br />
+</p>
+<ul>
+<li><p>bio1.asc</p></li>
+<li><p>bio12.asc</p></li>
+<li><p>Threnetes_ruckeri.shp (and associated files)<br />
+<br />
+</p></li>
+</ul>
+<p>In this example, a different graph will be plotted using the sampled points.</p>
+<p>Read the shapefile. The rasterstack was already prepared in the previous example and it is not necessary to redo the process.</p>
 <pre class="r"><code># Read M polygon
 thr.shp &lt;- readOGR(&quot;./Initial_Data/shapefiles&quot;,&quot;Threnetes_ruckeri&quot;)</code></pre>
 <p><br />
@@ -337,7 +331,10 @@ points(sam.pnts2[,1], sam.pnts2[,2],col=col.M2,pch=20,cex=0.6)</code></pre>
 Figure of the environmental space showing layers with various density of the sampled points from the rasterstack and polygon.
 </p>
 </div>
-<!-- end of function random sampling in E -->
+<p><br />
+<br />
+</p>
+<p><em>End of tutorial</em></p>
 </div>
 </div>
 
