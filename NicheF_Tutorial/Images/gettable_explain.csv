@@ -1,5 +1,0 @@
-Function,Parameter,Initial filename,Initial filetype,necessary modification
-get.table,G.occ,*_occ_G.csv,matrix,x
-,suit.Estck,bio1WH.asc,raster,crop
-,,Bio6_america.tif,raster,crop (*needs value adjustment)
-,,bio12WH.asc,raster,crop
