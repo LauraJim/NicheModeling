@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>2 Description of initial datasets | Index</title>
+  <meta name="description" content="2 Description of initial datasets | Index" />
+  <meta name="generator" content="bookdown 0.23 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="2 Description of initial datasets | Index" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="2 Description of initial datasets | Index" />
+  
+  
+  
+
+<meta name="author" content="Laura Jiménez and Carola Franzen" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+<link rel="next" href="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"/>
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.0.1" data-path="index.html"><a href="index.html#organization-within-the-tutorial"><i class="fa fa-check"></i><b>1.0.1</b> Organization within the tutorial</a></li>
+<li class="chapter" data-level="1.0.2" data-path="index.html"><a href="index.html#references"><i class="fa fa-check"></i><b>1.0.2</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="description-of-initial-datasets.html"><a href="description-of-initial-datasets.html"><i class="fa fa-check"></i><b>2</b> Description of initial datasets</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="description-of-initial-datasets.html"><a href="description-of-initial-datasets.html#species-under-study-and-necessary-files-to-start-an-analysis"><i class="fa fa-check"></i><b>2.1</b> Species under study and necessary files to start an analysis</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="description-of-initial-datasets.html"><a href="description-of-initial-datasets.html#occurrence-data"><i class="fa fa-check"></i><b>2.1.1</b> Occurrence data</a></li>
+<li class="chapter" data-level="2.1.2" data-path="description-of-initial-datasets.html"><a href="description-of-initial-datasets.html#points-inside-the-study-area-to-plot-hutchinsons-duality"><i class="fa fa-check"></i><b>2.1.2</b> Points inside the study area to plot Hutchinson’s duality</a></li>
+<li class="chapter" data-level="2.1.3" data-path="description-of-initial-datasets.html"><a href="description-of-initial-datasets.html#table-with-species-tolerance-limit"><i class="fa fa-check"></i><b>2.1.3</b> Table with species’ tolerance limit</a></li>
+<li class="chapter" data-level="2.1.4" data-path="description-of-initial-datasets.html"><a href="description-of-initial-datasets.html#polygons-of-the-study-area"><i class="fa fa-check"></i><b>2.1.4</b> Polygons of the study area</a></li>
+<li class="chapter" data-level="2.1.5" data-path="description-of-initial-datasets.html"><a href="description-of-initial-datasets.html#rasters-with-environmental-information"><i class="fa fa-check"></i><b>2.1.5</b> Rasters with environmental information</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"><a href="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"><i class="fa fa-check"></i><b>3</b> Extracting environmental data from raster files from a set of geographic coordinates</a>
+<ul>
+<li class="chapter" data-level="3.0.1" data-path="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"><a href="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html#parameters"><i class="fa fa-check"></i><b>3.0.1</b> Parameters</a></li>
+<li class="chapter" data-level="3.0.2" data-path="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"><a href="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html#input-and-output"><i class="fa fa-check"></i><b>3.0.2</b> Input and Output</a></li>
+<li class="chapter" data-level="3.0.3" data-path="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"><a href="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html#dependencies"><i class="fa fa-check"></i><b>3.0.3</b> Dependencies</a></li>
+<li class="chapter" data-level="3.1" data-path="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"><a href="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html#worked-examples"><i class="fa fa-check"></i><b>3.1</b> Worked Examples</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"><a href="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html#read-source-code-and-libraries"><i class="fa fa-check"></i><b>3.1.1</b> Read source code and libraries</a></li>
+<li class="chapter" data-level="3.1.2" data-path="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"><a href="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html#catasticta-nimbice"><i class="fa fa-check"></i><b>3.1.2</b> <em>Catasticta nimbice</em></a></li>
+<li class="chapter" data-level="3.1.3" data-path="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"><a href="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html#threnetes-ruckeri"><i class="fa fa-check"></i><b>3.1.3</b> <em>Threnetes ruckeri</em></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html"><i class="fa fa-check"></i><b>4</b> Creating plots with the geographical and environmental space of a species in ggplot2</a>
+<ul>
+<li class="chapter" data-level="4.0.1" data-path="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#parameters-1"><i class="fa fa-check"></i><b>4.0.1</b> Parameters</a></li>
+<li class="chapter" data-level="4.0.2" data-path="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#input-and-output-1"><i class="fa fa-check"></i><b>4.0.2</b> Input and Output</a></li>
+<li class="chapter" data-level="4.0.3" data-path="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#dependencies-1"><i class="fa fa-check"></i><b>4.0.3</b> Dependencies</a></li>
+<li class="chapter" data-level="4.1" data-path="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#worked-examples-1"><i class="fa fa-check"></i><b>4.1</b> Worked Examples</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#read-source-code-and-libraries-1"><i class="fa fa-check"></i><b>4.1.1</b> Read source code and libraries</a></li>
+<li class="chapter" data-level="4.1.2" data-path="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#catasticta-nimbice-1"><i class="fa fa-check"></i><b>4.1.2</b> <em>Catasticta nimbice</em></a></li>
+<li class="chapter" data-level="4.1.3" data-path="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#threnetes-ruckeri-1"><i class="fa fa-check"></i><b>4.1.3</b> <em>Threnetes ruckeri</em></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html"><i class="fa fa-check"></i><b>5</b> Mahalanobis model: raw occurrence data only</a>
+<ul>
+<li class="chapter" data-level="5.0.1" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#input-and-output-2"><i class="fa fa-check"></i><b>5.0.1</b> Input and Output</a></li>
+<li class="chapter" data-level="5.0.2" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#dependencies-2"><i class="fa fa-check"></i><b>5.0.2</b> Dependencies</a></li>
+<li class="chapter" data-level="5.1" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#worked-examples-2"><i class="fa fa-check"></i><b>5.1</b> Worked Examples</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#read-source-code-and-libraries-2"><i class="fa fa-check"></i><b>5.1.1</b> Read Source Code and Libraries</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#threnetes-ruckeri---example-with-two-environmental-layers"><i class="fa fa-check"></i><b>5.2</b> <em>Threnetes ruckeri</em> - example with two environmental layers</a></li>
+<li class="chapter" data-level="5.3" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#catasticta-nimbice-2"><i class="fa fa-check"></i><b>5.3</b> <em>Catasticta nimbice</em></a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#get-environmental-information-from-three-raster-layers"><i class="fa fa-check"></i><b>5.3.1</b> 1) Get environmental information from three raster layers</a></li>
+<li class="chapter" data-level="5.3.2" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#estimate-mahalanobis-model-parameters"><i class="fa fa-check"></i><b>5.3.2</b> 2) Estimate Mahalanobis Model Parameters</a></li>
+<li class="chapter" data-level="5.3.3" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#calculate-suitability-index"><i class="fa fa-check"></i><b>5.3.3</b> 3) Calculate Suitability Index</a></li>
+<li class="chapter" data-level="5.3.4" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#comparing-suitability-index-against-mahalanobis-distance"><i class="fa fa-check"></i><b>5.3.4</b> 3) Comparing suitability index against Mahalanobis distance</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="plotting-an-ellipsoid-in-e-space.html"><a href="plotting-an-ellipsoid-in-e-space.html"><i class="fa fa-check"></i><b>6</b> Plotting an ellipsoid in E-space</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="plotting-an-ellipsoid-in-e-space.html"><a href="plotting-an-ellipsoid-in-e-space.html#parameters-2"><i class="fa fa-check"></i><b>6.1</b> Parameters</a></li>
+<li class="chapter" data-level="6.2" data-path="plotting-an-ellipsoid-in-e-space.html"><a href="plotting-an-ellipsoid-in-e-space.html#input-and-output-3"><i class="fa fa-check"></i><b>6.2</b> Input and Output</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="plotting-an-ellipsoid-in-e-space.html"><a href="plotting-an-ellipsoid-in-e-space.html#dependencies-3"><i class="fa fa-check"></i><b>6.2.1</b> Dependencies</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="plotting-an-ellipsoid-in-e-space.html"><a href="plotting-an-ellipsoid-in-e-space.html#worked-examples-3"><i class="fa fa-check"></i><b>6.3</b> Worked Examples</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="plotting-an-ellipsoid-in-e-space.html"><a href="plotting-an-ellipsoid-in-e-space.html#read-source-code-and-library"><i class="fa fa-check"></i><b>6.3.1</b> Read source code and library</a></li>
+<li class="chapter" data-level="6.3.2" data-path="plotting-an-ellipsoid-in-e-space.html"><a href="plotting-an-ellipsoid-in-e-space.html#example-with-three-ellipses-threnetes-ruckeri"><i class="fa fa-check"></i><b>6.3.2</b> Example with three ellipses (<em>Threnetes ruckeri</em>)</a></li>
+<li class="chapter" data-level="6.3.3" data-path="plotting-an-ellipsoid-in-e-space.html"><a href="plotting-an-ellipsoid-in-e-space.html#example-with-several-ellipses-catasticta-nimbice"><i class="fa fa-check"></i><b>6.3.3</b> Example with several ellipses (<em>Catasticta nimbice</em>)</a></li>
+<li class="chapter" data-level="6.3.4" data-path="plotting-an-ellipsoid-in-e-space.html"><a href="plotting-an-ellipsoid-in-e-space.html#example-with-three-environmental-variables-catasticta-nimbice"><i class="fa fa-check"></i><b>6.3.4</b> Example with three environmental variables (<em>Catasticta nimbice</em>)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html"><a href="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html"><i class="fa fa-check"></i><b>7</b> How to simulate a random sample of environmental conditions inside an region</a>
+<ul>
+<li class="chapter" data-level="7.0.1" data-path="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html"><a href="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html#parameters-3"><i class="fa fa-check"></i><b>7.0.1</b> Parameters</a></li>
+<li class="chapter" data-level="7.0.2" data-path="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html"><a href="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html#input-and-output-4"><i class="fa fa-check"></i><b>7.0.2</b> Input and Output</a></li>
+<li class="chapter" data-level="7.0.3" data-path="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html"><a href="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html#dependencies-4"><i class="fa fa-check"></i><b>7.0.3</b> Dependencies</a></li>
+<li class="chapter" data-level="7.1" data-path="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html"><a href="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html#worked-examples-4"><i class="fa fa-check"></i><b>7.1</b> Worked Examples</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html"><a href="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html#read-source-code-and-libraries-3"><i class="fa fa-check"></i><b>7.1.1</b> Read source code and libraries</a></li>
+<li class="chapter" data-level="7.1.2" data-path="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html"><a href="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html#catasticta-nimbice-3"><i class="fa fa-check"></i><b>7.1.2</b> <em>Catasticta nimbice</em></a></li>
+<li class="chapter" data-level="7.1.3" data-path="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html"><a href="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html#threnetes-ruckeri-2"><i class="fa fa-check"></i><b>7.1.3</b> <em>Threnetes ruckeri</em></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><i class="fa fa-check"></i><b>8</b> How to identify points inside and outside the fundamental niche</a>
+<ul>
+<li class="chapter" data-level="8.0.1" data-path="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html#parameters-4"><i class="fa fa-check"></i><b>8.0.1</b> Parameters</a></li>
+<li class="chapter" data-level="8.0.2" data-path="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html#input-and-output-5"><i class="fa fa-check"></i><b>8.0.2</b> Input and Output</a></li>
+<li class="chapter" data-level="8.0.3" data-path="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html#dependencies-5"><i class="fa fa-check"></i><b>8.0.3</b> Dependencies</a></li>
+<li class="chapter" data-level="8.1" data-path="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html#worked-examples-5"><i class="fa fa-check"></i><b>8.1</b> Worked Examples</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html#read-source-code-and-library-1"><i class="fa fa-check"></i><b>8.1.1</b> Read source code and library</a></li>
+<li class="chapter" data-level="8.1.2" data-path="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html#threnetes-ruckeri-3"><i class="fa fa-check"></i><b>8.1.2</b> <em>Threnetes ruckeri</em></a></li>
+<li class="chapter" data-level="8.1.3" data-path="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html#catasticta-nimbice-4"><i class="fa fa-check"></i><b>8.1.3</b> <em>Catasticta nimbice</em></a></li>
+<li class="chapter" data-level="8.1.4" data-path="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html#theoretical-example"><i class="fa fa-check"></i><b>8.1.4</b> Theoretical Example</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><i class="fa fa-check"></i><b>9</b> Weighted-normal model: accounting for the uneven availability of environmental conditions</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#how-the-functions-work"><i class="fa fa-check"></i><b>9.1</b> How the functions work</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#parameters-5"><i class="fa fa-check"></i><b>9.1.1</b> Parameters</a></li>
+<li class="chapter" data-level="9.1.2" data-path="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#input-and-output-6"><i class="fa fa-check"></i><b>9.1.2</b> Input and Output</a></li>
+<li class="chapter" data-level="9.1.3" data-path="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#dependencies-6"><i class="fa fa-check"></i><b>9.1.3</b> Dependencies</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#worked-examples-6"><i class="fa fa-check"></i><b>9.2</b> Worked examples</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#read-sources-and-libraries"><i class="fa fa-check"></i><b>9.2.1</b> Read sources and libraries</a></li>
+<li class="chapter" data-level="9.2.2" data-path="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#catasticta-nimbice-5"><i class="fa fa-check"></i><b>9.2.2</b> <em>Catasticta nimbice</em></a></li>
+<li class="chapter" data-level="9.2.3" data-path="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#threnetes-ruckeri-4"><i class="fa fa-check"></i><b>9.2.3</b> <em>Threnetes ruckeri</em></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="projecting-an-estimated-niche-into-g-space.html"><a href="projecting-an-estimated-niche-into-g-space.html"><i class="fa fa-check"></i><b>10</b> Projecting an estimated niche into G-space</a>
+<ul>
+<li class="chapter" data-level="10.0.1" data-path="projecting-an-estimated-niche-into-g-space.html"><a href="projecting-an-estimated-niche-into-g-space.html#parameters-6"><i class="fa fa-check"></i><b>10.0.1</b> Parameters</a></li>
+<li class="chapter" data-level="10.0.2" data-path="projecting-an-estimated-niche-into-g-space.html"><a href="projecting-an-estimated-niche-into-g-space.html#input-and-output-7"><i class="fa fa-check"></i><b>10.0.2</b> Input and Output</a></li>
+<li class="chapter" data-level="10.0.3" data-path="projecting-an-estimated-niche-into-g-space.html"><a href="projecting-an-estimated-niche-into-g-space.html#dependencies-7"><i class="fa fa-check"></i><b>10.0.3</b> Dependencies</a></li>
+<li class="chapter" data-level="10.1" data-path="projecting-an-estimated-niche-into-g-space.html"><a href="projecting-an-estimated-niche-into-g-space.html#worked-examples-7"><i class="fa fa-check"></i><b>10.1</b> Worked Examples</a>
+<ul>
+<li class="chapter" data-level="10.1.1" data-path="projecting-an-estimated-niche-into-g-space.html"><a href="projecting-an-estimated-niche-into-g-space.html#read-source-code-and-libraries-4"><i class="fa fa-check"></i><b>10.1.1</b> Read source code and libraries</a></li>
+<li class="chapter" data-level="10.1.2" data-path="projecting-an-estimated-niche-into-g-space.html"><a href="projecting-an-estimated-niche-into-g-space.html#catasticta-nimbice-6"><i class="fa fa-check"></i><b>10.1.2</b> <em>Catasticta nimbice</em></a></li>
+<li class="chapter" data-level="10.1.3" data-path="projecting-an-estimated-niche-into-g-space.html"><a href="projecting-an-estimated-niche-into-g-space.html#threnetes-ruckeri-5"><i class="fa fa-check"></i><b>10.1.3</b> <em>Threnetes ruckeri</em></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html"><i class="fa fa-check"></i><b>11</b> Evaluation method: building accumulation curve of occurrences</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#calculate-the-accumulation-curve"><i class="fa fa-check"></i><b>11.1</b> Calculate the accumulation curve</a>
+<ul>
+<li class="chapter" data-level="11.1.1" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#parameters-7"><i class="fa fa-check"></i><b>11.1.1</b> Parameters</a></li>
+<li class="chapter" data-level="11.1.2" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#input-and-output-8"><i class="fa fa-check"></i><b>11.1.2</b> Input and Output</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#worked-examples-8"><i class="fa fa-check"></i><b>11.2</b> Worked Examples</a>
+<ul>
+<li class="chapter" data-level="11.2.1" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#read-libraries-and-source-codes"><i class="fa fa-check"></i><b>11.2.1</b> Read libraries and source codes</a></li>
+<li class="chapter" data-level="11.2.2" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#catasticta-nimbice-with-three-environmental-layers"><i class="fa fa-check"></i><b>11.2.2</b> <em>Catasticta nimbice</em> with three environmental layers</a></li>
+<li class="chapter" data-level="11.2.3" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#threnetes-ruckeri-with-two-environmental-layers"><i class="fa fa-check"></i><b>11.2.3</b> <em>Threnetes ruckeri</em> with two environmental layers</a></li>
+</ul></li>
+<li class="chapter" data-level="11.3" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#comparing-the-accumulation-curves"><i class="fa fa-check"></i><b>11.3</b> Comparing the accumulation curves</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#parameters-8"><i class="fa fa-check"></i><b>11.3.1</b> Parameters</a></li>
+<li class="chapter" data-level="11.3.2" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#input-and-output-9"><i class="fa fa-check"></i><b>11.3.2</b> Input and Output</a></li>
+<li class="chapter" data-level="11.3.3" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#worked-example-threnetes-ruckeri"><i class="fa fa-check"></i><b>11.3.3</b> Worked example: <em>Threnetes ruckeri</em></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html"><i class="fa fa-check"></i><b>12</b> Bayesian model: adding tolerance limits</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html#how-the-main-functions-work"><i class="fa fa-check"></i><b>12.1</b> How the main functions work</a>
+<ul>
+<li class="chapter" data-level="12.1.1" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html#parameters-9"><i class="fa fa-check"></i><b>12.1.1</b> Parameters</a></li>
+<li class="chapter" data-level="12.1.2" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html#input-and-output-10"><i class="fa fa-check"></i><b>12.1.2</b> Input and Output</a></li>
+<li class="chapter" data-level="12.1.3" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html#dependencies-8"><i class="fa fa-check"></i><b>12.1.3</b> Dependencies</a></li>
+</ul></li>
+<li class="chapter" data-level="12.2" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html#worked-example-threnetes-ruckeri-1"><i class="fa fa-check"></i><b>12.2</b> Worked Example: <em>Threnetes ruckeri</em></a>
+<ul>
+<li class="chapter" data-level="12.2.1" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html#read-source-codes-and-libraries"><i class="fa fa-check"></i><b>12.2.1</b> Read source codes and libraries</a></li>
+<li class="chapter" data-level="12.2.2" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html#main-code"><i class="fa fa-check"></i><b>12.2.2</b> Main code</a></li>
+</ul></li>
+<li class="chapter" data-level="12.3" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html#using-the-bayesian-model-for-the-projection-into-g-space"><i class="fa fa-check"></i><b>12.3</b> Using the Bayesian model for the projection into G-Space</a>
+<ul>
+<li class="chapter" data-level="12.3.1" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html#read-source-and-libraries"><i class="fa fa-check"></i><b>12.3.1</b> Read source and libraries</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Index</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="description-of-initial-datasets" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Description of initial datasets</h1>
+<div id="species-under-study-and-necessary-files-to-start-an-analysis" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Species under study and necessary files to start an analysis</h2>
+<p>We selected two species as our focus species for all the analysis and examples:</p>
+<ul>
+<li><p><em>Threnetes rucheri</em>, the band-tailed barbthroat hummingbird, resident from Central America.</p></li>
+<li><p><em>Catasticta nimbice</em>, the pine white or Mexican dartwhite butterfly, known to occur from Costa Rica north to Mexico.</p></li>
+</ul>
+<p>Four types of files are needed to reproduce the ecological niche modeling exercises included in this tutorial:</p>
+<ul>
+<li><p>A csv file that contains the geographic coordinates of the sites where the species has been recorded as present,</p></li>
+<li><p>A shapefile containing a polygon which delimits the study region,</p></li>
+<li><p>Raster files with the environmental variables to be used in the analysis and an extent larger or equal to the extent of the shapefile,</p></li>
+<li><p>A csv file that contains tolerance limits of a species.</p></li>
+</ul>
+<p>Below, we describe the files that we created for our two focus species so you can create similar files for the species of your interest.</p>
+<div id="occurrence-data" class="section level3" number="2.1.1">
+<h3><span class="header-section-number">2.1.1</span> Occurrence data</h3>
+<p>The tables used for this package are matrices that contain the location information of a species observation. Only presence data is used as absence data plays no role for the models employed.</p>
+<p>Occurrence data is available on various open databases. For all examples, data from <a href="https://www.gbif.org/">GBIF</a> was used. However, the tables from GBIF need to be cleaned up before they can be used as the database is aggregated from various sources with different formats and can contain various errors. There are packages available that aid in the cleaning of the data (e.g. see <a href="https://ropensci.github.io/CoordinateCleaner/articles/Cleaning_GBIF_data_with_CoordinateCleaner.html">CoordinateCleaner</a>).</p>
+<p>The tables for the examples have been cleaned and contain three columns: species name, longitude, latitude. These occurrence tables with three columns are called <code>G.occ</code>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="description-of-initial-datasets.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># table with a species occurrence  </span></span>
+<span id="cb1-2"><a href="description-of-initial-datasets.html#cb1-2" aria-hidden="true" tabindex="-1"></a>G.occ <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;./Initial_Data/Catasticta_nimbice_occ_G.csv&quot;</span>,<span class="at">header=</span>T)</span>
+<span id="cb1-3"><a href="description-of-initial-datasets.html#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(G.occ, <span class="at">n=</span><span class="dv">3</span>)</span></code></pre></div>
+<pre><code>##              species Longitude Latitude
+## 1 Catasticta nimbice -96.50500 16.06139
+## 2 Catasticta nimbice -96.50083 16.16944
+## 3 Catasticta nimbice -96.57000 16.31722</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="description-of-initial-datasets.html#cb3-1" aria-hidden="true" tabindex="-1"></a>G.occ2 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;./Initial_Data/Threnetes_ruckeri_occ_G.csv&quot;</span>,<span class="at">header=</span>T)</span>
+<span id="cb3-2"><a href="description-of-initial-datasets.html#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(G.occ2, <span class="at">n=</span><span class="dv">3</span>)</span></code></pre></div>
+<pre><code>##             species      long       lat
+## 1 Threnetes_ruckeri -79.42474  9.225965
+## 2 Threnetes_ruckeri -84.01280 10.428800
+## 3 Threnetes_ruckeri -82.95325  9.867804</code></pre>
+<div id="how-to-plot-occurrence-data-using-ggplot" class="section level4" number="2.1.1.1">
+<h4><span class="header-section-number">2.1.1.1</span> How to plot occurrence data using <code>ggplot</code></h4>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="description-of-initial-datasets.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set the boundaries to which the worldmap is cut</span></span>
+<span id="cb5-2"><a href="description-of-initial-datasets.html#cb5-2" aria-hidden="true" tabindex="-1"></a>ext <span class="ot">&lt;-</span> <span class="fu">extent</span>(<span class="sc">-</span><span class="dv">115</span>, <span class="sc">-</span><span class="dv">68</span>, <span class="sc">-</span><span class="dv">8</span>, <span class="dv">35</span>)</span>
+<span id="cb5-3"><a href="description-of-initial-datasets.html#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># worldmap is added from the rnaturalearth packages</span></span>
+<span id="cb5-4"><a href="description-of-initial-datasets.html#cb5-4" aria-hidden="true" tabindex="-1"></a>world <span class="ot">&lt;-</span> <span class="fu">ne_countries</span>(<span class="at">scale =</span> <span class="st">&quot;medium&quot;</span>, <span class="at">returnclass =</span> <span class="st">&quot;sf&quot;</span>)</span>
+<span id="cb5-5"><a href="description-of-initial-datasets.html#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(world)</span>
+<span id="cb5-6"><a href="description-of-initial-datasets.html#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># create dataframe for ggplot with both points</span></span>
+<span id="cb5-7"><a href="description-of-initial-datasets.html#cb5-7" aria-hidden="true" tabindex="-1"></a>cn.occ <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">longitude =</span> G.occ[, <span class="dv">2</span>], <span class="at">latitude =</span> G.occ[, <span class="dv">3</span>])</span>
+<span id="cb5-8"><a href="description-of-initial-datasets.html#cb5-8" aria-hidden="true" tabindex="-1"></a>thr.occ <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">longitude =</span> G.occ2[, <span class="dv">2</span>], <span class="at">latitude =</span> G.occ2[, <span class="dv">3</span>])</span>
+<span id="cb5-9"><a href="description-of-initial-datasets.html#cb5-9" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">rbind</span>(cn.occ[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>],thr.occ[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]),</span>
+<span id="cb5-10"><a href="description-of-initial-datasets.html#cb5-10" aria-hidden="true" tabindex="-1"></a>              <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">1</span>,<span class="fu">nrow</span>(cn.occ)),<span class="fu">rep</span>(<span class="dv">2</span>,<span class="fu">nrow</span>(thr.occ))))</span>
+<span id="cb5-11"><a href="description-of-initial-datasets.html#cb5-11" aria-hidden="true" tabindex="-1"></a>data2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Longitude =</span> data[, <span class="dv">1</span>], <span class="at">Latitude =</span> data[, <span class="dv">2</span>], </span>
+<span id="cb5-12"><a href="description-of-initial-datasets.html#cb5-12" aria-hidden="true" tabindex="-1"></a>                    <span class="at">Type =</span> data[,<span class="dv">3</span>])</span>
+<span id="cb5-13"><a href="description-of-initial-datasets.html#cb5-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-14"><a href="description-of-initial-datasets.html#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co"># create plot</span></span>
+<span id="cb5-15"><a href="description-of-initial-datasets.html#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> world) <span class="sc">+</span></span>
+<span id="cb5-16"><a href="description-of-initial-datasets.html#cb5-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>( ) <span class="sc">+</span></span>
+<span id="cb5-17"><a href="description-of-initial-datasets.html#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb5-18"><a href="description-of-initial-datasets.html#cb5-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(ext[<span class="dv">1</span>], ext[<span class="dv">2</span>]),</span>
+<span id="cb5-19"><a href="description-of-initial-datasets.html#cb5-19" aria-hidden="true" tabindex="-1"></a>           <span class="at">ylim =</span> <span class="fu">c</span>(ext[<span class="dv">3</span>],ext[<span class="dv">4</span>]), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb5-20"><a href="description-of-initial-datasets.html#cb5-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.major =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">&quot;white&quot;</span>),</span>
+<span id="cb5-21"><a href="description-of-initial-datasets.html#cb5-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">&quot;aliceblue&quot;</span>)) <span class="sc">+</span> </span>
+<span id="cb5-22"><a href="description-of-initial-datasets.html#cb5-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> data2, <span class="at">alpha=</span><span class="fl">0.5</span>, </span>
+<span id="cb5-23"><a href="description-of-initial-datasets.html#cb5-23" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x =</span> Longitude, <span class="at">y =</span> Latitude, <span class="at">color=</span><span class="fu">factor</span>(Type), </span>
+<span id="cb5-24"><a href="description-of-initial-datasets.html#cb5-24" aria-hidden="true" tabindex="-1"></a>                 <span class="at">shape=</span><span class="fu">factor</span>(Type))) <span class="sc">+</span></span>
+<span id="cb5-25"><a href="description-of-initial-datasets.html#cb5-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_shape_manual</span>(<span class="at">values=</span> <span class="fu">c</span>(<span class="dv">19</span>, <span class="dv">19</span>), <span class="at">guide =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb5-26"><a href="description-of-initial-datasets.html#cb5-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">name =</span> <span class="st">&quot;Occurrences&quot;</span>,</span>
+<span id="cb5-27"><a href="description-of-initial-datasets.html#cb5-27" aria-hidden="true" tabindex="-1"></a>                     <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Catasticta nimbice&quot;</span>, <span class="st">&quot;Threnetes ruckeri&quot;</span>),</span>
+<span id="cb5-28"><a href="description-of-initial-datasets.html#cb5-28" aria-hidden="true" tabindex="-1"></a>                     <span class="at">values=</span> <span class="fu">c</span>(<span class="st">&quot;1&quot;</span> <span class="ot">=</span> <span class="st">&quot;seagreen4&quot;</span>, <span class="st">&quot;2&quot;</span> <span class="ot">=</span> <span class="st">&quot;royalblue3&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb5-29"><a href="description-of-initial-datasets.html#cb5-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(.<span class="dv">03</span>, .<span class="dv">05</span>),</span>
+<span id="cb5-30"><a href="description-of-initial-datasets.html#cb5-30" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.justification =</span> <span class="fu">c</span>(<span class="st">&quot;left&quot;</span>, <span class="st">&quot;bottom&quot;</span>)) </span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-3"></span>
+<img src="Images/occurrences.png" alt=" Figure of the of the two species *Catasticta nimbice* and *Threnetes ruckeri* ." width="100%" />
+<p class="caption">
+Figure 2.1:  Figure of the of the two species <em>Catasticta nimbice</em> and <em>Threnetes ruckeri</em> .
+</p>
+</div>
+</div>
+</div>
+<div id="points-inside-the-study-area-to-plot-hutchinsons-duality" class="section level3" number="2.1.2">
+<h3><span class="header-section-number">2.1.2</span> Points inside the study area to plot Hutchinson’s duality</h3>
+<p>There are two other tables that are used for the functions of this package. They contain random samples of locations of the study area. These points serve as background points for various graphs.</p>
+<p>The first table is contains two columns with the longitude and latitude of sampled locations for the species <em>Threnetes ruckeri</em>.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="description-of-initial-datasets.html#cb6-1" aria-hidden="true" tabindex="-1"></a>thrM <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;./Initial_Data/Threnetes_ruckeri_M_G.csv&quot;</span>,<span class="at">header=</span>T)</span>
+<span id="cb6-2"><a href="description-of-initial-datasets.html#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(thrM, <span class="at">n=</span><span class="dv">3</span>)</span></code></pre></div>
+<pre><code>##        long       lat
+## 1 -71.58333  6.250003
+## 2 -83.91666 11.916670
+## 3 -69.74999  9.916670</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="description-of-initial-datasets.html#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(thrM)</span></code></pre></div>
+<pre><code>## [1] 599   2</code></pre>
+<p>The second table contains four columns. In addition to the longitude and latitude of random locations of the study are for the species <em>Catasticta nimbice</em> the correlating environmental data for mean annual temperature and total annual precipitation. This file can be created by extracting the environmental data from raster layers with the function <code>get.ecoord</code> (see tutorial).</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="description-of-initial-datasets.html#cb10-1" aria-hidden="true" tabindex="-1"></a>cnM.GE <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;./Initial_Data/Catasticta_nimbice_M_GE.csv&quot;</span>,<span class="at">header=</span>T)</span>
+<span id="cb10-2"><a href="description-of-initial-datasets.html#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cnM.GE, <span class="at">n=</span><span class="dv">3</span>)</span></code></pre></div>
+<pre><code>##        long      lat bio1 bio12
+## 1 -98.08333 20.41667  194  2307
+## 2 -97.91667 20.25000  199  2587
+## 3 -99.08333 21.41667  184  1781</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="description-of-initial-datasets.html#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(cnM.GE)</span></code></pre></div>
+<pre><code>## [1] 7486    4</code></pre>
+</div>
+<div id="table-with-species-tolerance-limit" class="section level3" number="2.1.3">
+<h3><span class="header-section-number">2.1.3</span> Table with species’ tolerance limit</h3>
+<p>The table for a species’ tolerance limit contains the lower and upper limits of an environmental condition. In the example provided, we estimated these limits for the species <em>Threnetes ruckeri</em>, which is necessary information for using the Bayesian model (see Tutorial “Bayesian model”). Please keep in mind that the provided example is not estimated with a scientific method and only meant to aid in using and understanding the tutorial. For scientific research, the tolerance limits of a species need to be tested within a controlled lab environment.</p>
+<p>The matrix needs to have at two columns that provide the lower limit in the first column, and the upper limit in the second column. There should be as many rows as environmental conditions (usually two). The example contains the estimated tolerance limits for the mean annual temperature (MAT) and the total annual precipitation (AP).</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="description-of-initial-datasets.html#cb14-1" aria-hidden="true" tabindex="-1"></a>(limits <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;./Initial_Data/T_ruckeri_tolerances.csv&quot;</span>))</span></code></pre></div>
+<pre><code>##   variable minimum maximum units
+## 1      MAT     200     300  C*10
+## 2       AP     500    5000    mm</code></pre>
+<table class=" lightable-classic" style="font-family: Cambria; width: auto !important; ">
+<caption>
+<span id="tab:unnamed-chunk-7">Table 2.1: </span>Threnetes ruckeri tolerance limits
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+variable
+</th>
+<th style="text-align:right;">
+minimum
+</th>
+<th style="text-align:right;">
+maximum
+</th>
+<th style="text-align:left;">
+units
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+MAT
+</td>
+<td style="text-align:right;">
+200
+</td>
+<td style="text-align:right;">
+300
+</td>
+<td style="text-align:left;">
+C*10
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AP
+</td>
+<td style="text-align:right;">
+500
+</td>
+<td style="text-align:right;">
+5000
+</td>
+<td style="text-align:left;">
+mm
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="polygons-of-the-study-area" class="section level3" number="2.1.4">
+<h3><span class="header-section-number">2.1.4</span> Polygons of the study area</h3>
+<p>The functions often use a polygon of the region of interest either to serve as a boundary in plots or to delimit rasters or sampled points to the specific region. The polygons used in the examples are shapefiles.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="description-of-initial-datasets.html#cb16-1" aria-hidden="true" tabindex="-1"></a>cn.shp <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(<span class="st">&quot;./Initial_Data/shapefiles&quot;</span>,<span class="st">&quot;Catasticta_nimbice&quot;</span>)</span>
+<span id="cb16-2"><a href="description-of-initial-datasets.html#cb16-2" aria-hidden="true" tabindex="-1"></a>thr.shp <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(<span class="st">&quot;./Initial_Data/shapefiles&quot;</span>,<span class="st">&quot;Threnetes_ruckeri&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="description-of-initial-datasets.html#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># in order to plot the shapefiles, they need to be adjusted first</span></span>
+<span id="cb17-2"><a href="description-of-initial-datasets.html#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co"># transform polygon into WGS 84</span></span>
+<span id="cb17-3"><a href="description-of-initial-datasets.html#cb17-3" aria-hidden="true" tabindex="-1"></a>cnM <span class="ot">&lt;-</span> <span class="fu">spTransform</span>(cn.shp, <span class="fu">CRS</span>(<span class="st">&quot;+proj=longlat +datum=WGS84&quot;</span>))</span>
+<span id="cb17-4"><a href="description-of-initial-datasets.html#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># This function turns a map into a data frame that can more easily be </span></span>
+<span id="cb17-5"><a href="description-of-initial-datasets.html#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co"># plotted with ggplot2.</span></span>
+<span id="cb17-6"><a href="description-of-initial-datasets.html#cb17-6" aria-hidden="true" tabindex="-1"></a>cnM <span class="ot">&lt;-</span> <span class="fu">fortify</span>(cnM)</span>
+<span id="cb17-7"><a href="description-of-initial-datasets.html#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co"># takes id that is a &quot;character&quot; and converts it to a number</span></span>
+<span id="cb17-8"><a href="description-of-initial-datasets.html#cb17-8" aria-hidden="true" tabindex="-1"></a>cnM<span class="sc">$</span>id <span class="ot">=</span> <span class="fu">as.numeric</span>(cnM<span class="sc">$</span>id)</span>
+<span id="cb17-9"><a href="description-of-initial-datasets.html#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="description-of-initial-datasets.html#cb17-10" aria-hidden="true" tabindex="-1"></a>thrM <span class="ot">&lt;-</span> <span class="fu">spTransform</span>(thr.shp, <span class="fu">CRS</span>(<span class="st">&quot;+proj=longlat +datum=WGS84&quot;</span>))</span>
+<span id="cb17-11"><a href="description-of-initial-datasets.html#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="co"># This function turns a map into a data frame that can more easily be </span></span>
+<span id="cb17-12"><a href="description-of-initial-datasets.html#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="co"># plotted with ggplot2.</span></span>
+<span id="cb17-13"><a href="description-of-initial-datasets.html#cb17-13" aria-hidden="true" tabindex="-1"></a>thrM <span class="ot">&lt;-</span> <span class="fu">fortify</span>(thrM)</span>
+<span id="cb17-14"><a href="description-of-initial-datasets.html#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="co"># takes id that is a &quot;character&quot; and converts it to a number</span></span>
+<span id="cb17-15"><a href="description-of-initial-datasets.html#cb17-15" aria-hidden="true" tabindex="-1"></a>thrM<span class="sc">$</span>id <span class="ot">=</span> <span class="fu">as.numeric</span>(thrM<span class="sc">$</span>id)</span>
+<span id="cb17-16"><a href="description-of-initial-datasets.html#cb17-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-17"><a href="description-of-initial-datasets.html#cb17-17" aria-hidden="true" tabindex="-1"></a><span class="co"># worldmap is added from the rnaturalearth packages</span></span>
+<span id="cb17-18"><a href="description-of-initial-datasets.html#cb17-18" aria-hidden="true" tabindex="-1"></a>world <span class="ot">&lt;-</span> <span class="fu">ne_countries</span>(<span class="at">scale =</span> <span class="st">&quot;medium&quot;</span>, <span class="at">returnclass =</span> <span class="st">&quot;sf&quot;</span>)</span>
+<span id="cb17-19"><a href="description-of-initial-datasets.html#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(world)</span>
+<span id="cb17-20"><a href="description-of-initial-datasets.html#cb17-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-21"><a href="description-of-initial-datasets.html#cb17-21" aria-hidden="true" tabindex="-1"></a><span class="co"># plot in ggplot</span></span>
+<span id="cb17-22"><a href="description-of-initial-datasets.html#cb17-22" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> world) <span class="sc">+</span></span>
+<span id="cb17-23"><a href="description-of-initial-datasets.html#cb17-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>( ) <span class="sc">+</span></span>
+<span id="cb17-24"><a href="description-of-initial-datasets.html#cb17-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb17-25"><a href="description-of-initial-datasets.html#cb17-25" aria-hidden="true" tabindex="-1"></a>  <span class="co"># alpha -&gt; transparency of polygon, 0.1 = high, 0.5 = medium transparency</span></span>
+<span id="cb17-26"><a href="description-of-initial-datasets.html#cb17-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_map</span>(<span class="at">map=</span>cnM, <span class="at">data=</span>cnM, <span class="fu">aes</span>(<span class="at">map_id=</span>id), <span class="at">color=</span> <span class="st">&quot;springgreen3&quot;</span>, </span>
+<span id="cb17-27"><a href="description-of-initial-datasets.html#cb17-27" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> <span class="st">&quot;springgreen3&quot;</span>, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb17-28"><a href="description-of-initial-datasets.html#cb17-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_map</span>(<span class="at">map=</span>thrM, <span class="at">data=</span>thrM, <span class="fu">aes</span>(<span class="at">map_id=</span>id), <span class="at">color=</span> <span class="st">&quot;royalblue3&quot;</span>, </span>
+<span id="cb17-29"><a href="description-of-initial-datasets.html#cb17-29" aria-hidden="true" tabindex="-1"></a>           <span class="at">fill =</span> <span class="st">&quot;royalblue3&quot;</span>, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb17-30"><a href="description-of-initial-datasets.html#cb17-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">120</span>, <span class="sc">-</span><span class="dv">65</span>), </span>
+<span id="cb17-31"><a href="description-of-initial-datasets.html#cb17-31" aria-hidden="true" tabindex="-1"></a>           <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">35</span>), <span class="at">expand =</span><span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb17-32"><a href="description-of-initial-datasets.html#cb17-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.major =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">&quot;white&quot;</span>),</span>
+<span id="cb17-33"><a href="description-of-initial-datasets.html#cb17-33" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">&quot;aliceblue&quot;</span>))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-10"></span>
+<img src="Images/shapefiles.png" alt=" Figure of the shapefiles for the study area of *Catasticta nimbice* (green) and *Threnetes ruckeri* (blue)." width="80%" />
+<p class="caption">
+Figure 2.2:  Figure of the shapefiles for the study area of <em>Catasticta nimbice</em> (green) and <em>Threnetes ruckeri</em> (blue).
+</p>
+</div>
+</div>
+<div id="rasters-with-environmental-information" class="section level3" number="2.1.5">
+<h3><span class="header-section-number">2.1.5</span> Rasters with environmental information</h3>
+<p>The raster files for the functions of this package need to contain information on climatic values that are of interest for the user. The rasters used in the examples are from <a href="https://worldclim.org/data/index.html">WorldClim</a> and have a resolution of “10 minutes.” The files usually do not need further editing.</p>
+<p>For our examples, we used the raster of the American continent. The environmental conditions of interest are the <em>mean annual temperature</em>, called <code>bio1</code> and the the <em>total mean precipitation</em>, called <code>bio12</code>.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="description-of-initial-datasets.html#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># raster for mean annual temperature (°C x 10)</span></span>
+<span id="cb18-2"><a href="description-of-initial-datasets.html#cb18-2" aria-hidden="true" tabindex="-1"></a>bio1 <span class="ot">&lt;-</span> <span class="fu">raster</span>(<span class="st">&quot;./Initial_Data/bio1.asc&quot;</span>)</span>
+<span id="cb18-3"><a href="description-of-initial-datasets.html#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co"># raster for minimum temperature of the coldest month (°C x 10)</span></span>
+<span id="cb18-4"><a href="description-of-initial-datasets.html#cb18-4" aria-hidden="true" tabindex="-1"></a>bio6 <span class="ot">&lt;-</span> <span class="fu">raster</span>(<span class="st">&quot;./Initial_Data/bio6.tif&quot;</span>)</span>
+<span id="cb18-5"><a href="description-of-initial-datasets.html#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co"># raster for mean total precipitation (mm)</span></span>
+<span id="cb18-6"><a href="description-of-initial-datasets.html#cb18-6" aria-hidden="true" tabindex="-1"></a>bio12 <span class="ot">&lt;-</span> <span class="fu">raster</span>(<span class="st">&quot;./Initial_Data/bio12.asc&quot;</span>)</span></code></pre></div>
+<p>The raster can simply be plotted by using the <code>plot()</code> function:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="description-of-initial-datasets.html#cb19-1" aria-hidden="true" tabindex="-1"></a>bios <span class="ot">&lt;-</span> <span class="fu">stack</span>(bio6, bio12)</span>
+<span id="cb19-2"><a href="description-of-initial-datasets.html#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(bios)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-13"></span>
+<img src="Images/bio6bio12.png" alt="Figure of the of the coldest month of the year (in °C x 10) and the total annual precipitation (in mm) for the American continent." width="90%" />
+<p class="caption">
+Figure 2.3: Figure of the of the coldest month of the year (in °C x 10) and the total annual precipitation (in mm) for the American continent.
+</p>
+</div>
+<p>Another option to plot the raster is the <code>spplot()</code> function of the <code>sp</code> package:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="description-of-initial-datasets.html#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spplot</span>(bio1)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-15"></span>
+<img src="Images/Raster_bio1.png" alt=" Figure of the of the mean annual temperature (in °C, multiplied by 10) for the American continent.." width="80%" />
+<p class="caption">
+Figure 2.4:  Figure of the of the mean annual temperature (in °C, multiplied by 10) for the American continent..
+</p>
+</div>
+<div id="how-to-crop-raster-layers" class="section level4" number="2.1.5.1">
+<h4><span class="header-section-number">2.1.5.1</span> How to crop raster layers</h4>
+<p>You need to run this examples and save the resulting raster layers because these will be used in the exercises.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="description-of-initial-datasets.html#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cropped by the shapefile for Catasticta nimbice study area</span></span>
+<span id="cb21-2"><a href="description-of-initial-datasets.html#cb21-2" aria-hidden="true" tabindex="-1"></a>bio1cn <span class="ot">&lt;-</span> <span class="fu">mask</span>(<span class="fu">crop</span>(bio1, cn.shp), cn.shp)</span>
+<span id="cb21-3"><a href="description-of-initial-datasets.html#cb21-3" aria-hidden="true" tabindex="-1"></a>bio6cn <span class="ot">&lt;-</span> <span class="fu">mask</span>(<span class="fu">crop</span>(bio6, cn.shp), cn.shp)</span>
+<span id="cb21-4"><a href="description-of-initial-datasets.html#cb21-4" aria-hidden="true" tabindex="-1"></a>bio12cn <span class="ot">&lt;-</span> <span class="fu">mask</span>(<span class="fu">crop</span>(bio12, cn.shp), cn.shp)</span>
+<span id="cb21-5"><a href="description-of-initial-datasets.html#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-6"><a href="description-of-initial-datasets.html#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="co"># cropped by the shapefile for Threnetes ruckeri study area</span></span>
+<span id="cb21-7"><a href="description-of-initial-datasets.html#cb21-7" aria-hidden="true" tabindex="-1"></a>bio1thr <span class="ot">&lt;-</span> <span class="fu">mask</span>(<span class="fu">crop</span>(bio1, thr.shp), thr.shp)</span>
+<span id="cb21-8"><a href="description-of-initial-datasets.html#cb21-8" aria-hidden="true" tabindex="-1"></a>bio6thr <span class="ot">&lt;-</span> <span class="fu">mask</span>(<span class="fu">crop</span>(bio6, thr.shp), thr.shp)</span>
+<span id="cb21-9"><a href="description-of-initial-datasets.html#cb21-9" aria-hidden="true" tabindex="-1"></a>bio12thr <span class="ot">&lt;-</span> <span class="fu">mask</span>(<span class="fu">crop</span>(bio12, thr.shp), thr.shp)</span></code></pre></div>
+<p>Example plot for the cropped raster bio6 (in ggplot):</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="description-of-initial-datasets.html#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate raster to points for ggplot</span></span>
+<span id="cb22-2"><a href="description-of-initial-datasets.html#cb22-2" aria-hidden="true" tabindex="-1"></a>bio6thr.p <span class="ot">&lt;-</span> <span class="fu">rasterToPoints</span>(bio6thr)</span>
+<span id="cb22-3"><a href="description-of-initial-datasets.html#cb22-3" aria-hidden="true" tabindex="-1"></a>bio6thr.pd <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(bio6thr.p)</span>
+<span id="cb22-4"><a href="description-of-initial-datasets.html#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(bio6thr.pd) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Longitude&quot;</span>,<span class="st">&quot;Latitude&quot;</span>, <span class="st">&quot;MinTemp&quot;</span>)</span>
+<span id="cb22-5"><a href="description-of-initial-datasets.html#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="description-of-initial-datasets.html#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="description-of-initial-datasets.html#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="co"># x11()</span></span>
+<span id="cb22-8"><a href="description-of-initial-datasets.html#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb22-9"><a href="description-of-initial-datasets.html#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">data =</span> bio6thr.pd,<span class="fu">aes</span>(<span class="at">x=</span>Longitude, <span class="at">y=</span>Latitude, <span class="at">fill=</span>MinTemp)) <span class="sc">+</span></span>
+<span id="cb22-10"><a href="description-of-initial-datasets.html#cb22-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb22-11"><a href="description-of-initial-datasets.html#cb22-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradient2</span>(<span class="st">&quot;Minimum Temperature (°C x 10)&quot;</span>,<span class="at">limits=</span><span class="fu">c</span>(<span class="dv">50</span>,<span class="dv">300</span>), <span class="at">low =</span> <span class="st">&#39;royalblue3&#39;</span>,</span>
+<span id="cb22-12"><a href="description-of-initial-datasets.html#cb22-12" aria-hidden="true" tabindex="-1"></a>                       <span class="at">mid=</span><span class="st">&#39;seagreen3&#39;</span>, <span class="at">high =</span> <span class="st">&#39;gold2&#39;</span>,<span class="at">na.value =</span> <span class="cn">NA</span>,</span>
+<span id="cb22-13"><a href="description-of-initial-datasets.html#cb22-13" aria-hidden="true" tabindex="-1"></a>                       <span class="at">midpoint =</span> <span class="dv">200</span>, <span class="at">n.breaks=</span><span class="dv">6</span>)</span></code></pre></div>
+<p><img src="01_Initial_data_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p>Save the rasters for later use</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="description-of-initial-datasets.html#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">writeRaster</span>(bio1cn,<span class="st">&quot;./Generated_Data/cn_bio1_cropped.tif&quot;</span>, <span class="at">overwrite =</span> T)</span>
+<span id="cb23-2"><a href="description-of-initial-datasets.html#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">writeRaster</span>(bio6cn,<span class="st">&quot;./Generated_Data/cn_bio6_cropped.tif&quot;</span>, <span class="at">overwrite =</span> T)</span>
+<span id="cb23-3"><a href="description-of-initial-datasets.html#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="fu">writeRaster</span>(bio12cn,<span class="st">&quot;./Generated_Data/cn_bio12_cropped.tif&quot;</span>, <span class="at">overwrite =</span> T)</span>
+<span id="cb23-4"><a href="description-of-initial-datasets.html#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-5"><a href="description-of-initial-datasets.html#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="fu">writeRaster</span>(bio1thr,<span class="st">&quot;./Generated_Data/tr_bio1_cropped.tif&quot;</span>, <span class="at">overwrite =</span> T)</span>
+<span id="cb23-6"><a href="description-of-initial-datasets.html#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="fu">writeRaster</span>(bio6thr,<span class="st">&quot;./Generated_Data/tr_bio6_cropped.tif&quot;</span>, <span class="at">overwrite =</span> T)</span>
+<span id="cb23-7"><a href="description-of-initial-datasets.html#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="fu">writeRaster</span>(bio12thr,<span class="st">&quot;./Generated_Data/tr_bio12_cropped.tif&quot;</span>, <span class="at">overwrite =</span> T)</span></code></pre></div>
+<p>Additionally, note that you can use this code to crop and mask any raster layer to the study area of each species. This is something you will need to do before doing some future examples.</p>
+
+</div>
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "lunr",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

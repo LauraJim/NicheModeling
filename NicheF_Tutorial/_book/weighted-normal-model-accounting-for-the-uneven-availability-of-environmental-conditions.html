@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>9 Weighted-normal model: accounting for the uneven availability of environmental conditions | Index</title>
+  <meta name="description" content="9 Weighted-normal model: accounting for the uneven availability of environmental conditions | Index" />
+  <meta name="generator" content="bookdown 0.23 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="9 Weighted-normal model: accounting for the uneven availability of environmental conditions | Index" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="9 Weighted-normal model: accounting for the uneven availability of environmental conditions | Index" />
+  
+  
+  
+
+<meta name="author" content="Laura Jiménez and Carola Franzen" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"/>
+<link rel="next" href="projecting-an-estimated-niche-into-g-space.html"/>
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.0.1" data-path="index.html"><a href="index.html#organization-within-the-tutorial"><i class="fa fa-check"></i><b>1.0.1</b> Organization within the tutorial</a></li>
+<li class="chapter" data-level="1.0.2" data-path="index.html"><a href="index.html#references"><i class="fa fa-check"></i><b>1.0.2</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="description-of-initial-datasets.html"><a href="description-of-initial-datasets.html"><i class="fa fa-check"></i><b>2</b> Description of initial datasets</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="description-of-initial-datasets.html"><a href="description-of-initial-datasets.html#species-under-study-and-necessary-files-to-start-an-analysis"><i class="fa fa-check"></i><b>2.1</b> Species under study and necessary files to start an analysis</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="description-of-initial-datasets.html"><a href="description-of-initial-datasets.html#occurrence-data"><i class="fa fa-check"></i><b>2.1.1</b> Occurrence data</a></li>
+<li class="chapter" data-level="2.1.2" data-path="description-of-initial-datasets.html"><a href="description-of-initial-datasets.html#points-inside-the-study-area-to-plot-hutchinsons-duality"><i class="fa fa-check"></i><b>2.1.2</b> Points inside the study area to plot Hutchinson’s duality</a></li>
+<li class="chapter" data-level="2.1.3" data-path="description-of-initial-datasets.html"><a href="description-of-initial-datasets.html#table-with-species-tolerance-limit"><i class="fa fa-check"></i><b>2.1.3</b> Table with species’ tolerance limit</a></li>
+<li class="chapter" data-level="2.1.4" data-path="description-of-initial-datasets.html"><a href="description-of-initial-datasets.html#polygons-of-the-study-area"><i class="fa fa-check"></i><b>2.1.4</b> Polygons of the study area</a></li>
+<li class="chapter" data-level="2.1.5" data-path="description-of-initial-datasets.html"><a href="description-of-initial-datasets.html#rasters-with-environmental-information"><i class="fa fa-check"></i><b>2.1.5</b> Rasters with environmental information</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"><a href="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"><i class="fa fa-check"></i><b>3</b> Extracting environmental data from raster files from a set of geographic coordinates</a>
+<ul>
+<li class="chapter" data-level="3.0.1" data-path="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"><a href="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html#parameters"><i class="fa fa-check"></i><b>3.0.1</b> Parameters</a></li>
+<li class="chapter" data-level="3.0.2" data-path="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"><a href="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html#input-and-output"><i class="fa fa-check"></i><b>3.0.2</b> Input and Output</a></li>
+<li class="chapter" data-level="3.0.3" data-path="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"><a href="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html#dependencies"><i class="fa fa-check"></i><b>3.0.3</b> Dependencies</a></li>
+<li class="chapter" data-level="3.1" data-path="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"><a href="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html#worked-examples"><i class="fa fa-check"></i><b>3.1</b> Worked Examples</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"><a href="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html#read-source-code-and-libraries"><i class="fa fa-check"></i><b>3.1.1</b> Read source code and libraries</a></li>
+<li class="chapter" data-level="3.1.2" data-path="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"><a href="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html#catasticta-nimbice"><i class="fa fa-check"></i><b>3.1.2</b> <em>Catasticta nimbice</em></a></li>
+<li class="chapter" data-level="3.1.3" data-path="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"><a href="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html#threnetes-ruckeri"><i class="fa fa-check"></i><b>3.1.3</b> <em>Threnetes ruckeri</em></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html"><i class="fa fa-check"></i><b>4</b> Creating plots with the geographical and environmental space of a species in ggplot2</a>
+<ul>
+<li class="chapter" data-level="4.0.1" data-path="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#parameters-1"><i class="fa fa-check"></i><b>4.0.1</b> Parameters</a></li>
+<li class="chapter" data-level="4.0.2" data-path="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#input-and-output-1"><i class="fa fa-check"></i><b>4.0.2</b> Input and Output</a></li>
+<li class="chapter" data-level="4.0.3" data-path="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#dependencies-1"><i class="fa fa-check"></i><b>4.0.3</b> Dependencies</a></li>
+<li class="chapter" data-level="4.1" data-path="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#worked-examples-1"><i class="fa fa-check"></i><b>4.1</b> Worked Examples</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#read-source-code-and-libraries-1"><i class="fa fa-check"></i><b>4.1.1</b> Read source code and libraries</a></li>
+<li class="chapter" data-level="4.1.2" data-path="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#catasticta-nimbice-1"><i class="fa fa-check"></i><b>4.1.2</b> <em>Catasticta nimbice</em></a></li>
+<li class="chapter" data-level="4.1.3" data-path="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#threnetes-ruckeri-1"><i class="fa fa-check"></i><b>4.1.3</b> <em>Threnetes ruckeri</em></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html"><i class="fa fa-check"></i><b>5</b> Mahalanobis model: raw occurrence data only</a>
+<ul>
+<li class="chapter" data-level="5.0.1" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#input-and-output-2"><i class="fa fa-check"></i><b>5.0.1</b> Input and Output</a></li>
+<li class="chapter" data-level="5.0.2" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#dependencies-2"><i class="fa fa-check"></i><b>5.0.2</b> Dependencies</a></li>
+<li class="chapter" data-level="5.1" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#worked-examples-2"><i class="fa fa-check"></i><b>5.1</b> Worked Examples</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#read-source-code-and-libraries-2"><i class="fa fa-check"></i><b>5.1.1</b> Read Source Code and Libraries</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#threnetes-ruckeri---example-with-two-environmental-layers"><i class="fa fa-check"></i><b>5.2</b> <em>Threnetes ruckeri</em> - example with two environmental layers</a></li>
+<li class="chapter" data-level="5.3" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#catasticta-nimbice-2"><i class="fa fa-check"></i><b>5.3</b> <em>Catasticta nimbice</em></a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#get-environmental-information-from-three-raster-layers"><i class="fa fa-check"></i><b>5.3.1</b> 1) Get environmental information from three raster layers</a></li>
+<li class="chapter" data-level="5.3.2" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#estimate-mahalanobis-model-parameters"><i class="fa fa-check"></i><b>5.3.2</b> 2) Estimate Mahalanobis Model Parameters</a></li>
+<li class="chapter" data-level="5.3.3" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#calculate-suitability-index"><i class="fa fa-check"></i><b>5.3.3</b> 3) Calculate Suitability Index</a></li>
+<li class="chapter" data-level="5.3.4" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#comparing-suitability-index-against-mahalanobis-distance"><i class="fa fa-check"></i><b>5.3.4</b> 3) Comparing suitability index against Mahalanobis distance</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="plotting-an-ellipsoid-in-e-space.html"><a href="plotting-an-ellipsoid-in-e-space.html"><i class="fa fa-check"></i><b>6</b> Plotting an ellipsoid in E-space</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="plotting-an-ellipsoid-in-e-space.html"><a href="plotting-an-ellipsoid-in-e-space.html#parameters-2"><i class="fa fa-check"></i><b>6.1</b> Parameters</a></li>
+<li class="chapter" data-level="6.2" data-path="plotting-an-ellipsoid-in-e-space.html"><a href="plotting-an-ellipsoid-in-e-space.html#input-and-output-3"><i class="fa fa-check"></i><b>6.2</b> Input and Output</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="plotting-an-ellipsoid-in-e-space.html"><a href="plotting-an-ellipsoid-in-e-space.html#dependencies-3"><i class="fa fa-check"></i><b>6.2.1</b> Dependencies</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="plotting-an-ellipsoid-in-e-space.html"><a href="plotting-an-ellipsoid-in-e-space.html#worked-examples-3"><i class="fa fa-check"></i><b>6.3</b> Worked Examples</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="plotting-an-ellipsoid-in-e-space.html"><a href="plotting-an-ellipsoid-in-e-space.html#read-source-code-and-library"><i class="fa fa-check"></i><b>6.3.1</b> Read source code and library</a></li>
+<li class="chapter" data-level="6.3.2" data-path="plotting-an-ellipsoid-in-e-space.html"><a href="plotting-an-ellipsoid-in-e-space.html#example-with-three-ellipses-threnetes-ruckeri"><i class="fa fa-check"></i><b>6.3.2</b> Example with three ellipses (<em>Threnetes ruckeri</em>)</a></li>
+<li class="chapter" data-level="6.3.3" data-path="plotting-an-ellipsoid-in-e-space.html"><a href="plotting-an-ellipsoid-in-e-space.html#example-with-several-ellipses-catasticta-nimbice"><i class="fa fa-check"></i><b>6.3.3</b> Example with several ellipses (<em>Catasticta nimbice</em>)</a></li>
+<li class="chapter" data-level="6.3.4" data-path="plotting-an-ellipsoid-in-e-space.html"><a href="plotting-an-ellipsoid-in-e-space.html#example-with-three-environmental-variables-catasticta-nimbice"><i class="fa fa-check"></i><b>6.3.4</b> Example with three environmental variables (<em>Catasticta nimbice</em>)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html"><a href="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html"><i class="fa fa-check"></i><b>7</b> How to simulate a random sample of environmental conditions inside an region</a>
+<ul>
+<li class="chapter" data-level="7.0.1" data-path="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html"><a href="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html#parameters-3"><i class="fa fa-check"></i><b>7.0.1</b> Parameters</a></li>
+<li class="chapter" data-level="7.0.2" data-path="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html"><a href="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html#input-and-output-4"><i class="fa fa-check"></i><b>7.0.2</b> Input and Output</a></li>
+<li class="chapter" data-level="7.0.3" data-path="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html"><a href="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html#dependencies-4"><i class="fa fa-check"></i><b>7.0.3</b> Dependencies</a></li>
+<li class="chapter" data-level="7.1" data-path="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html"><a href="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html#worked-examples-4"><i class="fa fa-check"></i><b>7.1</b> Worked Examples</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html"><a href="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html#read-source-code-and-libraries-3"><i class="fa fa-check"></i><b>7.1.1</b> Read source code and libraries</a></li>
+<li class="chapter" data-level="7.1.2" data-path="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html"><a href="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html#catasticta-nimbice-3"><i class="fa fa-check"></i><b>7.1.2</b> <em>Catasticta nimbice</em></a></li>
+<li class="chapter" data-level="7.1.3" data-path="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html"><a href="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html#threnetes-ruckeri-2"><i class="fa fa-check"></i><b>7.1.3</b> <em>Threnetes ruckeri</em></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><i class="fa fa-check"></i><b>8</b> How to identify points inside and outside the fundamental niche</a>
+<ul>
+<li class="chapter" data-level="8.0.1" data-path="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html#parameters-4"><i class="fa fa-check"></i><b>8.0.1</b> Parameters</a></li>
+<li class="chapter" data-level="8.0.2" data-path="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html#input-and-output-5"><i class="fa fa-check"></i><b>8.0.2</b> Input and Output</a></li>
+<li class="chapter" data-level="8.0.3" data-path="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html#dependencies-5"><i class="fa fa-check"></i><b>8.0.3</b> Dependencies</a></li>
+<li class="chapter" data-level="8.1" data-path="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html#worked-examples-5"><i class="fa fa-check"></i><b>8.1</b> Worked Examples</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html#read-source-code-and-library-1"><i class="fa fa-check"></i><b>8.1.1</b> Read source code and library</a></li>
+<li class="chapter" data-level="8.1.2" data-path="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html#threnetes-ruckeri-3"><i class="fa fa-check"></i><b>8.1.2</b> <em>Threnetes ruckeri</em></a></li>
+<li class="chapter" data-level="8.1.3" data-path="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html#catasticta-nimbice-4"><i class="fa fa-check"></i><b>8.1.3</b> <em>Catasticta nimbice</em></a></li>
+<li class="chapter" data-level="8.1.4" data-path="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html#theoretical-example"><i class="fa fa-check"></i><b>8.1.4</b> Theoretical Example</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><i class="fa fa-check"></i><b>9</b> Weighted-normal model: accounting for the uneven availability of environmental conditions</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#how-the-functions-work"><i class="fa fa-check"></i><b>9.1</b> How the functions work</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#parameters-5"><i class="fa fa-check"></i><b>9.1.1</b> Parameters</a></li>
+<li class="chapter" data-level="9.1.2" data-path="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#input-and-output-6"><i class="fa fa-check"></i><b>9.1.2</b> Input and Output</a></li>
+<li class="chapter" data-level="9.1.3" data-path="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#dependencies-6"><i class="fa fa-check"></i><b>9.1.3</b> Dependencies</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#worked-examples-6"><i class="fa fa-check"></i><b>9.2</b> Worked examples</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#read-sources-and-libraries"><i class="fa fa-check"></i><b>9.2.1</b> Read sources and libraries</a></li>
+<li class="chapter" data-level="9.2.2" data-path="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#catasticta-nimbice-5"><i class="fa fa-check"></i><b>9.2.2</b> <em>Catasticta nimbice</em></a></li>
+<li class="chapter" data-level="9.2.3" data-path="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#threnetes-ruckeri-4"><i class="fa fa-check"></i><b>9.2.3</b> <em>Threnetes ruckeri</em></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="projecting-an-estimated-niche-into-g-space.html"><a href="projecting-an-estimated-niche-into-g-space.html"><i class="fa fa-check"></i><b>10</b> Projecting an estimated niche into G-space</a>
+<ul>
+<li class="chapter" data-level="10.0.1" data-path="projecting-an-estimated-niche-into-g-space.html"><a href="projecting-an-estimated-niche-into-g-space.html#parameters-6"><i class="fa fa-check"></i><b>10.0.1</b> Parameters</a></li>
+<li class="chapter" data-level="10.0.2" data-path="projecting-an-estimated-niche-into-g-space.html"><a href="projecting-an-estimated-niche-into-g-space.html#input-and-output-7"><i class="fa fa-check"></i><b>10.0.2</b> Input and Output</a></li>
+<li class="chapter" data-level="10.0.3" data-path="projecting-an-estimated-niche-into-g-space.html"><a href="projecting-an-estimated-niche-into-g-space.html#dependencies-7"><i class="fa fa-check"></i><b>10.0.3</b> Dependencies</a></li>
+<li class="chapter" data-level="10.1" data-path="projecting-an-estimated-niche-into-g-space.html"><a href="projecting-an-estimated-niche-into-g-space.html#worked-examples-7"><i class="fa fa-check"></i><b>10.1</b> Worked Examples</a>
+<ul>
+<li class="chapter" data-level="10.1.1" data-path="projecting-an-estimated-niche-into-g-space.html"><a href="projecting-an-estimated-niche-into-g-space.html#read-source-code-and-libraries-4"><i class="fa fa-check"></i><b>10.1.1</b> Read source code and libraries</a></li>
+<li class="chapter" data-level="10.1.2" data-path="projecting-an-estimated-niche-into-g-space.html"><a href="projecting-an-estimated-niche-into-g-space.html#catasticta-nimbice-6"><i class="fa fa-check"></i><b>10.1.2</b> <em>Catasticta nimbice</em></a></li>
+<li class="chapter" data-level="10.1.3" data-path="projecting-an-estimated-niche-into-g-space.html"><a href="projecting-an-estimated-niche-into-g-space.html#threnetes-ruckeri-5"><i class="fa fa-check"></i><b>10.1.3</b> <em>Threnetes ruckeri</em></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html"><i class="fa fa-check"></i><b>11</b> Evaluation method: building accumulation curve of occurrences</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#calculate-the-accumulation-curve"><i class="fa fa-check"></i><b>11.1</b> Calculate the accumulation curve</a>
+<ul>
+<li class="chapter" data-level="11.1.1" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#parameters-7"><i class="fa fa-check"></i><b>11.1.1</b> Parameters</a></li>
+<li class="chapter" data-level="11.1.2" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#input-and-output-8"><i class="fa fa-check"></i><b>11.1.2</b> Input and Output</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#worked-examples-8"><i class="fa fa-check"></i><b>11.2</b> Worked Examples</a>
+<ul>
+<li class="chapter" data-level="11.2.1" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#read-libraries-and-source-codes"><i class="fa fa-check"></i><b>11.2.1</b> Read libraries and source codes</a></li>
+<li class="chapter" data-level="11.2.2" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#catasticta-nimbice-with-three-environmental-layers"><i class="fa fa-check"></i><b>11.2.2</b> <em>Catasticta nimbice</em> with three environmental layers</a></li>
+<li class="chapter" data-level="11.2.3" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#threnetes-ruckeri-with-two-environmental-layers"><i class="fa fa-check"></i><b>11.2.3</b> <em>Threnetes ruckeri</em> with two environmental layers</a></li>
+</ul></li>
+<li class="chapter" data-level="11.3" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#comparing-the-accumulation-curves"><i class="fa fa-check"></i><b>11.3</b> Comparing the accumulation curves</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#parameters-8"><i class="fa fa-check"></i><b>11.3.1</b> Parameters</a></li>
+<li class="chapter" data-level="11.3.2" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#input-and-output-9"><i class="fa fa-check"></i><b>11.3.2</b> Input and Output</a></li>
+<li class="chapter" data-level="11.3.3" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#worked-example-threnetes-ruckeri"><i class="fa fa-check"></i><b>11.3.3</b> Worked example: <em>Threnetes ruckeri</em></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html"><i class="fa fa-check"></i><b>12</b> Bayesian model: adding tolerance limits</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html#how-the-main-functions-work"><i class="fa fa-check"></i><b>12.1</b> How the main functions work</a>
+<ul>
+<li class="chapter" data-level="12.1.1" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html#parameters-9"><i class="fa fa-check"></i><b>12.1.1</b> Parameters</a></li>
+<li class="chapter" data-level="12.1.2" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html#input-and-output-10"><i class="fa fa-check"></i><b>12.1.2</b> Input and Output</a></li>
+<li class="chapter" data-level="12.1.3" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html#dependencies-8"><i class="fa fa-check"></i><b>12.1.3</b> Dependencies</a></li>
+</ul></li>
+<li class="chapter" data-level="12.2" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html#worked-example-threnetes-ruckeri-1"><i class="fa fa-check"></i><b>12.2</b> Worked Example: <em>Threnetes ruckeri</em></a>
+<ul>
+<li class="chapter" data-level="12.2.1" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html#read-source-codes-and-libraries"><i class="fa fa-check"></i><b>12.2.1</b> Read source codes and libraries</a></li>
+<li class="chapter" data-level="12.2.2" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html#main-code"><i class="fa fa-check"></i><b>12.2.2</b> Main code</a></li>
+</ul></li>
+<li class="chapter" data-level="12.3" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html#using-the-bayesian-model-for-the-projection-into-g-space"><i class="fa fa-check"></i><b>12.3</b> Using the Bayesian model for the projection into G-Space</a>
+<ul>
+<li class="chapter" data-level="12.3.1" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html#read-source-and-libraries"><i class="fa fa-check"></i><b>12.3.1</b> Read source and libraries</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Index</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions" class="section level1" number="9">
+<h1><span class="header-section-number">9</span> Weighted-normal model: accounting for the uneven availability of environmental conditions</h1>
+<p>The estimation of the fundamental niche can be approached with the maximum likelihood estimation. It uses a weighted distribution where the weights represent the availability of environmental combinations inside M. To calculate the maximum likelihood estimation, three functions are necessary: <code>rs.inE</code>, <code>negloglike</code>, and <code>fitNiche</code>.</p>
+<div id="how-the-functions-work" class="section level2" number="9.1">
+<h2><span class="header-section-number">9.1</span> How the functions work</h2>
+<p>The main function of this tutorial is <code>fitNiche</code>. It estimates the fundamental niche of a species with a weighted normal distribution.</p>
+<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb115-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fitNiche</span>(E.occ, E.samM)</span></code></pre></div>
+<p>The <code>fitNiche</code> function makes use of another function, called <code>negloglike</code>, that calculates negative log-likelihood values.</p>
+<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb116-1" aria-hidden="true" tabindex="-1"></a><span class="fu">negloglike</span>(guess, sam1, sam2)</span></code></pre></div>
+<div id="parameters-5" class="section level3" number="9.1.1">
+<h3><span class="header-section-number">9.1.1</span> Parameters</h3>
+<p>Only two parameters are needed, as the parameters for <code>negloglike</code> will be derived from those as well.</p>
+<ul>
+<li><p><code>E.occ</code> = a matrix with occurrence and corresponding environmental data of a species</p></li>
+<li><p><code>E.samM</code> = a matrix containing a random sample of environmental combinations which come from the area of study (M)</p></li>
+</ul>
+</div>
+<div id="input-and-output-6" class="section level3" number="9.1.2">
+<h3><span class="header-section-number">9.1.2</span> Input and Output</h3>
+<p>In order to use <code>fitNiche</code>, a matrix of randomly sampled points within the study area (= result from the function <code>rs.inE</code>) and the occurrence data of a species that contains environmental data are needed.</p>
+<p>The output is a list with four different objects: mu and sigma for the weigthed normal distribution, and mu and sigma for the distribution using Mahalanobis distance. These parameter estimates can be used to calculate and plot ellipses in the environmental space. They can also be used for raster calculations (see following tutorials).</p>
+</div>
+<div id="dependencies-6" class="section level3" number="9.1.3">
+<h3><span class="header-section-number">9.1.3</span> Dependencies</h3>
+<p><strong>Functions:</strong> <code>rgeos</code></p>
+<p><strong>Examples:</strong> <code>raster</code>, <code>rgdal</code>, <code>ggplot2</code></p>
+</div>
+</div>
+<div id="worked-examples-6" class="section level2" number="9.2">
+<h2><span class="header-section-number">9.2</span> Worked examples</h2>
+<div id="read-sources-and-libraries" class="section level3" number="9.2.1">
+<h3><span class="header-section-number">9.2.1</span> Read sources and libraries</h3>
+<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb117-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;.</span><span class="sc">\\</span><span class="st">Functions</span><span class="sc">\\</span><span class="st">random_sampling_inE.R&quot;</span>)</span>
+<span id="cb117-2"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb117-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;.</span><span class="sc">\\</span><span class="st">Functions</span><span class="sc">\\</span><span class="st">fit_wn_maha_model.R&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb118-1"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb118-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(raster)</span>
+<span id="cb118-2"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb118-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rgdal)</span>
+<span id="cb118-3"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb118-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rgeos)</span>
+<span id="cb118-4"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb118-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code></pre></div>
+</div>
+<div id="catasticta-nimbice-5" class="section level3" number="9.2.2">
+<h3><span class="header-section-number">9.2.2</span> <em>Catasticta nimbice</em></h3>
+<p><strong>Input Files</strong></p>
+<ul>
+<li><p>Catasticta_nimbice_occ_GE.csv</p></li>
+<li><p>Catasticta_nimbice.shp (and associated files)</p></li>
+<li><p>bio1.asc</p></li>
+<li><p>bio12.asc</p></li>
+</ul>
+<p>Read the files necessary for the parameters of <code>rs.inE</code> and <code>fitNiche</code>.</p>
+<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb119-1"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb119-1" aria-hidden="true" tabindex="-1"></a>cn.shp <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(<span class="st">&quot;./Initial_Data/shapefiles&quot;</span>,<span class="st">&quot;Catasticta_nimbice&quot;</span>)</span>
+<span id="cb119-2"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb119-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb119-3"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb119-3" aria-hidden="true" tabindex="-1"></a>bio1 <span class="ot">&lt;-</span> <span class="fu">raster</span>(<span class="st">&quot;./Initial_Data/bio1.asc&quot;</span>)</span>
+<span id="cb119-4"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb119-4" aria-hidden="true" tabindex="-1"></a>bio12 <span class="ot">&lt;-</span> <span class="fu">raster</span>(<span class="st">&quot;./Initial_Data/bio12.asc&quot;</span>)</span>
+<span id="cb119-5"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb119-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb119-6"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb119-6" aria-hidden="true" tabindex="-1"></a>cn.occ <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;./Generated_Data/Catasticta_nimbice_occ_GE.csv&quot;</span>,<span class="at">header=</span>T)[,<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)]</span></code></pre></div>
+<p>For the parameter <code>E.samM</code> the output of the function <code>rs.inE</code> is necessary.
+Prepare parameters for <code>rs.inE</code>: create rasterstack.</p>
+<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb120-1"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb120-1" aria-hidden="true" tabindex="-1"></a>bios <span class="ot">&lt;-</span> <span class="fu">stack</span>(bio1, bio12)</span></code></pre></div>
+<p>Apply the function <code>rs.inE</code>.</p>
+<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb121-1"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb121-1" aria-hidden="true" tabindex="-1"></a>cn.sample <span class="ot">&lt;-</span> <span class="fu">rs.inE</span>(<span class="at">region =</span> cn.shp,<span class="at">N =</span> <span class="dv">10000</span>,<span class="at">Estck =</span> bios)</span></code></pre></div>
+<p>Apply the function with the parameters <code>E.occ</code> and <code>E.samM</code> (the sample `E.samM`` was calculated above and is named <em>sam.Mpnts</em>).</p>
+<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb122-1"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb122-1" aria-hidden="true" tabindex="-1"></a>ml <span class="ot">&lt;-</span> <span class="fu">fitNiche</span>(<span class="at">E.occ =</span> cn.occ, <span class="at">E.samM =</span> cn.sample)</span></code></pre></div>
+<p>Create a new table with the output data and rename the columns.</p>
+<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb123-1"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb123-1" aria-hidden="true" tabindex="-1"></a>ml.table <span class="ot">&lt;-</span> <span class="fu">cbind</span>(ml<span class="sc">$</span>wn.mu, ml<span class="sc">$</span>wn.sigma, ml<span class="sc">$</span>maha.mu, ml<span class="sc">$</span>maha.sigma)</span>
+<span id="cb123-2"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb123-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(ml.table) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;wn.mu&quot;</span>, <span class="st">&quot;wn.sigma1&quot;</span>, <span class="st">&quot;wn.sigma2&quot;</span>, <span class="st">&quot;maha.mu&quot;</span>, <span class="st">&quot;maha.sigma1&quot;</span>, <span class="st">&quot;maha.sigma2&quot;</span>)</span></code></pre></div>
+<p>Save the table as a csv-file.</p>
+<div class="sourceCode" id="cb124"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb124-1"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb124-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(ml.table,<span class="st">&quot;./Generated_Data/cn_mu_sigma_estimates.csv&quot;</span>,<span class="at">row.names =</span> F)</span></code></pre></div>
+<p>Calculate the ellipses for the weighted distribution normal and the multivariate normal distribution.</p>
+<div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb125-1"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb125-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get the ellipse defined by the ml estimators</span></span>
+<span id="cb125-2"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb125-2" aria-hidden="true" tabindex="-1"></a>el.wn <span class="ot">&lt;-</span> ellipse<span class="sc">::</span><span class="fu">ellipse</span>(<span class="at">x=</span>ml[[<span class="dv">2</span>]], <span class="at">centre=</span>ml[[<span class="dv">1</span>]], <span class="at">level=</span><span class="fl">0.99</span>)</span>
+<span id="cb125-3"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb125-3" aria-hidden="true" tabindex="-1"></a><span class="co"># get the ellipse from a multivarite normal model / mahalanobis distance method</span></span>
+<span id="cb125-4"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb125-4" aria-hidden="true" tabindex="-1"></a>el.maha <span class="ot">&lt;-</span> ellipse<span class="sc">::</span><span class="fu">ellipse</span>(<span class="at">x=</span>ml[[<span class="dv">4</span>]], <span class="at">centre=</span>ml[[<span class="dv">3</span>]], <span class="at">level=</span><span class="fl">0.99</span>)</span></code></pre></div>
+<p>Plot the environmental space with the sampled points, the occurrence points, the ellipse for the weigthed distribution and the ellipse from the Mahalanobis method. The plot will be saved as a png.</p>
+<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb126-1"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb126-1" aria-hidden="true" tabindex="-1"></a><span class="co"># set colorpalette</span></span>
+<span id="cb126-2"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb126-2" aria-hidden="true" tabindex="-1"></a>colpal <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;grey70&quot;</span>, <span class="st">&quot;chartreuse4&quot;</span>, <span class="st">&quot;coral2&quot;</span>, <span class="st">&quot;cadetblue3&quot;</span>)</span>
+<span id="cb126-3"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb126-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb126-4"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb126-4" aria-hidden="true" tabindex="-1"></a><span class="co"># plot will be saved as .png</span></span>
+<span id="cb126-5"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb126-5" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(<span class="fu">paste0</span>(<span class="st">&quot;./Generated_Data/Catasticta_nimbice&quot;</span>,<span class="st">&quot;_mle.png&quot;</span>),<span class="at">width =</span> <span class="dv">2300</span>, <span class="at">height =</span> <span class="dv">2300</span>, </span>
+<span id="cb126-6"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb126-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">res =</span> <span class="dv">600</span>, <span class="at">pointsize =</span> <span class="dv">6</span>)</span>
+<span id="cb126-7"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb126-7" aria-hidden="true" tabindex="-1"></a><span class="co"># x11()</span></span>
+<span id="cb126-8"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb126-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cn.sample,<span class="at">col=</span>colpal[<span class="dv">1</span>],<span class="at">pch=</span><span class="dv">1</span>, <span class="at">xlab=</span><span class="st">&quot;Annual mean temperature (°C*10)&quot;</span>, </span>
+<span id="cb126-9"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb126-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">&quot;Annual precipitation (mm)&quot;</span>)</span>
+<span id="cb126-10"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb126-10" aria-hidden="true" tabindex="-1"></a><span class="co"># add presence points to the plot</span></span>
+<span id="cb126-11"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb126-11" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(cn.occ,<span class="at">col=</span>colpal[<span class="dv">3</span>],<span class="at">pch=</span><span class="dv">20</span>,<span class="at">cex=</span><span class="fl">1.5</span>) <span class="co"># presences used in model</span></span>
+<span id="cb126-12"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb126-12" aria-hidden="true" tabindex="-1"></a><span class="co"># ellipse maha</span></span>
+<span id="cb126-13"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb126-13" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(el.maha,<span class="at">col=</span>colpal[<span class="dv">4</span>],<span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb126-14"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb126-14" aria-hidden="true" tabindex="-1"></a><span class="co"># ellipse wn</span></span>
+<span id="cb126-15"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb126-15" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(el.wn,<span class="at">col=</span>colpal[<span class="dv">2</span>],<span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb126-16"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb126-16" aria-hidden="true" tabindex="-1"></a>sp.leg <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">&quot;Catasticta nimbice&quot;</span>,<span class="st">&quot;(&quot;</span>,<span class="fu">nrow</span>(cn.occ),<span class="st">&quot;)&quot;</span>)</span>
+<span id="cb126-17"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb126-17" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topleft&quot;</span>,<span class="at">legend =</span> <span class="fu">c</span>(sp.leg,<span class="st">&quot;Points inside M&quot;</span>,<span class="st">&quot;Presences&quot;</span>,</span>
+<span id="cb126-18"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb126-18" aria-hidden="true" tabindex="-1"></a>                            <span class="st">&quot;Ellipse from Mahalanobis method&quot;</span>,</span>
+<span id="cb126-19"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb126-19" aria-hidden="true" tabindex="-1"></a>                            <span class="st">&quot;Ellipse from weighted-normal model&quot;</span>),</span>
+<span id="cb126-20"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb126-20" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch=</span><span class="fu">c</span>(<span class="cn">NA</span>,<span class="dv">1</span>,<span class="dv">19</span>,<span class="cn">NA</span>,<span class="cn">NA</span>),<span class="at">col =</span> <span class="fu">c</span>(<span class="st">&quot;white&quot;</span>, colpal[<span class="dv">1</span>], colpal[<span class="dv">3</span>], colpal[<span class="dv">4</span>], colpal[<span class="dv">2</span>]),</span>
+<span id="cb126-21"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb126-21" aria-hidden="true" tabindex="-1"></a>       <span class="at">lwd=</span><span class="fu">c</span>(<span class="cn">NA</span>,<span class="cn">NA</span>,<span class="cn">NA</span>,<span class="dv">2</span>,<span class="dv">2</span>),<span class="at">bty =</span> <span class="st">&quot;n&quot;</span>)</span>
+<span id="cb126-22"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb126-22" aria-hidden="true" tabindex="-1"></a><span class="co"># finish saving png</span></span>
+<span id="cb126-23"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb126-23" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-13"></span>
+<img src="Images/Catasticta_nimbice_mle.png" alt=" Figure of the environmental space of *Catasticta nimbice*. It shows the occurrence points of a species with two possible niches delineated by the Mahalanobis method and the weighted normal method." width="70%" />
+<p class="caption">
+Figure 2.3:  Figure of the environmental space of <em>Catasticta nimbice</em>. It shows the occurrence points of a species with two possible niches delineated by the Mahalanobis method and the weighted normal method.
+</p>
+</div>
+<p><strong>Output Files</strong></p>
+<ul>
+<li><p>cn_mu_sigma_estimates.csv</p></li>
+<li><p>Catasticta_nimbice_mle.png</p></li>
+</ul>
+</div>
+<div id="threnetes-ruckeri-4" class="section level3" number="9.2.3">
+<h3><span class="header-section-number">9.2.3</span> <em>Threnetes ruckeri</em></h3>
+<p><strong>Input Files</strong></p>
+<ul>
+<li><p>Threnetes_ruckeri_occ_GE.csv</p></li>
+<li><p>Threnetes_ruckeri.shp (and associated files)</p></li>
+<li><p>bio1.asc</p></li>
+<li><p>bio12.asc</p></li>
+</ul>
+<p>For this species the same steps are followed as above until the plot. Here, it will be plotted using <code>ggplot2</code>.</p>
+<p>Read the matrix with occurrences combined with environmental data and the shape-file of the study area (the necessary rasterstack was already created in the example above).</p>
+<div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb127-1"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb127-1" aria-hidden="true" tabindex="-1"></a>thr.occ <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;./Generated_Data/Threnetes_ruckeri_occ_GE.csv&quot;</span>,<span class="at">header=</span>T)[,<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)]</span>
+<span id="cb127-2"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb127-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb127-3"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb127-3" aria-hidden="true" tabindex="-1"></a>thr.shp <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(<span class="st">&quot;./Initial_Data/shapefiles&quot;</span>,<span class="st">&quot;Threnetes_ruckeri&quot;</span>)</span></code></pre></div>
+<p>Sample random points from the area of interest using the <code>rs.inE</code> function with the parameters <code>region</code>, <code>N</code>, and <code>Estck</code>.</p>
+<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb128-1"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb128-1" aria-hidden="true" tabindex="-1"></a>thr.sample <span class="ot">&lt;-</span> <span class="fu">rs.inE</span>(<span class="at">region =</span> thr.shp, <span class="at">N =</span> <span class="dv">5000</span>, <span class="at">Estck =</span> bios)</span></code></pre></div>
+<p>Apply function fit.Niche and change table.</p>
+<div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb129-1"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb129-1" aria-hidden="true" tabindex="-1"></a>ml2 <span class="ot">&lt;-</span> <span class="fu">fitNiche</span>(<span class="at">E.occ =</span> thr.occ, <span class="at">E.samM =</span> thr.sample)</span>
+<span id="cb129-2"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb129-2" aria-hidden="true" tabindex="-1"></a><span class="co"># change function into proper table and rename column names</span></span>
+<span id="cb129-3"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb129-3" aria-hidden="true" tabindex="-1"></a>ml.table2 <span class="ot">&lt;-</span> <span class="fu">cbind</span>(ml<span class="sc">$</span>wn.mu, ml<span class="sc">$</span>wn.sigma, ml<span class="sc">$</span>maha.mu, ml<span class="sc">$</span>maha.sigma)</span>
+<span id="cb129-4"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb129-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(ml.table2) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;wn.mu&quot;</span>, <span class="st">&quot;wn.sigma1&quot;</span>, <span class="st">&quot;wn.sigma2&quot;</span>, <span class="st">&quot;maha.mu&quot;</span>, <span class="st">&quot;maha.sigma1&quot;</span>, <span class="st">&quot;maha.sigma2&quot;</span>)</span></code></pre></div>
+<p>Write results as a table.</p>
+<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb130-1"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb130-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(ml.table2,<span class="st">&quot;./Generated_Data/tr_mu_sigma_estimates.csv&quot;</span>,<span class="at">row.names =</span> F)</span></code></pre></div>
+<p>Calculate ellipses and change them into a dataframe.</p>
+<div class="sourceCode" id="cb131"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb131-1"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb131-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get the ellipse defined by the ml estimators</span></span>
+<span id="cb131-2"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb131-2" aria-hidden="true" tabindex="-1"></a>el.wn2 <span class="ot">&lt;-</span> ellipse<span class="sc">::</span><span class="fu">ellipse</span>(<span class="at">x=</span>ml2[[<span class="dv">2</span>]], <span class="at">centre=</span>ml2[[<span class="dv">1</span>]], <span class="at">level=</span><span class="fl">0.99</span>, <span class="at">npoints =</span> <span class="dv">500</span>)</span>
+<span id="cb131-3"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb131-3" aria-hidden="true" tabindex="-1"></a>df.el2 <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(el.wn2)</span>
+<span id="cb131-4"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb131-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(df.el2) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Temperature&quot;</span>, <span class="st">&quot;Precipitation&quot;</span>)</span>
+<span id="cb131-5"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb131-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb131-6"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb131-6" aria-hidden="true" tabindex="-1"></a><span class="co"># get the ellipse from a multivarite normal model / mahalanobis distance method</span></span>
+<span id="cb131-7"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb131-7" aria-hidden="true" tabindex="-1"></a>el.maha2 <span class="ot">&lt;-</span> ellipse<span class="sc">::</span><span class="fu">ellipse</span>(<span class="at">x=</span>ml2[[<span class="dv">4</span>]], <span class="at">centre=</span>ml2[[<span class="dv">3</span>]], <span class="at">level=</span><span class="fl">0.99</span>)</span>
+<span id="cb131-8"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb131-8" aria-hidden="true" tabindex="-1"></a>df.elmh2 <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(el.maha2)</span>
+<span id="cb131-9"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb131-9" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(df.elmh2) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Temperature&quot;</span>, <span class="st">&quot;Precipitation&quot;</span>)</span></code></pre></div>
+<p>Plot in ggplot.</p>
+<div class="sourceCode" id="cb132"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb132-1"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb132-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prepare data as a dataframe for ggplot</span></span>
+<span id="cb132-2"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb132-2" aria-hidden="true" tabindex="-1"></a>bckgrnd <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Temperature =</span> thr.sample[,<span class="dv">1</span>], <span class="at">Precipitation =</span> thr.sample[,<span class="dv">2</span>])</span>
+<span id="cb132-3"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb132-3" aria-hidden="true" tabindex="-1"></a>species <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Temperature =</span> thr.occ[,<span class="dv">1</span>], <span class="at">Precipitation =</span> thr.occ[,<span class="dv">2</span>])</span>
+<span id="cb132-4"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb132-4" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">rbind</span>(bckgrnd[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], species[,<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]), <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">1</span>,<span class="fu">nrow</span>(bckgrnd)),<span class="fu">rep</span>(<span class="dv">2</span>,<span class="fu">nrow</span>(species))))</span>
+<span id="cb132-5"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb132-5" aria-hidden="true" tabindex="-1"></a>data2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Temperature =</span> data[, <span class="dv">1</span>], <span class="at">Precipitation =</span> data[, <span class="dv">2</span>], </span>
+<span id="cb132-6"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb132-6" aria-hidden="true" tabindex="-1"></a>                    <span class="at">Type =</span> data[,<span class="dv">3</span>]) </span>
+<span id="cb132-7"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb132-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb132-8"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb132-8" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the ellipses in E-Space</span></span>
+<span id="cb132-9"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb132-9" aria-hidden="true" tabindex="-1"></a><span class="co"># x11()</span></span>
+<span id="cb132-10"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb132-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data2, <span class="fu">aes</span>(<span class="at">x =</span> Temperature, <span class="at">y =</span> Precipitation)) <span class="sc">+</span></span>
+<span id="cb132-11"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb132-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> <span class="fu">factor</span>(Type), <span class="at">shape =</span> <span class="fu">factor</span>(Type))) <span class="sc">+</span></span>
+<span id="cb132-12"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb132-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_shape_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">19</span>), <span class="at">guide =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb132-13"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb132-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">name=</span> <span class="st">&quot;Data&quot;</span>,</span>
+<span id="cb132-14"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb132-14" aria-hidden="true" tabindex="-1"></a>                     <span class="at">labels=</span> <span class="fu">c</span>(<span class="st">&quot;Background&quot;</span>, <span class="st">&quot;Presence&quot;</span>),</span>
+<span id="cb132-15"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb132-15" aria-hidden="true" tabindex="-1"></a>                     <span class="at">values=</span> <span class="fu">c</span>(<span class="st">&quot;1&quot;</span><span class="ot">=</span>colpal[<span class="dv">1</span>], <span class="st">&quot;2&quot;</span><span class="ot">=</span> colpal[<span class="dv">3</span>])) <span class="sc">+</span></span>
+<span id="cb132-16"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb132-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(.<span class="dv">05</span>, .<span class="dv">95</span>), <span class="co"># for x, value of 0 puts it  to the </span></span>
+<span id="cb132-17"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb132-17" aria-hidden="true" tabindex="-1"></a>        <span class="co"># left side, value of 1 to the right, for y, value of 0 puts it to </span></span>
+<span id="cb132-18"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb132-18" aria-hidden="true" tabindex="-1"></a>        <span class="co"># the bottom, # value of 1 puts it to the top</span></span>
+<span id="cb132-19"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb132-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.justification =</span> <span class="fu">c</span>(<span class="st">&quot;left&quot;</span>, <span class="st">&quot;top&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb132-20"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb132-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="st">&quot;Annual mean temperature (°C*10)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb132-21"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb132-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="st">&quot;Annual precipitation (mm)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb132-22"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb132-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path</span>(<span class="at">data =</span> df.el2, <span class="at">color =</span> colpal[<span class="dv">2</span>], <span class="at">size =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb132-23"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb132-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_path</span>(<span class="at">data =</span> df.elmh2, <span class="at">color =</span> colpal[<span class="dv">4</span>], <span class="at">size =</span> <span class="fl">1.2</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-20"></span>
+<img src="Images/ThR_mle.png" alt=" Figure of the environmental space of *Threnetes ruckeri*. It shows the occurrence points of a species with two possible niches delineated by the Mahalanobis method (blue) and the weighted normal method (green)." width="70%" />
+<p class="caption">
+Figure 9.1:  Figure of the environmental space of <em>Threnetes ruckeri</em>. It shows the occurrence points of a species with two possible niches delineated by the Mahalanobis method (blue) and the weighted normal method (green).
+</p>
+</div>
+<p>Save the plot if needed.</p>
+<div class="sourceCode" id="cb133"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb133-1"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb133-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;./Generated_Data/Threnetes_ruckeri_mle.png&quot;</span>, <span class="at">width =</span> <span class="dv">12</span>, <span class="at">height =</span> <span class="dv">12</span>, <span class="at">units =</span> <span class="st">&quot;cm&quot;</span>,</span>
+<span id="cb133-2"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#cb133-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">dpi =</span> <span class="dv">600</span>, <span class="at">pointsize =</span> <span class="dv">6</span>)</span></code></pre></div>
+<p><strong>Output Files</strong></p>
+<ul>
+<li><p>tr_mu_sigma_estimates.csv</p></li>
+<li><p>Threnetes_ruckeri_mle.png</p></li>
+</ul>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="projecting-an-estimated-niche-into-g-space.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "lunr",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,55 @@
+---
+title: "Index"
+author: "Laura Jiménez and Carola Franzen"
+date: "August 2021"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+bibliography: ENM-references.bib
+csl: ecology-letters.csl
+---
+
+
+
+# Introduction
+
+Our package contains all the functions needed to estimate the climatic fundamental niche of a species in a multivariate space defined by two or three environmental variables. We included three different statistical models to estimate the fundamental niche:
+
+1) Mahalanobis model, which assumes that occurrences are observed according to a normal distribution and that ellipses are biologically realistic model to represent the border of the fundamental niche. Under this approach, it is implicitly assumed that every environmental combination in niche space is equally likely to be observed in a sample of occurrences.
+
+2) Weigthed-normal model *sensu* @Jimenez2021, this model has the same assumptions as the Mahalanobis model regarding the shape of the fundamental niche, however, it takes into account that not all the environmental combinations in niche space have the same probability of being observed in a sample of occurrences. 
+
+3) Bayesian normal model *sensu* @Jimenez2019, which takes the Mahalanobis as the underlying models for the fundamental niche of a species and assumes that there is relevant *a priori* information that can be incorporated into de model, usually from physiological experiments.
+
+Additionally, we included the functions used to apply the evaluation method based on a hypergeometric test presented by @Jimenez2020.
+
+The main goal of this tutorial is to provide worked examples that teach you how to use all the functions included in the package. Although we chose two arbitrary species as our focus species (a hummingbird, *Threnetes ruckeri*, and a butterfly, *Catasticta nimbice*), you should be able to apply all the functions to any species and any geographic region. In the following section, we provide a detailed description of the datasets that are included in the package and that can be used to reproduce all the examples, as well as to prepare other datasets for future analysis with other species and study regions.
+
+### Organization within the tutorial
+
+In each section of the tutorial, you will find a section called **Input data** which will indicate which are the files that you need beforehand to be able to reproduce the examples, and, a section called **Output data** which indicates what are the files that you would generate after reproducing the examples. In some cases, we only show how to make the analysis for one of the species and ask you to repeat the analysis for the second species as an exercise. It is important that you generate all the files listed in the **Output data** section since they will be used in subsequent sections of the tutorial.
+
+Here is a list of the different sections within the tutorial and the corresponding functions of the package that are used in that specific section; the input and output files are also listed.
+
+
+|Topic                                                                                     |Functions                                                                         |Input.files                                                                                                                                                                                    |Output.files                                                                                                                                                                                            |
+|:-----------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|Description of initial datasets                                                           |                                                                                  |Catasticta_nimbice_occ_G.csv; Catasticta_nimbice_M_GE.csv; Catasticta_nimbice.shp;  Threnetes_ruckeri_occ_G.csv; Threnetes_ruckeri_M.csv; Threnetes_ruckeri.shp; bio1.asc; bio6.tif; bio12.asc |cn_bio1_cropped.tif; cn_bio6_cropped.tif; cn_bio12_cropped.tif; tr_bio1_cropped.tif; tr_bio6_cropped.tif; tr_bio12_cropped.tif                                                                          |
+|Getting environmental values for the study sites                                          |get.Ecoord                                                                        |bio1.asc; bio12.asc; Catasticta_nimbice_occ_G.csv; Threnetes_ruckeri_M_G.csv                                                                                                                   |Catasticta_nimbice_occ_GE.csv; Threnetes_ruckeri_occ_GE.csv; Threnetes_ruckeri_M_GE.csv; Catasticta_nimbice_M_GE.csv                                                                                    |
+|Plotting our datasets in G-space and E-space                                              |GEspace                                                                           |Catasticta_nimbice_occ_GE.csv; Catasticta_nimbice_M_GE.csv; Catasticta_nimbice.shp; Threnetes_ruckeri_M_GE.csv; Threnetes_ruckeri_occ_GE.csv; Threnetes_ruckeri.shp                            |Catasticta_nimbice_bckgrndmap.png; Catasticta_nimbice_polymap.png; Threnetes_bckgrndmap.png; Threnetes_polymap.png                                                                                      |
+|Mahalanobis model: raw occurrence data only                                               |get.Ecoord; nicheG                                                                |Threnetes_ruckeri_occ_GE.csv; Catasticta_nimbice_occ_G.csv; cn_bio1_cropped.tif; cn_bio6_cropped.tif; cn_bio12_cropped.tif                                                                     |Catasticta_nimbice_occ_GE3.csv; Catasticta_nimbice_maha3_cropped.tif                                                                                                                                    |
+|Plotting an ellipsoid in E-space                                                          |E.ellipse2d; E.ellipse3d                                                          |Threnetes_ruckeri_occ_GE.csv; Catasticta_nimbice_occ_GE.csv; Catasticta_nimbice_occ_GE3.csv                                                                                                    |                                                                                                                                                                                                        |
+|How to simulate a random sample of environmental conditions inside an region              |rs.inE                                                                            |bio1.asc; bio12.asc; Catasticta_nimbice.shp; Catasticta_nimbice_occ_GE.csv; Threnetes_ruckeri.shp;                                                                                             |Catasticta_nimbice_M_E.csv                                                                                                                                                                              |
+|How to identify points inside and outside the fundamental niche                           |el.in                                                                             |Threnetes_ruckeri_M_GE.csv; Threnetes_ruckeri_occ_GE.csv; Catasticta_nimbice_occ_GE.csv; Catasticta_nimbice_M_GE.csv                                                                           |                                                                                                                                                                                                        |
+|Weighted-normal model: accounting for the uneven availability of environmental conditions |fitNiche; negloglike; rs.inE                                                      |bio1.asc; bio12.asc; Catasticta_nimbice.shp; Catasticta_nimbice_occ_GE.csv; Threnetes_ruckeri.shp; Threnetes_ruckeri_occ_GE.csv                                                                |cn_mu_sigma_estimates.csv; tr_mu_sigma_estimates.csv                                                                                                                                                    |
+|Projecting an estimated niche into G-space                                                |nicheG                                                                            |bio1.asc; bio12.asc; Catasticta_nimbice_occ_GE.csv; tr_mu_sigma_estimates.csv; Threnetes_ruckeri_occ_GE.csv                                                                                    |Catasticta_nimbice_maha_map.tif; Catasticta_nimbice_wn_map.tif; Catasticta_nimbice_wn_map_ggplot.png; Threnetes_ruckeri_wn_map.tif; Threnetes_ruckeri_maha_map.tif; Threnetes_ruckeri_nicheG_ggplot.png |
+|Evaluation method: building accumulation curve of occurrences                             |get.table; get.curve; plot.aco; accum.occ;                                        |                                                                                                                                                                                               |                                                                                                                                                                                                        |
+|Bayesian model: adding tolerance limits                                                   |DefineSp; priorpar; Supp; Energy; Initth; PlotXYEnvVars; PlotIterations; save.all |Threnetes_ruckeri_occ_GE.csv; Threnetes_ruckeri_M_GE.csv; T_ruckeri_tolerances.csv                                                                                                             |Threnetes_ruckeri_10000_output.csv; tr_bay_mu_sigma_estimates.csv; tr_bay_cropped.tif                                                                                                                   |
+
+### References
+<!-- reference code does not work, I just copied the references there -->
+
+Jimenez, L. & Soberón, J. (2021). Estimating the fundamental niche: accounting for the uneven availability of existing climates. bioRxiv.
+
+Jiménez, L. & Soberón, J. (2020). Leaving the area under the receiving operating characteristic curve behind: An evaluation method for species distribution modelling applications based on presence-only data. Methods in Ecology and Evolution, 11, 1571–1586.
+
+Jiménez, L., Soberón, J., Christen, J.A. & Soto, D. (2019). On the problem of modeling a fundamental niche from occurrence data. Ecological Modelling, 397, 74–83.

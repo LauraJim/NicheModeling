@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>4 Creating plots with the geographical and environmental space of a species in ggplot2 | Index</title>
+  <meta name="description" content="4 Creating plots with the geographical and environmental space of a species in ggplot2 | Index" />
+  <meta name="generator" content="bookdown 0.23 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="4 Creating plots with the geographical and environmental space of a species in ggplot2 | Index" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="4 Creating plots with the geographical and environmental space of a species in ggplot2 | Index" />
+  
+  
+  
+
+<meta name="author" content="Laura Jiménez and Carola Franzen" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"/>
+<link rel="next" href="mahalanobis-model-raw-occurrence-data-only.html"/>
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.0.1" data-path="index.html"><a href="index.html#organization-within-the-tutorial"><i class="fa fa-check"></i><b>1.0.1</b> Organization within the tutorial</a></li>
+<li class="chapter" data-level="1.0.2" data-path="index.html"><a href="index.html#references"><i class="fa fa-check"></i><b>1.0.2</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="description-of-initial-datasets.html"><a href="description-of-initial-datasets.html"><i class="fa fa-check"></i><b>2</b> Description of initial datasets</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="description-of-initial-datasets.html"><a href="description-of-initial-datasets.html#species-under-study-and-necessary-files-to-start-an-analysis"><i class="fa fa-check"></i><b>2.1</b> Species under study and necessary files to start an analysis</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="description-of-initial-datasets.html"><a href="description-of-initial-datasets.html#occurrence-data"><i class="fa fa-check"></i><b>2.1.1</b> Occurrence data</a></li>
+<li class="chapter" data-level="2.1.2" data-path="description-of-initial-datasets.html"><a href="description-of-initial-datasets.html#points-inside-the-study-area-to-plot-hutchinsons-duality"><i class="fa fa-check"></i><b>2.1.2</b> Points inside the study area to plot Hutchinson’s duality</a></li>
+<li class="chapter" data-level="2.1.3" data-path="description-of-initial-datasets.html"><a href="description-of-initial-datasets.html#table-with-species-tolerance-limit"><i class="fa fa-check"></i><b>2.1.3</b> Table with species’ tolerance limit</a></li>
+<li class="chapter" data-level="2.1.4" data-path="description-of-initial-datasets.html"><a href="description-of-initial-datasets.html#polygons-of-the-study-area"><i class="fa fa-check"></i><b>2.1.4</b> Polygons of the study area</a></li>
+<li class="chapter" data-level="2.1.5" data-path="description-of-initial-datasets.html"><a href="description-of-initial-datasets.html#rasters-with-environmental-information"><i class="fa fa-check"></i><b>2.1.5</b> Rasters with environmental information</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"><a href="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"><i class="fa fa-check"></i><b>3</b> Extracting environmental data from raster files from a set of geographic coordinates</a>
+<ul>
+<li class="chapter" data-level="3.0.1" data-path="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"><a href="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html#parameters"><i class="fa fa-check"></i><b>3.0.1</b> Parameters</a></li>
+<li class="chapter" data-level="3.0.2" data-path="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"><a href="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html#input-and-output"><i class="fa fa-check"></i><b>3.0.2</b> Input and Output</a></li>
+<li class="chapter" data-level="3.0.3" data-path="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"><a href="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html#dependencies"><i class="fa fa-check"></i><b>3.0.3</b> Dependencies</a></li>
+<li class="chapter" data-level="3.1" data-path="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"><a href="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html#worked-examples"><i class="fa fa-check"></i><b>3.1</b> Worked Examples</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"><a href="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html#read-source-code-and-libraries"><i class="fa fa-check"></i><b>3.1.1</b> Read source code and libraries</a></li>
+<li class="chapter" data-level="3.1.2" data-path="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"><a href="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html#catasticta-nimbice"><i class="fa fa-check"></i><b>3.1.2</b> <em>Catasticta nimbice</em></a></li>
+<li class="chapter" data-level="3.1.3" data-path="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"><a href="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html#threnetes-ruckeri"><i class="fa fa-check"></i><b>3.1.3</b> <em>Threnetes ruckeri</em></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html"><i class="fa fa-check"></i><b>4</b> Creating plots with the geographical and environmental space of a species in ggplot2</a>
+<ul>
+<li class="chapter" data-level="4.0.1" data-path="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#parameters-1"><i class="fa fa-check"></i><b>4.0.1</b> Parameters</a></li>
+<li class="chapter" data-level="4.0.2" data-path="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#input-and-output-1"><i class="fa fa-check"></i><b>4.0.2</b> Input and Output</a></li>
+<li class="chapter" data-level="4.0.3" data-path="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#dependencies-1"><i class="fa fa-check"></i><b>4.0.3</b> Dependencies</a></li>
+<li class="chapter" data-level="4.1" data-path="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#worked-examples-1"><i class="fa fa-check"></i><b>4.1</b> Worked Examples</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#read-source-code-and-libraries-1"><i class="fa fa-check"></i><b>4.1.1</b> Read source code and libraries</a></li>
+<li class="chapter" data-level="4.1.2" data-path="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#catasticta-nimbice-1"><i class="fa fa-check"></i><b>4.1.2</b> <em>Catasticta nimbice</em></a></li>
+<li class="chapter" data-level="4.1.3" data-path="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#threnetes-ruckeri-1"><i class="fa fa-check"></i><b>4.1.3</b> <em>Threnetes ruckeri</em></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html"><i class="fa fa-check"></i><b>5</b> Mahalanobis model: raw occurrence data only</a>
+<ul>
+<li class="chapter" data-level="5.0.1" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#input-and-output-2"><i class="fa fa-check"></i><b>5.0.1</b> Input and Output</a></li>
+<li class="chapter" data-level="5.0.2" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#dependencies-2"><i class="fa fa-check"></i><b>5.0.2</b> Dependencies</a></li>
+<li class="chapter" data-level="5.1" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#worked-examples-2"><i class="fa fa-check"></i><b>5.1</b> Worked Examples</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#read-source-code-and-libraries-2"><i class="fa fa-check"></i><b>5.1.1</b> Read Source Code and Libraries</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#threnetes-ruckeri---example-with-two-environmental-layers"><i class="fa fa-check"></i><b>5.2</b> <em>Threnetes ruckeri</em> - example with two environmental layers</a></li>
+<li class="chapter" data-level="5.3" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#catasticta-nimbice-2"><i class="fa fa-check"></i><b>5.3</b> <em>Catasticta nimbice</em></a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#get-environmental-information-from-three-raster-layers"><i class="fa fa-check"></i><b>5.3.1</b> 1) Get environmental information from three raster layers</a></li>
+<li class="chapter" data-level="5.3.2" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#estimate-mahalanobis-model-parameters"><i class="fa fa-check"></i><b>5.3.2</b> 2) Estimate Mahalanobis Model Parameters</a></li>
+<li class="chapter" data-level="5.3.3" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#calculate-suitability-index"><i class="fa fa-check"></i><b>5.3.3</b> 3) Calculate Suitability Index</a></li>
+<li class="chapter" data-level="5.3.4" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#comparing-suitability-index-against-mahalanobis-distance"><i class="fa fa-check"></i><b>5.3.4</b> 3) Comparing suitability index against Mahalanobis distance</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="plotting-an-ellipsoid-in-e-space.html"><a href="plotting-an-ellipsoid-in-e-space.html"><i class="fa fa-check"></i><b>6</b> Plotting an ellipsoid in E-space</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="plotting-an-ellipsoid-in-e-space.html"><a href="plotting-an-ellipsoid-in-e-space.html#parameters-2"><i class="fa fa-check"></i><b>6.1</b> Parameters</a></li>
+<li class="chapter" data-level="6.2" data-path="plotting-an-ellipsoid-in-e-space.html"><a href="plotting-an-ellipsoid-in-e-space.html#input-and-output-3"><i class="fa fa-check"></i><b>6.2</b> Input and Output</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="plotting-an-ellipsoid-in-e-space.html"><a href="plotting-an-ellipsoid-in-e-space.html#dependencies-3"><i class="fa fa-check"></i><b>6.2.1</b> Dependencies</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="plotting-an-ellipsoid-in-e-space.html"><a href="plotting-an-ellipsoid-in-e-space.html#worked-examples-3"><i class="fa fa-check"></i><b>6.3</b> Worked Examples</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="plotting-an-ellipsoid-in-e-space.html"><a href="plotting-an-ellipsoid-in-e-space.html#read-source-code-and-library"><i class="fa fa-check"></i><b>6.3.1</b> Read source code and library</a></li>
+<li class="chapter" data-level="6.3.2" data-path="plotting-an-ellipsoid-in-e-space.html"><a href="plotting-an-ellipsoid-in-e-space.html#example-with-three-ellipses-threnetes-ruckeri"><i class="fa fa-check"></i><b>6.3.2</b> Example with three ellipses (<em>Threnetes ruckeri</em>)</a></li>
+<li class="chapter" data-level="6.3.3" data-path="plotting-an-ellipsoid-in-e-space.html"><a href="plotting-an-ellipsoid-in-e-space.html#example-with-several-ellipses-catasticta-nimbice"><i class="fa fa-check"></i><b>6.3.3</b> Example with several ellipses (<em>Catasticta nimbice</em>)</a></li>
+<li class="chapter" data-level="6.3.4" data-path="plotting-an-ellipsoid-in-e-space.html"><a href="plotting-an-ellipsoid-in-e-space.html#example-with-three-environmental-variables-catasticta-nimbice"><i class="fa fa-check"></i><b>6.3.4</b> Example with three environmental variables (<em>Catasticta nimbice</em>)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html"><a href="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html"><i class="fa fa-check"></i><b>7</b> How to simulate a random sample of environmental conditions inside an region</a>
+<ul>
+<li class="chapter" data-level="7.0.1" data-path="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html"><a href="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html#parameters-3"><i class="fa fa-check"></i><b>7.0.1</b> Parameters</a></li>
+<li class="chapter" data-level="7.0.2" data-path="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html"><a href="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html#input-and-output-4"><i class="fa fa-check"></i><b>7.0.2</b> Input and Output</a></li>
+<li class="chapter" data-level="7.0.3" data-path="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html"><a href="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html#dependencies-4"><i class="fa fa-check"></i><b>7.0.3</b> Dependencies</a></li>
+<li class="chapter" data-level="7.1" data-path="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html"><a href="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html#worked-examples-4"><i class="fa fa-check"></i><b>7.1</b> Worked Examples</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html"><a href="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html#read-source-code-and-libraries-3"><i class="fa fa-check"></i><b>7.1.1</b> Read source code and libraries</a></li>
+<li class="chapter" data-level="7.1.2" data-path="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html"><a href="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html#catasticta-nimbice-3"><i class="fa fa-check"></i><b>7.1.2</b> <em>Catasticta nimbice</em></a></li>
+<li class="chapter" data-level="7.1.3" data-path="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html"><a href="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html#threnetes-ruckeri-2"><i class="fa fa-check"></i><b>7.1.3</b> <em>Threnetes ruckeri</em></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><i class="fa fa-check"></i><b>8</b> How to identify points inside and outside the fundamental niche</a>
+<ul>
+<li class="chapter" data-level="8.0.1" data-path="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html#parameters-4"><i class="fa fa-check"></i><b>8.0.1</b> Parameters</a></li>
+<li class="chapter" data-level="8.0.2" data-path="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html#input-and-output-5"><i class="fa fa-check"></i><b>8.0.2</b> Input and Output</a></li>
+<li class="chapter" data-level="8.0.3" data-path="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html#dependencies-5"><i class="fa fa-check"></i><b>8.0.3</b> Dependencies</a></li>
+<li class="chapter" data-level="8.1" data-path="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html#worked-examples-5"><i class="fa fa-check"></i><b>8.1</b> Worked Examples</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html#read-source-code-and-library-1"><i class="fa fa-check"></i><b>8.1.1</b> Read source code and library</a></li>
+<li class="chapter" data-level="8.1.2" data-path="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html#threnetes-ruckeri-3"><i class="fa fa-check"></i><b>8.1.2</b> <em>Threnetes ruckeri</em></a></li>
+<li class="chapter" data-level="8.1.3" data-path="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html#catasticta-nimbice-4"><i class="fa fa-check"></i><b>8.1.3</b> <em>Catasticta nimbice</em></a></li>
+<li class="chapter" data-level="8.1.4" data-path="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html#theoretical-example"><i class="fa fa-check"></i><b>8.1.4</b> Theoretical Example</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><i class="fa fa-check"></i><b>9</b> Weighted-normal model: accounting for the uneven availability of environmental conditions</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#how-the-functions-work"><i class="fa fa-check"></i><b>9.1</b> How the functions work</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#parameters-5"><i class="fa fa-check"></i><b>9.1.1</b> Parameters</a></li>
+<li class="chapter" data-level="9.1.2" data-path="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#input-and-output-6"><i class="fa fa-check"></i><b>9.1.2</b> Input and Output</a></li>
+<li class="chapter" data-level="9.1.3" data-path="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#dependencies-6"><i class="fa fa-check"></i><b>9.1.3</b> Dependencies</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#worked-examples-6"><i class="fa fa-check"></i><b>9.2</b> Worked examples</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#read-sources-and-libraries"><i class="fa fa-check"></i><b>9.2.1</b> Read sources and libraries</a></li>
+<li class="chapter" data-level="9.2.2" data-path="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#catasticta-nimbice-5"><i class="fa fa-check"></i><b>9.2.2</b> <em>Catasticta nimbice</em></a></li>
+<li class="chapter" data-level="9.2.3" data-path="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#threnetes-ruckeri-4"><i class="fa fa-check"></i><b>9.2.3</b> <em>Threnetes ruckeri</em></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="projecting-an-estimated-niche-into-g-space.html"><a href="projecting-an-estimated-niche-into-g-space.html"><i class="fa fa-check"></i><b>10</b> Projecting an estimated niche into G-space</a>
+<ul>
+<li class="chapter" data-level="10.0.1" data-path="projecting-an-estimated-niche-into-g-space.html"><a href="projecting-an-estimated-niche-into-g-space.html#parameters-6"><i class="fa fa-check"></i><b>10.0.1</b> Parameters</a></li>
+<li class="chapter" data-level="10.0.2" data-path="projecting-an-estimated-niche-into-g-space.html"><a href="projecting-an-estimated-niche-into-g-space.html#input-and-output-7"><i class="fa fa-check"></i><b>10.0.2</b> Input and Output</a></li>
+<li class="chapter" data-level="10.0.3" data-path="projecting-an-estimated-niche-into-g-space.html"><a href="projecting-an-estimated-niche-into-g-space.html#dependencies-7"><i class="fa fa-check"></i><b>10.0.3</b> Dependencies</a></li>
+<li class="chapter" data-level="10.1" data-path="projecting-an-estimated-niche-into-g-space.html"><a href="projecting-an-estimated-niche-into-g-space.html#worked-examples-7"><i class="fa fa-check"></i><b>10.1</b> Worked Examples</a>
+<ul>
+<li class="chapter" data-level="10.1.1" data-path="projecting-an-estimated-niche-into-g-space.html"><a href="projecting-an-estimated-niche-into-g-space.html#read-source-code-and-libraries-4"><i class="fa fa-check"></i><b>10.1.1</b> Read source code and libraries</a></li>
+<li class="chapter" data-level="10.1.2" data-path="projecting-an-estimated-niche-into-g-space.html"><a href="projecting-an-estimated-niche-into-g-space.html#catasticta-nimbice-6"><i class="fa fa-check"></i><b>10.1.2</b> <em>Catasticta nimbice</em></a></li>
+<li class="chapter" data-level="10.1.3" data-path="projecting-an-estimated-niche-into-g-space.html"><a href="projecting-an-estimated-niche-into-g-space.html#threnetes-ruckeri-5"><i class="fa fa-check"></i><b>10.1.3</b> <em>Threnetes ruckeri</em></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html"><i class="fa fa-check"></i><b>11</b> Evaluation method: building accumulation curve of occurrences</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#calculate-the-accumulation-curve"><i class="fa fa-check"></i><b>11.1</b> Calculate the accumulation curve</a>
+<ul>
+<li class="chapter" data-level="11.1.1" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#parameters-7"><i class="fa fa-check"></i><b>11.1.1</b> Parameters</a></li>
+<li class="chapter" data-level="11.1.2" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#input-and-output-8"><i class="fa fa-check"></i><b>11.1.2</b> Input and Output</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#worked-examples-8"><i class="fa fa-check"></i><b>11.2</b> Worked Examples</a>
+<ul>
+<li class="chapter" data-level="11.2.1" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#read-libraries-and-source-codes"><i class="fa fa-check"></i><b>11.2.1</b> Read libraries and source codes</a></li>
+<li class="chapter" data-level="11.2.2" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#catasticta-nimbice-with-three-environmental-layers"><i class="fa fa-check"></i><b>11.2.2</b> <em>Catasticta nimbice</em> with three environmental layers</a></li>
+<li class="chapter" data-level="11.2.3" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#threnetes-ruckeri-with-two-environmental-layers"><i class="fa fa-check"></i><b>11.2.3</b> <em>Threnetes ruckeri</em> with two environmental layers</a></li>
+</ul></li>
+<li class="chapter" data-level="11.3" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#comparing-the-accumulation-curves"><i class="fa fa-check"></i><b>11.3</b> Comparing the accumulation curves</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#parameters-8"><i class="fa fa-check"></i><b>11.3.1</b> Parameters</a></li>
+<li class="chapter" data-level="11.3.2" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#input-and-output-9"><i class="fa fa-check"></i><b>11.3.2</b> Input and Output</a></li>
+<li class="chapter" data-level="11.3.3" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#worked-example-threnetes-ruckeri"><i class="fa fa-check"></i><b>11.3.3</b> Worked example: <em>Threnetes ruckeri</em></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html"><i class="fa fa-check"></i><b>12</b> Bayesian model: adding tolerance limits</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html#how-the-main-functions-work"><i class="fa fa-check"></i><b>12.1</b> How the main functions work</a>
+<ul>
+<li class="chapter" data-level="12.1.1" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html#parameters-9"><i class="fa fa-check"></i><b>12.1.1</b> Parameters</a></li>
+<li class="chapter" data-level="12.1.2" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html#input-and-output-10"><i class="fa fa-check"></i><b>12.1.2</b> Input and Output</a></li>
+<li class="chapter" data-level="12.1.3" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html#dependencies-8"><i class="fa fa-check"></i><b>12.1.3</b> Dependencies</a></li>
+</ul></li>
+<li class="chapter" data-level="12.2" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html#worked-example-threnetes-ruckeri-1"><i class="fa fa-check"></i><b>12.2</b> Worked Example: <em>Threnetes ruckeri</em></a>
+<ul>
+<li class="chapter" data-level="12.2.1" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html#read-source-codes-and-libraries"><i class="fa fa-check"></i><b>12.2.1</b> Read source codes and libraries</a></li>
+<li class="chapter" data-level="12.2.2" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html#main-code"><i class="fa fa-check"></i><b>12.2.2</b> Main code</a></li>
+</ul></li>
+<li class="chapter" data-level="12.3" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html#using-the-bayesian-model-for-the-projection-into-g-space"><i class="fa fa-check"></i><b>12.3</b> Using the Bayesian model for the projection into G-Space</a>
+<ul>
+<li class="chapter" data-level="12.3.1" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html#read-source-and-libraries"><i class="fa fa-check"></i><b>12.3.1</b> Read source and libraries</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Index</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2" class="section level1" number="4">
+<h1><span class="header-section-number">4</span> Creating plots with the geographical and environmental space of a species in ggplot2</h1>
+<p>The function <code>GEspace</code> is a tool that can plot the geographical and environmental space of a species’ presence in <code>ggplot2</code>. The output is a plot with a geographical map with occurrence points and a graph of the occurrence in relation to the environmental data, such as annual mean temperature or total annual precipitation, next to it. Depending on the data input, the function <code>GEspace</code> will create a plot with a polygon or random background points as a geographical space.</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">GEspace</span>(bckgrnd, E.occ, <span class="at">add.poly =</span> <span class="cn">NULL</span>, <span class="at">save.p =</span> <span class="cn">NULL</span>)</span></code></pre></div>
+<p>The default option (no polygon added, no graph saved) will create a map of the study area based on the coordinates of random background points and the occurrence points of a species. If the user adds a polygon with <code>add.poly</code>, it will be used alongside a worldmap from the <code>rnaturalearth</code> packages for the mapping of the geographical space. The coordinate system used is WGS 84. If <code>save.p</code> is added to the function, then the graph will be saved, if not, a window with the graph will pop up.</p>
+<div id="parameters-1" class="section level3" number="4.0.1">
+<h3><span class="header-section-number">4.0.1</span> Parameters</h3>
+<p>For this function, two parameters are necessary and a two more can be added:</p>
+<ul>
+<li><p><code>E.occ</code> = a matrix with occurrence and corresponding environmental data of a species</p></li>
+<li><p><code>bckgrnd</code> = a matrix with random points from a specific geographic region and corresponding environmental data</p></li>
+<li><p><code>add.poly</code> = a polygon of the study area (optional)</p></li>
+<li><p><code>save.p</code> = saves the file to your set output folder (optional)</p></li>
+</ul>
+</div>
+<div id="input-and-output-1" class="section level3" number="4.0.2">
+<h3><span class="header-section-number">4.0.2</span> Input and Output</h3>
+<p>The occurrence and background points with environmental information can be created by using the function <code>get.Ecoord</code> (see tutorial “Getting environmental values for the study sites”). vIt is important to note that both parameters, the matrices for <code>E.occ</code> and <code>bckgrnd</code>, need to have the same structure: the first two columns contain the coordinates, with longitude in the first column and latitude in the second. The following columns need to contain the environmental data of interest. Other than these matrices with occurrences and random background points, a polygon can be used to define the area of study.</p>
+<p>The output is a plot with two graphs. On the left side is the geographical space and on the right side is the environmental space (with two environmental conditions) of a species’ occurrence.
+The output varies depending on how the function is applied. If a polygon is added, the background for the geographical space will be a clipped worldmap from the <code>rnaturalearth</code> packages overlayed with the polygon of the study area. If no polygon is added, the background will consist of random points of the study area.</p>
+</div>
+<div id="dependencies-1" class="section level3" number="4.0.3">
+<h3><span class="header-section-number">4.0.3</span> Dependencies</h3>
+<p><strong>Function:</strong> <code>rgdal</code>, <code>raster</code>, <code>ggplot2</code>, <code>rnaturalearth</code>, <code>rnaturalearthdata</code>, <code>ggpubr</code>, <code>sf</code>, <code>rgeos</code></p>
+</div>
+<div id="worked-examples-1" class="section level2" number="4.1">
+<h2><span class="header-section-number">4.1</span> Worked Examples</h2>
+<div id="read-source-code-and-libraries-1" class="section level3" number="4.1.1">
+<h3><span class="header-section-number">4.1.1</span> Read source code and libraries</h3>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;.</span><span class="sc">\\</span><span class="st">Functions</span><span class="sc">\\</span><span class="st">GEspace.R&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rgdal)</span>
+<span id="cb42-2"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(raster)</span>
+<span id="cb42-3"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb42-4"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rnaturalearth)</span>
+<span id="cb42-5"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rnaturalearthdata)</span>
+<span id="cb42-6"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#cb42-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggpubr)</span>
+<span id="cb42-7"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#cb42-7" aria-hidden="true" tabindex="-1"></a><span class="co"># package &quot;sf&quot; needs to be installed, but not loaded</span></span>
+<span id="cb42-8"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#cb42-8" aria-hidden="true" tabindex="-1"></a><span class="co"># package &quot;rgeos&quot; needs to be installed, but not loaded</span></span></code></pre></div>
+</div>
+<div id="catasticta-nimbice-1" class="section level3" number="4.1.2">
+<h3><span class="header-section-number">4.1.2</span> <em>Catasticta nimbice</em></h3>
+<p><strong>Input files</strong></p>
+<ul>
+<li><p>Catasticta_nimbice_occ_GE.csv</p></li>
+<li><p>Catasticta_nimbice_M_GE.csv</p></li>
+<li><p>Catasticta_nimbice.shp (and associated files)</p></li>
+</ul>
+<p>In this example the number of background points is above 1000 and the point size is reduced in order to keep a clear display of points.</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read table of a species occurrence with environmental data points and table </span></span>
+<span id="cb43-2"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="co">#  with random background points that contain environmental data</span></span>
+<span id="cb43-3"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#cb43-3" aria-hidden="true" tabindex="-1"></a>species <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;./Generated_Data/Catasticta_nimbice_occ_GE.csv&quot;</span>,<span class="at">header=</span>T)</span>
+<span id="cb43-4"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#cb43-4" aria-hidden="true" tabindex="-1"></a>ranpoints <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;./Initial_Data/Catasticta_nimbice_M_GE.csv&quot;</span>,<span class="at">header=</span>T)</span></code></pre></div>
+<p>If a polygon of the distribution area is available, it can be added as a parameter.</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read polygon</span></span>
+<span id="cb44-2"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#cb44-2" aria-hidden="true" tabindex="-1"></a>shp <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(<span class="st">&quot;./Initial_Data/shapefiles&quot;</span>,<span class="st">&quot;Catasticta_nimbice&quot;</span>)</span></code></pre></div>
+<p>If the graph is to be saved, the location and name can be set.</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#cb45-1" aria-hidden="true" tabindex="-1"></a>saveM <span class="ot">&lt;-</span> <span class="st">&quot;./Generated_Data/Catasticta_nimbice&quot;</span></span></code></pre></div>
+<p><strong>Apply <code>GEspace</code></strong> (but do not run every time):</p>
+<p>No polygon added (default), no save.p added (default): A graph will pop up &amp; the geographical background will be made of random points.</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">GEspace</span>(<span class="at">bckgrnd=</span>ranpoints, <span class="at">E.occ=</span>species)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-8"></span>
+<img src="Images/Catasticta_nimbice_points.png" alt=" Figure of the geographical space with random points as a background (left) and the environmental space (right) of *Catasticta nimbice* ." width="80%" />
+<p class="caption">
+Figure 4.1:  Figure of the geographical space with random points as a background (left) and the environmental space (right) of <em>Catasticta nimbice</em> .
+</p>
+</div>
+<p>No polygon added (default), save.p added: The graph will be saved &amp; the geographical background will be made of random points.</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">GEspace</span>(<span class="at">bckgrnd=</span>ranpoints, <span class="at">E.occ=</span>species, <span class="at">save.p =</span>  <span class="fu">paste0</span>(saveM, <span class="st">&quot;_bckgrndmap.png&quot;</span>))</span></code></pre></div>
+<p>With polygon, no save.p added (default): A graph will pop up &amp; the geographical background will be made of a polygon.</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">GEspace</span>(<span class="at">bckgrnd=</span>ranpoints, <span class="at">E.occ=</span>species, <span class="at">add.poly=</span>shp)</span></code></pre></div>
+<p>With polygon, save.p added: A graph will pop up &amp; the geographical background will be made of a polygon.</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">GEspace</span>(<span class="at">bckgrnd=</span>ranpoints, <span class="at">E.occ=</span>species, <span class="at">add.poly=</span>shp, <span class="at">save.p =</span>  <span class="fu">paste0</span>(saveM, <span class="st">&quot;_polymap.png&quot;</span>))</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-12"></span>
+<img src="Images/Catasticta_nimbice_poly.png" alt=" Figure of the geographical space with a polygon and clipped worldmap as a background (left) and the environmental space (right) of *Catasticta nimbice* ." width="80%" />
+<p class="caption">
+Figure 4.2:  Figure of the geographical space with a polygon and clipped worldmap as a background (left) and the environmental space (right) of <em>Catasticta nimbice</em> .
+</p>
+</div>
+<p><strong>Output files</strong></p>
+<ul>
+<li><p>Catasticta_nimbice_bckgrndmap.png</p></li>
+<li><p>Catasticta_nimbice_polymap.png</p></li>
+</ul>
+</div>
+<div id="threnetes-ruckeri-1" class="section level3" number="4.1.3">
+<h3><span class="header-section-number">4.1.3</span> <em>Threnetes ruckeri</em></h3>
+<p><strong>Input files</strong></p>
+<ul>
+<li><p>Threnetes_ruckeri_M_GE.csv</p></li>
+<li><p>Threnetes_ruckeri_occ_GE.csv</p></li>
+<li><p>Threnetes_ruckeri.shp (and associated files)</p></li>
+</ul>
+<p>In this example the number of background points is below 1000 and the point size is not reduced.</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read necessary files</span></span>
+<span id="cb50-2"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#cb50-2" aria-hidden="true" tabindex="-1"></a>ranpoints2 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;./Generated_Data/Threnetes_ruckeri_M_GE.csv&quot;</span>,<span class="at">header=</span>T)</span>
+<span id="cb50-3"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#cb50-3" aria-hidden="true" tabindex="-1"></a>species2 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;./Generated_Data/Threnetes_ruckeri_occ_GE.csv&quot;</span>,<span class="at">header=</span>T)</span>
+<span id="cb50-4"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#cb50-4" aria-hidden="true" tabindex="-1"></a>shp2 <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(<span class="st">&quot;./Initial_Data/shapefiles&quot;</span>,<span class="st">&quot;Threnetes_ruckeri&quot;</span>)</span></code></pre></div>
+<p>Apply the function with a polygon.</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">GEspace</span>(<span class="at">bckgrnd =</span> ranpoints2, <span class="at">E.occ =</span> species2, <span class="at">add.poly =</span> shp2, <span class="at">save.p =</span> <span class="st">&quot;Threnetes_bckgrndmap.png&quot;</span>)</span>
+<span id="cb51-2"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">GEspace</span>(<span class="at">bckgrnd =</span> ranpoints2, <span class="at">E.occ =</span> species2, <span class="at">add.poly =</span> shp2)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-15"></span>
+<img src="Images/Threnetes_ruckeri_points.png" alt=" Figure of the geographical space with random points as a background (left) and the environmental space (right) of *Threnetes ruckeri* ." width="80%" />
+<p class="caption">
+Figure 2.4:  Figure of the geographical space with random points as a background (left) and the environmental space (right) of <em>Threnetes ruckeri</em> .
+</p>
+</div>
+<p>Apply the function without a polygon.</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">GEspace</span>(<span class="at">bckgrnd =</span> ranpoints2, <span class="at">E.occ =</span> species2, <span class="at">save.p =</span> <span class="st">&quot;Threnetes_polymap.png&quot;</span>)</span>
+<span id="cb52-2"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="fu">GEspace</span>(<span class="at">bckgrnd =</span> ranpoints2, <span class="at">E.occ =</span> species2)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-17"></span>
+<img src="Images/Threnetes_ruckeri_poly.png" alt=" Figure of the geographical space with a polygon and clipped worldmap as a background (left) and the environmental space (right) of *Threnetes ruckeri* ." width="80%" />
+<p class="caption">
+Figure 4.3:  Figure of the geographical space with a polygon and clipped worldmap as a background (left) and the environmental space (right) of <em>Threnetes ruckeri</em> .
+</p>
+</div>
+<p><strong>Output files</strong></p>
+<ul>
+<li><p>Threnetes_bckgrndmap.png</p></li>
+<li><p>Threnetes_polymap.png</p></li>
+</ul>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="mahalanobis-model-raw-occurrence-data-only.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "lunr",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

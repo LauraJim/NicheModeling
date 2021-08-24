@@ -1,0 +1,194 @@
+
+# Extracting environmental data from raster files from a set of geographic coordinates
+
+The function `get.Ecoord` is a simple tool to extract environmental data, such as annual mean temperature or total annual precipitation, from raster-files that contain this type of information. The extracted data is then combined with the occurrence coordinates of a species. The output is a matrix that contains four or more columns: the coordinates of the species' occurrence (latitude and longitude) and the environmental variables for those coordinates. The same function can also be used to extract environmental data and combine it with random points of a study area if a matrix with random points is available.
+
+```r
+get.Ecoord(Estck, Gcoord, Enames)
+```
+  
+  
+### Parameters
+
+For this function, three parameters are necessary:
+
+- `Estck` = a raster stack that has two or more climatic layers
+
+- `Gcoord` = a matrix with two columns whose rows are geographic coordinates of species' occurrence in the study area
+
+- `Enames` = names for the extracted environmental variables in form of a character vector for the output table
+
+
+### Input and Output
+
+The input for the function are raster files with climatic values and presence information of a species (for more information on these files, see the explanation for the initial dataset that comes along with this package). 
+
+The output of the function is a matrix with at least four variables. The first two columns are the longitude and latitude coordinates of the species' occurrence. The following columns are the environmental data that has been extracted from the raster files. The matrix can be saved as a csv-file that serves as data input for other functions.
+
+
+### Dependencies 
+
+**Function:** dismo
+
+  
+## Worked Examples
+
+### Read source code and libraries
+
+```r
+source(".\\Functions\\getEcoord.R")
+```
+
+
+```r
+library(dismo)
+```
+  
+### *Catasticta nimbice*
+
+
+**Input Files**
+
+* bio1.asc
+
+* bio12.asc
+
+* Catasticta_nimbice_occ_G.csv
+
+* Catasticta_nimbice_M_G.csv
+
+
+To create the parameter `Estck`, two or more rasters are combined into one rasterstack. For this species we used rasters with the environmental conditions "mean annual temperature" (= bio1) and "total annual precipitation" (= bio12).  
+The created rasterstack will have as many layers as rasters are combined together. In this example, there are only two layers: bio1 and bio12.
+
+```r
+# read raster files
+bio1 <- raster("./Initial_Data/bio1.asc")
+bio12 <- raster("./Initial_Data/bio12.asc")
+# combine the rasters into a RasterStack
+bios <- stack(bio1, bio12) #  = Estck
+```
+
+The parameter `Gcoord` is a matrix with coordinates of the tracked occurrence of *Catasticta nimbice*. The cleaned table can be directly read without much modification.
+
+```r
+# read table, set header and omit first column of the table
+occ <- read.csv("./Initial_Data/Catasticta_nimbice_occ_G.csv",header=T)[,-1] #  = Gcoord
+
+head(occ, n=3)
+```
+
+```
+##   Longitude Latitude
+## 1 -96.50500 16.06139
+## 2 -96.50083 16.16944
+## 3 -96.57000 16.31722
+```
+
+In order to set names for the new columns that will be created by the function, the parameter `Enames` will be set with as many names as rasters have been stacked. In this example, the first column name is bio1 and the second is bio12. 
+
+```r
+# write names for the column heads of the environmental data
+names1 <- c("bio1", "bio12") #  = Enames
+```
+
+Apply `get.Ecoord` with the parameters `Estck`, `Gcoord`, and `Enames`:
+
+```r
+f <- get.Ecoord(Estck=bios, Gcoord=occ, Enames=names1)
+
+head(f, n=3)
+```
+
+```
+##   Longitude Latitude bio1 bio12
+## 1 -96.50500 16.06139  191  1249
+## 2 -96.50083 16.16944  175  1029
+## 3 -96.57000 16.31722  175  1029
+```
+
+Save the output as a csv-file (but do not run every time):
+
+```r
+write.csv(f,file=paste0("./Generated_Data/Catasticta_nimbice","_occ_GE.csv"),
+          row.names = F)
+```
+This csv-file can now be used as data input for various graphs that highlight the geographical presence of the species and the surrounding environment.
+
+
+**Output files**
+
+- Catasticta_nimbice_occ_GE.csv
+
+- <span style="color: red;">Catasticta_nimbice_M_GE.csv</span>
+
+- <span style="color: red;">Catasticta_nimbice_occ_GE3.csv</span>
+
+
+### *Threnetes ruckeri*
+
+**Input files**
+
+
+- bio1.asc
+
+- bio12.asc
+
+- Threnetes_ruckeri_M_G.csv
+
+- Threnetes_ruckeri_occ_G.csv
+
+
+The raster datasets for the species *Threnetes ruckeri* and names ("bio1" and "bio12") are the same as the above example.
+
+```r
+bio1 <- raster("./Initial_Data/bio1.asc") 
+bio12 <- raster("./Initial_Data/bio12.asc") 
+bios <- stack(bio1, bio12)
+
+names1 <- c("bio1", "bio12") 
+```
+  
+Unlike the previous example, random points of a study area instead of the occurrence points are combined with extracted environmental data that can be used as a background for maps (e.g. in the tutorials "Function *GEspace*" and "Function *el.in*").
+
+```r
+# read table with random points
+bckgrnd <- read.csv("./Initial_Data/Threnetes_ruckeri_M_G.csv",header=T)
+head(bckgrnd, n=3)
+```
+
+```
+##        long       lat
+## 1 -71.58333  6.250003
+## 2 -83.91666 11.916670
+## 3 -69.74999  9.916670
+```
+
+```r
+f2 <- get.Ecoord(Estck=bios, Gcoord=bckgrnd, names1) 
+head(f2, n=3)
+```
+
+```
+##        long       lat bio1 bio12
+## 1 -71.58333  6.250003  263  2588
+## 2 -83.91666 11.916670  256  4614
+## 3 -69.74999  9.916670  239   586
+```
+
+Save the output as a csv-file (but do not run it every time):
+
+```r
+write.csv(f2,file=paste0("./Generated_Data/Threnetes_ruckeri_M","_GE.csv"),
+          row.names = F)
+```
+
+Now, repeat this example but using the data of *Catasticta nimbice*, and save a file called "Catasticta_nimbice_M_GE.csv"
+
+
+**Output files**
+
+- Threnetes_ruckeri_M_GE.csv
+
+- <span style="color: red;">Threnetes_ruckeri_occ_GE.csv</span>
+

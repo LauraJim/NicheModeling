@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>12 Bayesian model: adding tolerance limits | Index</title>
+  <meta name="description" content="12 Bayesian model: adding tolerance limits | Index" />
+  <meta name="generator" content="bookdown 0.23 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="12 Bayesian model: adding tolerance limits | Index" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="12 Bayesian model: adding tolerance limits | Index" />
+  
+  
+  
+
+<meta name="author" content="Laura Jiménez and Carola Franzen" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="evaluation-method-building-accumulation-curve-of-occurrences.html"/>
+
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.0.1" data-path="index.html"><a href="index.html#organization-within-the-tutorial"><i class="fa fa-check"></i><b>1.0.1</b> Organization within the tutorial</a></li>
+<li class="chapter" data-level="1.0.2" data-path="index.html"><a href="index.html#references"><i class="fa fa-check"></i><b>1.0.2</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="description-of-initial-datasets.html"><a href="description-of-initial-datasets.html"><i class="fa fa-check"></i><b>2</b> Description of initial datasets</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="description-of-initial-datasets.html"><a href="description-of-initial-datasets.html#species-under-study-and-necessary-files-to-start-an-analysis"><i class="fa fa-check"></i><b>2.1</b> Species under study and necessary files to start an analysis</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="description-of-initial-datasets.html"><a href="description-of-initial-datasets.html#occurrence-data"><i class="fa fa-check"></i><b>2.1.1</b> Occurrence data</a></li>
+<li class="chapter" data-level="2.1.2" data-path="description-of-initial-datasets.html"><a href="description-of-initial-datasets.html#points-inside-the-study-area-to-plot-hutchinsons-duality"><i class="fa fa-check"></i><b>2.1.2</b> Points inside the study area to plot Hutchinson’s duality</a></li>
+<li class="chapter" data-level="2.1.3" data-path="description-of-initial-datasets.html"><a href="description-of-initial-datasets.html#table-with-species-tolerance-limit"><i class="fa fa-check"></i><b>2.1.3</b> Table with species’ tolerance limit</a></li>
+<li class="chapter" data-level="2.1.4" data-path="description-of-initial-datasets.html"><a href="description-of-initial-datasets.html#polygons-of-the-study-area"><i class="fa fa-check"></i><b>2.1.4</b> Polygons of the study area</a></li>
+<li class="chapter" data-level="2.1.5" data-path="description-of-initial-datasets.html"><a href="description-of-initial-datasets.html#rasters-with-environmental-information"><i class="fa fa-check"></i><b>2.1.5</b> Rasters with environmental information</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"><a href="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"><i class="fa fa-check"></i><b>3</b> Extracting environmental data from raster files from a set of geographic coordinates</a>
+<ul>
+<li class="chapter" data-level="3.0.1" data-path="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"><a href="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html#parameters"><i class="fa fa-check"></i><b>3.0.1</b> Parameters</a></li>
+<li class="chapter" data-level="3.0.2" data-path="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"><a href="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html#input-and-output"><i class="fa fa-check"></i><b>3.0.2</b> Input and Output</a></li>
+<li class="chapter" data-level="3.0.3" data-path="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"><a href="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html#dependencies"><i class="fa fa-check"></i><b>3.0.3</b> Dependencies</a></li>
+<li class="chapter" data-level="3.1" data-path="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"><a href="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html#worked-examples"><i class="fa fa-check"></i><b>3.1</b> Worked Examples</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"><a href="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html#read-source-code-and-libraries"><i class="fa fa-check"></i><b>3.1.1</b> Read source code and libraries</a></li>
+<li class="chapter" data-level="3.1.2" data-path="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"><a href="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html#catasticta-nimbice"><i class="fa fa-check"></i><b>3.1.2</b> <em>Catasticta nimbice</em></a></li>
+<li class="chapter" data-level="3.1.3" data-path="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html"><a href="extracting-environmental-data-from-raster-files-from-a-set-of-geographic-coordinates.html#threnetes-ruckeri"><i class="fa fa-check"></i><b>3.1.3</b> <em>Threnetes ruckeri</em></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html"><i class="fa fa-check"></i><b>4</b> Creating plots with the geographical and environmental space of a species in ggplot2</a>
+<ul>
+<li class="chapter" data-level="4.0.1" data-path="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#parameters-1"><i class="fa fa-check"></i><b>4.0.1</b> Parameters</a></li>
+<li class="chapter" data-level="4.0.2" data-path="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#input-and-output-1"><i class="fa fa-check"></i><b>4.0.2</b> Input and Output</a></li>
+<li class="chapter" data-level="4.0.3" data-path="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#dependencies-1"><i class="fa fa-check"></i><b>4.0.3</b> Dependencies</a></li>
+<li class="chapter" data-level="4.1" data-path="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#worked-examples-1"><i class="fa fa-check"></i><b>4.1</b> Worked Examples</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#read-source-code-and-libraries-1"><i class="fa fa-check"></i><b>4.1.1</b> Read source code and libraries</a></li>
+<li class="chapter" data-level="4.1.2" data-path="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#catasticta-nimbice-1"><i class="fa fa-check"></i><b>4.1.2</b> <em>Catasticta nimbice</em></a></li>
+<li class="chapter" data-level="4.1.3" data-path="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html"><a href="creating-plots-with-the-geographical-and-environmental-space-of-a-species-in-ggplot2.html#threnetes-ruckeri-1"><i class="fa fa-check"></i><b>4.1.3</b> <em>Threnetes ruckeri</em></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html"><i class="fa fa-check"></i><b>5</b> Mahalanobis model: raw occurrence data only</a>
+<ul>
+<li class="chapter" data-level="5.0.1" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#input-and-output-2"><i class="fa fa-check"></i><b>5.0.1</b> Input and Output</a></li>
+<li class="chapter" data-level="5.0.2" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#dependencies-2"><i class="fa fa-check"></i><b>5.0.2</b> Dependencies</a></li>
+<li class="chapter" data-level="5.1" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#worked-examples-2"><i class="fa fa-check"></i><b>5.1</b> Worked Examples</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#read-source-code-and-libraries-2"><i class="fa fa-check"></i><b>5.1.1</b> Read Source Code and Libraries</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#threnetes-ruckeri---example-with-two-environmental-layers"><i class="fa fa-check"></i><b>5.2</b> <em>Threnetes ruckeri</em> - example with two environmental layers</a></li>
+<li class="chapter" data-level="5.3" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#catasticta-nimbice-2"><i class="fa fa-check"></i><b>5.3</b> <em>Catasticta nimbice</em></a>
+<ul>
+<li class="chapter" data-level="5.3.1" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#get-environmental-information-from-three-raster-layers"><i class="fa fa-check"></i><b>5.3.1</b> 1) Get environmental information from three raster layers</a></li>
+<li class="chapter" data-level="5.3.2" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#estimate-mahalanobis-model-parameters"><i class="fa fa-check"></i><b>5.3.2</b> 2) Estimate Mahalanobis Model Parameters</a></li>
+<li class="chapter" data-level="5.3.3" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#calculate-suitability-index"><i class="fa fa-check"></i><b>5.3.3</b> 3) Calculate Suitability Index</a></li>
+<li class="chapter" data-level="5.3.4" data-path="mahalanobis-model-raw-occurrence-data-only.html"><a href="mahalanobis-model-raw-occurrence-data-only.html#comparing-suitability-index-against-mahalanobis-distance"><i class="fa fa-check"></i><b>5.3.4</b> 3) Comparing suitability index against Mahalanobis distance</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="plotting-an-ellipsoid-in-e-space.html"><a href="plotting-an-ellipsoid-in-e-space.html"><i class="fa fa-check"></i><b>6</b> Plotting an ellipsoid in E-space</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="plotting-an-ellipsoid-in-e-space.html"><a href="plotting-an-ellipsoid-in-e-space.html#parameters-2"><i class="fa fa-check"></i><b>6.1</b> Parameters</a></li>
+<li class="chapter" data-level="6.2" data-path="plotting-an-ellipsoid-in-e-space.html"><a href="plotting-an-ellipsoid-in-e-space.html#input-and-output-3"><i class="fa fa-check"></i><b>6.2</b> Input and Output</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="plotting-an-ellipsoid-in-e-space.html"><a href="plotting-an-ellipsoid-in-e-space.html#dependencies-3"><i class="fa fa-check"></i><b>6.2.1</b> Dependencies</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="plotting-an-ellipsoid-in-e-space.html"><a href="plotting-an-ellipsoid-in-e-space.html#worked-examples-3"><i class="fa fa-check"></i><b>6.3</b> Worked Examples</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="plotting-an-ellipsoid-in-e-space.html"><a href="plotting-an-ellipsoid-in-e-space.html#read-source-code-and-library"><i class="fa fa-check"></i><b>6.3.1</b> Read source code and library</a></li>
+<li class="chapter" data-level="6.3.2" data-path="plotting-an-ellipsoid-in-e-space.html"><a href="plotting-an-ellipsoid-in-e-space.html#example-with-three-ellipses-threnetes-ruckeri"><i class="fa fa-check"></i><b>6.3.2</b> Example with three ellipses (<em>Threnetes ruckeri</em>)</a></li>
+<li class="chapter" data-level="6.3.3" data-path="plotting-an-ellipsoid-in-e-space.html"><a href="plotting-an-ellipsoid-in-e-space.html#example-with-several-ellipses-catasticta-nimbice"><i class="fa fa-check"></i><b>6.3.3</b> Example with several ellipses (<em>Catasticta nimbice</em>)</a></li>
+<li class="chapter" data-level="6.3.4" data-path="plotting-an-ellipsoid-in-e-space.html"><a href="plotting-an-ellipsoid-in-e-space.html#example-with-three-environmental-variables-catasticta-nimbice"><i class="fa fa-check"></i><b>6.3.4</b> Example with three environmental variables (<em>Catasticta nimbice</em>)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html"><a href="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html"><i class="fa fa-check"></i><b>7</b> How to simulate a random sample of environmental conditions inside an region</a>
+<ul>
+<li class="chapter" data-level="7.0.1" data-path="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html"><a href="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html#parameters-3"><i class="fa fa-check"></i><b>7.0.1</b> Parameters</a></li>
+<li class="chapter" data-level="7.0.2" data-path="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html"><a href="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html#input-and-output-4"><i class="fa fa-check"></i><b>7.0.2</b> Input and Output</a></li>
+<li class="chapter" data-level="7.0.3" data-path="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html"><a href="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html#dependencies-4"><i class="fa fa-check"></i><b>7.0.3</b> Dependencies</a></li>
+<li class="chapter" data-level="7.1" data-path="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html"><a href="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html#worked-examples-4"><i class="fa fa-check"></i><b>7.1</b> Worked Examples</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html"><a href="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html#read-source-code-and-libraries-3"><i class="fa fa-check"></i><b>7.1.1</b> Read source code and libraries</a></li>
+<li class="chapter" data-level="7.1.2" data-path="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html"><a href="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html#catasticta-nimbice-3"><i class="fa fa-check"></i><b>7.1.2</b> <em>Catasticta nimbice</em></a></li>
+<li class="chapter" data-level="7.1.3" data-path="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html"><a href="how-to-simulate-a-random-sample-of-environmental-conditions-inside-an-region.html#threnetes-ruckeri-2"><i class="fa fa-check"></i><b>7.1.3</b> <em>Threnetes ruckeri</em></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><i class="fa fa-check"></i><b>8</b> How to identify points inside and outside the fundamental niche</a>
+<ul>
+<li class="chapter" data-level="8.0.1" data-path="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html#parameters-4"><i class="fa fa-check"></i><b>8.0.1</b> Parameters</a></li>
+<li class="chapter" data-level="8.0.2" data-path="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html#input-and-output-5"><i class="fa fa-check"></i><b>8.0.2</b> Input and Output</a></li>
+<li class="chapter" data-level="8.0.3" data-path="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html#dependencies-5"><i class="fa fa-check"></i><b>8.0.3</b> Dependencies</a></li>
+<li class="chapter" data-level="8.1" data-path="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html#worked-examples-5"><i class="fa fa-check"></i><b>8.1</b> Worked Examples</a>
+<ul>
+<li class="chapter" data-level="8.1.1" data-path="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html#read-source-code-and-library-1"><i class="fa fa-check"></i><b>8.1.1</b> Read source code and library</a></li>
+<li class="chapter" data-level="8.1.2" data-path="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html#threnetes-ruckeri-3"><i class="fa fa-check"></i><b>8.1.2</b> <em>Threnetes ruckeri</em></a></li>
+<li class="chapter" data-level="8.1.3" data-path="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html#catasticta-nimbice-4"><i class="fa fa-check"></i><b>8.1.3</b> <em>Catasticta nimbice</em></a></li>
+<li class="chapter" data-level="8.1.4" data-path="how-to-identify-points-inside-and-outside-the-fundamental-niche.html"><a href="how-to-identify-points-inside-and-outside-the-fundamental-niche.html#theoretical-example"><i class="fa fa-check"></i><b>8.1.4</b> Theoretical Example</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><i class="fa fa-check"></i><b>9</b> Weighted-normal model: accounting for the uneven availability of environmental conditions</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#how-the-functions-work"><i class="fa fa-check"></i><b>9.1</b> How the functions work</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#parameters-5"><i class="fa fa-check"></i><b>9.1.1</b> Parameters</a></li>
+<li class="chapter" data-level="9.1.2" data-path="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#input-and-output-6"><i class="fa fa-check"></i><b>9.1.2</b> Input and Output</a></li>
+<li class="chapter" data-level="9.1.3" data-path="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#dependencies-6"><i class="fa fa-check"></i><b>9.1.3</b> Dependencies</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#worked-examples-6"><i class="fa fa-check"></i><b>9.2</b> Worked examples</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#read-sources-and-libraries"><i class="fa fa-check"></i><b>9.2.1</b> Read sources and libraries</a></li>
+<li class="chapter" data-level="9.2.2" data-path="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#catasticta-nimbice-5"><i class="fa fa-check"></i><b>9.2.2</b> <em>Catasticta nimbice</em></a></li>
+<li class="chapter" data-level="9.2.3" data-path="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html"><a href="weighted-normal-model-accounting-for-the-uneven-availability-of-environmental-conditions.html#threnetes-ruckeri-4"><i class="fa fa-check"></i><b>9.2.3</b> <em>Threnetes ruckeri</em></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="projecting-an-estimated-niche-into-g-space.html"><a href="projecting-an-estimated-niche-into-g-space.html"><i class="fa fa-check"></i><b>10</b> Projecting an estimated niche into G-space</a>
+<ul>
+<li class="chapter" data-level="10.0.1" data-path="projecting-an-estimated-niche-into-g-space.html"><a href="projecting-an-estimated-niche-into-g-space.html#parameters-6"><i class="fa fa-check"></i><b>10.0.1</b> Parameters</a></li>
+<li class="chapter" data-level="10.0.2" data-path="projecting-an-estimated-niche-into-g-space.html"><a href="projecting-an-estimated-niche-into-g-space.html#input-and-output-7"><i class="fa fa-check"></i><b>10.0.2</b> Input and Output</a></li>
+<li class="chapter" data-level="10.0.3" data-path="projecting-an-estimated-niche-into-g-space.html"><a href="projecting-an-estimated-niche-into-g-space.html#dependencies-7"><i class="fa fa-check"></i><b>10.0.3</b> Dependencies</a></li>
+<li class="chapter" data-level="10.1" data-path="projecting-an-estimated-niche-into-g-space.html"><a href="projecting-an-estimated-niche-into-g-space.html#worked-examples-7"><i class="fa fa-check"></i><b>10.1</b> Worked Examples</a>
+<ul>
+<li class="chapter" data-level="10.1.1" data-path="projecting-an-estimated-niche-into-g-space.html"><a href="projecting-an-estimated-niche-into-g-space.html#read-source-code-and-libraries-4"><i class="fa fa-check"></i><b>10.1.1</b> Read source code and libraries</a></li>
+<li class="chapter" data-level="10.1.2" data-path="projecting-an-estimated-niche-into-g-space.html"><a href="projecting-an-estimated-niche-into-g-space.html#catasticta-nimbice-6"><i class="fa fa-check"></i><b>10.1.2</b> <em>Catasticta nimbice</em></a></li>
+<li class="chapter" data-level="10.1.3" data-path="projecting-an-estimated-niche-into-g-space.html"><a href="projecting-an-estimated-niche-into-g-space.html#threnetes-ruckeri-5"><i class="fa fa-check"></i><b>10.1.3</b> <em>Threnetes ruckeri</em></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html"><i class="fa fa-check"></i><b>11</b> Evaluation method: building accumulation curve of occurrences</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#calculate-the-accumulation-curve"><i class="fa fa-check"></i><b>11.1</b> Calculate the accumulation curve</a>
+<ul>
+<li class="chapter" data-level="11.1.1" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#parameters-7"><i class="fa fa-check"></i><b>11.1.1</b> Parameters</a></li>
+<li class="chapter" data-level="11.1.2" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#input-and-output-8"><i class="fa fa-check"></i><b>11.1.2</b> Input and Output</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#worked-examples-8"><i class="fa fa-check"></i><b>11.2</b> Worked Examples</a>
+<ul>
+<li class="chapter" data-level="11.2.1" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#read-libraries-and-source-codes"><i class="fa fa-check"></i><b>11.2.1</b> Read libraries and source codes</a></li>
+<li class="chapter" data-level="11.2.2" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#catasticta-nimbice-with-three-environmental-layers"><i class="fa fa-check"></i><b>11.2.2</b> <em>Catasticta nimbice</em> with three environmental layers</a></li>
+<li class="chapter" data-level="11.2.3" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#threnetes-ruckeri-with-two-environmental-layers"><i class="fa fa-check"></i><b>11.2.3</b> <em>Threnetes ruckeri</em> with two environmental layers</a></li>
+</ul></li>
+<li class="chapter" data-level="11.3" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#comparing-the-accumulation-curves"><i class="fa fa-check"></i><b>11.3</b> Comparing the accumulation curves</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#parameters-8"><i class="fa fa-check"></i><b>11.3.1</b> Parameters</a></li>
+<li class="chapter" data-level="11.3.2" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#input-and-output-9"><i class="fa fa-check"></i><b>11.3.2</b> Input and Output</a></li>
+<li class="chapter" data-level="11.3.3" data-path="evaluation-method-building-accumulation-curve-of-occurrences.html"><a href="evaluation-method-building-accumulation-curve-of-occurrences.html#worked-example-threnetes-ruckeri"><i class="fa fa-check"></i><b>11.3.3</b> Worked example: <em>Threnetes ruckeri</em></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html"><i class="fa fa-check"></i><b>12</b> Bayesian model: adding tolerance limits</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html#how-the-main-functions-work"><i class="fa fa-check"></i><b>12.1</b> How the main functions work</a>
+<ul>
+<li class="chapter" data-level="12.1.1" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html#parameters-9"><i class="fa fa-check"></i><b>12.1.1</b> Parameters</a></li>
+<li class="chapter" data-level="12.1.2" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html#input-and-output-10"><i class="fa fa-check"></i><b>12.1.2</b> Input and Output</a></li>
+<li class="chapter" data-level="12.1.3" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html#dependencies-8"><i class="fa fa-check"></i><b>12.1.3</b> Dependencies</a></li>
+</ul></li>
+<li class="chapter" data-level="12.2" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html#worked-example-threnetes-ruckeri-1"><i class="fa fa-check"></i><b>12.2</b> Worked Example: <em>Threnetes ruckeri</em></a>
+<ul>
+<li class="chapter" data-level="12.2.1" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html#read-source-codes-and-libraries"><i class="fa fa-check"></i><b>12.2.1</b> Read source codes and libraries</a></li>
+<li class="chapter" data-level="12.2.2" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html#main-code"><i class="fa fa-check"></i><b>12.2.2</b> Main code</a></li>
+</ul></li>
+<li class="chapter" data-level="12.3" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html#using-the-bayesian-model-for-the-projection-into-g-space"><i class="fa fa-check"></i><b>12.3</b> Using the Bayesian model for the projection into G-Space</a>
+<ul>
+<li class="chapter" data-level="12.3.1" data-path="bayesian-model-adding-tolerance-limits.html"><a href="bayesian-model-adding-tolerance-limits.html#read-source-and-libraries"><i class="fa fa-check"></i><b>12.3.1</b> Read source and libraries</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Index</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="bayesian-model-adding-tolerance-limits" class="section level1" number="12">
+<h1><span class="header-section-number">12</span> Bayesian model: adding tolerance limits</h1>
+<p>This tutorial shows how to use the Bayesian model with tolerance limits to create estimates for the fundamental niche of a species. Various functions are necessary for this process that are within the file <strong>Nf_Model_functions.R</strong>: <code>priorpar</code>, <code>DefineSp</code>, <code>Supp</code>, <code>Initth</code>, <code>PlotXYEnvVars</code>, <code>PlotIterations</code>, and <code>save.all</code>. Out of these, <code>Supp</code>, <code>Initth</code>, and <code>PlotXYEnvVars</code> are directly used within other functions. Other functions (<code>Energy</code> and <code>Run</code>) are used directly in the example as they need to be adjusted based on the example and estimation results.
+<!--- Add more description ---></p>
+<div id="how-the-main-functions-work" class="section level2" number="12.1">
+<h2><span class="header-section-number">12.1</span> How the main functions work</h2>
+<p>The function <code>DefineSp</code> fixes the values for species and environmental variables that are worked with. The fixed values are <code>Comp1</code> and <code>Comp2</code> (providing columns), <code>env.d</code> (a matrix with environmental information of randomly sampled locations of a study area), <code>env.sp</code> (a matrix with environmental information of the presence points of a species), <code>n</code> (number of occurrences), m (number of randomly sampled points), <code>N</code> (total amount of data points, including occurrences and sample), <code>Et</code> (a matrix with the combined environmental information of occurrences and samples).</p>
+<div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb194-1"><a href="bayesian-model-adding-tolerance-limits.html#cb194-1" aria-hidden="true" tabindex="-1"></a><span class="fu">DefineSp</span>(env, data.sp, Comp1, Comp2)</span></code></pre></div>
+<p>The function <code>priorpar</code> uses data of environmental tolerance limits (maximum and minimum) of a species to determine the values of the parameters that define the a priori distribution.</p>
+<div class="sourceCode" id="cb195"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb195-1"><a href="bayesian-model-adding-tolerance-limits.html#cb195-1" aria-hidden="true" tabindex="-1"></a><span class="fu">priorpar</span>(tolran, nsd, alpha)</span></code></pre></div>
+<p>The functions <code>Supp</code> and <code>Initth</code> are essential for using the t-walk algorithm. Alongside <code>PlotXYEnvVars</code>, these functions are used later in the simulations.<br />
+<!-- Add more description --></p>
+<p>The function <code>PlotIterations</code> is used after calculating MCMC. It will plot a selection (indices) of the MCMC iterations.</p>
+<div class="sourceCode" id="cb196"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb196-1"><a href="bayesian-model-adding-tolerance-limits.html#cb196-1" aria-hidden="true" tabindex="-1"></a><span class="fu">PlotIterations</span>(info, from, thin, lev,...)</span></code></pre></div>
+<p>The function <code>save.all</code> saves all the values of mu and Sigma simulated from the posterior.</p>
+<div class="sourceCode" id="cb197"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb197-1"><a href="bayesian-model-adding-tolerance-limits.html#cb197-1" aria-hidden="true" tabindex="-1"></a><span class="fu">save.all</span>(info, from, thin, filename)</span></code></pre></div>
+<div id="parameters-9" class="section level3" number="12.1.1">
+<h3><span class="header-section-number">12.1.1</span> Parameters</h3>
+<ul>
+<li><p><code>env</code> = random sample of points inside a study area that contain environmental information</p></li>
+<li><p><code>data.sp</code> = a matrix that contains the occurrence points of a species and correlated environmental data</p></li>
+<li><p><code>Comp1</code> = two numbers that define the column number which contains the first environmental condition of a matrix</p></li>
+<li><p><code>Comp2</code> = two numbers that define the column number which contains the second environmental condition of a matrix</p></li>
+<li><p><code>tolran</code> = a matrix that contains the minimum and maximum values of the tolerance limits of a species (two columns for min and max and as many rows as environmental variables are used)</p></li>
+<li><p><code>nsd</code> = number of standard deviations covered by a tolerance range</p></li>
+<li><p><code>alpha</code> = number of degrees of freedom in the a priori Wishart distribution</p></li>
+<li><p><code>th</code> = a vector of five elements (first two are values of mu, 3,4, and 5 are values of A)</p></li>
+<li><p><code>…</code> = with this parameter, further graphical parameters can be supplied as arguments to the plot</p></li>
+<li><p><code>info</code> = a list of iterations calculated with the <code>Rtwalk</code> function (MCMC)</p></li>
+<li><p><code>from</code> = gives the start iteration</p></li>
+<li><p><code>thin</code> = the separation between iterations</p></li>
+</ul>
+</div>
+<div id="input-and-output-10" class="section level3" number="12.1.2">
+<h3><span class="header-section-number">12.1.2</span> Input and Output</h3>
+<p>The files that need to be prepared to run these functions are: a matrix that contains tolerance limits of environmental conditions that a species can survive in, a matrix that contains the occurrence points of a species and correlated environmental data, and a matrix that contains a random sample of points inside a study area that are correlated with environmental information. The information on the tolerance limits of a species needs to be obtained through lab experiments. The two other files can be created by using the function <code>get.Ecoord</code> (see tutorial “Getting environmental values for the study sites”).</p>
+<p>The output are several graphs that show the tolerance limits within the environmental space as well as the iterations from the MCMC algorithm. Furthermore, a matrix with the calculated iterations will be created.</p>
+</div>
+<div id="dependencies-8" class="section level3" number="12.1.3">
+<h3><span class="header-section-number">12.1.3</span> Dependencies</h3>
+<p><strong>Functions:</strong> <code>Rtwalk</code></p>
+<p><strong>Example:</strong> <code>rgdal</code>, `raster``</p>
+</div>
+</div>
+<div id="worked-example-threnetes-ruckeri-1" class="section level2" number="12.2">
+<h2><span class="header-section-number">12.2</span> Worked Example: <em>Threnetes ruckeri</em></h2>
+<div id="read-source-codes-and-libraries" class="section level3" number="12.2.1">
+<h3><span class="header-section-number">12.2.1</span> Read source codes and libraries</h3>
+<div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb198-1"><a href="bayesian-model-adding-tolerance-limits.html#cb198-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;.</span><span class="sc">\\</span><span class="st">Functions</span><span class="sc">\\</span><span class="st">Nf_Model_functions.R&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb199"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb199-1"><a href="bayesian-model-adding-tolerance-limits.html#cb199-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Rtwalk)</span></code></pre></div>
+<p><strong>Input files</strong></p>
+<ul>
+<li><p>Threnetes_ruckeri_occ_GE.csv</p></li>
+<li><p>Threnetes_ruckeri_M_GE.csv</p></li>
+<li><p>T_ruckeri_tolerances.csv</p></li>
+</ul>
+</div>
+<div id="main-code" class="section level3" number="12.2.2">
+<h3><span class="header-section-number">12.2.2</span> Main code</h3>
+<p><strong>Read files and prepare the parameters</strong></p>
+<div class="sourceCode" id="cb200"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb200-1"><a href="bayesian-model-adding-tolerance-limits.html#cb200-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read random sampled points with GE information and occurrences with GE information</span></span>
+<span id="cb200-2"><a href="bayesian-model-adding-tolerance-limits.html#cb200-2" aria-hidden="true" tabindex="-1"></a>envall <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;./Generated_Data/Threnetes_ruckeri_M_GE.csv&quot;</span>,<span class="at">header=</span>T) </span>
+<span id="cb200-3"><a href="bayesian-model-adding-tolerance-limits.html#cb200-3" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;./Generated_Data/Threnetes_ruckeri_occ_GE.csv&quot;</span>,<span class="at">header=</span>T)</span>
+<span id="cb200-4"><a href="bayesian-model-adding-tolerance-limits.html#cb200-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb200-5"><a href="bayesian-model-adding-tolerance-limits.html#cb200-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Read matrix with tolerance ranges for two environmental conditions of the species</span></span>
+<span id="cb200-6"><a href="bayesian-model-adding-tolerance-limits.html#cb200-6" aria-hidden="true" tabindex="-1"></a>limits <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;./Initial_Data/T_ruckeri_tolerances.csv&quot;</span>)</span>
+<span id="cb200-7"><a href="bayesian-model-adding-tolerance-limits.html#cb200-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb200-8"><a href="bayesian-model-adding-tolerance-limits.html#cb200-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Specify species name</span></span>
+<span id="cb200-9"><a href="bayesian-model-adding-tolerance-limits.html#cb200-9" aria-hidden="true" tabindex="-1"></a>rotule <span class="ot">&lt;-</span> <span class="st">&quot;Threnetes_ruckeri&quot;</span></span>
+<span id="cb200-10"><a href="bayesian-model-adding-tolerance-limits.html#cb200-10" aria-hidden="true" tabindex="-1"></a><span class="co"># select species color for plots</span></span>
+<span id="cb200-11"><a href="bayesian-model-adding-tolerance-limits.html#cb200-11" aria-hidden="true" tabindex="-1"></a>spcol <span class="ot">&lt;-</span> <span class="st">&quot;royalblue3&quot;</span></span></code></pre></div>
+<p>Fixing the species and environmental variables with the function <code>DefineSp</code>. The numbers in Comp1 and Comp2 are the numbers of the columns in the loaded matrices that contain the environmental information. After calling the function, the values Comp1, Comp2, env.d, env.sp, n, m, N, Et are fixed for further use.</p>
+<div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb201-1"><a href="bayesian-model-adding-tolerance-limits.html#cb201-1" aria-hidden="true" tabindex="-1"></a><span class="fu">DefineSp</span>( <span class="at">env =</span> envall, <span class="at">data.sp =</span> data, <span class="at">Comp1=</span><span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">3</span>), <span class="at">Comp2=</span><span class="fu">c</span>(<span class="dv">4</span>,<span class="dv">4</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb202"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb202-1"><a href="bayesian-model-adding-tolerance-limits.html#cb202-1" aria-hidden="true" tabindex="-1"></a>n <span class="co"># number of occurrences</span></span></code></pre></div>
+<pre><code>## [1] 171</code></pre>
+<div class="sourceCode" id="cb204"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb204-1"><a href="bayesian-model-adding-tolerance-limits.html#cb204-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(env.sp, <span class="at">n=</span><span class="dv">4</span>) <span class="co"># environmental information of occurrence points</span></span></code></pre></div>
+<pre><code>##      bio1 bio12
+## [1,]  241  3039
+## [2,]  255  4036
+## [3,]  263  2876
+## [4,]  257  4018</code></pre>
+<div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb206-1"><a href="bayesian-model-adding-tolerance-limits.html#cb206-1" aria-hidden="true" tabindex="-1"></a>m <span class="co"># </span></span></code></pre></div>
+<pre><code>## [1] 599</code></pre>
+<div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb208-1"><a href="bayesian-model-adding-tolerance-limits.html#cb208-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(env.d, <span class="at">n=</span><span class="dv">4</span>) <span class="co"># environmental information of randomly sampled points</span></span></code></pre></div>
+<pre><code>##      bio1 bio12
+## [1,]  263  2588
+## [2,]  256  4614
+## [3,]  239   586
+## [4,]  242  2450</code></pre>
+<div class="sourceCode" id="cb210"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb210-1"><a href="bayesian-model-adding-tolerance-limits.html#cb210-1" aria-hidden="true" tabindex="-1"></a>N <span class="co"># number of randomly sampled points</span></span></code></pre></div>
+<pre><code>## [1] 770</code></pre>
+<div class="sourceCode" id="cb212"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb212-1"><a href="bayesian-model-adding-tolerance-limits.html#cb212-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(Et, <span class="at">n=</span><span class="dv">4</span>) <span class="co"># combined environmental information of occurrences and samples</span></span></code></pre></div>
+<pre><code>##      bio1 bio12
+## [1,]  263  2588
+## [2,]  256  4614
+## [3,]  239   586
+## [4,]  242  2450</code></pre>
+<div class="sourceCode" id="cb214"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb214-1"><a href="bayesian-model-adding-tolerance-limits.html#cb214-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(Et, <span class="at">n=</span><span class="dv">4</span>)</span></code></pre></div>
+<pre><code>##        bio1 bio12
+## [767,]  207  3575
+## [768,]  248  2918
+## [769,]  254  2261
+## [770,]  257  4018</code></pre>
+<p>Define a valid interval for mu, depending on the range of the environmental variables. These limits are used for the plots as well as for the function <code>Supp</code>.</p>
+<div class="sourceCode" id="cb216"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb216-1"><a href="bayesian-model-adding-tolerance-limits.html#cb216-1" aria-hidden="true" tabindex="-1"></a>b1 <span class="ot">&lt;-</span> <span class="dv">10</span> </span>
+<span id="cb216-2"><a href="bayesian-model-adding-tolerance-limits.html#cb216-2" aria-hidden="true" tabindex="-1"></a>b2 <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb216-3"><a href="bayesian-model-adding-tolerance-limits.html#cb216-3" aria-hidden="true" tabindex="-1"></a>mu.lim <span class="ot">&lt;&lt;-</span> <span class="fu">c</span>(<span class="fu">min</span>(Et[,<span class="dv">1</span>],limits[<span class="dv">1</span>,<span class="dv">2</span>])<span class="sc">-</span>b1,<span class="fu">max</span>(Et[,<span class="dv">1</span>],limits[<span class="dv">1</span>,<span class="dv">3</span>])<span class="sc">+</span>b1,</span>
+<span id="cb216-4"><a href="bayesian-model-adding-tolerance-limits.html#cb216-4" aria-hidden="true" tabindex="-1"></a>             <span class="fu">min</span>(Et[,<span class="dv">2</span>],limits[<span class="dv">2</span>,<span class="dv">2</span>])<span class="sc">-</span>b2,<span class="fu">max</span>(Et[,<span class="dv">2</span>],limits[<span class="dv">2</span>,<span class="dv">3</span>])<span class="sc">+</span>b2)</span></code></pre></div>
+<p>Apply the function <code>priorpar</code> to calculate a priori parameters with the tolerance limits.</p>
+<div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb217-1"><a href="bayesian-model-adding-tolerance-limits.html#cb217-1" aria-hidden="true" tabindex="-1"></a><span class="co"># number of d.f. in the a priori Wishart distribution</span></span>
+<span id="cb217-2"><a href="bayesian-model-adding-tolerance-limits.html#cb217-2" aria-hidden="true" tabindex="-1"></a>alpha0 <span class="ot">&lt;&lt;-</span> <span class="dv">2</span></span>
+<span id="cb217-3"><a href="bayesian-model-adding-tolerance-limits.html#cb217-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb217-4"><a href="bayesian-model-adding-tolerance-limits.html#cb217-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply function</span></span>
+<span id="cb217-5"><a href="bayesian-model-adding-tolerance-limits.html#cb217-5" aria-hidden="true" tabindex="-1"></a><span class="fu">priorpar</span>(limits[,<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>], <span class="at">nsd=</span><span class="dv">6</span>, <span class="at">alpha=</span>alpha0)</span>
+<span id="cb217-6"><a href="bayesian-model-adding-tolerance-limits.html#cb217-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb217-7"><a href="bayesian-model-adding-tolerance-limits.html#cb217-7" aria-hidden="true" tabindex="-1"></a><span class="co"># a priori mean</span></span>
+<span id="cb217-8"><a href="bayesian-model-adding-tolerance-limits.html#cb217-8" aria-hidden="true" tabindex="-1"></a>mu0</span></code></pre></div>
+<pre><code>## [1]  250 2750</code></pre>
+<div class="sourceCode" id="cb219"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb219-1"><a href="bayesian-model-adding-tolerance-limits.html#cb219-1" aria-hidden="true" tabindex="-1"></a><span class="co"># precision matrix</span></span>
+<span id="cb219-2"><a href="bayesian-model-adding-tolerance-limits.html#cb219-2" aria-hidden="true" tabindex="-1"></a>(A0 <span class="ot">&lt;&lt;-</span> <span class="fu">chol2inv</span>(CholSigma0)) </span></code></pre></div>
+<pre><code>##        [,1]         [,2]
+## [1,] 0.0036 0.000000e+00
+## [2,] 0.0000 1.777778e-06</code></pre>
+<div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb221-1"><a href="bayesian-model-adding-tolerance-limits.html#cb221-1" aria-hidden="true" tabindex="-1"></a><span class="co"># scale matrix</span></span>
+<span id="cb221-2"><a href="bayesian-model-adding-tolerance-limits.html#cb221-2" aria-hidden="true" tabindex="-1"></a>(W0 <span class="ot">&lt;&lt;-</span> <span class="fu">chol2inv</span>(CholW)) </span></code></pre></div>
+<pre><code>##          [,1]   [,2]
+## [1,] 138.8889      0
+## [2,]   0.0000 281250</code></pre>
+<div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb223-1"><a href="bayesian-model-adding-tolerance-limits.html#cb223-1" aria-hidden="true" tabindex="-1"></a><span class="co"># covariance matrix</span></span>
+<span id="cb223-2"><a href="bayesian-model-adding-tolerance-limits.html#cb223-2" aria-hidden="true" tabindex="-1"></a>(Sigma0 <span class="ot">&lt;&lt;-</span> <span class="fu">t</span>(CholSigma0) <span class="sc">%*%</span> CholSigma0)</span></code></pre></div>
+<pre><code>##          [,1]   [,2]
+## [1,] 277.7778      0
+## [2,]   0.0000 562500</code></pre>
+<p>Plot the the a priori parameters as an ellipse and the tolerance limits as a rectangle in the environmental space.</p>
+<div class="sourceCode" id="cb225"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb225-1"><a href="bayesian-model-adding-tolerance-limits.html#cb225-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create an ellipse with a 95% confidence region (=lev)</span></span>
+<span id="cb225-2"><a href="bayesian-model-adding-tolerance-limits.html#cb225-2" aria-hidden="true" tabindex="-1"></a>el <span class="ot">&lt;-</span> ellipse<span class="sc">::</span><span class="fu">ellipse</span>(<span class="at">x =</span> Sigma0, <span class="at">centre =</span> mu0,<span class="at">level =</span> <span class="fl">0.95</span>)</span>
+<span id="cb225-3"><a href="bayesian-model-adding-tolerance-limits.html#cb225-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb225-4"><a href="bayesian-model-adding-tolerance-limits.html#cb225-4" aria-hidden="true" tabindex="-1"></a><span class="co"># x11()</span></span>
+<span id="cb225-5"><a href="bayesian-model-adding-tolerance-limits.html#cb225-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot background points</span></span>
+<span id="cb225-6"><a href="bayesian-model-adding-tolerance-limits.html#cb225-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(env.d, <span class="at">pch=</span><span class="dv">1</span>, <span class="at">col=</span> <span class="st">&quot;grey80&quot;</span>, <span class="at">xlim=</span>mu.lim[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="at">ylim=</span>mu.lim[<span class="dv">3</span><span class="sc">:</span><span class="dv">4</span>],</span>
+<span id="cb225-7"><a href="bayesian-model-adding-tolerance-limits.html#cb225-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">&quot;Mean Annual Temperature (°C *10)&quot;</span>,</span>
+<span id="cb225-8"><a href="bayesian-model-adding-tolerance-limits.html#cb225-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">&quot;Total Annual Precipitation (mm)&quot;</span>,<span class="at">main=</span><span class="st">&quot;Environmental space&quot;</span>)</span>
+<span id="cb225-9"><a href="bayesian-model-adding-tolerance-limits.html#cb225-9" aria-hidden="true" tabindex="-1"></a><span class="co"># add occurrences</span></span>
+<span id="cb225-10"><a href="bayesian-model-adding-tolerance-limits.html#cb225-10" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(env.sp, <span class="at">pch=</span><span class="dv">19</span>, <span class="at">col=</span>spcol)</span>
+<span id="cb225-11"><a href="bayesian-model-adding-tolerance-limits.html#cb225-11" aria-hidden="true" tabindex="-1"></a><span class="co"># add tolerance limits</span></span>
+<span id="cb225-12"><a href="bayesian-model-adding-tolerance-limits.html#cb225-12" aria-hidden="true" tabindex="-1"></a><span class="fu">rect</span>(<span class="at">xleft =</span> limits[<span class="dv">1</span>,<span class="dv">2</span>], <span class="at">xright=</span> limits[<span class="dv">1</span>,<span class="dv">3</span>], <span class="at">ybottom =</span> limits[<span class="dv">2</span>,<span class="dv">2</span>],</span>
+<span id="cb225-13"><a href="bayesian-model-adding-tolerance-limits.html#cb225-13" aria-hidden="true" tabindex="-1"></a>     <span class="at">ytop =</span> limits[<span class="dv">2</span>,<span class="dv">3</span>], <span class="at">border=</span><span class="st">&quot;gold&quot;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb225-14"><a href="bayesian-model-adding-tolerance-limits.html#cb225-14" aria-hidden="true" tabindex="-1"></a><span class="co"># add ellipse corresponding to the selected confidence region</span></span>
+<span id="cb225-15"><a href="bayesian-model-adding-tolerance-limits.html#cb225-15" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(el,<span class="at">col=</span><span class="st">&quot;gold&quot;</span>,<span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb225-16"><a href="bayesian-model-adding-tolerance-limits.html#cb225-16" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">&quot;topleft&quot;</span>,<span class="at">legend=</span><span class="fu">c</span>(rotule, <span class="st">&quot;Species presences&quot;</span>, <span class="st">&quot;Points inside M&quot;</span>, <span class="st">&quot;Tolerance ranges&quot;</span>),<span class="at">pch=</span><span class="fu">c</span>(<span class="cn">NA</span>,<span class="dv">19</span>,<span class="dv">1</span>,<span class="cn">NA</span>),</span>
+<span id="cb225-17"><a href="bayesian-model-adding-tolerance-limits.html#cb225-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">bty=</span><span class="st">&quot;n&quot;</span>,<span class="at">lty=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>),<span class="at">col=</span><span class="fu">c</span>(<span class="st">&quot;white&quot;</span>, spcol, <span class="st">&quot;grey80&quot;</span>, <span class="st">&quot;gold&quot;</span>),<span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-13"></span>
+<img src="Images/Thr_apriori.png" alt=" Figure of the suitable niches constructed by a priori parameters in the environmental space for the species *Threnetes ruckeri* ." width="80%" />
+<p class="caption">
+Figure 2.3:  Figure of the suitable niches constructed by a priori parameters in the environmental space for the species <em>Threnetes ruckeri</em> .
+</p>
+</div>
+<p>The next step is to calculate the Markov Chain Monte Carlocreate for the Bayesian model with the function <code>Energy</code>. It creates a negative logarithm of the posterior function of the parameters of interest.</p>
+<p>This function needs to be adjusted based on the datasets and the resulting estimations. The previously defined variables are necessary for these calculations. Another variable that is needed is the number of environmental variables in the study. In this case we have two (bio1 and bio12).</p>
+<div class="sourceCode" id="cb226"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb226-1"><a href="bayesian-model-adding-tolerance-limits.html#cb226-1" aria-hidden="true" tabindex="-1"></a>dd <span class="ot">&lt;-</span> <span class="dv">2</span></span></code></pre></div>
+<p>Apply the function <code>Engery</code> and adjust accordingly.</p>
+<div class="sourceCode" id="cb227"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb227-1"><a href="bayesian-model-adding-tolerance-limits.html#cb227-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This is called right after Supp: mu, A and detA are already defined, th is ignored</span></span>
+<span id="cb227-2"><a href="bayesian-model-adding-tolerance-limits.html#cb227-2" aria-hidden="true" tabindex="-1"></a>Energy <span class="ot">&lt;-</span> <span class="cf">function</span>(th)</span>
+<span id="cb227-3"><a href="bayesian-model-adding-tolerance-limits.html#cb227-3" aria-hidden="true" tabindex="-1"></a>{ </span>
+<span id="cb227-4"><a href="bayesian-model-adding-tolerance-limits.html#cb227-4" aria-hidden="true" tabindex="-1"></a>  ax1 <span class="ot">&lt;-</span> (mu <span class="sc">-</span> mu0)</span>
+<span id="cb227-5"><a href="bayesian-model-adding-tolerance-limits.html#cb227-5" aria-hidden="true" tabindex="-1"></a>  ax2 <span class="ot">&lt;-</span> <span class="fu">apply</span>( env.sp, <span class="dv">1</span>, <span class="cf">function</span>(xi) { ax<span class="ot">&lt;-</span><span class="fu">as.matrix</span>(xi <span class="sc">-</span> mu); <span class="fu">t</span>(ax) <span class="sc">%*%</span> A <span class="sc">%*%</span> ax })</span>
+<span id="cb227-6"><a href="bayesian-model-adding-tolerance-limits.html#cb227-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># first two terms are generic in the posterior due to the normal model</span></span>
+<span id="cb227-7"><a href="bayesian-model-adding-tolerance-limits.html#cb227-7" aria-hidden="true" tabindex="-1"></a>  S <span class="ot">&lt;-</span> <span class="fl">0.5</span><span class="sc">*</span><span class="fu">sum</span>(ax2) <span class="sc">+</span> n<span class="sc">*</span><span class="fu">log</span>(suma.Et)</span>
+<span id="cb227-8"><a href="bayesian-model-adding-tolerance-limits.html#cb227-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># these terms correspond to the priors:</span></span>
+<span id="cb227-9"><a href="bayesian-model-adding-tolerance-limits.html#cb227-9" aria-hidden="true" tabindex="-1"></a>  S <span class="ot">&lt;-</span> S <span class="sc">+</span> <span class="fl">0.5</span><span class="sc">*</span>( <span class="fu">t</span>(ax1) <span class="sc">%*%</span> A0 <span class="sc">%*%</span> ax1 <span class="sc">+</span> <span class="fu">sum</span>(<span class="fu">diag</span>(A <span class="sc">%*%</span> W0)) <span class="sc">-</span> (alpha0<span class="sc">-</span>dd<span class="dv">-1</span>)<span class="sc">*</span><span class="fu">log</span>(detA) )</span>
+<span id="cb227-10"><a href="bayesian-model-adding-tolerance-limits.html#cb227-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb227-11"><a href="bayesian-model-adding-tolerance-limits.html#cb227-11" aria-hidden="true" tabindex="-1"></a>  S </span>
+<span id="cb227-12"><a href="bayesian-model-adding-tolerance-limits.html#cb227-12" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>The next step is to run the MCMC simulation of the posterior with the output of Energy. 1000 iterations would be quite fast but it is better to use at least 10000 or 20000. The resulting values in the beginning are quite large and not of interest. The main focus should be on smaller iterations.
+<!-- don't touch the code here unless you want to rerun the iterations several times and re-save the following images; beware of the cache!--></p>
+<div class="sourceCode" id="cb228"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb228-1"><a href="bayesian-model-adding-tolerance-limits.html#cb228-1" aria-hidden="true" tabindex="-1"></a><span class="co"># number of iterations</span></span>
+<span id="cb228-2"><a href="bayesian-model-adding-tolerance-limits.html#cb228-2" aria-hidden="true" tabindex="-1"></a>niter <span class="ot">&lt;-</span> <span class="dv">10000</span></span>
+<span id="cb228-3"><a href="bayesian-model-adding-tolerance-limits.html#cb228-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb228-4"><a href="bayesian-model-adding-tolerance-limits.html#cb228-4" aria-hidden="true" tabindex="-1"></a><span class="co"># draw the iterations in as many plots as dimensions where entered for Run (in this case: 5)</span></span>
+<span id="cb228-5"><a href="bayesian-model-adding-tolerance-limits.html#cb228-5" aria-hidden="true" tabindex="-1"></a>info <span class="ot">&lt;-</span> <span class="fu">Runtwalk</span>( <span class="at">Tr=</span>niter, <span class="at">dim=</span><span class="dv">5</span>, <span class="at">Obj=</span>Energy, <span class="at">Supp=</span>Supp, <span class="at">x0=</span><span class="fu">Initth</span>(), <span class="at">xp0=</span><span class="fu">Initth</span>())</span></code></pre></div>
+<pre><code>## This is the twalk for R.
+## Evaluating the objective density at initial values.
+## Opening 12 X 10001 matrix to save output.  Sampling, check graphics divice.</code></pre>
+<div class="sourceCode" id="cb230"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb230-1"><a href="bayesian-model-adding-tolerance-limits.html#cb230-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(info)</span></code></pre></div>
+<pre><code>## List of 8
+##  $ dim    : num 5
+##  $ Tr     : num 10000
+##  $ acc    : num 1227
+##  $ Us     : num [1:10001] 2048 2048 2048 2048 2048 ...
+##  $ Ups    : num [1:10001] 2048 2048 2048 2048 2048 ...
+##  $ output : num [1:10001, 1:5] 259 259 259 259 259 ...
+##  $ outputp: num [1:10001, 1:5] 269 269 269 269 269 ...
+##  $ recacc : num [1:10000, 1:2] 2 1 2 1 1 1 1 1 2 2 ...</code></pre>
+<p>Plot the results to check the MCMC convergence. The resulting values in the beginning are usually quite large and not of interest. Smaller iterations are of interest. Adjust the line depending on how the iterations turn out to catch the smaller iterations.</p>
+<div class="sourceCode" id="cb232"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb232-1"><a href="bayesian-model-adding-tolerance-limits.html#cb232-1" aria-hidden="true" tabindex="-1"></a><span class="co"># define a parameter for the number at which a line is drawn and used as a </span></span>
+<span id="cb232-2"><a href="bayesian-model-adding-tolerance-limits.html#cb232-2" aria-hidden="true" tabindex="-1"></a><span class="co"># lower limit for the plot iterations</span></span>
+<span id="cb232-3"><a href="bayesian-model-adding-tolerance-limits.html#cb232-3" aria-hidden="true" tabindex="-1"></a>marker <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb232-4"><a href="bayesian-model-adding-tolerance-limits.html#cb232-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb232-5"><a href="bayesian-model-adding-tolerance-limits.html#cb232-5" aria-hidden="true" tabindex="-1"></a><span class="co"># x11()</span></span>
+<span id="cb232-6"><a href="bayesian-model-adding-tolerance-limits.html#cb232-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="dv">1</span><span class="sc">:</span>(niter<span class="sc">+</span><span class="dv">1</span>), <span class="sc">-</span>info<span class="sc">$</span>Ups, <span class="at">type =</span> <span class="st">&quot;l&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;iteration&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;LogPost&quot;</span>,</span>
+<span id="cb232-7"><a href="bayesian-model-adding-tolerance-limits.html#cb232-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;dim=5&quot;</span>)</span>
+<span id="cb232-8"><a href="bayesian-model-adding-tolerance-limits.html#cb232-8" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span>marker, <span class="at">col=</span><span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-19"></span>
+<img src="Images/Thr_Iterations_abline.png" alt=" Figure of the Bayesian iterations for the species *Threnetes ruckeri* marked with the lower limit." width="80%" />
+<p class="caption">
+Figure 6.2:  Figure of the Bayesian iterations for the species <em>Threnetes ruckeri</em> marked with the lower limit.
+</p>
+</div>
+<p>Save the results as a csv-file. <code>From</code> defines from which iteration the output is saved and <code>thin</code> defines the steps in between the iterations.</p>
+<div class="sourceCode" id="cb233"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb233-1"><a href="bayesian-model-adding-tolerance-limits.html#cb233-1" aria-hidden="true" tabindex="-1"></a>fname <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="fu">paste</span>(rotule,niter,<span class="st">&quot;output&quot;</span>,<span class="at">sep=</span><span class="st">&quot;_&quot;</span>),<span class="st">&quot;.csv&quot;</span>)</span>
+<span id="cb233-2"><a href="bayesian-model-adding-tolerance-limits.html#cb233-2" aria-hidden="true" tabindex="-1"></a><span class="fu">save.all</span>(info,<span class="at">from =</span> marker, <span class="at">thin =</span> <span class="dv">400</span>, <span class="fu">paste0</span>(<span class="st">&quot;./Generated_Data/&quot;</span>,fname))</span></code></pre></div>
+<p>Since the MCMC calculation simulates values of a distribution, for each simulation an ellipse can be drawn. The blue ellipse is supposed to present the best estimation for the niche of a species. However, this might not always be true and is quite dependend on the amount of iterations used.</p>
+<div class="sourceCode" id="cb234"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb234-1"><a href="bayesian-model-adding-tolerance-limits.html#cb234-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot simulated ellipses</span></span>
+<span id="cb234-2"><a href="bayesian-model-adding-tolerance-limits.html#cb234-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb234-3"><a href="bayesian-model-adding-tolerance-limits.html#cb234-3" aria-hidden="true" tabindex="-1"></a><span class="co"># x11()</span></span>
+<span id="cb234-4"><a href="bayesian-model-adding-tolerance-limits.html#cb234-4" aria-hidden="true" tabindex="-1"></a><span class="fu">PlotIterations</span>(info, <span class="at">from=</span>marker, <span class="at">thin=</span><span class="dv">400</span>,<span class="at">col=</span>spcol,</span>
+<span id="cb234-5"><a href="bayesian-model-adding-tolerance-limits.html#cb234-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">main=</span><span class="fu">paste</span>(rotule, niter, <span class="at">sep=</span><span class="st">&quot;_&quot;</span>),</span>
+<span id="cb234-6"><a href="bayesian-model-adding-tolerance-limits.html#cb234-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">xlim=</span>mu.lim[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], <span class="at">ylim=</span>mu.lim[<span class="dv">3</span><span class="sc">:</span><span class="dv">4</span>])</span>
+<span id="cb234-7"><a href="bayesian-model-adding-tolerance-limits.html#cb234-7" aria-hidden="true" tabindex="-1"></a><span class="co"># a priori ellipse</span></span>
+<span id="cb234-8"><a href="bayesian-model-adding-tolerance-limits.html#cb234-8" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(el,<span class="at">col=</span><span class="st">&quot;gold&quot;</span>,<span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-22"></span>
+<img src="Images/Thr_MCMC_ellipses.png" alt=" Figure of the suitable niches constructed by the MCMC iterations in the environmental space for the species *Threnetes ruckeri* ." width="80%" />
+<p class="caption">
+Figure 10.2:  Figure of the suitable niches constructed by the MCMC iterations in the environmental space for the species <em>Threnetes ruckeri</em> .
+</p>
+</div>
+<p>Save the values mu and Sigma into a csv-file for further use. Estimated parameters = MAPs</p>
+<div class="sourceCode" id="cb235"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb235-1"><a href="bayesian-model-adding-tolerance-limits.html#cb235-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define mu and Sigma</span></span>
+<span id="cb235-2"><a href="bayesian-model-adding-tolerance-limits.html#cb235-2" aria-hidden="true" tabindex="-1"></a>mu</span></code></pre></div>
+<pre><code>##          [,1]
+## [1,]  228.079
+## [2,] 3969.181</code></pre>
+<div class="sourceCode" id="cb237"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb237-1"><a href="bayesian-model-adding-tolerance-limits.html#cb237-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chol2inv</span>(<span class="fu">chol</span>(A))</span></code></pre></div>
+<pre><code>##           [,1]        [,2]
+## [1,]  1101.323   -2423.676
+## [2,] -2423.676 1851053.170</code></pre>
+<div class="sourceCode" id="cb239"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb239-1"><a href="bayesian-model-adding-tolerance-limits.html#cb239-1" aria-hidden="true" tabindex="-1"></a><span class="co"># save the estimated parameters for further use as a matrix (csv)</span></span>
+<span id="cb239-2"><a href="bayesian-model-adding-tolerance-limits.html#cb239-2" aria-hidden="true" tabindex="-1"></a>mat <span class="ot">&lt;-</span> <span class="fu">cbind</span>(mu, <span class="fu">chol2inv</span>(<span class="fu">chol</span>(A)))</span>
+<span id="cb239-3"><a href="bayesian-model-adding-tolerance-limits.html#cb239-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(mat) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;mu&quot;</span>, <span class="st">&quot;Sigma1&quot;</span>, <span class="st">&quot;Sigma2&quot;</span>)</span>
+<span id="cb239-4"><a href="bayesian-model-adding-tolerance-limits.html#cb239-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb239-5"><a href="bayesian-model-adding-tolerance-limits.html#cb239-5" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(mat,<span class="st">&quot;./Generated_Data/tr_bay_mu_sigma_estimates.csv&quot;</span>,<span class="at">row.names =</span> F)</span></code></pre></div>
+<p><strong>Output files</strong></p>
+<ul>
+<li><p>Threnetes_ruckeri_10000_output.csv</p></li>
+<li><p>tr_bay_mu_sigma_estimates.csv</p></li>
+</ul>
+</div>
+</div>
+<div id="using-the-bayesian-model-for-the-projection-into-g-space" class="section level2" number="12.3">
+<h2><span class="header-section-number">12.3</span> Using the Bayesian model for the projection into G-Space</h2>
+<div id="read-source-and-libraries" class="section level3" number="12.3.1">
+<h3><span class="header-section-number">12.3.1</span> Read source and libraries</h3>
+<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb240-1"><a href="bayesian-model-adding-tolerance-limits.html#cb240-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;.</span><span class="sc">\\</span><span class="st">Functions</span><span class="sc">\\</span><span class="st">nicheG.R&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb241"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb241-1"><a href="bayesian-model-adding-tolerance-limits.html#cb241-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rgdal)</span>
+<span id="cb241-2"><a href="bayesian-model-adding-tolerance-limits.html#cb241-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(raster)</span></code></pre></div>
+<p><strong>Input files</strong></p>
+<ul>
+<li><p>bio1.asc</p></li>
+<li><p>bio12.asc</p></li>
+<li><p>Threnetes_ruckeri.shp (and associated files)</p></li>
+</ul>
+<p>Read rasters with environmental information and stack them.</p>
+<div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb242-1"><a href="bayesian-model-adding-tolerance-limits.html#cb242-1" aria-hidden="true" tabindex="-1"></a>bio1 <span class="ot">&lt;-</span> <span class="fu">raster</span>(<span class="st">&quot;.</span><span class="sc">\\</span><span class="st">Initial_Data</span><span class="sc">\\</span><span class="st">bio1.asc&quot;</span>)</span>
+<span id="cb242-2"><a href="bayesian-model-adding-tolerance-limits.html#cb242-2" aria-hidden="true" tabindex="-1"></a>bio2 <span class="ot">&lt;-</span> <span class="fu">raster</span>(<span class="st">&quot;.</span><span class="sc">\\</span><span class="st">Initial_Data</span><span class="sc">\\</span><span class="st">bio12.asc&quot;</span>)</span>
+<span id="cb242-3"><a href="bayesian-model-adding-tolerance-limits.html#cb242-3" aria-hidden="true" tabindex="-1"></a>bios <span class="ot">&lt;-</span> <span class="fu">stack</span>(bio1,bio2)</span></code></pre></div>
+<p>Apply the function <code>Niche.G</code> to create a raster with a suitability index based on the Bayesian model.
+<!-- renew the cache if the iteration chunk is changed and run again --></p>
+<div class="sourceCode" id="cb243"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb243-1"><a href="bayesian-model-adding-tolerance-limits.html#cb243-1" aria-hidden="true" tabindex="-1"></a>thr.bay <span class="ot">&lt;-</span> <span class="fu">niche.G</span>(<span class="at">Estck =</span> bios, <span class="at">mu =</span> mu, <span class="at">Sigma =</span> <span class="fu">chol2inv</span>(<span class="fu">chol</span>(A)))</span></code></pre></div>
+<p>The new raster can be either saved like this or be sized to the study area. For further application a cropped raster is necessary. Read a shapefile that defines the study area, crop the raster with it and save the result.</p>
+<div class="sourceCode" id="cb244"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb244-1"><a href="bayesian-model-adding-tolerance-limits.html#cb244-1" aria-hidden="true" tabindex="-1"></a>thr.shp <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(<span class="st">&quot;./Initial_Data/shapefiles&quot;</span>,<span class="st">&quot;Threnetes_ruckeri&quot;</span>)</span>
+<span id="cb244-2"><a href="bayesian-model-adding-tolerance-limits.html#cb244-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb244-3"><a href="bayesian-model-adding-tolerance-limits.html#cb244-3" aria-hidden="true" tabindex="-1"></a>thr.bayc <span class="ot">&lt;-</span> <span class="fu">mask</span>(<span class="fu">crop</span>(thr.bay, thr.shp), thr.shp)</span></code></pre></div>
+<div class="sourceCode" id="cb245"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb245-1"><a href="bayesian-model-adding-tolerance-limits.html#cb245-1" aria-hidden="true" tabindex="-1"></a><span class="fu">writeRaster</span>(thr.bayc,<span class="st">&quot;./Generated_Data/tr_bay_cropped.tif&quot;</span>, <span class="at">overwrite =</span> T)</span></code></pre></div>
+<p>Plot of the suitability index of the Bayesian model.</p>
+<div class="sourceCode" id="cb246"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb246-1"><a href="bayesian-model-adding-tolerance-limits.html#cb246-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(thr.bayc)</span></code></pre></div>
+<p><img src="11_Bayesian_model_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
+<p><strong>Output files</strong></p>
+<ul>
+<li>tr_bay_cropped.tif</li>
+</ul>
+
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div class="csl-entry">
+Jimenez, L. &amp; Soberón, J. (2021). <span class="nocase">Estimating the fundamental niche: accounting for the uneven availability of existing climates</span>. <em>bioRxiv</em>.
+</div>
+<div class="csl-entry">
+Jiménez, L. &amp; Soberón, J. (2020). <span class="nocase">Leaving the area under the receiving operating characteristic curve behind: An evaluation method for species distribution modelling applications based on presence-only data</span>. <em>Methods in Ecology and Evolution</em>, 11, 1571–1586.
+</div>
+<div class="csl-entry">
+Jiménez, L., Soberón, J., Christen, J.A. &amp; Soto, D. (2019). <span class="nocase">On the problem of modeling a fundamental niche from occurrence data</span>. <em>Ecological Modelling</em>, 397, 74–83.
+</div>
+</div>
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="evaluation-method-building-accumulation-curve-of-occurrences.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "lunr",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
