@@ -96,7 +96,7 @@ ggplot(data = world) +
 ```
 <div class="figure" style="text-align: center">
 <img src="Images/occurrences.png" alt=" Figure of the of the two species *Catasticta nimbice* and *Threnetes ruckeri* ." width="100%" />
-<p class="caption">(\#fig:unnamed-chunk-3) Figure of the of the two species *Catasticta nimbice* and *Threnetes ruckeri* .</p>
+<p class="caption"> Figure of the of the two species *Catasticta nimbice* and *Threnetes ruckeri* .</p>
 </div>
 
 
@@ -167,8 +167,13 @@ The matrix needs to have at two columns that provide the lower limit in the firs
 ```
 
 
+
+```
+## Warning: package 'kableExtra' was built under R version 4.0.5
+```
+
 <table class=" lightable-classic" style="font-family: Cambria; width: auto !important; ">
-<caption>(\#tab:unnamed-chunk-7)Threnetes ruckeri tolerance limits</caption>
+<caption>Threnetes ruckeri tolerance limits</caption>
  <thead>
   <tr>
    <th style="text-align:left;"> variable </th>
@@ -243,7 +248,7 @@ ggplot(data = world) +
 
 <div class="figure" style="text-align: center">
 <img src="Images/shapefiles.png" alt=" Figure of the shapefiles for the study area of *Catasticta nimbice* (green) and *Threnetes ruckeri* (blue)." width="80%" />
-<p class="caption">(\#fig:unnamed-chunk-10) Figure of the shapefiles for the study area of *Catasticta nimbice* (green) and *Threnetes ruckeri* (blue).</p>
+<p class="caption"> Figure of the shapefiles for the study area of *Catasticta nimbice* (green) and *Threnetes ruckeri* (blue).</p>
 </div>
 
 
@@ -272,7 +277,7 @@ plot(bios)
 
 <div class="figure" style="text-align: center">
 <img src="Images/bio6bio12.png" alt="Figure of the of the coldest month of the year (in °C x 10) and the total annual precipitation (in mm) for the American continent." width="90%" />
-<p class="caption">(\#fig:unnamed-chunk-13)Figure of the of the coldest month of the year (in °C x 10) and the total annual precipitation (in mm) for the American continent.</p>
+<p class="caption">Figure of the of the coldest month of the year (in °C x 10) and the total annual precipitation (in mm) for the American continent.</p>
 </div>
 
 
@@ -284,7 +289,7 @@ spplot(bio1)
 
 <div class="figure" style="text-align: center">
 <img src="Images/Raster_bio1.png" alt=" Figure of the of the mean annual temperature (in °C, multiplied by 10) for the American continent.." width="80%" />
-<p class="caption">(\#fig:unnamed-chunk-15) Figure of the of the mean annual temperature (in °C, multiplied by 10) for the American continent..</p>
+<p class="caption"> Figure of the of the mean annual temperature (in °C, multiplied by 10) for the American continent..</p>
 </div>
 
 
