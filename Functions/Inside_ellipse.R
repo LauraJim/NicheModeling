@@ -19,7 +19,7 @@
 
 
 in.el <- function(cloud,centroid,sigma,alpha){
-  # step 1: calculate de Mahalanobis distance
+  # step 1: calculate de Mahalanobis distance (this function uses the squared distance)
   maha <- mahalanobis(x=cloud,center=centroid,cov=sigma)
   # step 2: a point is inside the confidence region (1-alpha=confidence%) if
   # the distance divided by the quantile of a Chi-square variable with k d.f. is less than 1
